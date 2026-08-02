@@ -1,0 +1,96 @@
+---
+import { t } from '@/i18n/utils';
+import SEOHead from './SEOHead.astro';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqs = [
+  { qKey: 'home.faq.q1.question', aKey: 'home.faq.q1.answer' },
+  { qKey: 'home.faq.q2.question', aKey: 'home.faq.q2.answer' },
+  { qKey: 'home.faq.q3.question', aKey: 'home.faq.q3.answer' },
+  { qKey: 'home.faq.q4.question', aKey: 'home.faq.q4.answer' },
+  { qKey: 'home.faq.q5.question', aKey: 'home.faq.q5.answer' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: t(locale, faq.qKey),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(locale, faq.aKey),
+    },
+  })),
+};
+---
+
+<section class="section faq-section">
+  <div class="container">
+    <h2 class="section-title">{t(locale, 'home.faq.title')}</h2>
+    <div class="faq-list">
+      {faqs.map((faq) => (
+        <details class="faq-item">
+          <summary class="faq-question">{t(locale, faq.qKey)}</summary>
+          <p class="faq-answer">{t(locale, faq.aKey)}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+  <SEOHead schema={faqSchema} />
+</section>
+
+<style>
+  .faq-list {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-2);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    min-height: 48px;
+  }
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-question::marker {
+    display: none;
+    content: '';
+  }
+  .faq-question::after {
+    content: '+';
+    font-size: var(--text-xl);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    margin-left: var(--space-4);
+    transition: transform 0.15s;
+  }
+  .faq-item[open] .faq-question::after {
+    content: '−';
+  }
+  .faq-answer {
+    padding: 0 var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+</style>

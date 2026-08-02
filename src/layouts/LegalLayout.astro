@@ -1,0 +1,70 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+}
+
+const { title, description, canonicalUrl } = Astro.props;
+---
+
+<BaseLayout
+  locale="en"
+  title={title}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  showLanguageSwitcher={false}
+>
+  <Header locale="en" showLanguageSwitcher={false} />
+  <main class="main-content">
+    <div class="container legal-content">
+      <slot />
+    </div>
+  </main>
+  <Footer locale="en" />
+</BaseLayout>
+
+<style>
+  .main-content {
+    padding-top: var(--header-height);
+  }
+  .legal-content {
+    max-width: var(--container-narrow);
+    padding-block: var(--space-12);
+  }
+  .legal-content :global(h1) {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    margin-bottom: var(--space-6);
+    color: var(--color-text);
+  }
+  .legal-content :global(h2) {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+  }
+  .legal-content :global(p) {
+    margin-bottom: var(--space-4);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+  .legal-content :global(ul) {
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-4);
+    list-style: disc;
+  }
+  .legal-content :global(li) {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-secondary);
+  }
+  .legal-content :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+</style>

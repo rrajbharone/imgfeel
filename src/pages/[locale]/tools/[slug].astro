@@ -1,0 +1,176 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CmMmResizer from '@/components/CmMmResizer.astro';
+import CmMmContent from '@/components/CmMmContent.astro';
+import PanResizer from '@/components/PanResizer.astro';
+import PanContent from '@/components/PanContent.astro';
+import WhatsAppResizer from '@/components/WhatsAppResizer.astro';
+import WhatsAppContent from '@/components/WhatsAppContent.astro';
+import SscResizer from '@/components/SscResizer.astro';
+import SscContent from '@/components/SscContent.astro';
+import YouTubeResizer from '@/components/YouTubeResizer.astro';
+import YouTubeContent from '@/components/YouTubeContent.astro';
+import Base64Converter from '@/components/Base64Converter.astro';
+import Base64Content from '@/components/Base64Content.astro';
+import DataUriConverter from '@/components/DataUriConverter.astro';
+import DataUriContent from '@/components/DataUriContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t, getLocalizedPath } from '@/i18n/utils';
+import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
+import { TOOL_SLUGS, getToolUrl } from '@/data/tools';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.flatMap((locale) => {
+    return Object.entries(TOOL_SLUGS).map(([toolId, slugs]) => ({
+      params: {
+        locale,
+        slug: slugs[locale],
+      },
+      props: {
+        toolId,
+      },
+    }));
+  });
+}
+
+const { locale } = Astro.params as { locale: Locale };
+const { toolId } = Astro.props as { toolId: string };
+
+const toolUrl = getToolUrl(toolId, locale);
+
+const isCmMm = toolId === 'cm-mm-resizer';
+const isPan = toolId === 'pan-card-resizer';
+const isWa = toolId === 'whatsapp-dp-resizer';
+const isSsc = toolId === 'ssc-photo-signature-resizer';
+const isYt = toolId === 'youtube-banner-resizer';
+const isB64 = toolId === 'image-to-base64-converter';
+const isDataUri = toolId === 'image-to-data-uri-converter';
+
+const metaTitle = isCmMm
+  ? t(locale, 'cmresizer.meta.title')
+  : isPan
+    ? t(locale, 'panresizer.meta.title')
+    : isWa
+      ? t(locale, 'waresizer.meta.title')
+      : isSsc
+        ? t(locale, 'sscresizer.meta.title')
+        : isYt
+          ? t(locale, 'ytresizer.meta.title')
+          : isB64
+            ? t(locale, 'b64.meta.title')
+            : t(locale, 'datauri.meta.title');
+
+const metaDesc = isCmMm
+  ? t(locale, 'cmresizer.meta.description')
+  : isPan
+    ? t(locale, 'panresizer.meta.description')
+    : isWa
+      ? t(locale, 'waresizer.meta.description')
+      : isSsc
+        ? t(locale, 'sscresizer.meta.description')
+        : isYt
+          ? t(locale, 'ytresizer.meta.description')
+          : isB64
+            ? t(locale, 'b64.meta.description')
+            : t(locale, 'datauri.meta.description');
+
+const heroTitle = isCmMm
+  ? t(locale, 'cmresizer.hero.title')
+  : isPan
+    ? t(locale, 'panresizer.hero.title')
+    : isWa
+      ? t(locale, 'waresizer.hero.title')
+      : isSsc
+        ? t(locale, 'sscresizer.hero.title')
+        : isYt
+          ? t(locale, 'ytresizer.hero.title')
+          : isB64
+            ? t(locale, 'b64.hero.title')
+            : t(locale, 'datauri.hero.title');
+
+const heroSubtitle = isCmMm
+  ? t(locale, 'cmresizer.hero.subtitle')
+  : isPan
+    ? t(locale, 'panresizer.hero.subtitle')
+    : isWa
+      ? t(locale, 'waresizer.hero.subtitle')
+      : isSsc
+        ? t(locale, 'sscresizer.hero.subtitle')
+        : isYt
+          ? t(locale, 'ytresizer.hero.subtitle')
+          : isB64
+            ? t(locale, 'b64.hero.subtitle')
+            : t(locale, 'datauri.hero.subtitle');
+---
+
+<MainLayout
+  locale={locale}
+  title={metaTitle}
+  description={metaDesc}
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": heroTitle,
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: getLocalizedPath('/', locale) },
+        { label: t(locale, 'breadcrumb.tools'), href: getLocalizedPath('/tools/', locale) },
+        { label: heroTitle }
+      ]} />
+
+      <div class="tool-header">
+        <h1 class="tool-title">{heroTitle}</h1>
+        <p class="tool-subtitle">{heroSubtitle}</p>
+      </div>
+
+      {isCmMm && <CmMmResizer locale={locale} />}
+      {isPan && <PanResizer locale={locale} />}
+      {isWa && <WhatsAppResizer locale={locale} />}
+      {isSsc && <SscResizer locale={locale} />}
+      {isYt && <YouTubeResizer locale={locale} />}
+      {isB64 && <Base64Converter locale={locale} />}
+      {isDataUri && <DataUriConverter locale={locale} />}
+    </div>
+  </div>
+
+  {isCmMm && <CmMmContent locale={locale} />}
+  {isPan && <PanContent locale={locale} />}
+  {isWa && <WhatsAppContent locale={locale} />}
+  {isSsc && <SscContent locale={locale} />}
+  {isYt && <YouTubeContent locale={locale} />}
+  {isB64 && <Base64Content locale={locale} />}
+  {isDataUri && <DataUriContent locale={locale} />}
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+  }
+</style>

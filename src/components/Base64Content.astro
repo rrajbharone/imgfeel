@@ -1,0 +1,162 @@
+---
+import { t } from '@/i18n/utils';
+import SEOHead from './SEOHead.astro';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqs = [
+  { qKey: 'b64.faq.q1', aKey: 'b64.faq.a1' },
+  { qKey: 'b64.faq.q2', aKey: 'b64.faq.a2' },
+  { qKey: 'b64.faq.q3', aKey: 'b64.faq.a3' },
+  { qKey: 'b64.faq.q4', aKey: 'b64.faq.a4' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: t(locale, faq.qKey),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(locale, faq.aKey),
+    },
+  })),
+};
+---
+
+<article class="tool-content">
+  <div class="container content-inner">
+    <h2>{t(locale, 'b64.content.heading1')}</h2>
+    <p>{t(locale, 'b64.content.p1')}</p>
+
+    <h2>{t(locale, 'b64.content.heading2')}</h2>
+    <p>{t(locale, 'b64.content.p2')}</p>
+    <div class="code-example">
+      <code>{t(locale, 'b64.content.syntax1')}</code>
+    </div>
+    <p>{t(locale, 'b64.content.p3')}</p>
+
+    <h2>{t(locale, 'b64.content.heading3')}</h2>
+    <p>{t(locale, 'b64.content.p4')}</p>
+    <ul class="req-list">
+      <li>{t(locale, 'b64.content.useCase1')}</li>
+      <li>{t(locale, 'b64.content.useCase2')}</li>
+      <li>{t(locale, 'b64.content.useCase3')}</li>
+      <li>{t(locale, 'b64.content.useCase4')}</li>
+    </ul>
+
+    <h2>{t(locale, 'b64.content.heading4')}</h2>
+    <p>{t(locale, 'b64.content.p5')}</p>
+
+    <h2>{t(locale, 'b64.content.heading5')}</h2>
+    <p>{t(locale, 'b64.content.p6')}</p>
+    <ol class="step-list">
+      <li>{t(locale, 'b64.content.step1')}</li>
+      <li>{t(locale, 'b64.content.step2')}</li>
+      <li>{t(locale, 'b64.content.step3')}</li>
+      <li>{t(locale, 'b64.content.step4')}</li>
+      <li>{t(locale, 'b64.content.step5')}</li>
+    </ol>
+
+    <h2>{t(locale, 'b64.content.heading6')}</h2>
+    <p>{t(locale, 'b64.content.p7')}</p>
+
+    <!-- FAQ Section -->
+    <section class="content-faq">
+      <h2>{t(locale, 'home.faq.title')}</h2>
+      <div class="faq-list">
+        {faqs.map((faq) => (
+          <details class="faq-item">
+            <summary class="faq-question">{t(locale, faq.qKey)}</summary>
+            <p class="faq-answer">{t(locale, faq.aKey)}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+  <SEOHead schema={faqSchema} />
+</article>
+
+<style>
+  .tool-content {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+  }
+  .content-inner {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+  .tool-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+  .tool-content p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+  .code-example {
+    background: #1e1e1e;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-4);
+    overflow-x: auto;
+  }
+  .code-example code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: var(--text-xs);
+    color: #4ec9b0;
+    word-break: break-all;
+  }
+  .req-list,
+  .step-list {
+    padding-left: var(--space-5);
+    margin-bottom: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .req-list li,
+  .step-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .content-faq {
+    margin-top: var(--space-10);
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-question {
+    padding: var(--space-4) 0;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-answer {
+    padding-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+</style>

@@ -1,0 +1,23 @@
+{
+  "tools.meta.title": "Bild-Werkzeuge — ImgFeel",
+  "tools.meta.description": "Kostenlose browserbasierte Bild-Werkzeuge. Ändern Sie die Bildgröße sofort ohne Upload.",
+  "tools.page.title": "Bild-Werkzeuge",
+  "tools.page.subtitle": "Kostenlose browserbasierte Werkzeuge zum privaten Bearbeiten Ihrer Bilder.",
+  "tools.category.resize": "Größe ändern",
+  "tools.imageResizer.title": "Bild-Skalierer",
+  "tools.imageResizer.description": "Ändern Sie die Bildgröße auf exakte Abmessungen oder in Prozent. Unterstützt JPG, PNG und WebP.",
+  "tools.cmMmResizer.title": "Bild in CM & MM skalieren",
+  "tools.cmMmResizer.description": "Ändern Sie die Bildgröße auf physische Abmessungen in Zentimetern oder Millimetern für den Druck mit benutzerdefiniertem DPI.",
+  "tools.panCardResizer.title": "PAN-Karten Dokumenten-Skalierer",
+  "tools.panCardResizer.description": "Ändern Sie die Größe und komprimieren Sie PAN-Kartenbilder nach Abmessungen oder KB-Dateigröße für Online-Einreichungen.",
+  "tools.whatsappDpResizer.title": "WhatsApp Profilbild-Skalierer",
+  "tools.whatsappDpResizer.description": "Passen Sie vollständige Fotos mit unscharfem Hintergrund, Zoom und Zuschnitt in ein 1:1-Quadrat für WhatsApp-Profilbilder mit Live-Kreis-Vorschau an.",
+  "tools.sscResizer.title": "SSC Foto- & Unterschrift-Skalierer",
+  "tools.sscResizer.description": "Erstellen Sie 100 % verifizierte SSC-Prüfungsfotos (20–50 KB) und Unterschriften (10–20 KB) mit offiziellen Portal-Voreinstellungen.",
+  "tools.youtubeBannerResizer.title": "YouTube Banner-Skalierer",
+  "tools.youtubeBannerResizer.description": "Schneiden und positionieren Sie Kanalbilder auf exakt 2560 × 1440 px mit Live-Safe-Area-Überlagerung.",
+  "tools.base64Converter.title": "Bild in Base64 Konverter",
+  "tools.base64Converter.description": "Konvertieren Sie Bilder (JPG, PNG, WebP, SVG, GIF) in Base64 Data-URLs mit 1-Klick-HTML- und CSS-Codegeneratoren.",
+  "tools.dataUriConverter.title": "Bild in Data URI Konverter",
+  "tools.dataUriConverter.description": "Erzeugen Sie RFC 2397 Data-URIs für Bilder (PNG, JPG, SVG, WebP) zur sofortigen Inline-Einbindung in HTML und CSS."
+}

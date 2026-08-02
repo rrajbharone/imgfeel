@@ -1,0 +1,239 @@
+---
+import { t } from '@/i18n/utils';
+import SEOHead from './SEOHead.astro';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqs = [
+  { qKey: 'cmresizer.faq.q1', aKey: 'cmresizer.faq.a1' },
+  { qKey: 'cmresizer.faq.q2', aKey: 'cmresizer.faq.a2' },
+  { qKey: 'cmresizer.faq.q3', aKey: 'cmresizer.faq.a3' },
+  { qKey: 'cmresizer.faq.q4', aKey: 'cmresizer.faq.a4' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: t(locale, faq.qKey),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(locale, faq.aKey),
+    },
+  })),
+};
+---
+
+<article class="tool-content">
+  <div class="container content-inner">
+    <h2>{t(locale, 'cmresizer.content.heading1')}</h2>
+    <p>{t(locale, 'cmresizer.content.p1')}</p>
+
+    <h2>{t(locale, 'cmresizer.content.heading2')}</h2>
+    <p>{t(locale, 'cmresizer.content.p2')}</p>
+
+    <h2>{t(locale, 'cmresizer.content.heading3')}</h2>
+    <p>{t(locale, 'cmresizer.content.p3')}</p>
+    <p>{t(locale, 'cmresizer.content.p4')}</p>
+
+    <h2>{t(locale, 'cmresizer.content.heading4')}</h2>
+    <p>{t(locale, 'cmresizer.content.p5')}</p>
+    <div class="formula-box">
+      <code>{t(locale, 'cmresizer.content.formula1')}</code>
+      <code>{t(locale, 'cmresizer.content.formula2')}</code>
+    </div>
+    <p>{t(locale, 'cmresizer.content.p6')}</p>
+
+    <h2>{t(locale, 'cmresizer.content.heading5')}</h2>
+    <ol class="step-list">
+      <li>{t(locale, 'cmresizer.content.step1')}</li>
+      <li>{t(locale, 'cmresizer.content.step2')}</li>
+      <li>{t(locale, 'cmresizer.content.step3')}</li>
+      <li>{t(locale, 'cmresizer.content.step4')}</li>
+      <li>{t(locale, 'cmresizer.content.step5')}</li>
+      <li>{t(locale, 'cmresizer.content.step6')}</li>
+    </ol>
+
+    <h2>{t(locale, 'cmresizer.content.heading6')}</h2>
+    <p>{t(locale, 'cmresizer.content.p7')}</p>
+    <div class="table-wrapper">
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>{t(locale, 'cmresizer.table.colName')}</th>
+            <th>{t(locale, 'cmresizer.table.colCm')}</th>
+            <th>{t(locale, 'cmresizer.table.colMm')}</th>
+            <th>{t(locale, 'cmresizer.table.colPx')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{t(locale, 'cmresizer.table.rowPassport')}</td>
+            <td>3.5 × 4.5 cm</td>
+            <td>35 × 45 mm</td>
+            <td>413 × 531 px</td>
+          </tr>
+          <tr>
+            <td>{t(locale, 'cmresizer.table.row4x6')}</td>
+            <td>10.16 × 15.24 cm</td>
+            <td>101.6 × 152.4 mm</td>
+            <td>1200 × 1800 px</td>
+          </tr>
+          <tr>
+            <td>{t(locale, 'cmresizer.table.row5x7')}</td>
+            <td>12.7 × 17.78 cm</td>
+            <td>127 × 177.8 mm</td>
+            <td>1500 × 2100 px</td>
+          </tr>
+          <tr>
+            <td>{t(locale, 'cmresizer.table.rowA4')}</td>
+            <td>21.0 × 29.7 cm</td>
+            <td>210 × 297 mm</td>
+            <td>2480 × 3508 px</td>
+          </tr>
+          <tr>
+            <td>{t(locale, 'cmresizer.table.rowA3')}</td>
+            <td>29.7 × 42.0 cm</td>
+            <td>297 × 420 mm</td>
+            <td>3508 × 4960 px</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>{t(locale, 'cmresizer.content.heading7')}</h2>
+    <p>{t(locale, 'cmresizer.content.p8')}</p>
+    <ul class="mistake-list">
+      <li>{t(locale, 'cmresizer.content.mistake1')}</li>
+      <li>{t(locale, 'cmresizer.content.mistake2')}</li>
+      <li>{t(locale, 'cmresizer.content.mistake3')}</li>
+    </ul>
+
+    <h2>{t(locale, 'cmresizer.content.heading8')}</h2>
+    <p>{t(locale, 'cmresizer.content.p9')}</p>
+
+    <!-- FAQ Section -->
+    <section class="content-faq">
+      <h2>{t(locale, 'home.faq.title')}</h2>
+      <div class="faq-list">
+        {faqs.map((faq) => (
+          <details class="faq-item">
+            <summary class="faq-question">{t(locale, faq.qKey)}</summary>
+            <p class="faq-answer">{t(locale, faq.aKey)}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+  <SEOHead schema={faqSchema} />
+</article>
+
+<style>
+  .tool-content {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+  }
+  .content-inner {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+  .tool-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+  .tool-content p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+  .formula-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  .formula-box code {
+    font-family: monospace;
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .step-list,
+  .mistake-list {
+    padding-left: var(--space-5);
+    margin-bottom: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .step-list li,
+  .mistake-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    margin-block: var(--space-6);
+  }
+  .size-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+  .size-table th {
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-weight: 600;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 2px solid var(--color-border);
+  }
+  .size-table td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+  }
+
+  .content-faq {
+    margin-top: var(--space-10);
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-question {
+    padding: var(--space-4) 0;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-answer {
+    padding-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+</style>

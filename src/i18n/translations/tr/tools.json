@@ -1,0 +1,23 @@
+{
+  "tools.meta.title": "Görsel Araçları — ImgFeel",
+  "tools.meta.description": "Ücretsiz tarayıcı tabanlı görsel araçları. Görselleri yüklemeden anında yeniden boyutlandırın.",
+  "tools.page.title": "Görsel Araçları",
+  "tools.page.subtitle": "Görsellerinizi gizli bir şekilde düzenlemek için ücretsiz tarayıcı tabanlı araçlar.",
+  "tools.category.resize": "Yeniden Boyutlandır",
+  "tools.imageResizer.title": "Görsel Yeniden Boyutlandırıcı",
+  "tools.imageResizer.description": "Görselleri tam boyutlara veya yüzdeye göre yeniden boyutlandırın. JPG, PNG ve WebP destekler.",
+  "tools.cmMmResizer.title": "Resmi CM ve MM Olarak Yeniden Boyutlandır",
+  "tools.cmMmResizer.description": "Özel DPI ile yazdırma için resimleri santimetre veya milimetre cinsinden fiziksel boyutlara yeniden boyutlandırın.",
+  "tools.panCardResizer.title": "PAN Kartı Belge Boyutlandırıcı",
+  "tools.panCardResizer.description": "Online başvurular için PAN kartı resimlerini boyut veya KB dosya boyutuna göre yeniden boyutlandırın ve sıkıştırın.",
+  "tools.whatsappDpResizer.title": "WhatsApp Profil Resmi Boyutlandırıcı",
+  "tools.whatsappDpResizer.description": "Fotoğrafları yüzleri kesmeden WhatsApp profil resimleri için mükemmel bir 1:1 kare formatına kırpın ve boyutlandırın.",
+  "tools.sscResizer.title": "SSC Fotoğraf ve İmza Boyutlandırıcı",
+  "tools.sscResizer.description": "Resmi portal ön ayarlarını kullanarak %100 doğrulanmış SSC sınav fotoğraflarını (20–50 KB) ve imzalarını (10–20 KB) hazırlayın.",
+  "tools.youtubeBannerResizer.title": "YouTube Banner Boyutlandırıcı",
+  "tools.youtubeBannerResizer.description": "Kanal resimlerini güvenli alan katmanı ile tam 2560 × 1440 px YouTube banner boyutlarına kırpın ve yerleştirin.",
+  "tools.base64Converter.title": "Resimden Base64 Dönüştürücü",
+  "tools.base64Converter.description": "Resimleri (JPG, PNG, WebP, SVG, GIF) tek tıkla HTML ve CSS kod oluşturucularıyla Base64 Data URL formatına dönüştürün.",
+  "tools.dataUriConverter.title": "Resimden Data URI Dönüştürücü",
+  "tools.dataUriConverter.description": "HTML <img> ve CSS yerleştirme için resimlerden (PNG, JPG, SVG, WebP) RFC 2397 Data URI kodları oluşturun."
+}

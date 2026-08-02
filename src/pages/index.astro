@@ -1,0 +1,49 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import HeroSection from '@/components/HeroSection.astro';
+import ImageResizer from '@/components/ImageResizer.astro';
+import HowItWorks from '@/components/HowItWorks.astro';
+import FeaturesSection from '@/components/FeaturesSection.astro';
+import FAQSection from '@/components/FAQSection.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t } from '@/i18n/utils';
+
+const locale = 'en';
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'home.meta.title')}
+  description={t(locale, 'home.meta.description')}
+  canonicalUrl="https://imgfeel.com/"
+  basePath="/"
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ImgFeel",
+      "url": "https://imgfeel.com",
+      "description": t(locale, 'home.meta.description')
+    }} />
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ImgFeel Image Resizer",
+      "url": "https://imgfeel.com",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <HeroSection locale={locale} />
+  <section id="resizer" class="section">
+    <div class="container">
+      <ImageResizer locale={locale} />
+    </div>
+  </section>
+  <HowItWorks locale={locale} />
+  <FeaturesSection locale={locale} />
+  <FAQSection locale={locale} />
+</MainLayout>

@@ -1,0 +1,23 @@
+{
+  "tools.meta.title": "Alat Gambar — ImgFeel",
+  "tools.meta.description": "Alat gambar berbasis peramban gratis. Ubah ukuran gambar secara instan tanpa mengunggah.",
+  "tools.page.title": "Alat Gambar",
+  "tools.page.subtitle": "Alat berbasis peramban gratis untuk menyunting gambar Anda secara privat.",
+  "tools.category.resize": "Ubah Ukuran",
+  "tools.imageResizer.title": "Pengubah Ukuran Gambar",
+  "tools.imageResizer.description": "Ubah ukuran gambar ke dimensi tepat atau berdasarkan persentase. Mendukung JPG, PNG, dan WebP.",
+  "tools.cmMmResizer.title": "Ubah Ukuran Gambar dalam CM & MM",
+  "tools.cmMmResizer.description": "Ubah ukuran gambar ke dimensi fisik dalam sentimeter atau milimeter untuk pencetakan dengan DPI khusus.",
+  "tools.panCardResizer.title": "Pengubah Ukuran Dokumen Kartu PAN",
+  "tools.panCardResizer.description": "Ubah ukuran dan kompres gambar kartu PAN berdasarkan dimensi atau ukuran file KB untuk pengunggahan online.",
+  "tools.whatsappDpResizer.title": "Pengubah Ukuran Foto Profil WhatsApp",
+  "tools.whatsappDpResizer.description": "Potong dan ubah ukuran foto menjadi persegi 1:1 sempurna untuk foto profil WhatsApp tanpa memotong wajah.",
+  "tools.sscResizer.title": "Pengubah Ukuran Foto & Tanda Tangan SSC",
+  "tools.sscResizer.description": "Siapkan foto (20–50 KB) dan tanda tangan (10–20 KB) ujian SSC yang 100% terverifikasi menggunakan prasetel portal resmi.",
+  "tools.youtubeBannerResizer.title": "Pengubah Ukuran Banner YouTube",
+  "tools.youtubeBannerResizer.description": "Potong dan posisikan gambar saluran ke dimensi persis 2560 × 1440 px dengan hamparan area aman.",
+  "tools.base64Converter.title": "Pengonversi Gambar ke Base64",
+  "tools.base64Converter.description": "Ubah gambar (JPG, PNG, WebP, SVG, GIF) ke Data URL Base64 dengan pembuat kode HTML dan CSS satu klik.",
+  "tools.dataUriConverter.title": "Pengonversi Gambar ke Data URI",
+  "tools.dataUriConverter.description": "Buat Data URI RFC 2397 untuk gambar (PNG, JPG, SVG, WebP) untuk penyematan HTML <img> dan CSS instan."
+}

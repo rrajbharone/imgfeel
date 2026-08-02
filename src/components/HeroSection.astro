@@ -1,0 +1,54 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<section class="hero">
+  <div class="container hero-inner">
+    <h1 class="hero-title">{t(locale, 'home.hero.title')}</h1>
+    <p class="hero-subtitle">{t(locale, 'home.hero.subtitle')}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .hero-inner {
+    text-align: center;
+    max-width: var(--container-narrow);
+  }
+  .hero-title {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+  .hero-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    max-width: 540px;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      padding-block: var(--space-16) var(--space-10);
+    }
+    .hero-title {
+      font-size: 3rem;
+    }
+    .hero-subtitle {
+      font-size: var(--text-xl);
+    }
+  }
+</style>

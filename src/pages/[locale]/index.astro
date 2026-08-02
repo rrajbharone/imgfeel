@@ -1,0 +1,49 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import HeroSection from '@/components/HeroSection.astro';
+import ImageResizer from '@/components/ImageResizer.astro';
+import HowItWorks from '@/components/HowItWorks.astro';
+import FeaturesSection from '@/components/FeaturesSection.astro';
+import FAQSection from '@/components/FAQSection.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t, getLocalizedPath } from '@/i18n/utils';
+import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'home.meta.title')}
+  description={t(locale, 'home.meta.description')}
+  canonicalUrl={`https://imgfeel.com${getLocalizedPath('/', locale)}`}
+  basePath="/"
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ImgFeel Image Resizer",
+      "url": `https://imgfeel.com${getLocalizedPath('/', locale)}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <HeroSection locale={locale} />
+  <section id="resizer" class="section">
+    <div class="container">
+      <ImageResizer locale={locale} />
+    </div>
+  </section>
+  <HowItWorks locale={locale} />
+  <FeaturesSection locale={locale} />
+  <FAQSection locale={locale} />
+</MainLayout>

@@ -1,0 +1,80 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const steps = [
+  { num: '1', titleKey: 'home.howItWorks.step1.title', descKey: 'home.howItWorks.step1.description' },
+  { num: '2', titleKey: 'home.howItWorks.step2.title', descKey: 'home.howItWorks.step2.description' },
+  { num: '3', titleKey: 'home.howItWorks.step3.title', descKey: 'home.howItWorks.step3.description' },
+];
+---
+
+<section class="section how-it-works">
+  <div class="container">
+    <h2 class="section-title">{t(locale, 'home.howItWorks.title')}</h2>
+    <div class="steps-grid">
+      {steps.map((step) => (
+        <div class="step">
+          <div class="step-number">{step.num}</div>
+          <h3 class="step-title">{t(locale, step.titleKey)}</h3>
+          <p class="step-desc">{t(locale, step.descKey)}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .how-it-works {
+    background: var(--color-surface);
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    max-width: 800px;
+    margin-inline: auto;
+  }
+  .step {
+    text-align: center;
+  }
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: var(--text-base);
+    margin-bottom: var(--space-3);
+  }
+  .step-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+  .step-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    max-width: 280px;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .steps-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

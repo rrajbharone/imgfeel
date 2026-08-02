@@ -1,0 +1,104 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { t } from '@/i18n/utils';
+
+const locale = 'en';
+---
+
+<MainLayout
+  locale={locale}
+  title={`500 — ${t(locale, 'error.500.title')} | ImgFeel`}
+  description={t(locale, 'error.500.description')}
+>
+  <div class="error-container">
+    <div class="error-card">
+      <div class="error-badge">500</div>
+      <div class="error-illustration">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="8" rx="2"></rect>
+          <rect x="2" y="14" width="20" height="8" rx="2"></rect>
+          <line x1="6" y1="6" x2="6.01" y2="6"></line>
+          <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          <path d="M12 6h6"></path>
+          <path d="M12 18h6"></path>
+        </svg>
+      </div>
+      <h1 class="error-title">{t(locale, 'error.500.title')}</h1>
+      <p class="error-desc">{t(locale, 'error.500.description')}</p>
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>{t(locale, 'error.action.home')}</span>
+        </a>
+        <a href="/tools/" class="btn btn-secondary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="2"></rect>
+            <path d="M15 2v20"></path>
+            <path d="M2 12h13"></path>
+          </svg>
+          <span>{t(locale, 'error.action.tools')}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .error-container {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8) var(--space-4);
+  }
+  .error-card {
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-10) var(--space-6);
+    box-shadow: var(--shadow-md);
+  }
+  .error-badge {
+    font-size: var(--text-4xl);
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #ef4444;
+    line-height: 1;
+    margin-bottom: var(--space-2);
+  }
+  .error-illustration {
+    color: var(--color-text-muted);
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+  }
+  .error-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+  .error-desc {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-8);
+  }
+  .error-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  @media (min-width: 480px) {
+    .error-actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+</style>

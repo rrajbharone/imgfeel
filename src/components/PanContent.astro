@@ -1,0 +1,154 @@
+---
+import { t } from '@/i18n/utils';
+import SEOHead from './SEOHead.astro';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqs = [
+  { qKey: 'panresizer.faq.q1', aKey: 'panresizer.faq.a1' },
+  { qKey: 'panresizer.faq.q2', aKey: 'panresizer.faq.a2' },
+  { qKey: 'panresizer.faq.q3', aKey: 'panresizer.faq.a3' },
+  { qKey: 'panresizer.faq.q4', aKey: 'panresizer.faq.a4' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: t(locale, faq.qKey),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(locale, faq.aKey),
+    },
+  })),
+};
+---
+
+<article class="tool-content">
+  <div class="container content-inner">
+    <h2>{t(locale, 'panresizer.content.heading1')}</h2>
+    <p>{t(locale, 'panresizer.content.p1')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading2')}</h2>
+    <p>{t(locale, 'panresizer.content.p2')}</p>
+    <ol class="step-list">
+      <li>{t(locale, 'panresizer.content.step1')}</li>
+      <li>{t(locale, 'panresizer.content.step2')}</li>
+      <li>{t(locale, 'panresizer.content.step3')}</li>
+      <li>{t(locale, 'panresizer.content.step4')}</li>
+      <li>{t(locale, 'panresizer.content.step5')}</li>
+      <li>{t(locale, 'panresizer.content.step6')}</li>
+    </ol>
+
+    <h2>{t(locale, 'panresizer.content.heading3')}</h2>
+    <p>{t(locale, 'panresizer.content.p3')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading4')}</h2>
+    <p>{t(locale, 'panresizer.content.p4')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading5')}</h2>
+    <p>{t(locale, 'panresizer.content.p5')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading6')}</h2>
+    <p>{t(locale, 'panresizer.content.p6')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading7')}</h2>
+    <p>{t(locale, 'panresizer.content.p7')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading8')}</h2>
+    <p>{t(locale, 'panresizer.content.p8')}</p>
+
+    <h2>{t(locale, 'panresizer.content.heading9')}</h2>
+    <p>{t(locale, 'panresizer.content.p9')}</p>
+    <ul class="mistake-list">
+      <li>{t(locale, 'panresizer.content.mistake1')}</li>
+      <li>{t(locale, 'panresizer.content.mistake2')}</li>
+      <li>{t(locale, 'panresizer.content.mistake3')}</li>
+    </ul>
+
+    <!-- FAQ Section -->
+    <section class="content-faq">
+      <h2>{t(locale, 'home.faq.title')}</h2>
+      <div class="faq-list">
+        {faqs.map((faq) => (
+          <details class="faq-item">
+            <summary class="faq-question">{t(locale, faq.qKey)}</summary>
+            <p class="faq-answer">{t(locale, faq.aKey)}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+  <SEOHead schema={faqSchema} />
+</article>
+
+<style>
+  .tool-content {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+  }
+  .content-inner {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+  .tool-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+  .tool-content p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+  .step-list,
+  .mistake-list {
+    padding-left: var(--space-5);
+    margin-bottom: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .step-list li,
+  .mistake-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .content-faq {
+    margin-top: var(--space-10);
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-question {
+    padding: var(--space-4) 0;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-answer {
+    padding-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+</style>

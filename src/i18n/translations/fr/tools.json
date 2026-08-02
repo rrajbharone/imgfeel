@@ -1,0 +1,23 @@
+{
+  "tools.meta.title": "Outils d'image — ImgFeel",
+  "tools.meta.description": "Outils d'image gratuits basés sur le navigateur. Redimensionnez vos images instantanément sans les télécharger.",
+  "tools.page.title": "Outils d'image",
+  "tools.page.subtitle": "Outils gratuits basés sur le navigateur pour modifier vos images en toute confidentialité.",
+  "tools.category.resize": "Redimensionner",
+  "tools.imageResizer.title": "Redimensionneur d'image",
+  "tools.imageResizer.description": "Redimensionnez des images à des dimensions exactes ou par pourcentage. Prend en charge JPG, PNG et WebP.",
+  "tools.cmMmResizer.title": "Redimensionner l'image en CM et MM",
+  "tools.cmMmResizer.description": "Redimensionnez des images aux dimensions physiques en cm ou mm pour l'impression avec un DPI personnalisé.",
+  "tools.panCardResizer.title": "Redimensionneur de document carte PAN",
+  "tools.panCardResizer.description": "Redimensionnez et compressez les images de cartes PAN par dimensions ou taille en Ko pour l'envoi en ligne.",
+  "tools.whatsappDpResizer.title": "Redimensionneur de photo de profil WhatsApp",
+  "tools.whatsappDpResizer.description": "Ajustez des photos entières avec arrière-plan flou, zoom et recadrage dans un carré 1:1 pour la photo de profil WhatsApp avec aperçu circulaire en direct.",
+  "tools.sscResizer.title": "Redimensionneur de photo et signature SSC",
+  "tools.sscResizer.description": "Préparez des photos (20–50 Ko) et signatures (10–20 Ko) 100 % vérifiées pour les examens SSC à l'aide de préréglages officiels du portail.",
+  "tools.youtubeBannerResizer.title": "Redimensionneur de bannière YouTube",
+  "tools.youtubeBannerResizer.description": "Ajustez et positionnez votre illustration de chaîne aux dimensions exactes de 2560 × 1440 px avec superposition de zone sécurisée.",
+  "tools.base64Converter.title": "Convertisseur d'image en Base64",
+  "tools.base64Converter.description": "Convertissez des images (JPG, PNG, WebP, SVG, GIF) en Data URLs Base64 avec générateurs de code HTML et CSS en un clic.",
+  "tools.dataUriConverter.title": "Convertisseur d'image en Data URI",
+  "tools.dataUriConverter.description": "Générez des Data URIs RFC 2397 pour des images (PNG, JPG, SVG, WebP) pour une intégration en un clic dans HTML et CSS."
+}

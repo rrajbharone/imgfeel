@@ -1,0 +1,66 @@
+---
+import { t, getLocalizedPath } from '@/i18n/utils';
+import { LOCALES, LOCALE_CODES, type Locale } from '@/i18n/config';
+import { getBasePathFromUrl } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+const basePath = getBasePathFromUrl(new URL(currentPath, 'https://imgfeel.com'));
+---
+
+<div class="lang-switcher">
+  <svg class="lang-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+  <select
+    class="lang-select"
+    aria-label={t(locale, 'lang.switch')}
+    onchange="window.location.href=this.value"
+  >
+    {LOCALE_CODES.map((code) => (
+      <option
+        value={getLocalizedPath(basePath, code)}
+        selected={code === locale}
+      >
+        {LOCALES[code].label}
+      </option>
+    ))}
+  </select>
+</div>
+
+<style>
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    position: relative;
+  }
+  .lang-icon {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+  .lang-select {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-1) var(--space-6) var(--space-1) var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    min-height: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+  }
+  .lang-select:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+</style>

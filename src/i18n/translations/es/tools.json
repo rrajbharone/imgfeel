@@ -1,0 +1,23 @@
+{
+  "tools.meta.title": "Herramientas de imágenes — ImgFeel",
+  "tools.meta.description": "Herramientas de imágenes gratuitas en el navegador. Redimensiona imágenes al instante sin subir archivos.",
+  "tools.page.title": "Herramientas de imágenes",
+  "tools.page.subtitle": "Herramientas gratuitas en el navegador para editar tus imágenes de forma privada.",
+  "tools.category.resize": "Redimensionar",
+  "tools.imageResizer.title": "Redimensionador de imágenes",
+  "tools.imageResizer.description": "Redimensiona imágenes a dimensiones exactas o por porcentaje. Compatible con JPG, PNG y WebP.",
+  "tools.cmMmResizer.title": "Redimensionar imagen en CM y MM",
+  "tools.cmMmResizer.description": "Redimensiona imágenes a dimensiones físicas en centímetros o milímetros para impresión con DPI personalizado.",
+  "tools.panCardResizer.title": "Redimensionador de documentos de tarjeta PAN",
+  "tools.panCardResizer.description": "Redimensiona y comprime imágenes de tarjetas PAN por dimensiones o tamaño KB para trámites en línea.",
+  "tools.whatsappDpResizer.title": "Redimensionador de foto de perfil de WhatsApp",
+  "tools.whatsappDpResizer.description": "Ajusta fotos completas con fondo borroso, zoom y recorta a un cuadrado 1:1 para fotos de perfil de WhatsApp con vista previa circular en vivo.",
+  "tools.sscResizer.title": "Redimensionador de fotos y firmas SSC",
+  "tools.sscResizer.description": "Prepara fotos (20–50 KB) y firmas (10–20 KB) 100 % verificadas para exámenes SSC usando preajustes oficiales del portal.",
+  "tools.youtubeBannerResizer.title": "Redimensionador de banner de YouTube",
+  "tools.youtubeBannerResizer.description": "Recorta y posiciona arte de canal a las dimensiones exactas de 2560 × 1440 px con superposición de área segura.",
+  "tools.base64Converter.title": "Convertidor de Imagen a Base64",
+  "tools.base64Converter.description": "Convierte imágenes (JPG, PNG, WebP, SVG, GIF) a URLs de datos Base64 con generadores de código HTML y CSS en un clic.",
+  "tools.dataUriConverter.title": "Convertidor de Imagen a Data URI",
+  "tools.dataUriConverter.description": "Genera Data URIs RFC 2397 para imágenes (PNG, JPG, SVG, WebP) para inserción en HTML <img> y CSS en un clic."
+}

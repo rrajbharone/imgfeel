@@ -1,0 +1,79 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ToolCard from '@/components/ToolCard.astro';
+import ToolSearch from '@/components/ToolSearch.astro';
+import { t, getLocalizedPath } from '@/i18n/utils';
+import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
+import { getSearchableTools } from '@/data/tools';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
+const searchableTools = getSearchableTools(locale);
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'tools.meta.title')}
+  description={t(locale, 'tools.meta.description')}
+  canonicalUrl={`https://imgfeel.com${getLocalizedPath('/tools/', locale)}`}
+  basePath="/tools/"
+>
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: getLocalizedPath('/', locale) },
+        { label: t(locale, 'breadcrumb.tools') }
+      ]} />
+      <h1 class="page-title">{t(locale, 'tools.page.title')}</h1>
+      <p class="page-subtitle">{t(locale, 'tools.page.subtitle')}</p>
+
+      <!-- Dynamic Future-Ready Search Bar consuming single source of truth -->
+      <ToolSearch locale={locale} searchableTools={searchableTools} />
+
+      <!-- Tools Grid dynamically built from single source of truth -->
+      <div class="tools-grid">
+        {searchableTools.map((tool) => (
+          <ToolCard
+            locale={locale}
+            id={tool.id}
+            title={tool.title}
+            description={tool.description}
+            href={tool.href}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .page-title {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+  }
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    max-width: 600px;
+  }
+  @media (min-width: 768px) {
+    .tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: none;
+    }
+  }
+</style>

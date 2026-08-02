@@ -1,0 +1,23 @@
+{
+  "tools.meta.title": "Image Tools — ImgFeel",
+  "tools.meta.description": "Free browser-based image tools. Resize images instantly without uploading.",
+  "tools.page.title": "Image Tools",
+  "tools.page.subtitle": "Free browser-based tools to edit your images privately.",
+  "tools.category.resize": "Resize",
+  "tools.imageResizer.title": "Image Resizer",
+  "tools.imageResizer.description": "Resize images to exact dimensions or by percentage. Supports JPG, PNG, and WebP.",
+  "tools.cmMmResizer.title": "Resize Image in CM & MM",
+  "tools.cmMmResizer.description": "Resize images to physical dimensions in centimeters or millimeters for printing with custom DPI.",
+  "tools.panCardResizer.title": "PAN Card Document Resizer",
+  "tools.panCardResizer.description": "Resize and compress PAN card images by dimensions or KB file size for online portal submissions privately.",
+  "tools.whatsappDpResizer.title": "WhatsApp DP Resizer",
+  "tools.whatsappDpResizer.description": "Fit full photos with blurred backgrounds, zoom, and crop to a 1:1 square for WhatsApp profile pictures with live circle preview.",
+  "tools.sscResizer.title": "SSC Photo & Signature Resizer",
+  "tools.sscResizer.description": "Prepare 100% verified SSC exam photos (20–50 KB) and signatures (10–20 KB) using official portal presets.",
+  "tools.youtubeBannerResizer.title": "YouTube Banner Resizer",
+  "tools.youtubeBannerResizer.description": "Crop, fit, and position channel art to exact 2560 × 1440 px YouTube banner dimensions with live Safe Area overlay.",
+  "tools.base64Converter.title": "Image to Base64 Converter",
+  "tools.base64Converter.description": "Convert images (JPG, PNG, WebP, SVG, GIF) to Base64 Data URLs with 1-click HTML & CSS code generators.",
+  "tools.dataUriConverter.title": "Image to Data URI Converter",
+  "tools.dataUriConverter.description": "Generate RFC 2397 Data URIs for images (PNG, JPG, SVG, WebP) for instant inline HTML <img> and CSS embedding."
+}
