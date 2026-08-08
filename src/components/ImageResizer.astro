@@ -16,6 +16,7 @@ const { locale } = Astro.props;
   data-i18n-dropzone-subtitle={t(locale, 'resizer.dropzone.subtitle')}
   data-i18n-dropzone-formats={t(locale, 'resizer.dropzone.formats')}
   data-i18n-dropzone-dragging={t(locale, 'resizer.dropzone.dragging')}
+  data-i18n-dropzone-browse={t(locale, 'resizer.dropzone.browse')}
   data-i18n-info-title={t(locale, 'resizer.info.title')}
   data-i18n-info-filename={t(locale, 'resizer.info.filename')}
   data-i18n-info-format={t(locale, 'resizer.info.format')}
@@ -30,6 +31,8 @@ const { locale } = Astro.props;
   data-i18n-label-target-file-size={t(locale, 'resizer.label.targetFileSize')}
   data-i18n-label-lock={t(locale, 'resizer.label.lockAspectRatio')}
   data-i18n-label-quality={t(locale, 'resizer.label.quality')}
+  data-i18n-label-output-format={t(locale, 'resizer.label.outputFormat')}
+  data-i18n-format-original={t(locale, 'resizer.format.original')}
   data-i18n-result-title={t(locale, 'resizer.result.title')}
   data-i18n-result-new-dimensions={t(locale, 'resizer.result.newDimensions')}
   data-i18n-result-new-size={t(locale, 'resizer.result.newSize')}
@@ -44,19 +47,27 @@ const { locale } = Astro.props;
 >
   <!-- Upload State -->
   <div class="resizer-upload" id="resizer-upload">
-    <div class="dropzone" id="resizer-dropzone">
-      <svg class="dropzone-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <circle cx="8.5" cy="8.5" r="1.5" />
-        <path d="m21 15-5-5L5 21" />
-      </svg>
+    <div class="dropzone" id="resizer-dropzone" tabindex="0" role="button" aria-label={t(locale, 'resizer.dropzone.title')}>
+      <div class="dropzone-icon-wrapper">
+        <svg class="dropzone-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </div>
       <p class="dropzone-title">{t(locale, 'resizer.dropzone.title')}</p>
       <p class="dropzone-subtitle">{t(locale, 'resizer.dropzone.subtitle')}</p>
+      <button type="button" class="btn btn-primary dropzone-browse-btn" id="resizer-browse-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 8 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"></path>
+        </svg>
+        <span>{t(locale, 'resizer.dropzone.browse')}</span>
+      </button>
       <p class="dropzone-formats">{t(locale, 'resizer.dropzone.formats')}</p>
       <input
         type="file"
         id="resizer-file-input"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/png,image/webp,image/avif"
         class="sr-only"
       />
     </div>
@@ -137,6 +148,18 @@ const { locale } = Astro.props;
           </div>
         </div>
 
+        <!-- Output Format -->
+        <div class="control-group" id="format-group">
+          <label for="resize-format">{t(locale, 'resizer.label.outputFormat')}</label>
+          <select id="resize-format" class="format-select">
+            <option value="original" selected>{t(locale, 'resizer.format.original')}</option>
+            <option value="image/jpeg">JPG / JPEG</option>
+            <option value="image/png">PNG (Lossless)</option>
+            <option value="image/webp">WebP</option>
+            <option value="image/avif" id="opt-avif" hidden>AVIF</option>
+          </select>
+        </div>
+
         <!-- Quality -->
         <div class="control-group" id="quality-group">
           <label for="resize-quality">{t(locale, 'resizer.label.quality')}: <span id="quality-value">90</span>%</label>
@@ -181,36 +204,58 @@ const { locale } = Astro.props;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
     padding: var(--space-10) var(--space-4);
-    border: 2px dashed var(--color-border);
+    border: 2px dashed var(--color-accent);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: border-color 0.15s, background-color 0.15s;
+    background: var(--color-surface);
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
     text-align: center;
+    outline: none;
   }
   .dropzone:hover,
+  .dropzone:focus-visible,
   .dropzone.dragging {
     border-color: var(--color-accent);
     background: var(--color-accent-light);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
   }
-  .dropzone-icon {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-2);
+  .dropzone-icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-1);
+    transition: transform 0.15s ease;
+  }
+  .dropzone:hover .dropzone-icon-wrapper,
+  .dropzone.dragging .dropzone-icon-wrapper {
+    transform: translateY(-2px);
   }
   .dropzone-title {
     font-size: var(--text-lg);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--color-text);
   }
   .dropzone-subtitle {
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
+    max-width: 360px;
+  }
+  .dropzone-browse-btn {
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-1);
+    min-height: 44px;
+    padding-inline: var(--space-6);
   }
   .dropzone-formats {
     font-size: var(--text-xs);
     color: var(--color-text-muted);
-    margin-top: var(--space-1);
   }
 
   /* Editor */
@@ -310,6 +355,21 @@ const { locale } = Astro.props;
     background: var(--color-bg);
   }
   .input-field input[type="number"]:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -1px;
+    border-color: transparent;
+  }
+  .format-select {
+    width: 100%;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    min-height: 44px;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+  .format-select:focus {
     outline: 2px solid var(--color-accent);
     outline-offset: -1px;
     border-color: transparent;

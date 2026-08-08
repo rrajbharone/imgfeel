@@ -51,8 +51,11 @@ const modeTargetBtn = document.getElementById('mode-target-size')!;
 const controlsDim = document.getElementById('controls-dimensions')!;
 const controlsPct = document.getElementById('controls-percentage')!;
 const controlsTarget = document.getElementById('controls-target-size')!;
-const qualityGroup = document.getElementById('quality-group')!;
 
+const formatSelect = document.getElementById('resize-format') as HTMLSelectElement;
+const optAvif = document.getElementById('opt-avif') as HTMLOptionElement;
+
+const qualityGroup = document.getElementById('quality-group')!;
 const widthInput = document.getElementById('resize-width') as HTMLInputElement;
 const heightInput = document.getElementById('resize-height') as HTMLInputElement;
 const percentageInput = document.getElementById('resize-percentage') as HTMLInputElement;
@@ -69,6 +72,15 @@ const pctPreviewInfo = document.getElementById('pct-preview-info');
 const btnResize = document.getElementById('btn-resize')!;
 const btnDownload = document.getElementById('btn-download')!;
 const btnNewImage = document.getElementById('btn-new-image')!;
+
+// Detect AVIF browser support
+const testCanvas = document.createElement('canvas');
+testCanvas.width = 1;
+testCanvas.height = 1;
+const isAvifSupported = testCanvas.toDataURL('image/avif').startsWith('data:image/avif');
+if (isAvifSupported && optAvif) {
+  optAvif.hidden = false;
+}
 
 // State
 const state: ResizerState = {
@@ -89,18 +101,34 @@ function formatSize(bytes: number): string {
   return `${(bytes / 1048576).toFixed(1)} MB`;
 }
 
-// Utility: get mime type from file
-function getMimeType(file: File): string {
-  if (file.type === 'image/png') return 'image/png';
-  if (file.type === 'image/webp') return 'image/webp';
+// Utility: determine target output MIME type
+function getTargetMimeType(): string {
+  const selected = formatSelect?.value ?? 'original';
+  if (selected !== 'original') {
+    return selected;
+  }
+  if (!state.file) return 'image/jpeg';
+  const fileType = state.file.type.toLowerCase();
+  if (['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(fileType)) {
+    return fileType;
+  }
   return 'image/jpeg';
 }
 
-// Utility: get extension from mime
-function getExtension(mime: string): string {
+// Utility: get extension from MIME type
+function getTargetExtension(mime: string): string {
   if (mime === 'image/png') return '.png';
   if (mime === 'image/webp') return '.webp';
+  if (mime === 'image/avif') return '.avif';
   return '.jpg';
+}
+
+// Utility: format label for MIME type
+function getFormatName(mime: string): string {
+  if (mime === 'image/png') return 'PNG';
+  if (mime === 'image/webp') return 'WebP';
+  if (mime === 'image/avif') return 'AVIF';
+  return 'JPG';
 }
 
 // Show error
@@ -115,7 +143,43 @@ function showError(msg: string): void {
 // Validate file
 function isValidImage(file: File): boolean {
   const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-  return validTypes.includes(file.type);
+  if (isAvifSupported) validTypes.push('image/avif');
+  return validTypes.includes(file.type.toLowerCase());
+}
+
+// Draw image onto canvas with appropriate background handling
+function drawImageToCanvas(
+  img: HTMLImageElement,
+  width: number,
+  height: number,
+  targetMime: string
+): HTMLCanvasElement {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d')!;
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  if (targetMime === 'image/jpeg') {
+    // Fill white background for JPEG to handle transparency cleanly
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+  } else {
+    // Clear canvas for PNG/WebP/AVIF to preserve transparency
+    ctx.clearRect(0, 0, width, height);
+  }
+
+  ctx.drawImage(img, 0, 0, width, height);
+  return canvas;
+}
+
+// Update quality control visibility
+function updateQualityVisibility(): void {
+  const targetMime = getTargetMimeType();
+  const isPng = targetMime === 'image/png';
+  qualityGroup.hidden = state.mode === 'targetSize' || isPng;
 }
 
 // Update percentage preview calculation & preset button highlights
@@ -166,9 +230,7 @@ function setMode(mode: 'dimensions' | 'percentage' | 'targetSize'): void {
   controlsPct.hidden = mode !== 'percentage';
   controlsTarget.hidden = mode !== 'targetSize';
 
-  // Quality slider visibility (hidden in targetSize mode or PNG)
-  const isPng = state.file?.type === 'image/png';
-  qualityGroup.hidden = mode === 'targetSize' || isPng;
+  updateQualityVisibility();
 
   if (mode === 'percentage') {
     updatePercentagePreview();
@@ -180,21 +242,14 @@ function setMode(mode: 'dimensions' | 'percentage' | 'targetSize'): void {
 // Optimization algorithm for Target File Size mode (binary search)
 async function optimizeToTargetSize(
   img: HTMLImageElement,
-  file: File,
   targetBytes: number
 ): Promise<{ blob: Blob; width: number; height: number }> {
-  const mime = getMimeType(file);
+  const mime = getTargetMimeType();
 
   const encode = (scale: number, quality: number): Promise<{ blob: Blob; width: number; height: number }> => {
     const width = Math.max(1, Math.round(img.naturalWidth * scale));
     const height = Math.max(1, Math.round(img.naturalHeight * scale));
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d')!;
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(img, 0, 0, width, height);
+    const canvas = drawImageToCanvas(img, width, height, mime);
 
     return new Promise((resolve) => {
       canvas.toBlob(
@@ -228,8 +283,7 @@ async function optimizeToTargetSize(
     return bestResult ?? closestResult!;
   }
 
-  // For JPEG / WebP
-  // Test original dimensions at min quality (0.05)
+  // For JPEG / WebP / AVIF
   const minQRes = await encode(1.0, 0.05);
 
   if (minQRes.blob.size <= targetBytes) {
@@ -318,6 +372,7 @@ function loadImage(file: File): void {
       // Set default values
       widthInput.value = String(img.naturalWidth);
       heightInput.value = String(img.naturalHeight);
+      formatSelect.value = 'original';
       updatePercentagePreview();
       updateTargetPresetHighlights();
 
@@ -351,7 +406,20 @@ function handleFile(file: File): void {
 }
 
 // Dropzone events
+const browseBtn = document.getElementById('resizer-browse-btn');
+browseBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  fileInput.click();
+});
+
 dropzone.addEventListener('click', () => fileInput.click());
+
+dropzone.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    fileInput.click();
+  }
+});
 
 dropzone.addEventListener('dragover', (e) => {
   e.preventDefault();
@@ -372,6 +440,11 @@ dropzone.addEventListener('drop', (e) => {
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0];
   if (file) handleFile(file);
+});
+
+// Format selection handler
+formatSelect?.addEventListener('change', () => {
+  updateQualityVisibility();
 });
 
 // Mode switching handlers
@@ -441,6 +514,8 @@ btnResize.addEventListener('click', async () => {
   btnResize.setAttribute('disabled', 'true');
 
   try {
+    const targetMime = getTargetMimeType();
+
     if (state.mode === 'targetSize') {
       const targetKb = parseInt(targetSizeInput.value);
       if (isNaN(targetKb) || targetKb < 1) {
@@ -450,7 +525,7 @@ btnResize.addEventListener('click', async () => {
       }
       const targetBytes = targetKb * 1024;
 
-      const result = await optimizeToTargetSize(state.originalImage, state.file, targetBytes);
+      const result = await optimizeToTargetSize(state.originalImage, targetBytes);
 
       if (state.resultUrl) {
         URL.revokeObjectURL(state.resultUrl);
@@ -461,7 +536,7 @@ btnResize.addEventListener('click', async () => {
 
       resultInfo.innerHTML = `
         <span><strong>${i18n.resultNewDimensions}:</strong> ${result.width} × ${result.height} px</span>
-        <span><strong>${i18n.resultNewSize}:</strong> ${formatSize(result.blob.size)}</span>
+        <span><strong>${i18n.resultNewSize}:</strong> ${formatSize(result.blob.size)} (${getFormatName(targetMime)})</span>
       `;
       resultSection.hidden = false;
 
@@ -497,18 +572,8 @@ btnResize.addEventListener('click', async () => {
 
     requestAnimationFrame(() => {
       try {
-        const canvas = document.createElement('canvas');
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-        const ctx = canvas.getContext('2d')!;
-
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-
-        ctx.drawImage(state.originalImage!, 0, 0, targetWidth, targetHeight);
-
-        const mime = getMimeType(state.file!);
-        const quality = mime !== 'image/png' ? parseInt(qualityInput.value) / 100 : undefined;
+        const canvas = drawImageToCanvas(state.originalImage!, targetWidth, targetHeight, targetMime);
+        const quality = targetMime !== 'image/png' ? parseInt(qualityInput.value) / 100 : undefined;
 
         canvas.toBlob(
           (blob) => {
@@ -528,7 +593,7 @@ btnResize.addEventListener('click', async () => {
 
             resultInfo.innerHTML = `
               <span><strong>${i18n.resultNewDimensions}:</strong> ${targetWidth} × ${targetHeight} px</span>
-              <span><strong>${i18n.resultNewSize}:</strong> ${formatSize(blob.size)}</span>
+              <span><strong>${i18n.resultNewSize}:</strong> ${formatSize(blob.size)} (${getFormatName(targetMime)})</span>
             `;
             resultSection.hidden = false;
 
@@ -538,7 +603,7 @@ btnResize.addEventListener('click', async () => {
               btnResize.removeAttribute('disabled');
             }, 1000);
           },
-          mime,
+          targetMime,
           quality
         );
       } catch {
@@ -558,8 +623,8 @@ btnResize.addEventListener('click', async () => {
 btnDownload.addEventListener('click', () => {
   if (!state.resultUrl || !state.file) return;
 
-  const mime = getMimeType(state.file);
-  const ext = getExtension(mime);
+  const mime = getTargetMimeType();
+  const ext = getTargetExtension(mime);
   const baseName = state.file.name.replace(/\.[^.]+$/, '');
   const filename = `${baseName}_resized${ext}`;
 
@@ -589,6 +654,7 @@ btnNewImage.addEventListener('click', () => {
   infoArea.innerHTML = '';
   resultInfo.innerHTML = '';
   fileInput.value = '';
+  formatSelect.value = 'original';
 
   uploadSection.hidden = false;
   editorSection.hidden = true;
