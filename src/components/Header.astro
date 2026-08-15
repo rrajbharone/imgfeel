@@ -20,54 +20,103 @@ const navLinks = [
 
 <header class="header">
   <div class="header-inner container">
+    <!-- Brand Logo -->
     <a href={getLocalizedPath('/', locale)} class="logo" aria-label="IMG Feel">
-      <svg width="142" height="32" viewBox="0 0 142 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g>
-          <rect x="3" y="3" width="24" height="24" rx="4" fill="none" stroke="var(--color-accent)" stroke-width="2.5" />
-          <path d="M9 3H3V9" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M21 27H27V21" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M6 22L12 14.5L16 19.5L20 15.5L24 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-          <circle cx="20" cy="9" r="2" fill="var(--color-accent)" />
+      <svg class="logo-svg" width="136" height="32" viewBox="0 0 136 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Logo Icon: Standalone Image Resizing Symbol -->
+        <g class="logo-icon">
+          <rect x="2" y="3" width="26" height="26" rx="6" fill="#6366f1" />
+          <rect x="6.5" y="7.5" width="17" height="17" rx="3" fill="none" stroke="#ffffff" stroke-width="1.75" />
+          <circle cx="6.5" cy="7.5" r="1.75" fill="#ffffff" />
+          <circle cx="23.5" cy="24.5" r="1.75" fill="#ffffff" />
+          <path d="M8.5 20L12.5 14.5L15 18L18 15L21.5 20" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          <circle cx="18" cy="11.5" r="1.25" fill="#ffffff" />
         </g>
-        <text x="38" y="23" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="800" fill="var(--color-accent)" letter-spacing="-0.3px">IMG</text>
-        <text x="86" y="23" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="700" fill="currentColor" letter-spacing="-0.3px">Feel</text>
+        
+        <!-- Text Wordmark: "IMG Feel" -->
+        <text x="36" y="22" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="800" fill="#6366f1" letter-spacing="-0.03em">IMG</text>
+        <text x="79" y="22" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="700" fill="var(--color-text)" letter-spacing="-0.03em">Feel</text>
       </svg>
     </a>
 
+    <!-- Desktop Navigation -->
     <nav class="nav-desktop" aria-label="Main">
       {navLinks.map((link) => (
-        <a href={link.href} class="nav-link">{link.label}</a>
+        <a href={link.href} class={`nav-link ${currentPath === link.href ? 'active' : ''}`}>{link.label}</a>
       ))}
       {showLanguageSwitcher && (
-        <LanguageSwitcher locale={locale} currentPath={currentPath} />
+        <div class="lang-wrapper-desktop">
+          <LanguageSwitcher locale={locale} currentPath={currentPath} />
+        </div>
       )}
     </nav>
 
-    <details class="mobile-menu">
-      <summary class="menu-toggle" aria-label={t(locale, 'nav.menu')}>
-        <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-        <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </summary>
-      <div class="mobile-nav">
-        {navLinks.map((link) => (
-          <a href={link.href} class="mobile-nav-link">{link.label}</a>
-        ))}
-        {showLanguageSwitcher && (
-          <div class="mobile-lang">
-            <LanguageSwitcher locale={locale} currentPath={currentPath} />
-          </div>
-        )}
-      </div>
-    </details>
+    <!-- Mobile Header Actions (Visible on Mobile & Tablet < 768px) -->
+    <div class="mobile-header-actions">
+      <!-- 1. Globe Language Selector Button outside the 3-dot menu -->
+      {showLanguageSwitcher && (
+        <div class="mobile-lang-container" title={t(locale, 'lang.switch')}>
+          <LanguageSwitcher locale={locale} currentPath={currentPath} compact={true} />
+        </div>
+      )}
+
+      <!-- 2. 3-Dot Navigation Menu -->
+      <details class="mobile-menu-details" id="mobile-menu-details">
+        <summary class="menu-dots-btn" aria-label={t(locale, 'nav.menu')}>
+          <!-- 3-Dot Vertical Icon -->
+          <svg class="icon-dots" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="12" cy="5" r="2.2" />
+            <circle cx="12" cy="12" r="2.2" />
+            <circle cx="12" cy="19" r="2.2" />
+          </svg>
+          <!-- Close Icon when open -->
+          <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </summary>
+        
+        <!-- Dropdown Card Menu -->
+        <div class="mobile-dropdown-card" id="mobile-dropdown-card">
+          <nav class="mobile-nav-list" aria-label="Mobile Navigation">
+            {navLinks.map((link) => (
+              <a href={link.href} class={`mobile-dropdown-link ${currentPath === link.href ? 'active' : ''}`}>
+                <span class="link-label">{link.label}</span>
+                {currentPath === link.href && <span class="active-pill"></span>}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </details>
+    </div>
   </div>
 </header>
+
+<script>
+  // Close mobile 3-dot dropdown when tapping outside or pressing Escape
+  function setupMobileMenu() {
+    const details = document.getElementById('mobile-menu-details') as HTMLDetailsElement | null;
+    if (!details) return;
+
+    document.addEventListener('click', (e) => {
+      if (details.open && !details.contains(e.target as Node)) {
+        details.open = false;
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && details.open) {
+        details.open = false;
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMobileMenu);
+  } else {
+    setupMobileMenu();
+  }
+</script>
 
 <style>
   .header {
@@ -76,9 +125,12 @@ const navLinks = [
     left: 0;
     right: 0;
     height: var(--header-height);
-    background: var(--color-bg);
+    background: rgba(251, 252, 253, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
     z-index: 100;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
   .header-inner {
     display: flex;
@@ -90,87 +142,179 @@ const navLinks = [
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    transition: opacity 0.15s ease;
   }
+  .logo:hover {
+    opacity: 0.9;
+  }
+  .logo-svg {
+    display: block;
+    height: 28px;
+    width: auto;
+  }
+  @media (min-width: 640px) {
+    .logo-svg {
+      height: 30px;
+    }
+  }
+
+  /* --- Desktop Navigation --- */
   .nav-desktop {
     display: none;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-1);
   }
   .nav-link {
     font-size: var(--text-sm);
     font-weight: 500;
     color: var(--color-text-secondary);
-    transition: color 0.15s;
+    padding: var(--space-1-5) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: all 0.15s ease;
   }
   .nav-link:hover {
     color: var(--color-text);
+    background: var(--color-surface-subtle);
   }
-  .mobile-menu {
+  .nav-link.active {
+    color: var(--color-accent);
+    font-weight: 600;
+    background: var(--color-accent-light);
+  }
+  .lang-wrapper-desktop {
+    margin-left: var(--space-2);
+    padding-left: var(--space-2);
+    border-left: 1px solid var(--color-border);
+  }
+
+  /* --- Mobile Header Actions --- */
+  .mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-lang-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-menu-details {
     position: relative;
   }
-  .menu-toggle {
+
+  .menu-dots-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     list-style: none;
-    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
-  .menu-toggle::-webkit-details-marker {
+
+  .menu-dots-btn:hover,
+  .mobile-menu-details[open] .menu-dots-btn {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .menu-dots-btn::-webkit-details-marker {
     display: none;
   }
-  .menu-toggle::marker {
+  .menu-dots-btn::marker {
     display: none;
     content: '';
   }
+
   .icon-close {
     display: none;
   }
-  .mobile-menu[open] .icon-menu {
+  .mobile-menu-details[open] .icon-dots {
     display: none;
   }
-  .mobile-menu[open] .icon-close {
+  .mobile-menu-details[open] .icon-close {
     display: block;
   }
-  .mobile-nav {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
+
+  /* --- Mobile Dropdown Menu Card --- */
+  .mobile-dropdown-card {
+    position: absolute;
+    top: calc(100% + 8px);
     right: 0;
-    bottom: 0;
-    background: var(--color-bg);
-    padding: var(--space-6) var(--space-4);
+    width: 200px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+    z-index: 1000;
+    animation: menuFadeIn 0.15s ease-out;
+  }
+
+  @keyframes menuFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .mobile-nav-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-    border-top: 1px solid var(--color-border);
+    gap: 2px;
   }
-  .mobile-nav-link {
+
+  .mobile-dropdown-link {
     display: flex;
     align-items: center;
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-lg);
-    font-weight: 500;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-size: var(--text-sm);
+    font-weight: 600;
     color: var(--color-text);
     border-radius: var(--radius-md);
-    min-height: 48px;
+    min-height: 42px;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
-  .mobile-nav-link:hover {
-    background: var(--color-surface);
+
+  .mobile-dropdown-link:hover {
+    background: var(--color-surface-subtle);
+    color: var(--color-accent);
   }
-  .mobile-lang {
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
+
+  .mobile-dropdown-link.active {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+
+  .active-pill {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
   }
 
   @media (min-width: 768px) {
     .nav-desktop {
       display: flex;
     }
-    .mobile-menu {
+    .mobile-header-actions {
       display: none;
     }
   }

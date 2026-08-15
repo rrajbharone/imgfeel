@@ -38,6 +38,10 @@ const alternateLinks = showLanguageSwitcher ? getAlternateLinks(basePath) : [];
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Preload critical Inter weights for instant rendering and zero layout shift -->
+    <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-600.woff2" as="font" type="font/woff2" crossorigin />
+
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
     {alternateLinks.map((link) => (

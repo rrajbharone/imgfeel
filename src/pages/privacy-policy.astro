@@ -2,38 +2,142 @@
 import LegalLayout from '@/layouts/LegalLayout.astro';
 ---
 
-<LegalLayout title="Privacy Policy — ImgFeel" description="ImgFeel privacy policy. Learn how we handle your data and protect your privacy." canonicalUrl="https://imgfeel.com/privacy-policy/">
+<LegalLayout
+  title="Privacy Policy — ImgFeel"
+  description="Read the ImgFeel Privacy Policy. Understand our client-side image processing practices, cookie usage, analytics, advertising disclosures, and data protection policies."
+  canonicalUrl="https://imgfeel.com/privacy-policy/"
+>
   <h1>Privacy Policy</h1>
-  <p><strong>Last updated:</strong> August 1, 2025</p>
+  <p class="last-updated"><strong>Last Updated:</strong> August 16, 2026</p>
 
-  <h2>Overview</h2>
-  <p>ImgFeel is a browser-based image tool. Your images are processed entirely on your device using your browser's built-in capabilities. We do not upload, store, or access your images in any way.</p>
+  <h2>1. Introduction</h2>
+  <p>
+    Welcome to <strong>ImgFeel</strong> (accessible at <a href="https://imgfeel.com/">https://imgfeel.com/</a>). We are dedicated to providing fast, reliable, and privacy-conscious online image processing utilities, including image resizing, format conversion, and compression.
+  </p>
+  <p>
+    This Privacy Policy explains in detail how ImgFeel handles information when you visit our website, use our tools, or communicate with us. We believe in transparency and data minimization: we collect only what is strictly necessary to maintain, protect, and improve our services.
+  </p>
 
-  <h2>Image Processing</h2>
-  <p>All image processing on ImgFeel happens client-side in your web browser. Your images never leave your device. We have no servers that receive, process, or store user images. When you close your browser tab, all image data is removed from memory.</p>
-
-  <h2>Information We Collect</h2>
-  <p>We may collect anonymous, aggregated usage data to improve our service, including:</p>
+  <h2>2. How Your Images Are Processed</h2>
+  <p>
+    The core philosophy of ImgFeel is <strong>client-side processing</strong>. When you select or drag and drop an image into any tool on ImgFeel (such as our Image Resizer, WebP Converter, HEIC to JPG Converter, or CM/MM Resizer):
+  </p>
   <ul>
-    <li>Pages visited and general usage patterns</li>
-    <li>Browser type and version</li>
-    <li>Device type (mobile, tablet, desktop)</li>
-    <li>Country of origin (via IP geolocation, not stored individually)</li>
+    <li><strong>Local Browser Execution:</strong> Image processing is executed directly inside your web browser using client-side technologies such as the HTML5 Canvas API, WebAssembly (WASM), and Web Workers.</li>
+    <li><strong>No Server Uploads:</strong> Your image files are never uploaded to, transmitted across, or stored on our web servers or any remote database.</li>
+    <li><strong>Zero Image Retention:</strong> Because images remain entirely within your device's local memory, all image data is instantly cleared as soon as you refresh the page, close your browser tab, or clear the tool.</li>
   </ul>
-  <p>We do not collect personally identifiable information unless you voluntarily provide it (e.g., by contacting us via email).</p>
 
-  <h2>Cookies</h2>
-  <p>ImgFeel may use cookies for basic functionality and analytics. Please see our <a href="/cookie-policy/">Cookie Policy</a> for details.</p>
+  <h2>3. Information You Voluntarily Provide</h2>
+  <p>
+    You can browse and use all tools on ImgFeel without creating an account or providing any personal details. If you choose to contact us directly via email (e.g. for customer support, bug reports, or business inquiries), we may collect:
+  </p>
+  <ul>
+    <li>Your email address</li>
+    <li>Your name (if included in your email)</li>
+    <li>The contents of your message, including any screenshots or technical logs you voluntarily attach</li>
+  </ul>
+  <p>
+    We use this information solely to respond to your inquiries and provide technical assistance. We never sell, rent, or distribute your email address to third parties.
+  </p>
 
-  <h2>Third-Party Services</h2>
-  <p>We may use third-party analytics services to understand how our website is used. These services may collect anonymous data about your visit. We do not share personal data with third parties.</p>
+  <h2>4. Information Collected Automatically</h2>
+  <p>
+    Like virtually all standard web servers, our hosting infrastructure and Content Delivery Network (CDN) may automatically log basic, non-personally identifiable technical information when you access our site. This may include:
+  </p>
+  <ul>
+    <li><strong>Browser & Device Data:</strong> Browser type, browser version, operating system, and screen resolution.</li>
+    <li><strong>Network Information:</strong> General geographic location (country or city level derived from IP address, not exact street location), referring URL, and pages visited.</li>
+    <li><strong>Timestamps:</strong> Date, time, and duration of requests to our server assets (such as HTML, CSS, JavaScript, and font files).</li>
+  </ul>
+  <p>
+    This information is analyzed strictly in aggregate to ensure server stability, prevent DDoS attacks, monitor network bandwidth, and diagnose technical errors.
+  </p>
 
-  <h2>Data Security</h2>
-  <p>Since your images are processed entirely in your browser and never transmitted to our servers, there is no risk of your image data being intercepted, stored, or breached on our end.</p>
+  <h2>5. Cookies and Similar Technologies</h2>
+  <p>
+    Cookies are small text files placed on your device by websites you visit. ImgFeel uses cookies and browser local storage for specific operational purposes:
+  </p>
+  <ul>
+    <li><strong>Essential Storage:</strong> Used to remember non-sensitive user interface preferences (such as tool settings, units, or dismissible notices).</li>
+    <li><strong>Analytics Cookies:</strong> Used by third-party analytics providers to gather aggregated metrics about website traffic and popular pages.</li>
+    <li><strong>Advertising Cookies:</strong> Used by advertising partners (including Google AdSense) to deliver relevant advertisements.</li>
+  </ul>
+  <p>
+    For comprehensive details on how cookies are used and instructions on how you can manage or disable them, please consult our dedicated <a href="/cookie-policy/">Cookie Policy</a>.
+  </p>
 
-  <h2>Changes to This Policy</h2>
-  <p>We may update this privacy policy from time to time. Any changes will be posted on this page with an updated date.</p>
+  <h2>6. Analytics and Performance Measurement</h2>
+  <p>
+    We may use privacy-oriented third-party analytics tools (such as Google Analytics or Cloudflare Web Analytics) to help us understand how visitors navigate our website. These tools collect aggregate statistics, such as total visitor count, bounce rates, and popular tools.
+  </p>
+  <p>
+    Analytics tools do not receive, inspect, or log any images you process on ImgFeel. You can prevent analytics tracking by enabling "Do Not Track" in your browser or using reputable content-blocking extensions.
+  </p>
 
-  <h2>Contact</h2>
-  <p>If you have questions about this privacy policy, please contact us at <a href="mailto:contact@imgfeel.com">contact@imgfeel.com</a>.</p>
+  <h2>7. Advertising and Google AdSense</h2>
+  <p>
+    To keep ImgFeel 100% free for all users worldwide, we may display third-party advertisements on our website through services such as <strong>Google AdSense</strong>.
+  </p>
+  <ul>
+    <li>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to our website or other websites on the internet.</li>
+    <li>Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to ImgFeel and/or other sites across the internet.</li>
+    <li>Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>. Alternatively, you can opt out of third-party vendor cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">www.aboutads.info</a>.</li>
+  </ul>
+
+  <h2>8. Third-Party Services and External Links</h2>
+  <p>
+    ImgFeel may contain links to external third-party websites, tools, or references. We do not operate or control these third-party platforms and are not responsible for their content, security practices, or privacy policies. We encourage you to review the privacy policies of any third-party websites you visit.
+  </p>
+
+  <h2>9. How We Use Collected Information</h2>
+  <p>Any non-image information collected through ImgFeel is used exclusively for:</p>
+  <ul>
+    <li>Operating, maintaining, and optimizing website speed and performance</li>
+    <li>Responding to customer support emails and user feedback</li>
+    <li>Detecting, preventing, and addressing technical faults, abuse, or security incidents</li>
+    <li>Serving advertisements to financially support free tool development and server infrastructure</li>
+  </ul>
+
+  <h2>10. Data Retention and Security</h2>
+  <p>
+    Because image processing is completed entirely in your browser's local memory, ImgFeel has zero access to or retention of your images. Technical server logs are automatically cycled and purged on a standard recurring schedule. Voluntary email communications are retained only as long as necessary to address your request or comply with standard record-keeping obligations.
+  </p>
+  <p>
+    We utilize modern HTTPS/TLS encryption across our entire website to ensure that all assets delivered to your browser are protected against eavesdropping and tampering.
+  </p>
+
+  <h2>11. Your Privacy Rights (GDPR, UK GDPR & CCPA/CPRA)</h2>
+  <p>
+    Depending on your geographic location, you may hold specific statutory privacy rights regarding your personal data under regulations such as the General Data Protection Regulation (GDPR) or the California Consumer Privacy Act (CCPA/CPRA), including:
+  </p>
+  <ul>
+    <li>The right to know what personal information is collected and processed</li>
+    <li>The right to request deletion of personal information you have voluntarily provided to us</li>
+    <li>The right to opt out of the sale or sharing of personal data for cross-context behavioral advertising</li>
+    <li>The right to non-discrimination for exercising your privacy rights</li>
+  </ul>
+  <p>
+    To exercise any of these rights, please reach out to us using the contact information below.
+  </p>
+
+  <h2>12. Children's Privacy</h2>
+  <p>
+    ImgFeel is a general-audience web tool and does not knowingly collect or solicit personal information from children under the age of 13 (or under 16 in certain European jurisdictions), in compliance with the Children's Online Privacy Protection Act (COPPA). If you believe a child has provided personal information to us, please contact us immediately so we can promptly delete it.
+  </p>
+
+  <h2>13. Changes to This Privacy Policy</h2>
+  <p>
+    We may periodically update this Privacy Policy to reflect changes in our operational practices, tool functionality, or legal requirements. When updates occur, the "Last Updated" date at the top of this document will be revised accordingly. We encourage users to check this page periodically to stay informed.
+  </p>
+
+  <h2>14. Contact Information</h2>
+  <p>
+    If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please contact us:
+  </p>
+  <div class="contact-box">
+    <h3>ImgFeel Privacy Support</h3>
+    <p><strong>Primary Email:</strong> <a href="mailto:business.rajbhar@gmail.com">business.rajbhar@gmail.com</a></p>
+    <p><strong>Website:</strong> <a href="https://imgfeel.com/">https://imgfeel.com/</a></p>
+  </div>
 </LegalLayout>

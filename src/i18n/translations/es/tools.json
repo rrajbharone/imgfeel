@@ -19,5 +19,9 @@
   "tools.base64Converter.title": "Convertidor de Imagen a Base64",
   "tools.base64Converter.description": "Convierte imágenes (JPG, PNG, WebP, SVG, GIF) a URLs de datos Base64 con generadores de código HTML y CSS en un clic.",
   "tools.dataUriConverter.title": "Convertidor de Imagen a Data URI",
-  "tools.dataUriConverter.description": "Genera Data URIs RFC 2397 para imágenes (PNG, JPG, SVG, WebP) para inserción en HTML <img> y CSS en un clic."
+  "tools.dataUriConverter.description": "Genera Data URIs RFC 2397 para imágenes (PNG, JPG, SVG, WebP) para inserción en HTML <img> y CSS en un clic.",
+  "tools.heicConverter.title": "Convertidor de HEIC a JPG",
+  "tools.heicConverter.description": "Convierte imágenes HEIC y HEIF de Apple iPhone a formato JPG en segundos. 100% privado, conversión por lotes.",
+  "tools.webpConverter.title": "Convertidor de WebP a JPG/PNG",
+  "tools.webpConverter.description": "Convierte imágenes WebP a formato JPG de alta calidad o PNG transparente al instante en tu navegador con procesamiento por lotes."
 }

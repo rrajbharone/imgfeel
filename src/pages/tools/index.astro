@@ -17,19 +17,22 @@ const searchableTools = getSearchableTools(locale);
   canonicalUrl="https://imgfeel.com/tools/"
   basePath="/tools/"
 >
-  <div class="section">
+  <div class="section tools-page">
     <div class="container">
       <Breadcrumbs locale={locale} items={[
         { label: t(locale, 'breadcrumb.home'), href: '/' },
         { label: t(locale, 'breadcrumb.tools') }
       ]} />
-      <h1 class="page-title">{t(locale, 'tools.page.title')}</h1>
-      <p class="page-subtitle">{t(locale, 'tools.page.subtitle')}</p>
+      
+      <div class="tools-page-header">
+        <h1 class="page-title">{t(locale, 'tools.page.title')}</h1>
+        <p class="page-subtitle">{t(locale, 'tools.page.subtitle')}</p>
+      </div>
 
-      <!-- Dynamic Future-Ready Search Bar consuming single source of truth -->
+      <!-- Dynamic Search Bar consuming single source of truth -->
       <ToolSearch locale={locale} searchableTools={searchableTools} />
 
-      <!-- Tools Grid dynamically built from single source of truth -->
+      <!-- Compact 2-Column Mobile & Multi-Column Desktop Tools Grid -->
       <div class="tools-grid">
         {searchableTools.map((tool) => (
           <ToolCard
@@ -38,6 +41,8 @@ const searchableTools = getSearchableTools(locale);
             title={tool.title}
             description={tool.description}
             href={tool.href}
+            icon={tool.icon}
+            badge={tool.badge}
           />
         ))}
       </div>
@@ -46,27 +51,73 @@ const searchableTools = getSearchableTools(locale);
 </MainLayout>
 
 <style>
+  .tools-page {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-12);
+  }
+  .tools-page-header {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
   .page-title {
-    font-size: var(--text-3xl);
-    font-weight: 700;
+    font-size: var(--text-2xl);
+    font-weight: 800;
     color: var(--color-text);
-    margin-top: var(--space-6);
-    margin-bottom: var(--space-2);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-1);
   }
   .page-subtitle {
+    font-size: var(--text-sm);
     color: var(--color-text-secondary);
-    margin-bottom: var(--space-6);
+    max-width: 600px;
+    line-height: 1.5;
   }
+
+  /* 2-column mobile grid by default */
   .tools-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-    max-width: 600px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
-  @media (min-width: 768px) {
+
+  @media (min-width: 480px) {
+    .tools-page {
+      padding-top: var(--space-8);
+      padding-bottom: var(--space-16);
+    }
+    .tools-page-header {
+      margin-top: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
     .tools-grid {
-      grid-template-columns: repeat(2, 1fr);
-      max-width: none;
+      gap: 12px;
+    }
+  }
+
+  /* Tablet (3 cards per row) */
+  @media (min-width: 740px) {
+    .tools-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .page-title {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  /* Desktop (4 cards per row) */
+  @media (min-width: 980px) {
+    .tools-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+  }
+
+  /* Large Desktop (5 cards per row) */
+  @media (min-width: 1200px) {
+    .tools-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
     }
   }
 </style>

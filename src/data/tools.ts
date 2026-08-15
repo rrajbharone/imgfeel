@@ -72,6 +72,26 @@ export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
     tr: 'resmi-data-urie-donustur',
     it: 'converti-immagine-in-data-uri',
   },
+  'heic-to-jpg': {
+    en: 'heic-to-jpg',
+    es: 'convertir-heic-a-jpg',
+    pt: 'converter-heic-para-jpg',
+    fr: 'convertir-heic-en-jpg',
+    de: 'heic-in-jpg-umwandeln',
+    id: 'ubah-heic-ke-jpg',
+    tr: 'heic-jpg-donusturucu',
+    it: 'converti-heic-in-jpg',
+  },
+  'webp-to-jpg-png-converter': {
+    en: 'webp-to-jpg-png-converter',
+    es: 'convertir-webp-a-jpg-png',
+    pt: 'converter-webp-para-jpg-png',
+    fr: 'convertir-webp-en-jpg-png',
+    de: 'webp-in-jpg-png-umwandeln',
+    id: 'ubah-webp-ke-jpg-png',
+    tr: 'webp-jpg-png-donusturucu',
+    it: 'converti-webp-in-jpg-png',
+  },
 };
 
 export interface ToolDefinition {
@@ -81,6 +101,7 @@ export interface ToolDefinition {
   titleKey: string;
   descKey: string;
   keywords: string[];
+  badge?: 'POPULAR' | 'NEW';
   isActive: boolean;
 }
 
@@ -96,6 +117,27 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.imageResizer.title',
     descKey: 'tools.imageResizer.description',
     keywords: ['resize', 'dimensions', 'percentage', 'target file size', 'kb', 'compress', 'jpg', 'png', 'webp'],
+    badge: 'POPULAR',
+    isActive: true,
+  },
+  {
+    id: 'webp-to-jpg-png-converter',
+    icon: 'image',
+    category: 'convert',
+    titleKey: 'tools.webpConverter.title',
+    descKey: 'tools.webpConverter.description',
+    keywords: ['webp', 'jpg', 'png', 'jpeg', 'convert webp to jpg', 'convert webp to png', 'webp converter', 'transparency'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
+    id: 'heic-to-jpg',
+    icon: 'image',
+    category: 'convert',
+    titleKey: 'tools.heicConverter.title',
+    descKey: 'tools.heicConverter.description',
+    keywords: ['heic', 'heif', 'jpg', 'jpeg', 'iphone', 'apple', 'convert heic to jpg', 'heic converter', 'batch'],
+    badge: 'POPULAR',
     isActive: true,
   },
   {
@@ -105,6 +147,7 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.cmMmResizer.title',
     descKey: 'tools.cmMmResizer.description',
     keywords: ['cm', 'mm', 'centimeter', 'millimeter', 'dpi', 'ppi', 'print', 'physical size'],
+    badge: 'POPULAR',
     isActive: true,
   },
   {
@@ -123,6 +166,7 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.whatsappDpResizer.title',
     descKey: 'tools.whatsappDpResizer.description',
     keywords: ['whatsapp', 'dp', 'profile picture', 'circle crop', '1:1', 'square', 'blur'],
+    badge: 'POPULAR',
     isActive: true,
   },
   {
@@ -132,6 +176,7 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.sscResizer.title',
     descKey: 'tools.sscResizer.description',
     keywords: ['ssc', 'cgl', 'chsl', 'mts', 'gd', 'cpo', 'photo', 'signature', 'passport'],
+    badge: 'POPULAR',
     isActive: true,
   },
   {
@@ -159,6 +204,7 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.dataUriConverter.title',
     descKey: 'tools.dataUriConverter.description',
     keywords: ['data uri', 'dataurl', 'base64', 'svg', 'mime', 'convert', 'inline image', 'html img', 'css background'],
+    badge: 'NEW',
     isActive: true,
   },
 ];
@@ -196,6 +242,7 @@ export interface SearchableTool {
   href: string;
   keywords: string[];
   icon: string;
+  badge?: 'POPULAR' | 'NEW';
 }
 
 /**
@@ -216,6 +263,7 @@ export function getSearchableTools(locale: Locale): SearchableTool[] {
         href,
         keywords: tool.keywords,
         icon: tool.icon,
+        badge: tool.badge,
       };
     });
 }

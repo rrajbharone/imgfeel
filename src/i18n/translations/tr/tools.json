@@ -18,6 +18,10 @@
   "tools.youtubeBannerResizer.description": "Kanal resimlerini güvenli alan katmanı ile tam 2560 × 1440 px YouTube banner boyutlarına kırpın ve yerleştirin.",
   "tools.base64Converter.title": "Resimden Base64 Dönüştürücü",
   "tools.base64Converter.description": "Resimleri (JPG, PNG, WebP, SVG, GIF) tek tıkla HTML ve CSS kod oluşturucularıyla Base64 Data URL formatına dönüştürün.",
-  "tools.dataUriConverter.title": "Resimden Data URI Dönüştürücü",
-  "tools.dataUriConverter.description": "HTML <img> ve CSS yerleştirme için resimlerden (PNG, JPG, SVG, WebP) RFC 2397 Data URI kodları oluşturun."
+  "tools.dataUriConverter.title": "Resmi Data URI'ye Dönüştürücü",
+  "tools.dataUriConverter.description": "Doğrudan HTML <img> ve CSS içerisine eklemek için resimlerden (PNG, JPG, SVG, WebP) RFC 2397 Data URI'leri oluşturun.",
+  "tools.heicConverter.title": "HEIC'i JPG'ye Dönüştürücü",
+  "tools.heicConverter.description": "Apple iPhone HEIC ve HEIF görsellerini saniyeler içinde JPG formatına dönüştürün. %100 gizli, toplu dönüştürme.",
+  "tools.webpConverter.title": "WebP'yi JPG/PNG'ye Dönüştürücü",
+  "tools.webpConverter.description": "WebP görsellerini tarayıcınızda anında yüksek kaliteli JPG veya şeffaf PNG formatına dönüştürün."
 }

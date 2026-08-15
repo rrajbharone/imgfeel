@@ -25,11 +25,11 @@ const schemaItems = items.map((item, index) => ({
   <ol class="breadcrumb-list">
     {items.map((item, index) => (
       <li class="breadcrumb-item">
-        {index > 0 && <span class="separator" aria-hidden="true">/</span>}
+        {index > 0 && <span class="separator" aria-hidden="true">›</span>}
         {item.href ? (
           <a href={item.href}>{item.label}</a>
         ) : (
-          <span aria-current="page">{item.label}</span>
+          <span aria-current="page" class="current-crumb">{item.label}</span>
         )}
       </li>
     ))}
@@ -47,23 +47,30 @@ const schemaItems = items.map((item, index) => ({
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-1);
-    font-size: var(--text-sm);
+    gap: var(--space-1-5);
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
+    font-weight: 500;
   }
   .breadcrumb-item {
     display: flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-1-5);
   }
   .breadcrumb-item a {
     color: var(--color-text-secondary);
-    transition: color 0.15s;
+    transition: color 0.15s ease;
   }
   .breadcrumb-item a:hover {
     color: var(--color-accent);
   }
+  .current-crumb {
+    color: var(--color-text);
+    font-weight: 600;
+  }
   .separator {
     color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1;
   }
 </style>

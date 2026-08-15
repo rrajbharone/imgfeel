@@ -17,11 +17,13 @@ const steps = [
 
 <section class="section how-it-works">
   <div class="container">
-    <h2 class="section-title">{t(locale, 'home.howItWorks.title')}</h2>
+    <div class="section-header">
+      <h2 class="section-title">{t(locale, 'home.howItWorks.title')}</h2>
+    </div>
     <div class="steps-grid">
       {steps.map((step) => (
-        <div class="step">
-          <div class="step-number">{step.num}</div>
+        <div class="step-card">
+          <div class="step-number-badge">{step.num}</div>
           <h3 class="step-title">{t(locale, step.titleKey)}</h3>
           <p class="step-desc">{t(locale, step.descKey)}</p>
         </div>
@@ -32,49 +34,75 @@ const steps = [
 
 <style>
   .how-it-works {
-    background: var(--color-surface);
+    background: var(--color-bg);
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+  .section-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: 0;
   }
   .steps-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-8);
-    max-width: 800px;
+    gap: var(--space-4);
+    max-width: 900px;
     margin-inline: auto;
   }
-  .step {
+  .step-card {
     text-align: center;
+    padding: var(--space-6) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xs);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .step-number {
+  .step-number-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-full);
     background: var(--color-accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: var(--text-base);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: var(--text-sm);
     margin-bottom: var(--space-3);
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
   }
   .step-title {
-    font-size: var(--text-lg);
-    font-weight: 600;
+    font-size: var(--text-base);
+    font-weight: 700;
     color: var(--color-text);
-    margin-bottom: var(--space-2);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-1-5);
   }
   .step-desc {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    line-height: 1.6;
+    line-height: 1.55;
     max-width: 280px;
-    margin-inline: auto;
   }
 
   @media (min-width: 768px) {
     .steps-grid {
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-6);
+      gap: var(--space-5);
+    }
+    .section-title {
+      font-size: var(--text-3xl);
+    }
+    .step-desc {
+      font-size: var(--text-sm);
     }
   }
 </style>

@@ -18,6 +18,10 @@
   "tools.youtubeBannerResizer.description": "Schneiden und positionieren Sie Kanalbilder auf exakt 2560 × 1440 px mit Live-Safe-Area-Überlagerung.",
   "tools.base64Converter.title": "Bild in Base64 Konverter",
   "tools.base64Converter.description": "Konvertieren Sie Bilder (JPG, PNG, WebP, SVG, GIF) in Base64 Data-URLs mit 1-Klick-HTML- und CSS-Codegeneratoren.",
-  "tools.dataUriConverter.title": "Bild in Data URI Konverter",
-  "tools.dataUriConverter.description": "Erzeugen Sie RFC 2397 Data-URIs für Bilder (PNG, JPG, SVG, WebP) zur sofortigen Inline-Einbindung in HTML und CSS."
+  "tools.dataUriConverter.title": "Bild-in-Data-URI-Umwandler",
+  "tools.dataUriConverter.description": "Erstellen Sie RFC 2397 Data URIs für Bilder (PNG, JPG, SVG, WebP) zur direkten Einbindung in HTML <img> und CSS.",
+  "tools.heicConverter.title": "HEIC-in-JPG-Konverter",
+  "tools.heicConverter.description": "Konvertieren Sie Apple iPhone HEIC- und HEIF-Bilder sekundenschnell in JPG. 100% privat, Stapelverarbeitung.",
+  "tools.webpConverter.title": "WebP-in-JPG/PNG-Konverter",
+  "tools.webpConverter.description": "Konvertieren Sie WebP-Bilder direkt im Browser in hochwertiges JPG oder transparentes PNG mit praktischer Stapelverarbeitung."
 }

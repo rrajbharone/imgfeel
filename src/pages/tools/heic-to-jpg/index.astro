@@ -1,0 +1,71 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import HeicConverter from '@/components/HeicConverter.astro';
+import HeicContent from '@/components/HeicContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+const locale = 'en';
+const toolUrl = getToolUrl('heic-to-jpg', locale);
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'heic.meta.title')}
+  description={t(locale, 'heic.meta.description')}
+  canonicalUrl="https://imgfeel.com/heic-to-jpg/"
+  basePath={toolUrl}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "HEIC to JPG Converter",
+      "url": "https://imgfeel.com/heic-to-jpg/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: '/' },
+        { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
+        { label: t(locale, 'heic.hero.title') }
+      ]} />
+      
+      <div class="tool-header">
+        <h1 class="tool-title">{t(locale, 'heic.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'heic.hero.subtitle')}</p>
+      </div>
+
+      <HeicConverter locale={locale} />
+    </div>
+  </div>
+
+  <HeicContent locale={locale} />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+  }
+</style>

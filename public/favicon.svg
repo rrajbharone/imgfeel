@@ -1,13 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">
-  <!-- Standalone Image Resizing Symbol for ImgFeel -->
-  <!-- Outer Image Frame -->
-  <rect x="4" y="4" width="24" height="24" rx="4" fill="none" stroke="#7c3aed" stroke-width="2.5" />
+  <!-- Modern Crisp Image Resizing Favicon for ImgFeel -->
+  <!-- Outer Rounded Container -->
+  <rect x="2" y="2" width="28" height="28" rx="7" fill="#6366f1" />
   
-  <!-- Corner Resize Handles (Top-Left & Bottom-Right) -->
-  <path d="M10 4H4V10" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M22 28H28V22" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Inner Photo Frame with clean white outline -->
+  <rect x="7" y="7" width="18" height="18" rx="3.5" fill="none" stroke="#ffffff" stroke-width="2" />
   
-  <!-- Internal Photo Landscape Mountain & Focal Sun -->
-  <path d="M7 23L13 15.5L17 20.5L21 16.5L25 23" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-  <circle cx="21" cy="10" r="2" fill="#3b82f6" />
+  <!-- Subtle Corner Resize Handles / Dots -->
+  <circle cx="7" cy="7" r="2" fill="#ffffff" />
+  <circle cx="25" cy="25" r="2" fill="#ffffff" />
+
+  <!-- Mountain/Landscape Minimal Vector -->
+  <path d="M9 20L13.5 14L16.5 18L19.5 14.5L23 20" stroke="#ffffff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Sun Dot -->
+  <circle cx="19.5" cy="10.5" r="1.5" fill="#ffffff" />
 </svg>

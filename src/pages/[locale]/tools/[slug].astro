@@ -15,6 +15,10 @@ import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
 import DataUriContent from '@/components/DataUriContent.astro';
+import HeicConverter from '@/components/HeicConverter.astro';
+import HeicContent from '@/components/HeicContent.astro';
+import WebpConverter from '@/components/WebpConverter.astro';
+import WebpContent from '@/components/WebpContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -46,6 +50,8 @@ const isSsc = toolId === 'ssc-photo-signature-resizer';
 const isYt = toolId === 'youtube-banner-resizer';
 const isB64 = toolId === 'image-to-base64-converter';
 const isDataUri = toolId === 'image-to-data-uri-converter';
+const isHeic = toolId === 'heic-to-jpg';
+const isWebp = toolId === 'webp-to-jpg-png-converter';
 
 const metaTitle = isCmMm
   ? t(locale, 'cmresizer.meta.title')
@@ -59,7 +65,11 @@ const metaTitle = isCmMm
           ? t(locale, 'ytresizer.meta.title')
           : isB64
             ? t(locale, 'b64.meta.title')
-            : t(locale, 'datauri.meta.title');
+            : isDataUri
+              ? t(locale, 'datauri.meta.title')
+              : isHeic
+                ? t(locale, 'heic.meta.title')
+                : t(locale, 'webp.meta.title');
 
 const metaDesc = isCmMm
   ? t(locale, 'cmresizer.meta.description')
@@ -73,7 +83,11 @@ const metaDesc = isCmMm
           ? t(locale, 'ytresizer.meta.description')
           : isB64
             ? t(locale, 'b64.meta.description')
-            : t(locale, 'datauri.meta.description');
+            : isDataUri
+              ? t(locale, 'datauri.meta.description')
+              : isHeic
+                ? t(locale, 'heic.meta.description')
+                : t(locale, 'webp.meta.description');
 
 const heroTitle = isCmMm
   ? t(locale, 'cmresizer.hero.title')
@@ -87,7 +101,11 @@ const heroTitle = isCmMm
           ? t(locale, 'ytresizer.hero.title')
           : isB64
             ? t(locale, 'b64.hero.title')
-            : t(locale, 'datauri.hero.title');
+            : isDataUri
+              ? t(locale, 'datauri.hero.title')
+              : isHeic
+                ? t(locale, 'heic.hero.title')
+                : t(locale, 'webp.hero.title');
 
 const heroSubtitle = isCmMm
   ? t(locale, 'cmresizer.hero.subtitle')
@@ -101,7 +119,11 @@ const heroSubtitle = isCmMm
           ? t(locale, 'ytresizer.hero.subtitle')
           : isB64
             ? t(locale, 'b64.hero.subtitle')
-            : t(locale, 'datauri.hero.subtitle');
+            : isDataUri
+              ? t(locale, 'datauri.hero.subtitle')
+              : isHeic
+                ? t(locale, 'heic.hero.subtitle')
+                : t(locale, 'webp.hero.subtitle');
 ---
 
 <MainLayout
@@ -143,6 +165,8 @@ const heroSubtitle = isCmMm
       {isYt && <YouTubeResizer locale={locale} />}
       {isB64 && <Base64Converter locale={locale} />}
       {isDataUri && <DataUriConverter locale={locale} />}
+      {isHeic && <HeicConverter locale={locale} />}
+      {isWebp && <WebpConverter locale={locale} />}
     </div>
   </div>
 
@@ -153,6 +177,8 @@ const heroSubtitle = isCmMm
   {isYt && <YouTubeContent locale={locale} />}
   {isB64 && <Base64Content locale={locale} />}
   {isDataUri && <DataUriContent locale={locale} />}
+  {isHeic && <HeicContent locale={locale} />}
+  {isWebp && <WebpContent locale={locale} />}
 </MainLayout>
 
 <style>

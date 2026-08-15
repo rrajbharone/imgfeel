@@ -19,5 +19,9 @@
   "tools.base64Converter.title": "Pengonversi Gambar ke Base64",
   "tools.base64Converter.description": "Ubah gambar (JPG, PNG, WebP, SVG, GIF) ke Data URL Base64 dengan pembuat kode HTML dan CSS satu klik.",
   "tools.dataUriConverter.title": "Pengonversi Gambar ke Data URI",
-  "tools.dataUriConverter.description": "Buat Data URI RFC 2397 untuk gambar (PNG, JPG, SVG, WebP) untuk penyematan HTML <img> dan CSS instan."
+  "tools.dataUriConverter.description": "Buat Data URI RFC 2397 untuk gambar (PNG, JPG, SVG, WebP) untuk penyematan HTML <img> dan CSS instan.",
+  "tools.heicConverter.title": "Pengubah HEIC ke JPG",
+  "tools.heicConverter.description": "Ubah gambar HEIC dan HEIF Apple iPhone ke format JPG dalam hitungan detik. 100% privat, konversi massal.",
+  "tools.webpConverter.title": "Pengubah WebP ke JPG/PNG",
+  "tools.webpConverter.description": "Ubah gambar WebP ke format JPG berkualitas tinggi atau PNG transparan secara instan di peramban dengan pemrosesan massal."
 }

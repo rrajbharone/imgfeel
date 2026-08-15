@@ -21,8 +21,10 @@ const { title, description, canonicalUrl } = Astro.props;
 >
   <Header locale="en" showLanguageSwitcher={false} />
   <main class="main-content">
-    <div class="container legal-content">
-      <slot />
+    <div class="container legal-container">
+      <article class="legal-article">
+        <slot />
+      </article>
     </div>
   </main>
   <Footer locale="en" />
@@ -31,40 +33,137 @@ const { title, description, canonicalUrl } = Astro.props;
 <style>
   .main-content {
     padding-top: var(--header-height);
+    background: var(--color-bg);
+    min-height: calc(100vh - var(--header-height));
   }
-  .legal-content {
-    max-width: var(--container-narrow);
-    padding-block: var(--space-12);
+  .legal-container {
+    max-width: 780px;
+    padding-block: var(--space-8);
   }
-  .legal-content :global(h1) {
-    font-size: var(--text-3xl);
-    font-weight: 700;
-    margin-bottom: var(--space-6);
+  @media (min-width: 768px) {
+    .legal-container {
+      padding-block: var(--space-12);
+    }
+  }
+  .legal-article {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6) var(--space-5);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  }
+  @media (min-width: 640px) {
+    .legal-article {
+      padding: var(--space-10) var(--space-8);
+    }
+  }
+
+  .legal-article :global(h1) {
+    font-size: var(--text-2xl);
+    font-weight: 800;
     color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-2);
+    line-height: 1.25;
   }
-  .legal-content :global(h2) {
-    font-size: var(--text-xl);
+  @media (min-width: 640px) {
+    .legal-article :global(h1) {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  .legal-article :global(.last-updated) {
+    font-size: var(--text-xs);
     font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .legal-article :global(h2) {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
     margin-top: var(--space-8);
     margin-bottom: var(--space-3);
-    color: var(--color-text);
+    padding-bottom: var(--space-1-5);
+    border-bottom: 1px solid var(--color-border-light);
+    line-height: 1.35;
   }
-  .legal-content :global(p) {
-    margin-bottom: var(--space-4);
+  @media (min-width: 640px) {
+    .legal-article :global(h2) {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .legal-article :global(h3) {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-article :global(p) {
+    font-size: var(--text-sm);
     color: var(--color-text-secondary);
     line-height: 1.7;
-  }
-  .legal-content :global(ul) {
-    padding-left: var(--space-6);
     margin-bottom: var(--space-4);
+  }
+
+  .legal-article :global(ul),
+  .legal-article :global(ol) {
+    padding-left: var(--space-5);
+    margin-bottom: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .legal-article :global(ul) {
     list-style: disc;
   }
-  .legal-content :global(li) {
-    margin-bottom: var(--space-2);
-    color: var(--color-text-secondary);
+
+  .legal-article :global(ol) {
+    list-style: decimal;
   }
-  .legal-content :global(a) {
+
+  .legal-article :global(li) {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+
+  .legal-article :global(strong) {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .legal-article :global(a) {
     color: var(--color-accent);
     text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s ease;
+  }
+  .legal-article :global(a:hover) {
+    color: var(--color-accent-hover);
+  }
+
+  .legal-article :global(.contact-box) {
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    margin-block: var(--space-6);
+  }
+  .legal-article :global(.contact-box h3) {
+    margin-top: 0;
+    color: var(--color-text);
+  }
+  .legal-article :global(.contact-box p) {
+    margin-bottom: 0;
+    color: var(--color-text-secondary);
   }
 </style>

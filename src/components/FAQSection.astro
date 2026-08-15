@@ -33,12 +33,19 @@ const faqSchema = {
 
 <section class="section faq-section">
   <div class="container">
-    <h2 class="section-title">{t(locale, 'home.faq.title')}</h2>
+    <div class="section-header">
+      <h2 class="section-title">{t(locale, 'home.faq.title')}</h2>
+    </div>
     <div class="faq-list">
       {faqs.map((faq) => (
         <details class="faq-item">
-          <summary class="faq-question">{t(locale, faq.qKey)}</summary>
-          <p class="faq-answer">{t(locale, faq.aKey)}</p>
+          <summary class="faq-question">
+            <span>{t(locale, faq.qKey)}</span>
+            <span class="faq-icon-indicator" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-answer-wrapper">
+            <p class="faq-answer">{t(locale, faq.aKey)}</p>
+          </div>
         </details>
       ))}
     </div>
@@ -47,27 +54,57 @@ const faqSchema = {
 </section>
 
 <style>
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+  .section-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: 0;
+  }
   .faq-list {
     max-width: var(--container-narrow);
     margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
   }
   .faq-item {
-    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  .faq-item:first-child {
-    border-top: 1px solid var(--color-border);
+  .faq-item:hover {
+    border-color: var(--color-border-hover);
+  }
+  .faq-item[open] {
+    border-color: var(--color-accent-border);
+    box-shadow: var(--shadow-sm);
   }
   .faq-question {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-4) var(--space-2);
-    font-size: var(--text-base);
+    padding: var(--space-4) var(--space-5);
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--color-text);
     cursor: pointer;
     list-style: none;
     min-height: 48px;
+    gap: var(--space-3);
+    user-select: none;
+  }
+  @media (min-width: 640px) {
+    .faq-question {
+      font-size: var(--text-base);
+    }
   }
   .faq-question::-webkit-details-marker {
     display: none;
@@ -76,21 +113,59 @@ const faqSchema = {
     display: none;
     content: '';
   }
-  .faq-question::after {
-    content: '+';
-    font-size: var(--text-xl);
-    color: var(--color-text-muted);
+  .faq-icon-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    margin-left: var(--space-4);
-    transition: transform 0.15s;
+    position: relative;
+    transition: all 0.15s ease;
   }
-  .faq-item[open] .faq-question::after {
-    content: '−';
+  .faq-icon-indicator::before,
+  .faq-icon-indicator::after {
+    content: '';
+    position: absolute;
+    background: var(--color-text-secondary);
+    transition: all 0.15s ease;
+  }
+  .faq-icon-indicator::before {
+    width: 10px;
+    height: 2px;
+  }
+  .faq-icon-indicator::after {
+    width: 2px;
+    height: 10px;
+  }
+  .faq-item[open] .faq-icon-indicator {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent-border);
+  }
+  .faq-item[open] .faq-icon-indicator::before {
+    background: var(--color-accent);
+  }
+  .faq-item[open] .faq-icon-indicator::after {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+  .faq-answer-wrapper {
+    padding: 0 var(--space-5) var(--space-4);
   }
   .faq-answer {
-    padding: 0 var(--space-2) var(--space-4);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    line-height: 1.7;
+    line-height: 1.65;
+  }
+  @media (min-width: 640px) {
+    .faq-answer {
+      font-size: var(--text-sm);
+    }
+    .section-title {
+      font-size: var(--text-3xl);
+    }
   }
 </style>
