@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Format",
   "sscresizer.validation.pass": "BESTANDEN",
   "sscresizer.validation.fail": "ANPASSUNG ERFORDERLICH",
-  "sscresizer.action.download": "Vorbereitetes SSC-Dokument herunterladen",
+  "sscresizer.action.download": "JPG herunterladen",
   "sscresizer.action.new": "Andere Datei hochladen",
   "sscresizer.dropzone.photoTitle": "Ziehen Sie Ihr SSC-Passfoto hierher",
   "sscresizer.dropzone.sigTitle": "Ziehen Sie Ihren SSC-Unterschrifts-Scan hierher",

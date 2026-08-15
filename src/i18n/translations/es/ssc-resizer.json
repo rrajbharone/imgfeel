@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Formato",
   "sscresizer.validation.pass": "APROBADO",
   "sscresizer.validation.fail": "REQUIERE AJUSTE",
-  "sscresizer.action.download": "Descargar Documento SSC Preparado",
+  "sscresizer.action.download": "Descargar JPG",
   "sscresizer.action.new": "Subir Otro Archivo",
   "sscresizer.dropzone.photoTitle": "Arrastra tu Foto Tipo Pasaporte SSC aquí",
   "sscresizer.dropzone.sigTitle": "Arrastra el escaneo de tu Firma SSC aquí",

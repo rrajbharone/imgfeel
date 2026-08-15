@@ -255,6 +255,8 @@ ol {
   border-radius: var(--radius-md);
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 42px;
+  max-width: 100%;
+  box-sizing: border-box;
   user-select: none;
   white-space: nowrap;
   line-height: 1;
@@ -317,10 +319,18 @@ ol {
 }
 
 .btn-lg {
-  padding: var(--space-3-5) var(--space-7);
+  padding: var(--space-3) var(--space-6);
   font-size: var(--text-base);
   min-height: 48px;
   border-radius: var(--radius-lg);
+}
+
+@media (max-width: 480px) {
+  .btn-lg {
+    padding: var(--space-2-5) var(--space-4);
+    font-size: var(--text-sm);
+    min-height: 44px;
+  }
 }
 
 /* Badge / Pill */

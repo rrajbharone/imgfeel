@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Format",
   "sscresizer.validation.pass": "LULUS",
   "sscresizer.validation.fail": "PERLU PENYESUAIAN",
-  "sscresizer.action.download": "Unduh Dokumen SSC yang Disiapkan",
+  "sscresizer.action.download": "Unduh JPG",
   "sscresizer.action.new": "Unggah File Lain",
   "sscresizer.dropzone.photoTitle": "Tarik & lepas Pasfoto SSC Anda di sini",
   "sscresizer.dropzone.subtitle": "atau klik untuk memilih file (JPG, PNG, WebP)",

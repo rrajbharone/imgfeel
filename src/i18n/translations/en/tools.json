@@ -6,6 +6,10 @@
   "tools.category.resize": "Resize",
   "tools.imageResizer.title": "Image Resizer",
   "tools.imageResizer.description": "Resize images to exact dimensions or by percentage. Supports JPG, PNG, and WebP.",
+  "tools.exactResizer.title": "Resize Image to Exact Dimensions",
+  "tools.exactResizer.description": "Set precise pixel width and height with aspect ratio locking, center crop, or letterbox padding.",
+  "tools.webpCompressor.title": "WebP Image Compressor",
+  "tools.webpCompressor.description": "Compress and optimize WebP images to custom quality levels or target KB sizes with zero quality loss.",
   "tools.cmMmResizer.title": "Resize Image in CM & MM",
   "tools.cmMmResizer.description": "Resize images to physical dimensions in centimeters or millimeters for printing with custom DPI.",
   "tools.panCardResizer.title": "PAN Card Document Resizer",
@@ -19,9 +23,5 @@
   "tools.base64Converter.title": "Image to Base64 Converter",
   "tools.base64Converter.description": "Convert images (JPG, PNG, WebP, SVG, GIF) to Base64 Data URLs with 1-click HTML & CSS code generators.",
   "tools.dataUriConverter.title": "Image to Data URI Converter",
-  "tools.dataUriConverter.description": "Generate RFC 2397 Data URIs for images (PNG, JPG, SVG, WebP) for instant inline HTML <img> and CSS embedding.",
-  "tools.heicConverter.title": "HEIC to JPG Converter",
-  "tools.heicConverter.description": "Convert Apple iPhone HEIC and HEIF images to JPG format in seconds. 100% private, batch conversion.",
-  "tools.webpConverter.title": "WebP to JPG/PNG Converter",
-  "tools.webpConverter.description": "Convert WebP images to high-quality JPG or transparent PNG format instantly in your browser with batch processing."
+  "tools.dataUriConverter.description": "Generate RFC 2397 Data URIs for images (PNG, JPG, SVG, WebP) for instant inline HTML <img> and CSS embedding."
 }

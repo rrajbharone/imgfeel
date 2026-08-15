@@ -13,7 +13,7 @@
   "ytresizer.bg.solid": "Düz Renk",
   "ytresizer.label.zoom": "Yakınlaştırma / Ölçek",
   "ytresizer.label.format": "Çıktı Formatı",
-  "ytresizer.action.download": "YouTube Bannerını İndir (2560 × 1440)",
+  "ytresizer.action.download": "Banner İndir",
   "ytresizer.action.newImage": "Resmi Değiştir",
   "ytresizer.dropzone.title": "Kanal banner resminizi buraya sürükleyip bırakın",
   "ytresizer.dropzone.subtitle": "veya bir dosya seçmek için tıklayın (Önerilen: 2560 × 1440 px, JPG/PNG)",

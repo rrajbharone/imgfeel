@@ -13,7 +13,7 @@
   "ytresizer.bg.solid": "Einfarbig",
   "ytresizer.label.zoom": "Zoom / Skalierung",
   "ytresizer.label.format": "Ausgabeformat",
-  "ytresizer.action.download": "YouTube-Banner herunterladen (2560 × 1440)",
+  "ytresizer.action.download": "Banner herunterladen",
   "ytresizer.action.newImage": "Bild ändern",
   "ytresizer.dropzone.title": "Ziehen Sie Ihr Kanalbanner-Bild hierher",
   "ytresizer.dropzone.subtitle": "oder klicken Sie, um eine Datei auszuwählen (Empfohlen: 2560 × 1440 px, JPG/PNG)",

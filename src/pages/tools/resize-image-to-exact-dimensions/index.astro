@@ -1,29 +1,29 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import WebpConverter from '@/components/WebpConverter.astro';
-import WebpContent from '@/components/WebpContent.astro';
+import ExactResizer from '@/components/ExactResizer.astro';
+import ExactResizerContent from '@/components/ExactResizerContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t } from '@/i18n/utils';
 import { getToolUrl } from '@/data/tools';
 
 const locale = 'en';
-const toolUrl = getToolUrl('webp-to-jpg-png-converter', locale);
+const toolUrl = getToolUrl('exact-dimension-resizer', locale);
 ---
 
 <MainLayout
   locale={locale}
-  title={t(locale, 'webp.meta.title')}
-  description={t(locale, 'webp.meta.description')}
-  canonicalUrl="https://imgfeel.com/webp-to-jpg-png-converter/"
+  title={t(locale, 'exactresizer.meta.title')}
+  description={t(locale, 'exactresizer.meta.description')}
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
   basePath={toolUrl}
 >
   <Fragment slot="head">
     <SEOHead schema={{
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "WebP to JPG/PNG Converter",
-      "url": "https://imgfeel.com/webp-to-jpg-png-converter/",
+      "name": "Resize Image to Exact Dimensions",
+      "url": `https://imgfeel.com${toolUrl}`,
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Any",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -35,19 +35,19 @@ const toolUrl = getToolUrl('webp-to-jpg-png-converter', locale);
       <Breadcrumbs locale={locale} items={[
         { label: t(locale, 'breadcrumb.home'), href: '/' },
         { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
-        { label: t(locale, 'webp.hero.title') }
+        { label: t(locale, 'exactresizer.hero.title') }
       ]} />
       
       <div class="tool-header">
-        <h1 class="tool-title">{t(locale, 'webp.hero.title')}</h1>
-        <p class="tool-subtitle">{t(locale, 'webp.hero.subtitle')}</p>
+        <h1 class="tool-title">{t(locale, 'exactresizer.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'exactresizer.hero.subtitle')}</p>
       </div>
 
-      <WebpConverter locale={locale} />
+      <ExactResizer locale={locale} />
     </div>
   </div>
 
-  <WebpContent locale={locale} />
+  <ExactResizerContent locale={locale} />
 </MainLayout>
 
 <style>

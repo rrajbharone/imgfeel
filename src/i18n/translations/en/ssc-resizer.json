@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Format",
   "sscresizer.validation.pass": "PASSED",
   "sscresizer.validation.fail": "NEEDS ADJUSTMENT",
-  "sscresizer.action.download": "Download Prepared SSC Document",
+  "sscresizer.action.download": "Download JPG",
   "sscresizer.action.new": "Upload Different File",
   "sscresizer.dropzone.photoTitle": "Drop your SSC Passport Photo here",
   "sscresizer.dropzone.sigTitle": "Drop your SSC Signature scan here",

@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Format",
   "sscresizer.validation.pass": "VALIDE",
   "sscresizer.validation.fail": "AJUSTEMENT NÉCESSAIRE",
-  "sscresizer.action.download": "Télécharger le document SSC préparé",
+  "sscresizer.action.download": "Télécharger JPG",
   "sscresizer.action.new": "Téléverser un autre fichier",
   "sscresizer.dropzone.photoTitle": "Déposez votre photo d'identité SSC ici",
   "sscresizer.dropzone.sigTitle": "Déposez votre signature scannée SSC ici",

@@ -25,6 +25,8 @@ export const TRANSLATION_NAMESPACES = [
   'home',
   'tools',
   'resizer',
+  'exact-resizer',
+  'webp-compressor',
   'cm-mm-resizer',
   'pan-resizer',
   'whatsapp-resizer',
@@ -32,8 +34,6 @@ export const TRANSLATION_NAMESPACES = [
   'youtube-resizer',
   'base64-converter',
   'data-uri-converter',
-  'heic-converter',
-  'webp-converter',
 ] as const;
 
 export type TranslationNamespace = (typeof TRANSLATION_NAMESPACES)[number];

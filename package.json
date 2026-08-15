@@ -15,11 +15,6 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.3.0",
-    "astro": "^7.1.6",
-    "heic2any": "^0.0.4",
-    "jszip": "^3.10.1"
-  },
-  "devDependencies": {
-    "@types/jszip": "^3.4.0"
+    "astro": "^7.1.6"
   }
 }

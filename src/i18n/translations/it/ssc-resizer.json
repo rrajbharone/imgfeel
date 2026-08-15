@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Formato",
   "sscresizer.validation.pass": "SUPERATO",
   "sscresizer.validation.fail": "RICHIEDE REGOLAZIONE",
-  "sscresizer.action.download": "Scarica Documento SSC Preparato",
+  "sscresizer.action.download": "Scarica JPG",
   "sscresizer.action.new": "Carica Un Altro File",
   "sscresizer.dropzone.photoTitle": "Trascina qui la tua Foto Tessera SSC",
   "sscresizer.dropzone.subtitle": "o clicca per selezionare un file (JPG, PNG, WebP)",

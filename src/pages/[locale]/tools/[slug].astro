@@ -1,6 +1,10 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ExactResizer from '@/components/ExactResizer.astro';
+import ExactResizerContent from '@/components/ExactResizerContent.astro';
+import WebpCompressor from '@/components/WebpCompressor.astro';
+import WebpCompressorContent from '@/components/WebpCompressorContent.astro';
 import CmMmResizer from '@/components/CmMmResizer.astro';
 import CmMmContent from '@/components/CmMmContent.astro';
 import PanResizer from '@/components/PanResizer.astro';
@@ -15,10 +19,6 @@ import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
 import DataUriContent from '@/components/DataUriContent.astro';
-import HeicConverter from '@/components/HeicConverter.astro';
-import HeicContent from '@/components/HeicContent.astro';
-import WebpConverter from '@/components/WebpConverter.astro';
-import WebpContent from '@/components/WebpContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -43,6 +43,8 @@ const { toolId } = Astro.props as { toolId: string };
 
 const toolUrl = getToolUrl(toolId, locale);
 
+const isExact = toolId === 'exact-dimension-resizer';
+const isWebp = toolId === 'webp-compressor';
 const isCmMm = toolId === 'cm-mm-resizer';
 const isPan = toolId === 'pan-card-resizer';
 const isWa = toolId === 'whatsapp-dp-resizer';
@@ -50,80 +52,78 @@ const isSsc = toolId === 'ssc-photo-signature-resizer';
 const isYt = toolId === 'youtube-banner-resizer';
 const isB64 = toolId === 'image-to-base64-converter';
 const isDataUri = toolId === 'image-to-data-uri-converter';
-const isHeic = toolId === 'heic-to-jpg';
-const isWebp = toolId === 'webp-to-jpg-png-converter';
 
-const metaTitle = isCmMm
-  ? t(locale, 'cmresizer.meta.title')
-  : isPan
-    ? t(locale, 'panresizer.meta.title')
-    : isWa
-      ? t(locale, 'waresizer.meta.title')
-      : isSsc
-        ? t(locale, 'sscresizer.meta.title')
-        : isYt
-          ? t(locale, 'ytresizer.meta.title')
-          : isB64
-            ? t(locale, 'b64.meta.title')
-            : isDataUri
-              ? t(locale, 'datauri.meta.title')
-              : isHeic
-                ? t(locale, 'heic.meta.title')
-                : t(locale, 'webp.meta.title');
+const metaTitle = isExact
+  ? t(locale, 'exactresizer.meta.title')
+  : isWebp
+    ? t(locale, 'webpcomp.meta.title')
+    : isCmMm
+      ? t(locale, 'cmresizer.meta.title')
+      : isPan
+        ? t(locale, 'panresizer.meta.title')
+        : isWa
+          ? t(locale, 'waresizer.meta.title')
+          : isSsc
+            ? t(locale, 'sscresizer.meta.title')
+            : isYt
+              ? t(locale, 'ytresizer.meta.title')
+              : isB64
+                ? t(locale, 'b64.meta.title')
+                : t(locale, 'datauri.meta.title');
 
-const metaDesc = isCmMm
-  ? t(locale, 'cmresizer.meta.description')
-  : isPan
-    ? t(locale, 'panresizer.meta.description')
-    : isWa
-      ? t(locale, 'waresizer.meta.description')
-      : isSsc
-        ? t(locale, 'sscresizer.meta.description')
-        : isYt
-          ? t(locale, 'ytresizer.meta.description')
-          : isB64
-            ? t(locale, 'b64.meta.description')
-            : isDataUri
-              ? t(locale, 'datauri.meta.description')
-              : isHeic
-                ? t(locale, 'heic.meta.description')
-                : t(locale, 'webp.meta.description');
+const metaDesc = isExact
+  ? t(locale, 'exactresizer.meta.description')
+  : isWebp
+    ? t(locale, 'webpcomp.meta.description')
+    : isCmMm
+      ? t(locale, 'cmresizer.meta.description')
+      : isPan
+        ? t(locale, 'panresizer.meta.description')
+        : isWa
+          ? t(locale, 'waresizer.meta.description')
+          : isSsc
+            ? t(locale, 'sscresizer.meta.description')
+            : isYt
+              ? t(locale, 'ytresizer.meta.description')
+              : isB64
+                ? t(locale, 'b64.meta.description')
+                : t(locale, 'datauri.meta.description');
 
-const heroTitle = isCmMm
-  ? t(locale, 'cmresizer.hero.title')
-  : isPan
-    ? t(locale, 'panresizer.hero.title')
-    : isWa
-      ? t(locale, 'waresizer.hero.title')
-      : isSsc
-        ? t(locale, 'sscresizer.hero.title')
-        : isYt
-          ? t(locale, 'ytresizer.hero.title')
-          : isB64
-            ? t(locale, 'b64.hero.title')
-            : isDataUri
-              ? t(locale, 'datauri.hero.title')
-              : isHeic
-                ? t(locale, 'heic.hero.title')
-                : t(locale, 'webp.hero.title');
+const heroTitle = isExact
+  ? t(locale, 'exactresizer.hero.title')
+  : isWebp
+    ? t(locale, 'webpcomp.hero.title')
+    : isCmMm
+      ? t(locale, 'cmresizer.hero.title')
+      : isPan
+        ? t(locale, 'panresizer.hero.title')
+        : isWa
+          ? t(locale, 'waresizer.hero.title')
+          : isSsc
+            ? t(locale, 'sscresizer.hero.title')
+            : isYt
+              ? t(locale, 'ytresizer.hero.title')
+              : isB64
+                ? t(locale, 'b64.hero.title')
+                : t(locale, 'datauri.hero.title');
 
-const heroSubtitle = isCmMm
-  ? t(locale, 'cmresizer.hero.subtitle')
-  : isPan
-    ? t(locale, 'panresizer.hero.subtitle')
-    : isWa
-      ? t(locale, 'waresizer.hero.subtitle')
-      : isSsc
-        ? t(locale, 'sscresizer.hero.subtitle')
-        : isYt
-          ? t(locale, 'ytresizer.hero.subtitle')
-          : isB64
-            ? t(locale, 'b64.hero.subtitle')
-            : isDataUri
-              ? t(locale, 'datauri.hero.subtitle')
-              : isHeic
-                ? t(locale, 'heic.hero.subtitle')
-                : t(locale, 'webp.hero.subtitle');
+const heroSubtitle = isExact
+  ? t(locale, 'exactresizer.hero.subtitle')
+  : isWebp
+    ? t(locale, 'webpcomp.hero.subtitle')
+    : isCmMm
+      ? t(locale, 'cmresizer.hero.subtitle')
+      : isPan
+        ? t(locale, 'panresizer.hero.subtitle')
+        : isWa
+          ? t(locale, 'waresizer.hero.subtitle')
+          : isSsc
+            ? t(locale, 'sscresizer.hero.subtitle')
+            : isYt
+              ? t(locale, 'ytresizer.hero.subtitle')
+              : isB64
+                ? t(locale, 'b64.hero.subtitle')
+                : t(locale, 'datauri.hero.subtitle');
 ---
 
 <MainLayout
@@ -158,6 +158,8 @@ const heroSubtitle = isCmMm
         <p class="tool-subtitle">{heroSubtitle}</p>
       </div>
 
+      {isExact && <ExactResizer locale={locale} />}
+      {isWebp && <WebpCompressor locale={locale} />}
       {isCmMm && <CmMmResizer locale={locale} />}
       {isPan && <PanResizer locale={locale} />}
       {isWa && <WhatsAppResizer locale={locale} />}
@@ -165,11 +167,11 @@ const heroSubtitle = isCmMm
       {isYt && <YouTubeResizer locale={locale} />}
       {isB64 && <Base64Converter locale={locale} />}
       {isDataUri && <DataUriConverter locale={locale} />}
-      {isHeic && <HeicConverter locale={locale} />}
-      {isWebp && <WebpConverter locale={locale} />}
     </div>
   </div>
 
+  {isExact && <ExactResizerContent locale={locale} />}
+  {isWebp && <WebpCompressorContent locale={locale} />}
   {isCmMm && <CmMmContent locale={locale} />}
   {isPan && <PanContent locale={locale} />}
   {isWa && <WhatsAppContent locale={locale} />}
@@ -177,8 +179,6 @@ const heroSubtitle = isCmMm
   {isYt && <YouTubeContent locale={locale} />}
   {isB64 && <Base64Content locale={locale} />}
   {isDataUri && <DataUriContent locale={locale} />}
-  {isHeic && <HeicContent locale={locale} />}
-  {isWebp && <WebpContent locale={locale} />}
 </MainLayout>
 
 <style>

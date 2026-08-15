@@ -22,7 +22,7 @@
   "sscresizer.validation.format": "Biçim",
   "sscresizer.validation.pass": "GEÇTİ",
   "sscresizer.validation.fail": "DÜZELTME GEREKİYOR",
-  "sscresizer.action.download": "Hazırlanan SSC Belgesini İndir",
+  "sscresizer.action.download": "JPG İndir",
   "sscresizer.action.new": "Farklı Dosya Yükle",
   "sscresizer.dropzone.photoTitle": "SSC Vesikalık Fotoğrafınızı buraya bırakın",
   "sscresizer.dropzone.subtitle": "veya dosya seçmek için tıklayın (JPG, PNG, WebP)",

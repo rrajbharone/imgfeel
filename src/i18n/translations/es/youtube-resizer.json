@@ -13,7 +13,7 @@
   "ytresizer.bg.solid": "Color sólido",
   "ytresizer.label.zoom": "Zoom / Escala",
   "ytresizer.label.format": "Formato de salida",
-  "ytresizer.action.download": "Descargar banner de YouTube (2560 × 1440)",
+  "ytresizer.action.download": "Descargar banner",
   "ytresizer.action.newImage": "Cambiar imagen",
   "ytresizer.dropzone.title": "Arrastra aquí la imagen de tu banner de canal",
   "ytresizer.dropzone.subtitle": "o haz clic para seleccionar un archivo (Recomendado: 2560 × 1440 px, JPG/PNG)",

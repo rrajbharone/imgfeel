@@ -15,7 +15,6 @@ const { title, description, href, id = '', icon, badge } = Astro.props;
 
 // Determine icon type from icon prop or id
 const iconType = icon || (
-  id.includes('webp') || id.includes('heic') ? 'image' :
   id.includes('cm-mm') ? 'ruler' :
   id.includes('pan') ? 'idCard' :
   id.includes('whatsapp') ? 'user' :

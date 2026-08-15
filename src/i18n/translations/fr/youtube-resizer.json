@@ -13,7 +13,7 @@
   "ytresizer.bg.solid": "Couleur unie",
   "ytresizer.label.zoom": "Zoom / Échelle",
   "ytresizer.label.format": "Format de sortie",
-  "ytresizer.action.download": "Télécharger la bannière YouTube (2560 × 1440)",
+  "ytresizer.action.download": "Télécharger la bannière",
   "ytresizer.action.newImage": "Changer d'image",
   "ytresizer.dropzone.title": "Déposez l'image de votre bannière de chaîne ici",
   "ytresizer.dropzone.subtitle": "ou cliquez pour sélectionner un fichier (Recommandé : 2560 × 1440 px, JPG/PNG)",
