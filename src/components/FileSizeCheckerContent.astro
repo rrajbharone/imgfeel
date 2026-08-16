@@ -1,0 +1,825 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  {
+    q: t(locale, 'sizecheck.faq.q1'),
+    a: t(locale, 'sizecheck.faq.a1')
+  },
+  {
+    q: t(locale, 'sizecheck.faq.q2'),
+    a: t(locale, 'sizecheck.faq.a2')
+  },
+  {
+    q: t(locale, 'sizecheck.faq.q3'),
+    a: t(locale, 'sizecheck.faq.a3')
+  },
+  {
+    q: t(locale, 'sizecheck.faq.q4'),
+    a: t(locale, 'sizecheck.faq.a4')
+  },
+  {
+    q: t(locale, 'sizecheck.faq.q5'),
+    a: t(locale, 'sizecheck.faq.a5')
+  },
+  {
+    q: t(locale, 'sizecheck.faq.q6'),
+    a: t(locale, 'sizecheck.faq.a6')
+  },
+  {
+    q: t(locale, 'sizecheck.faq.q7'),
+    a: t(locale, 'sizecheck.faq.a7')
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.a
+    }
+  }))
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Overview & Importance -->
+      <h2>{t(locale, 'sizecheck.content.h1')}</h2>
+      <p>{t(locale, 'sizecheck.content.p1a')}</p>
+      <p>{t(locale, 'sizecheck.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <h4>{t(locale, 'sizecheck.content.feat1Title')}</h4>
+          <p>{t(locale, 'sizecheck.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h4>{t(locale, 'sizecheck.content.feat2Title')}</h4>
+          <p>{t(locale, 'sizecheck.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+              <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'sizecheck.content.feat3Title')}</h4>
+          <p>{t(locale, 'sizecheck.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+            </svg>
+          </div>
+          <h4>{t(locale, 'sizecheck.content.feat4Title')}</h4>
+          <p>{t(locale, 'sizecheck.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Units of Measurement & Decimal vs Binary -->
+      <h2>{t(locale, 'sizecheck.content.h2')}</h2>
+      <p>{t(locale, 'sizecheck.content.p2a')}</p>
+      <p>{t(locale, 'sizecheck.content.p2b')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{t(locale, 'sizecheck.table.unitColName')}</th>
+              <th>{t(locale, 'sizecheck.table.unitColStandard')}</th>
+              <th>{t(locale, 'sizecheck.table.unitColBytes')}</th>
+              <th>{t(locale, 'sizecheck.table.unitColUse')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Byte (B)</strong></td>
+              <td>Base Unit</td>
+              <td>1 Byte (8 bits)</td>
+              <td>Fundamental computer data storage unit</td>
+            </tr>
+            <tr>
+              <td><strong>Kilobyte (KB)</strong></td>
+              <td>Decimal (SI Metric)</td>
+              <td>1,000 Bytes</td>
+              <td>Web browsers, network traffic, modern SaaS tools</td>
+            </tr>
+            <tr>
+              <td><strong>Kibibyte (KiB)</strong></td>
+              <td>Binary (IEC Standard)</td>
+              <td>1,024 Bytes</td>
+              <td>Operating systems (Windows Explorer), RAM buffers</td>
+            </tr>
+            <tr>
+              <td><strong>Megabyte (MB)</strong></td>
+              <td>Decimal (SI Metric)</td>
+              <td>1,000,000 Bytes (1,000 KB)</td>
+              <td>Camera RAW files, email attachments, high-res photos</td>
+            </tr>
+            <tr>
+              <td><strong>Mebibyte (MiB)</strong></td>
+              <td>Binary (IEC Standard)</td>
+              <td>1,048,576 Bytes (1,024 KiB)</td>
+              <td>Hard drive partition tables, memory mapping</td>
+            </tr>
+            <tr>
+              <td><strong>Gigabyte (GB)</strong></td>
+              <td>Decimal (SI Metric)</td>
+              <td>1,000,000,000 Bytes (1,000 MB)</td>
+              <td>Photo gallery collections, cloud backups, SD cards</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="formula-box">
+        <span class="formula-label">Conversion Formulas:</span>
+        <code>KB = Bytes ÷ 1,000  |  KiB = Bytes ÷ 1,024</code>
+        <code>MB = Bytes ÷ 1,000,000  |  MiB = Bytes ÷ 1,048,576</code>
+      </div>
+
+      <!-- Section 3: File Size vs Pixel Dimensions vs Resolution -->
+      <h2>{t(locale, 'sizecheck.content.h3')}</h2>
+      <p>{t(locale, 'sizecheck.content.p3a')}</p>
+      <p>{t(locale, 'sizecheck.content.p3b')}</p>
+
+      <!-- Section 4: What Factors Determine File Size? -->
+      <h2>{t(locale, 'sizecheck.content.h4')}</h2>
+      <p>{t(locale, 'sizecheck.content.p4a')}</p>
+
+      <div class="aspect-cards-grid">
+        <div class="aspect-item">
+          <span class="aspect-badge">Pixel Count</span>
+          <h4>Total Resolution (Megapixels)</h4>
+          <p>The more pixels in an image (e.g. 4000 × 3000 = 12 MP), the more uncompressed raw data needs to be stored and encoded.</p>
+        </div>
+
+        <div class="aspect-item">
+          <span class="aspect-badge">Compression</span>
+          <h4>Compression Algorithm & Quality</h4>
+          <p>Lossless compression retains 100% pixel fidelity at larger sizes, while lossy algorithms discard imperceptible detail to achieve up to 90% size reductions.</p>
+        </div>
+
+        <div class="aspect-item">
+          <span class="aspect-badge">Color Channels</span>
+          <h4>Color Depth & Transparency</h4>
+          <p>Images with 8-bit color channels use less space than 24-bit TrueColor or 32-bit RGBA images featuring an alpha transparency channel.</p>
+        </div>
+
+        <div class="aspect-item">
+          <span class="aspect-badge">Metadata</span>
+          <h4>Embedded EXIF & Color Profiles</h4>
+          <p>Camera metadata, GPS coordinates, thumbnail caches, and embedded ICC color profiles can add from 5 KB to over 500 KB of hidden weight.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Image Formats Compared by File Size Efficiency -->
+      <h2>{t(locale, 'sizecheck.content.h5')}</h2>
+      <p>{t(locale, 'sizecheck.content.p5a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Compression Type</th>
+              <th>Average Size Efficiency</th>
+              <th>Recommended Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>WebP</strong></td>
+              <td>Lossy & Lossless</td>
+              <td>⭐⭐⭐⭐⭐ 25–35% smaller than JPEG</td>
+              <td>Primary choice for modern web performance</td>
+            </tr>
+            <tr>
+              <td><strong>AVIF</strong></td>
+              <td>Advanced Lossy/Lossless</td>
+              <td>⭐⭐⭐⭐⭐ 40–50% smaller than JPEG</td>
+              <td>Ultra-optimized websites with AVIF browser support</td>
+            </tr>
+            <tr>
+              <td><strong>JPEG / JPG</strong></td>
+              <td>Lossy</td>
+              <td>⭐⭐⭐ Standard benchmark</td>
+              <td>Universal cross-platform compatibility, photo galleries</td>
+            </tr>
+            <tr>
+              <td><strong>PNG</strong></td>
+              <td>Lossless (Deflate)</td>
+              <td>⭐⭐ Heavy for complex photos, optimal for flat art</td>
+              <td>Screenshots, transparent UI badges, crisp graphics</td>
+            </tr>
+            <tr>
+              <td><strong>SVG</strong></td>
+              <td>Vector (XML Text)</td>
+              <td>⭐⭐⭐⭐⭐ Ultra-lightweight (few KB)</td>
+              <td>Icons, UI glyphs, scalable logos</td>
+            </tr>
+            <tr>
+              <td><strong>GIF</strong></td>
+              <td>Indexed 8-bit LZW</td>
+              <td>⭐ Heavy for animation</td>
+              <td>Short animated memes, legacy support</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 6: Recommended File Sizes for Web & Social Media -->
+      <h2>{t(locale, 'sizecheck.content.h6')}</h2>
+      <p>{t(locale, 'sizecheck.content.p6a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Image Type / Placement</th>
+              <th>Recommended Target Size</th>
+              <th>Optimal Format</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hero Background & Fullscreen Banner</td>
+              <td>150 KB – 300 KB</td>
+              <td>WebP / AVIF (80% Quality)</td>
+            </tr>
+            <tr>
+              <td>Blog & Article Content Images</td>
+              <td>70 KB – 150 KB</td>
+              <td>WebP / JPG</td>
+            </tr>
+            <tr>
+              <td>Product Catalog & E-Commerce Thumbnails</td>
+              <td>30 KB – 80 KB</td>
+              <td>WebP / PNG</td>
+            </tr>
+            <tr>
+              <td>Icons, UI Badges & Logos</td>
+              <td>5 KB – 25 KB</td>
+              <td>SVG / WebP</td>
+            </tr>
+            <tr>
+              <td>Instagram / Facebook Feed Uploads</td>
+              <td>500 KB – 2 MB</td>
+              <td>JPG (Max 1080p width)</td>
+            </tr>
+            <tr>
+              <td>Email Newsletter Embeds</td>
+              <td>&lt; 100 KB (Strict)</td>
+              <td>JPG / WebP / PNG</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 7: Impact on Page Speed and Core Web Vitals -->
+      <h2>{t(locale, 'sizecheck.content.h7')}</h2>
+      <p>{t(locale, 'sizecheck.content.p7a')}</p>
+      <p>{t(locale, 'sizecheck.content.p7b')}</p>
+
+      <!-- Section 8: How to Check Image File Size on OS -->
+      <h2>{t(locale, 'sizecheck.content.h8')}</h2>
+      <p>{t(locale, 'sizecheck.content.p8Intro')}</p>
+
+      <div class="os-guides-list">
+        <div class="os-card">
+          <h4>Windows 10 & 11</h4>
+          <p>Right-click the image in File Explorer and select <strong>Properties</strong>. The <em>General</em> tab shows the file size in KB/MB, and the <em>Size on disk</em> allocation.</p>
+        </div>
+        <div class="os-card">
+          <h4>macOS (Finder & Preview)</h4>
+          <p>Select the image in Finder and press <strong>Command (⌘) + I</strong> to open <em>Get Info</em>. Alternatively, press <strong>Spacebar</strong> to view Quick Look details.</p>
+        </div>
+        <div class="os-card">
+          <h4>iPhone & iPad (iOS)</h4>
+          <p>Open the photo in the <strong>Photos app</strong> and tap the <strong>Info (ℹ️)</strong> button at the bottom to view the exact MB file size and resolution.</p>
+        </div>
+        <div class="os-card">
+          <h4>Android Devices</h4>
+          <p>Open the photo in Google Photos or Gallery, swipe up or tap the <strong>three dots (⋮)</strong> to inspect the file size in KB/MB and storage path.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <h2 class="faq-heading">{t(locale, 'sizecheck.faq.heading')}</h2>
+      <div class="faq-list">
+        {faqItems.map((faq) => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.q}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Feature Summary Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 440px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* Aspect Cards Grid */
+  .aspect-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 560px) {
+    .aspect-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .aspect-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .aspect-item {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .aspect-badge {
+    align-self: flex-start;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+  }
+
+  .aspect-item h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .aspect-item p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Formula Box */
+  .formula-box {
+    background: #0f172a;
+    color: #f8fafc;
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    margin-block: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .formula-box {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      gap: 8px;
+    }
+  }
+
+  .formula-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 640px) {
+    .formula-label {
+      font-size: 11px;
+    }
+  }
+
+  .formula-box code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: #38bdf8;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: block;
+    word-break: break-word;
+  }
+
+  @media (min-width: 640px) {
+    .formula-box code {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* OS Guides List */
+  .os-guides-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 560px) {
+    .os-guides-list {
+      grid-template-columns: repeat(2, 1fr);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .os-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .os-card {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .os-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .os-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* FAQ List */
+  .faq-heading {
+    margin-top: var(--space-10) !important;
+  }
+
+  @media (min-width: 640px) {
+    .faq-heading {
+      margin-top: var(--space-12) !important;
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-border-hover);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent-border);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3-5) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    gap: var(--space-2);
+    line-height: 1.35;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-4) var(--space-5);
+      font-size: var(--text-base);
+      gap: var(--space-3);
+    }
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+      line-height: 1.7;
+    }
+  }
+</style>

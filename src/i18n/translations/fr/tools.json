@@ -23,5 +23,13 @@
   "tools.base64Converter.title": "Convertisseur d'image en Base64",
   "tools.base64Converter.description": "Convertissez des images (JPG, PNG, WebP, SVG, GIF) en Data URLs Base64 avec générateurs de code HTML et CSS en 1 clic.",
   "tools.dataUriConverter.title": "Convertisseur d'image en Data URI",
-  "tools.dataUriConverter.description": "Générez des Data URIs RFC 2397 pour images (PNG, JPG, SVG, WebP) pour intégration directe dans les balises HTML <img> et CSS."
+  "tools.dataUriConverter.description": "Générez des Data URIs RFC 2397 pour images (PNG, JPG, SVG, WebP) pour intégration directe dans les balises HTML <img> et CSS.",
+  "tools.dimensionsChecker.title": "Vérificateur de dimensions d'image",
+  "tools.dimensionsChecker.description": "Vérifiez les dimensions en pixels, le ratio d'aspect, les mégapixels, les formats d'impression DPI, les métadonnées EXIF et la palette de couleurs.",
+  "tools.fileSizeChecker.title": "Vérificateur de taille de fichier image",
+  "tools.fileSizeChecker.description": "Vérifiez le poids d'une image en Octets, Ko et Mo, évaluez la densité de compression (BPP) et simulez les vitesses de téléchargement.",
+  "tools.resolutionChecker.title": "Vérificateur de résolution d'image",
+  "tools.resolutionChecker.description": "Vérifiez la résolution en pixels, mégapixels, formats d'impression à 300 DPI et la netteté d'écran instantanément.",
+  "tools.aspectRatioChecker.title": "Vérificateur de ratio d'aspect d'image",
+  "tools.aspectRatioChecker.description": "Déterminez les ratios d'aspect exacts, proportions décimales, dimensions réseaux sociaux et le code CSS aspect-ratio instantanément."
 }

@@ -1,0 +1,90 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import DimensionsChecker from '@/components/DimensionsChecker.astro';
+import DimensionsCheckerContent from '@/components/DimensionsCheckerContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+const locale = 'en';
+const toolUrl = getToolUrl('image-dimensions-checker', locale);
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'dimcheck.meta.title')}
+  description={t(locale, 'dimcheck.meta.description')}
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Image Dimensions Checker",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: '/' },
+        { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
+        { label: t(locale, 'dimcheck.hero.title') }
+      ]} />
+      
+      <div class="tool-header">
+        <h1 class="tool-title">{t(locale, 'dimcheck.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'dimcheck.hero.subtitle')}</p>
+      </div>
+
+      <DimensionsChecker locale={locale} />
+    </div>
+  </div>
+
+  <DimensionsCheckerContent locale={locale} />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  @media (min-width: 640px) {
+    .tool-header {
+      margin-top: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+  }
+  .tool-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  @media (min-width: 640px) {
+    .tool-title {
+      font-size: var(--text-3xl);
+    }
+  }
+  .tool-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+  @media (min-width: 640px) {
+    .tool-subtitle {
+      font-size: var(--text-base);
+    }
+  }
+</style>

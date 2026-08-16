@@ -23,5 +23,13 @@
   "tools.base64Converter.title": "Bild in Base64 Konverter",
   "tools.base64Converter.description": "Konvertieren Sie Bilder (JPG, PNG, WebP, SVG, GIF) in Base64 Data-URLs mit 1-Klick-HTML- und CSS-Codegeneratoren.",
   "tools.dataUriConverter.title": "Bild-in-Data-URI-Umwandler",
-  "tools.dataUriConverter.description": "Erstellen Sie RFC 2397 Data URIs für Bilder (PNG, JPG, SVG, WebP) zur direkten Einbindung in HTML <img> und CSS."
+  "tools.dataUriConverter.description": "Erstellen Sie RFC 2397 Data URIs für Bilder (PNG, JPG, SVG, WebP) zur direkten Einbindung in HTML <img> und CSS.",
+  "tools.dimensionsChecker.title": "Bildabmessungen prüfen",
+  "tools.dimensionsChecker.description": "Überprüfen Sie Pixelabmessungen, Seitenverhältnis, Megapixel, DPI-Druckgrößen, EXIF-Kameradaten und Farbpalette sofort.",
+  "tools.fileSizeChecker.title": "Bilddateigröße prüfen",
+  "tools.fileSizeChecker.description": "Überprüfen Sie die Bildgröße in Bytes, KB und MB, bewerten Sie die Kompressionsdichte (BPP) und simulieren Sie Download-Zeiten.",
+  "tools.resolutionChecker.title": "Bildauflösung prüfen",
+  "tools.resolutionChecker.description": "Überprüfen Sie Bildauflösung, Pixelmaße, Megapixel, 300-DPI-Druckgrößen und Bildschirmschärfe sofort.",
+  "tools.aspectRatioChecker.title": "Bild-Seitenverhältnis prüfen",
+  "tools.aspectRatioChecker.description": "Ermitteln Sie exakte Seitenverhältnisse, Dezimalwerte, Social-Media-Formate und responsiven CSS aspect-ratio-Code sofort."
 }

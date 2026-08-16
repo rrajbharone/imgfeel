@@ -23,5 +23,13 @@
   "tools.base64Converter.title": "Pengubah Gambar ke Base64",
   "tools.base64Converter.description": "Ubah gambar (JPG, PNG, WebP, SVG, GIF) ke Data URL Base64 dengan generator kode HTML dan CSS 1-klik.",
   "tools.dataUriConverter.title": "Pengubah Gambar ke Data URI",
-  "tools.dataUriConverter.description": "Hasilkan Data URI RFC 2397 untuk gambar (PNG, JPG, SVG, WebP) untuk disematkan langsung di HTML <img> dan CSS."
+  "tools.dataUriConverter.description": "Hasilkan Data URI RFC 2397 untuk gambar (PNG, JPG, SVG, WebP) untuk disematkan langsung di HTML <img> dan CSS.",
+  "tools.dimensionsChecker.title": "Pemeriksa Dimensi Gambar",
+  "tools.dimensionsChecker.description": "Periksa dimensi piksel, rasio aspek, megapiksel, ukuran cetak DPI, metadata kamera EXIF, dan palet warna secara instan.",
+  "tools.fileSizeChecker.title": "Pemeriksa Ukuran File Gambar",
+  "tools.fileSizeChecker.description": "Cek ukuran file gambar dalam Bytes, KB, dan MB, evaluasi densitas kompresi (BPP), dan simulasi kecepatan unduh.",
+  "tools.resolutionChecker.title": "Pemeriksa Resolusi Gambar",
+  "tools.resolutionChecker.description": "Periksa resolusi gambar, dimensi piksel, megapiksel, ukuran cetak 300 DPI, dan ketajaman layar secara instan.",
+  "tools.aspectRatioChecker.title": "Pemeriksa Rasio Aspek Gambar",
+  "tools.aspectRatioChecker.description": "Temukan rasio aspek pasti, proporsi desimal, dimensi media sosial, dan kode CSS aspect-ratio secara instan."
 }

@@ -23,5 +23,13 @@
   "tools.base64Converter.title": "Resmi Base64'e Dönüştürücü",
   "tools.base64Converter.description": "Görselleri (JPG, PNG, WebP, SVG, GIF) tek tıkla HTML ve CSS kod üreticileriyle Base64 Data URL'lerine dönüştürün.",
   "tools.dataUriConverter.title": "Resmi Data URI'ye Dönüştürücü",
-  "tools.dataUriConverter.description": "Doğrudan HTML <img> ve CSS içerisine gömmek için görsellerden (PNG, JPG, SVG, WebP) RFC 2397 Data URI'leri üretin."
+  "tools.dataUriConverter.description": "Doğrudan HTML <img> ve CSS içerisine gömmek için görsellerden (PNG, JPG, SVG, WebP) RFC 2397 Data URI'leri üretin.",
+  "tools.dimensionsChecker.title": "Resim Boyutları Kontrol Etme",
+  "tools.dimensionsChecker.description": "Görsel piksel boyutlarını, en boy oranını, megapikseli, DPI baskı ölçülerini, EXIF kamera verilerini ve renk paletini anında inceleyin.",
+  "tools.fileSizeChecker.title": "Resim Dosya Boyutu Kontrol Etme",
+  "tools.fileSizeChecker.description": "Görsel dosya boyutunu Byte, KB ve MB olarak kontrol edin, sıkıştırma yoğunluğunu (BPP) ölçün ve indirme hızlarını simüle edin.",
+  "tools.resolutionChecker.title": "Resim Çözünürlük Kontrol Etme",
+  "tools.resolutionChecker.description": "Görsel piksel çözünürlüğünü, megapikseli, 300 DPI baskı boyutlarını ve ekran netliğini anında inceleyin.",
+  "tools.aspectRatioChecker.title": "Resim En Boy Oranı Kontrol Etme",
+  "tools.aspectRatioChecker.description": "Görselin tam en boy oranını, ondalık değerlerini, sosyal medya formatlarını ve duyarlı CSS aspect-ratio kodunu anında öğrenin."
 }

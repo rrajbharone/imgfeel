@@ -1,0 +1,792 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  {
+    q: t(locale, 'rescheck.faq.q1'),
+    a: t(locale, 'rescheck.faq.a1')
+  },
+  {
+    q: t(locale, 'rescheck.faq.q2'),
+    a: t(locale, 'rescheck.faq.a2')
+  },
+  {
+    q: t(locale, 'rescheck.faq.q3'),
+    a: t(locale, 'rescheck.faq.a3')
+  },
+  {
+    q: t(locale, 'rescheck.faq.q4'),
+    a: t(locale, 'rescheck.faq.a4')
+  },
+  {
+    q: t(locale, 'rescheck.faq.q5'),
+    a: t(locale, 'rescheck.faq.a5')
+  },
+  {
+    q: t(locale, 'rescheck.faq.q6'),
+    a: t(locale, 'rescheck.faq.a6')
+  },
+  {
+    q: t(locale, 'rescheck.faq.q7'),
+    a: t(locale, 'rescheck.faq.a7')
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.a
+    }
+  }))
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Overview -->
+      <h2>{t(locale, 'rescheck.content.h1')}</h2>
+      <p>{t(locale, 'rescheck.content.p1a')}</p>
+      <p>{t(locale, 'rescheck.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'rescheck.content.feat1Title')}</h4>
+          <p>{t(locale, 'rescheck.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </div>
+          <h4>{t(locale, 'rescheck.content.feat2Title')}</h4>
+          <p>{t(locale, 'rescheck.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h4>{t(locale, 'rescheck.content.feat3Title')}</h4>
+          <p>{t(locale, 'rescheck.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'rescheck.content.feat4Title')}</h4>
+          <p>{t(locale, 'rescheck.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Dimensions vs Resolution vs DPI/PPI -->
+      <h2>{t(locale, 'rescheck.content.h2')}</h2>
+      <p>{t(locale, 'rescheck.content.p2a')}</p>
+      <p>{t(locale, 'rescheck.content.p2b')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{t(locale, 'rescheck.table.termCol')}</th>
+              <th>{t(locale, 'rescheck.table.meaningCol')}</th>
+              <th>{t(locale, 'rescheck.table.formulaCol')}</th>
+              <th>{t(locale, 'rescheck.table.useCol')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Pixel Dimensions</strong></td>
+              <td>Total width & height in pixel count</td>
+              <td><code>Width (px) × Height (px)</code></td>
+              <td>Screen layouts, responsive CSS, file encoding</td>
+            </tr>
+            <tr>
+              <td><strong>Megapixels (MP)</strong></td>
+              <td>Total pixel volume in millions</td>
+              <td><code>(W × H) ÷ 1,000,000</code></td>
+              <td>Camera sensors, digital photography, file weight</td>
+            </tr>
+            <tr>
+              <td><strong>PPI (Pixels Per Inch)</strong></td>
+              <td>Pixel density of a digital screen</td>
+              <td><code>√(W² + H²) ÷ Screen Diagonal</code></td>
+              <td>Smartphone displays (Retina), desktop monitors</td>
+            </tr>
+            <tr>
+              <td><strong>DPI (Dots Per Inch)</strong></td>
+              <td>Ink dot density of physical printers</td>
+              <td><code>Pixels ÷ Physical Print Inches</code></td>
+              <td>Photo prints, magazines, posters, fine art</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 3: Megapixels Demystified -->
+      <h2>{t(locale, 'rescheck.content.h3')}</h2>
+      <p>{t(locale, 'rescheck.content.p3a')}</p>
+      <p>{t(locale, 'rescheck.content.p3b')}</p>
+
+      <div class="formula-box">
+        <span class="formula-label">Megapixel & Pixel Density Formulas:</span>
+        <code>Megapixels (MP) = (Width × Height) ÷ 1,000,000</code>
+        <code>Print Width (Inches) = Width (Pixels) ÷ Target DPI</code>
+        <code>Print Width (Centimeters) = (Width (Pixels) ÷ Target DPI) × 2.54</code>
+      </div>
+
+      <!-- Section 4: Standard Digital Resolutions Table -->
+      <h2>{t(locale, 'rescheck.content.h4')}</h2>
+      <p>{t(locale, 'rescheck.content.p4a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Standard Name</th>
+              <th>Dimensions (px)</th>
+              <th>Megapixels</th>
+              <th>Aspect Ratio</th>
+              <th>Common Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>8K Ultra HD (4320p)</strong></td>
+              <td>7680 × 4320</td>
+              <td>33.18 MP</td>
+              <td>16:9</td>
+              <td>Next-gen TV, cinema production, VR master</td>
+            </tr>
+            <tr>
+              <td><strong>4K Ultra HD (2160p)</strong></td>
+              <td>3840 × 2160</td>
+              <td>8.29 MP</td>
+              <td>16:9</td>
+              <td>Modern monitors, 4K streaming, YouTube 4K</td>
+            </tr>
+            <tr>
+              <td><strong>QHD 2K (1440p)</strong></td>
+              <td>2560 × 1440</td>
+              <td>3.69 MP</td>
+              <td>16:9</td>
+              <td>Gaming monitors, YouTube banners, iMac 27″</td>
+            </tr>
+            <tr>
+              <td><strong>Full HD (1080p)</strong></td>
+              <td>1920 × 1080</td>
+              <td>2.07 MP</td>
+              <td>16:9</td>
+              <td>Universal web standard, laptops, slide decks</td>
+            </tr>
+            <tr>
+              <td><strong>HD Ready (720p)</strong></td>
+              <td>1280 × 720</td>
+              <td>0.92 MP</td>
+              <td>16:9</td>
+              <td>YouTube thumbnails, fast web embeds</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram Square (1:1)</strong></td>
+              <td>1080 × 1080</td>
+              <td>1.17 MP</td>
+              <td>1:1</td>
+              <td>Instagram feed, profile avatars</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram Portrait (4:5)</strong></td>
+              <td>1080 × 1350</td>
+              <td>1.46 MP</td>
+              <td>4:5</td>
+              <td>High-engagement Instagram feed posts</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram Reel / TikTok</strong></td>
+              <td>1080 × 1920</td>
+              <td>2.07 MP</td>
+              <td>9:16</td>
+              <td>Full-screen mobile video and story format</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: Calculating Maximum Sharp Print Sizes -->
+      <h2>{t(locale, 'rescheck.content.h5')}</h2>
+      <p>{t(locale, 'rescheck.content.p5a')}</p>
+
+      <div class="aspect-cards-grid">
+        <div class="aspect-item">
+          <span class="aspect-badge">300 DPI</span>
+          <h4>Photo & Fine Art Gallery Quality</h4>
+          <p>The gold standard for up-close viewing. Produces razor-sharp photo albums, gallery prints, and glossy brochures where individual ink dots are invisible to the naked eye.</p>
+        </div>
+
+        <div class="aspect-item">
+          <span class="aspect-badge">200 DPI</span>
+          <h4>Magazine & Book Quality</h4>
+          <p>Ideal for commercial publications, art books, and product packaging held at arm's length. Offers excellent clarity while requiring fewer source pixels.</p>
+        </div>
+
+        <div class="aspect-item">
+          <span class="aspect-badge">150 DPI</span>
+          <h4>Posters & Event Banners</h4>
+          <p>Perfect for large wall posters, trade show booths, and retail signage viewed from a distance of 1 to 2 meters (3 to 6 feet).</p>
+        </div>
+
+        <div class="aspect-item">
+          <span class="aspect-badge">72 DPI</span>
+          <h4>Screen & Billboard Drafts</h4>
+          <p>Suitable only for digital screen displays or massive roadside billboards designed to be viewed from 10+ meters away.</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Screen Quality vs Print Quality -->
+      <h2>{t(locale, 'rescheck.content.h6')}</h2>
+      <p>{t(locale, 'rescheck.content.p6a')}</p>
+      <p>{t(locale, 'rescheck.content.p6b')}</p>
+
+      <!-- Section 7: Aspect Ratio and Display Scaling -->
+      <h2>{t(locale, 'rescheck.content.h7')}</h2>
+      <p>{t(locale, 'rescheck.content.p7a')}</p>
+
+      <!-- Section 8: How to Check Image Resolution on OS -->
+      <h2>{t(locale, 'rescheck.content.h8')}</h2>
+      <p>{t(locale, 'rescheck.content.p8Intro')}</p>
+
+      <div class="os-guides-list">
+        <div class="os-card">
+          <h4>Windows 10 & 11</h4>
+          <p>Right-click the image in File Explorer, choose <strong>Properties</strong>, and open the <strong>Details</strong> tab to inspect pixel width, height, and horizontal/vertical resolution.</p>
+        </div>
+        <div class="os-card">
+          <h4>macOS (Finder & Preview)</h4>
+          <p>Select the image in Finder and press <strong>Command (⌘) + I</strong> to open <em>Get Info</em>. In Preview, press <strong>Command (⌘) + I</strong> to see the Inspector window.</p>
+        </div>
+        <div class="os-card">
+          <h4>iPhone & iPad (iOS)</h4>
+          <p>Open the photo in the <strong>Photos app</strong> and tap the <strong>Info (ℹ️)</strong> button below the image to view the exact MP rating, pixel dimensions, and camera focal length.</p>
+        </div>
+        <div class="os-card">
+          <h4>Android Devices</h4>
+          <p>Open Google Photos or Gallery, swipe up on the image or tap the <strong>three dots (⋮)</strong> to inspect resolution (e.g. 12 MP • 4000 × 3000) and file details.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <h2 class="faq-heading">{t(locale, 'rescheck.faq.heading')}</h2>
+      <div class="faq-list">
+        {faqItems.map((faq) => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.q}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Feature Summary Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 440px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* Aspect Cards Grid */
+  .aspect-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 560px) {
+    .aspect-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .aspect-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .aspect-item {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .aspect-badge {
+    align-self: flex-start;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+  }
+
+  .aspect-item h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .aspect-item p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Formula Box */
+  .formula-box {
+    background: #0f172a;
+    color: #f8fafc;
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    margin-block: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .formula-box {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      gap: 8px;
+    }
+  }
+
+  .formula-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 640px) {
+    .formula-label {
+      font-size: 11px;
+    }
+  }
+
+  .formula-box code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: #38bdf8;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: block;
+    word-break: break-word;
+  }
+
+  @media (min-width: 640px) {
+    .formula-box code {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* OS Guides List */
+  .os-guides-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 560px) {
+    .os-guides-list {
+      grid-template-columns: repeat(2, 1fr);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .os-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .os-card {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .os-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .os-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* FAQ List */
+  .faq-heading {
+    margin-top: var(--space-10) !important;
+  }
+
+  @media (min-width: 640px) {
+    .faq-heading {
+      margin-top: var(--space-12) !important;
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-border-hover);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent-border);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3-5) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    gap: var(--space-2);
+    line-height: 1.35;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-4) var(--space-5);
+      font-size: var(--text-base);
+      gap: var(--space-3);
+    }
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+      line-height: 1.7;
+    }
+  }
+</style>

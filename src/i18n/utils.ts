@@ -15,6 +15,10 @@ import enSsc from './translations/en/ssc-resizer.json';
 import enYt from './translations/en/youtube-resizer.json';
 import enB64 from './translations/en/base64-converter.json';
 import enDataUri from './translations/en/data-uri-converter.json';
+import enDimCheck from './translations/en/dimensions-checker.json';
+import enSizeCheck from './translations/en/file-size-checker.json';
+import enResCheck from './translations/en/resolution-checker.json';
+import enRatioCheck from './translations/en/aspect-ratio-checker.json';
 
 import esCommon from './translations/es/common.json';
 import esHome from './translations/es/home.json';
@@ -29,6 +33,10 @@ import esSsc from './translations/es/ssc-resizer.json';
 import esYt from './translations/es/youtube-resizer.json';
 import esB64 from './translations/es/base64-converter.json';
 import esDataUri from './translations/es/data-uri-converter.json';
+import esDimCheck from './translations/es/dimensions-checker.json';
+import esSizeCheck from './translations/es/file-size-checker.json';
+import esResCheck from './translations/es/resolution-checker.json';
+import esRatioCheck from './translations/es/aspect-ratio-checker.json';
 
 import ptCommon from './translations/pt/common.json';
 import ptHome from './translations/pt/home.json';
@@ -43,6 +51,10 @@ import ptSsc from './translations/pt/ssc-resizer.json';
 import ptYt from './translations/pt/youtube-resizer.json';
 import ptB64 from './translations/pt/base64-converter.json';
 import ptDataUri from './translations/pt/data-uri-converter.json';
+import ptDimCheck from './translations/pt/dimensions-checker.json';
+import ptSizeCheck from './translations/pt/file-size-checker.json';
+import ptResCheck from './translations/pt/resolution-checker.json';
+import ptRatioCheck from './translations/pt/aspect-ratio-checker.json';
 
 import frCommon from './translations/fr/common.json';
 import frHome from './translations/fr/home.json';
@@ -57,6 +69,10 @@ import frSsc from './translations/fr/ssc-resizer.json';
 import frYt from './translations/fr/youtube-resizer.json';
 import frB64 from './translations/fr/base64-converter.json';
 import frDataUri from './translations/fr/data-uri-converter.json';
+import frDimCheck from './translations/fr/dimensions-checker.json';
+import frSizeCheck from './translations/fr/file-size-checker.json';
+import frResCheck from './translations/fr/resolution-checker.json';
+import frRatioCheck from './translations/fr/aspect-ratio-checker.json';
 
 import deCommon from './translations/de/common.json';
 import deHome from './translations/de/home.json';
@@ -71,6 +87,10 @@ import deSsc from './translations/de/ssc-resizer.json';
 import deYt from './translations/de/youtube-resizer.json';
 import deB64 from './translations/de/base64-converter.json';
 import deDataUri from './translations/de/data-uri-converter.json';
+import deDimCheck from './translations/de/dimensions-checker.json';
+import deSizeCheck from './translations/de/file-size-checker.json';
+import deResCheck from './translations/de/resolution-checker.json';
+import deRatioCheck from './translations/de/aspect-ratio-checker.json';
 
 import idCommon from './translations/id/common.json';
 import idHome from './translations/id/home.json';
@@ -85,6 +105,10 @@ import idSsc from './translations/id/ssc-resizer.json';
 import idYt from './translations/id/youtube-resizer.json';
 import idB64 from './translations/id/base64-converter.json';
 import idDataUri from './translations/id/data-uri-converter.json';
+import idDimCheck from './translations/id/dimensions-checker.json';
+import idSizeCheck from './translations/id/file-size-checker.json';
+import idResCheck from './translations/id/resolution-checker.json';
+import idRatioCheck from './translations/id/aspect-ratio-checker.json';
 
 import trCommon from './translations/tr/common.json';
 import trHome from './translations/tr/home.json';
@@ -99,6 +123,10 @@ import trSsc from './translations/tr/ssc-resizer.json';
 import trYt from './translations/tr/youtube-resizer.json';
 import trB64 from './translations/tr/base64-converter.json';
 import trDataUri from './translations/tr/data-uri-converter.json';
+import trDimCheck from './translations/tr/dimensions-checker.json';
+import trSizeCheck from './translations/tr/file-size-checker.json';
+import trResCheck from './translations/tr/resolution-checker.json';
+import trRatioCheck from './translations/tr/aspect-ratio-checker.json';
 
 import itCommon from './translations/it/common.json';
 import itHome from './translations/it/home.json';
@@ -113,19 +141,23 @@ import itSsc from './translations/it/ssc-resizer.json';
 import itYt from './translations/it/youtube-resizer.json';
 import itB64 from './translations/it/base64-converter.json';
 import itDataUri from './translations/it/data-uri-converter.json';
+import itDimCheck from './translations/it/dimensions-checker.json';
+import itSizeCheck from './translations/it/file-size-checker.json';
+import itResCheck from './translations/it/resolution-checker.json';
+import itRatioCheck from './translations/it/aspect-ratio-checker.json';
 
 type TranslationMap = Record<string, string>;
 
 /** All translations indexed by locale, with all namespaces merged into a flat map */
 const translations: Record<Locale, TranslationMap> = {
-  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri },
-  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri },
-  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri },
-  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri },
-  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri },
-  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri },
-  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri },
-  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri },
+  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck },
+  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck },
+  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck },
+  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck },
+  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck },
+  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck },
+  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck },
+  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck },
 };
 
 /**

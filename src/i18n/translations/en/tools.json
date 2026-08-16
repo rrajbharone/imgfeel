@@ -23,5 +23,13 @@
   "tools.base64Converter.title": "Image to Base64 Converter",
   "tools.base64Converter.description": "Convert images (JPG, PNG, WebP, SVG, GIF) to Base64 Data URLs with 1-click HTML & CSS code generators.",
   "tools.dataUriConverter.title": "Image to Data URI Converter",
-  "tools.dataUriConverter.description": "Generate RFC 2397 Data URIs for images (PNG, JPG, SVG, WebP) for instant inline HTML <img> and CSS embedding."
+  "tools.dataUriConverter.description": "Generate RFC 2397 Data URIs for images (PNG, JPG, SVG, WebP) for instant inline HTML <img> and CSS embedding.",
+  "tools.dimensionsChecker.title": "Image Dimensions Checker",
+  "tools.dimensionsChecker.description": "Check pixel dimensions, aspect ratio, megapixels, DPI print sizes, EXIF camera metadata, and color palette instantly.",
+  "tools.fileSizeChecker.title": "Image File Size Checker",
+  "tools.fileSizeChecker.description": "Check image file size in Bytes, KB, and MB, evaluate compression density (BPP), and simulate network download speeds.",
+  "tools.resolutionChecker.title": "Image Resolution Checker",
+  "tools.resolutionChecker.description": "Check image resolution, pixel dimensions, megapixels, 300 DPI print sizes, and screen display clarity instantly.",
+  "tools.aspectRatioChecker.title": "Image Aspect Ratio Checker",
+  "tools.aspectRatioChecker.description": "Find exact aspect ratios, decimal proportions, social media dimensions, and responsive CSS aspect-ratio code instantly."
 }

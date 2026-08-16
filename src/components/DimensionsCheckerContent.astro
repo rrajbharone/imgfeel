@@ -1,0 +1,854 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  { q: t(locale, 'dimcheck.faq.q1'), a: t(locale, 'dimcheck.faq.a1') },
+  { q: t(locale, 'dimcheck.faq.q2'), a: t(locale, 'dimcheck.faq.a2') },
+  { q: t(locale, 'dimcheck.faq.q3'), a: t(locale, 'dimcheck.faq.a3') },
+  { q: t(locale, 'dimcheck.faq.q4'), a: t(locale, 'dimcheck.faq.a4') },
+  { q: t(locale, 'dimcheck.faq.q5'), a: t(locale, 'dimcheck.faq.a5') },
+  { q: t(locale, 'dimcheck.faq.q6'), a: t(locale, 'dimcheck.faq.a6') },
+  { q: t(locale, 'dimcheck.faq.q7'), a: t(locale, 'dimcheck.faq.a7') },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.a
+    }
+  }))
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to Image Dimensions & Resolution -->
+      <h2>{t(locale, 'dimcheck.content.h1')}</h2>
+      <p>{t(locale, 'dimcheck.content.p1a')}</p>
+      <p>{t(locale, 'dimcheck.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dimcheck.content.feat1Title')}</h4>
+          <p>{t(locale, 'dimcheck.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <line x1="12" y1="4" x2="12" y2="20"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dimcheck.content.feat2Title')}</h4>
+          <p>{t(locale, 'dimcheck.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dimcheck.content.feat3Title')}</h4>
+          <p>{t(locale, 'dimcheck.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dimcheck.content.feat4Title')}</h4>
+          <p>{t(locale, 'dimcheck.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Pixels, Megapixels, and Resolution Breakdown -->
+      <h2>{t(locale, 'dimcheck.content.h2')}</h2>
+      <p>{t(locale, 'dimcheck.content.p2a')}</p>
+      <p>{t(locale, 'dimcheck.content.p2b')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{t(locale, 'dimcheck.table.resColName')}</th>
+              <th>{t(locale, 'dimcheck.table.resColDim')}</th>
+              <th>{t(locale, 'dimcheck.table.resColTotalPx')}</th>
+              <th>{t(locale, 'dimcheck.table.resColMP')}</th>
+              <th>{t(locale, 'dimcheck.table.resColUse')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>720p HD</strong></td>
+              <td>1280 × 720 px</td>
+              <td>921,600 px</td>
+              <td>0.92 MP</td>
+              <td>Fast web loading, email banners</td>
+            </tr>
+            <tr>
+              <td><strong>1080p Full HD</strong></td>
+              <td>1920 × 1080 px</td>
+              <td>2,073,600 px</td>
+              <td>2.07 MP</td>
+              <td>Standard web hero, desktop display</td>
+            </tr>
+            <tr>
+              <td><strong>1440p 2K QHD</strong></td>
+              <td>2560 × 1440 px</td>
+              <td>3,686,400 px</td>
+              <td>3.69 MP</td>
+              <td>YouTube channel banners, 2K monitors</td>
+            </tr>
+            <tr>
+              <td><strong>4K Ultra HD</strong></td>
+              <td>3840 × 2160 px</td>
+              <td>8,294,400 px</td>
+              <td>8.29 MP</td>
+              <td>Retina displays, ultra high-res photography</td>
+            </tr>
+            <tr>
+              <td><strong>8K Ultra HD</strong></td>
+              <td>7680 × 4320 px</td>
+              <td>33,177,600 px</td>
+              <td>33.18 MP</td>
+              <td>Commercial billboards, large fine-art prints</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 3: Understanding Aspect Ratio -->
+      <h2>{t(locale, 'dimcheck.content.h3')}</h2>
+      <p>{t(locale, 'dimcheck.content.p3a')}</p>
+      <p>{t(locale, 'dimcheck.content.p3b')}</p>
+
+      <div class="aspect-cards-grid">
+        <div class="aspect-item">
+          <span class="aspect-badge">16:9</span>
+          <h4>Widescreen Standard</h4>
+          <p>The universal standard for YouTube, video thumbnails, desktop screens, television, and modern website hero banners.</p>
+        </div>
+        <div class="aspect-item">
+          <span class="aspect-badge">1:1</span>
+          <h4>Square Ratio</h4>
+          <p>The classic square format popularized by Instagram feeds, e-commerce product listings, and digital avatar profile pictures.</p>
+        </div>
+        <div class="aspect-item">
+          <span class="aspect-badge">9:16</span>
+          <h4>Vertical Fullscreen</h4>
+          <p>Optimized for mobile-first social media formats including Instagram Stories, Reels, TikTok videos, and YouTube Shorts.</p>
+        </div>
+        <div class="aspect-item">
+          <span class="aspect-badge">4:5</span>
+          <h4>Portrait Feed</h4>
+          <p>The highest real-estate portrait post dimension on Instagram feeds (1080 × 1350 px), commanding maximum viewer screen space.</p>
+        </div>
+        <div class="aspect-item">
+          <span class="aspect-badge">3:2</span>
+          <h4>Classic 35mm Photo</h4>
+          <p>The native sensor format for standard DSLR and mirrorless photography (e.g. 6000 × 4000 px on a 24 MP sensor).</p>
+        </div>
+        <div class="aspect-item">
+          <span class="aspect-badge">21:9</span>
+          <h4>Cinematic Ultra-Wide</h4>
+          <p>Panoramic cinematic displays, header graphics, and ultra-wide monitor wallpapers.</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Digital Pixels vs. Physical Print Dimensions (DPI & PPI Explained) -->
+      <h2>{t(locale, 'dimcheck.content.h4')}</h2>
+      <p>{t(locale, 'dimcheck.content.p4a')}</p>
+      <p>{t(locale, 'dimcheck.content.p4b')}</p>
+      <div class="formula-box">
+        <span class="formula-label">Print Dimension Formula:</span>
+        <code>Print Size in Inches = Pixel Dimension ÷ DPI</code>
+        <code>Print Size in Centimeters = (Pixel Dimension ÷ DPI) × 2.54</code>
+      </div>
+      <p>{t(locale, 'dimcheck.content.p4c')}</p>
+
+      <!-- Section 5: Image Formats Comparison -->
+      <h2>{t(locale, 'dimcheck.content.h5')}</h2>
+      <p>{t(locale, 'dimcheck.content.p5a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Compression</th>
+              <th>Transparency</th>
+              <th>Animation</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>WebP</strong></td>
+              <td>Lossy & Lossless</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Modern high-performance web imagery & SaaS tools</td>
+            </tr>
+            <tr>
+              <td><strong>JPEG / JPG</strong></td>
+              <td>Lossy</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Photographs, social media uploads, real-world images</td>
+            </tr>
+            <tr>
+              <td><strong>PNG</strong></td>
+              <td>Lossless</td>
+              <td>Yes (Alpha)</td>
+              <td>No</td>
+              <td>Logos, screenshots, graphics requiring transparent background</td>
+            </tr>
+            <tr>
+              <td><strong>SVG</strong></td>
+              <td>Vector (XML)</td>
+              <td>Yes</td>
+              <td>Yes (CSS/JS)</td>
+              <td>Icons, UI badges, responsive brand logos</td>
+            </tr>
+            <tr>
+              <td><strong>AVIF</strong></td>
+              <td>Next-Gen Lossy/Lossless</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Cutting-edge compression with 20-30% smaller files than WebP</td>
+            </tr>
+            <tr>
+              <td><strong>GIF</strong></td>
+              <td>Indexed 8-bit</td>
+              <td>1-bit (Simple)</td>
+              <td>Yes</td>
+              <td>Short animated memes, legacy web animations</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 6: Image Metadata (EXIF, IPTC, XMP) & Privacy -->
+      <h2>{t(locale, 'dimcheck.content.h6')}</h2>
+      <p>{t(locale, 'dimcheck.content.p6a')}</p>
+      <p>{t(locale, 'dimcheck.content.p6b')}</p>
+      <p>{t(locale, 'dimcheck.content.p6c')}</p>
+
+      <!-- Section 7: How to Check Image Dimensions on Any Device -->
+      <h2>{t(locale, 'dimcheck.content.h7')}</h2>
+      <p>{t(locale, 'dimcheck.content.p7Intro')}</p>
+
+      <div class="os-guides-list">
+        <div class="os-card">
+          <h4>Windows 10 & 11</h4>
+          <p>Right-click the image file in File Explorer, select <strong>Properties</strong>, and navigate to the <strong>Details</strong> tab. You will see <em>Dimensions (e.g. 1920 x 1080)</em>, <em>Width</em>, <em>Height</em>, and <em>Horizontal/Vertical Resolution (DPI)</em>.</p>
+        </div>
+        <div class="os-card">
+          <h4>macOS (Finder & Preview)</h4>
+          <p>Select the image in Finder and press <strong>Command (⌘) + I</strong> to open <em>Get Info</em>. Alternatively, open the photo in <em>Preview</em> and press <strong>Command (⌘) + I</strong> to reveal the Inspector window displaying pixel dimensions, DPI, and color profile.</p>
+        </div>
+        <div class="os-card">
+          <h4>iPhone & iPad (iOS)</h4>
+          <p>Open the photo in the native <strong>Photos app</strong> and tap the <strong>Info (ℹ️)</strong> button at the bottom of the screen. iOS displays the resolution (e.g. 12 MP • 4032 × 3024), file size, camera lens, shutter speed, ISO, and capture date.</p>
+        </div>
+        <div class="os-card">
+          <h4>Android (Google Photos / Gallery)</h4>
+          <p>Open the image in Google Photos or your phone's Gallery, swipe up or tap the <strong>three vertical dots (⋮)</strong> at the top right. The details sheet will display width and height in pixels, file size in MB, camera settings, and file path.</p>
+        </div>
+      </div>
+
+      <!-- Section 8: Social Media Dimensions Master Cheat Sheet -->
+      <h2>{t(locale, 'dimcheck.content.h8')}</h2>
+      <p>{t(locale, 'dimcheck.content.p8a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Placement / Asset</th>
+              <th>Recommended Pixels</th>
+              <th>Aspect Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Instagram</strong></td>
+              <td>Square Feed Post</td>
+              <td>1080 × 1080 px</td>
+              <td>1:1</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram</strong></td>
+              <td>Portrait Post</td>
+              <td>1080 × 1350 px</td>
+              <td>4:5</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram / TikTok</strong></td>
+              <td>Story / Reel / Fullscreen Video</td>
+              <td>1080 × 1920 px</td>
+              <td>9:16</td>
+            </tr>
+            <tr>
+              <td><strong>YouTube</strong></td>
+              <td>Video Thumbnail</td>
+              <td>1280 × 720 px</td>
+              <td>16:9</td>
+            </tr>
+            <tr>
+              <td><strong>YouTube</strong></td>
+              <td>Channel Banner (TV/Desktop)</td>
+              <td>2560 × 1440 px</td>
+              <td>16:9 (Safe Area 1232×338)</td>
+            </tr>
+            <tr>
+              <td><strong>X (Twitter)</strong></td>
+              <td>Header / Banner</td>
+              <td>1500 × 500 px</td>
+              <td>3:1</td>
+            </tr>
+            <tr>
+              <td><strong>X (Twitter)</strong></td>
+              <td>In-Stream Image Post</td>
+              <td>1200 × 675 px</td>
+              <td>16:9</td>
+            </tr>
+            <tr>
+              <td><strong>Facebook</strong></td>
+              <td>Page Cover Photo</td>
+              <td>820 × 312 px</td>
+              <td>2.63:1</td>
+            </tr>
+            <tr>
+              <td><strong>LinkedIn</strong></td>
+              <td>Company Banner</td>
+              <td>1128 × 191 px</td>
+              <td>5.91:1</td>
+            </tr>
+            <tr>
+              <td><strong>Pinterest</strong></td>
+              <td>Standard Pin</td>
+              <td>1000 × 1500 px</td>
+              <td>2:3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FAQ Section -->
+      <h2 class="faq-heading">{t(locale, 'dimcheck.faq.heading')}</h2>
+      <div class="faq-list">
+        {faqItems.map((faq) => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.q}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Feature Summary Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 440px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* Aspect Cards Grid */
+  .aspect-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 560px) {
+    .aspect-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .aspect-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .aspect-item {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .aspect-badge {
+    align-self: flex-start;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+  }
+
+  .aspect-item h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .aspect-item p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Formula Box */
+  .formula-box {
+    background: #0f172a;
+    color: #f8fafc;
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    margin-block: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .formula-box {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      gap: 8px;
+    }
+  }
+
+  .formula-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 640px) {
+    .formula-label {
+      font-size: 11px;
+    }
+  }
+
+  .formula-box code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: #38bdf8;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: block;
+    word-break: break-word;
+  }
+
+  @media (min-width: 640px) {
+    .formula-box code {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* OS Guides List */
+  .os-guides-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 560px) {
+    .os-guides-list {
+      grid-template-columns: repeat(2, 1fr);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .os-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .os-card {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .os-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .os-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* FAQ List */
+  .faq-heading {
+    margin-top: var(--space-10) !important;
+  }
+
+  @media (min-width: 640px) {
+    .faq-heading {
+      margin-top: var(--space-12) !important;
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-border-hover);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent-border);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3-5) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    gap: var(--space-2);
+    line-height: 1.35;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-4) var(--space-5);
+      font-size: var(--text-base);
+      gap: var(--space-3);
+    }
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+      line-height: 1.7;
+    }
+  }
+</style>

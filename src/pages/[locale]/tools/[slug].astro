@@ -19,6 +19,14 @@ import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
 import DataUriContent from '@/components/DataUriContent.astro';
+import DimensionsChecker from '@/components/DimensionsChecker.astro';
+import DimensionsCheckerContent from '@/components/DimensionsCheckerContent.astro';
+import FileSizeChecker from '@/components/FileSizeChecker.astro';
+import FileSizeCheckerContent from '@/components/FileSizeCheckerContent.astro';
+import ResolutionChecker from '@/components/ResolutionChecker.astro';
+import ResolutionCheckerContent from '@/components/ResolutionCheckerContent.astro';
+import AspectRatioChecker from '@/components/AspectRatioChecker.astro';
+import AspectRatioCheckerContent from '@/components/AspectRatioCheckerContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -52,6 +60,10 @@ const isSsc = toolId === 'ssc-photo-signature-resizer';
 const isYt = toolId === 'youtube-banner-resizer';
 const isB64 = toolId === 'image-to-base64-converter';
 const isDataUri = toolId === 'image-to-data-uri-converter';
+const isDimCheck = toolId === 'image-dimensions-checker';
+const isFileSize = toolId === 'image-file-size-checker';
+const isResCheck = toolId === 'image-resolution-checker';
+const isRatioCheck = toolId === 'image-aspect-ratio-checker';
 
 const metaTitle = isExact
   ? t(locale, 'exactresizer.meta.title')
@@ -69,7 +81,15 @@ const metaTitle = isExact
               ? t(locale, 'ytresizer.meta.title')
               : isB64
                 ? t(locale, 'b64.meta.title')
-                : t(locale, 'datauri.meta.title');
+                : isDataUri
+                  ? t(locale, 'datauri.meta.title')
+                  : isDimCheck
+                    ? t(locale, 'dimcheck.meta.title')
+                    : isFileSize
+                      ? t(locale, 'sizecheck.meta.title')
+                      : isResCheck
+                        ? t(locale, 'rescheck.meta.title')
+                        : t(locale, 'ratiocheck.meta.title');
 
 const metaDesc = isExact
   ? t(locale, 'exactresizer.meta.description')
@@ -87,7 +107,15 @@ const metaDesc = isExact
               ? t(locale, 'ytresizer.meta.description')
               : isB64
                 ? t(locale, 'b64.meta.description')
-                : t(locale, 'datauri.meta.description');
+                : isDataUri
+                  ? t(locale, 'datauri.meta.description')
+                  : isDimCheck
+                    ? t(locale, 'dimcheck.meta.description')
+                    : isFileSize
+                      ? t(locale, 'sizecheck.meta.description')
+                      : isResCheck
+                        ? t(locale, 'rescheck.meta.description')
+                        : t(locale, 'ratiocheck.meta.description');
 
 const heroTitle = isExact
   ? t(locale, 'exactresizer.hero.title')
@@ -105,7 +133,15 @@ const heroTitle = isExact
               ? t(locale, 'ytresizer.hero.title')
               : isB64
                 ? t(locale, 'b64.hero.title')
-                : t(locale, 'datauri.hero.title');
+                : isDataUri
+                  ? t(locale, 'datauri.hero.title')
+                  : isDimCheck
+                    ? t(locale, 'dimcheck.hero.title')
+                    : isFileSize
+                      ? t(locale, 'sizecheck.hero.title')
+                      : isResCheck
+                        ? t(locale, 'rescheck.hero.title')
+                        : t(locale, 'ratiocheck.hero.title');
 
 const heroSubtitle = isExact
   ? t(locale, 'exactresizer.hero.subtitle')
@@ -123,7 +159,15 @@ const heroSubtitle = isExact
               ? t(locale, 'ytresizer.hero.subtitle')
               : isB64
                 ? t(locale, 'b64.hero.subtitle')
-                : t(locale, 'datauri.hero.subtitle');
+                : isDataUri
+                  ? t(locale, 'datauri.hero.subtitle')
+                  : isDimCheck
+                    ? t(locale, 'dimcheck.hero.subtitle')
+                    : isFileSize
+                      ? t(locale, 'sizecheck.hero.subtitle')
+                      : isResCheck
+                        ? t(locale, 'rescheck.hero.subtitle')
+                        : t(locale, 'ratiocheck.hero.subtitle');
 ---
 
 <MainLayout
@@ -167,6 +211,10 @@ const heroSubtitle = isExact
       {isYt && <YouTubeResizer locale={locale} />}
       {isB64 && <Base64Converter locale={locale} />}
       {isDataUri && <DataUriConverter locale={locale} />}
+      {isDimCheck && <DimensionsChecker locale={locale} />}
+      {isFileSize && <FileSizeChecker locale={locale} />}
+      {isResCheck && <ResolutionChecker locale={locale} />}
+      {isRatioCheck && <AspectRatioChecker locale={locale} />}
     </div>
   </div>
 
@@ -179,6 +227,10 @@ const heroSubtitle = isExact
   {isYt && <YouTubeContent locale={locale} />}
   {isB64 && <Base64Content locale={locale} />}
   {isDataUri && <DataUriContent locale={locale} />}
+  {isDimCheck && <DimensionsCheckerContent locale={locale} />}
+  {isFileSize && <FileSizeCheckerContent locale={locale} />}
+  {isResCheck && <ResolutionCheckerContent locale={locale} />}
+  {isRatioCheck && <AspectRatioCheckerContent locale={locale} />}
 </MainLayout>
 
 <style>
@@ -186,17 +238,36 @@ const heroSubtitle = isExact
     text-align: center;
     max-width: var(--container-narrow);
     margin-inline: auto;
-    margin-top: var(--space-6);
-    margin-bottom: var(--space-8);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  @media (min-width: 640px) {
+    .tool-header {
+      margin-top: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
   }
   .tool-title {
-    font-size: var(--text-3xl);
+    font-size: var(--text-2xl);
     font-weight: 800;
     color: var(--color-text);
     margin-bottom: var(--space-2);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  @media (min-width: 640px) {
+    .tool-title {
+      font-size: var(--text-3xl);
+    }
   }
   .tool-subtitle {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+  @media (min-width: 640px) {
+    .tool-subtitle {
+      font-size: var(--text-base);
+    }
   }
 </style>

@@ -23,5 +23,13 @@
   "tools.base64Converter.title": "Convertitore da immagine a Base64",
   "tools.base64Converter.description": "Converti immagini (JPG, PNG, WebP, SVG, GIF) in Data URL Base64 con generatori di codice HTML e CSS in 1 clic.",
   "tools.dataUriConverter.title": "Convertitore da immagine a Data URI",
-  "tools.dataUriConverter.description": "Genera Data URI RFC 2397 per immagini (PNG, JPG, SVG, WebP) per l'inclusione diretta in HTML <img> e CSS."
+  "tools.dataUriConverter.description": "Genera Data URI RFC 2397 per immagini (PNG, JPG, SVG, WebP) per l'inclusione diretta in HTML <img> e CSS.",
+  "tools.dimensionsChecker.title": "Controllo dimensioni immagine",
+  "tools.dimensionsChecker.description": "Verifica dimensioni in pixel, proporzioni, megapixel, formati di stampa DPI, metadati EXIF e palette di colori.",
+  "tools.fileSizeChecker.title": "Controllo dimensione file immagine",
+  "tools.fileSizeChecker.description": "Verifica la dimensione dell'immagine in Byte, KB e MB, valuta la densità di compressione (BPP) e simula i tempi di download.",
+  "tools.resolutionChecker.title": "Controllo Risoluzione Immagine",
+  "tools.resolutionChecker.description": "Verifica risoluzione in pixel, megapixel, formati di stampa a 300 DPI e nitidezza su schermo istantaneamente.",
+  "tools.aspectRatioChecker.title": "Controllo Rapporto d'Aspetto Immagine",
+  "tools.aspectRatioChecker.description": "Scopri i rapporti d'aspetto esatti, moltiplicatori decimali, formati per i social media e codice CSS aspect-ratio istantaneamente."
 }

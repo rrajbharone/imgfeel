@@ -1,0 +1,1814 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const resizerUrl = getToolUrl('image-resizer', locale);
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
+const resCheckUrl = getToolUrl('image-resolution-checker', locale);
+const dimCheckUrl = getToolUrl('image-dimensions-checker', locale);
+const fileSizeUrl = getToolUrl('image-file-size-checker', locale);
+
+// Dictionary of client-side localized strings passed as data-attributes
+const i18nDict = {
+  copied: t(locale, 'ratiocheck.action.copied'),
+  reportCopied: t(locale, 'ratiocheck.action.reportCopied'),
+  cssCopied: t(locale, 'ratiocheck.action.cssCopied'),
+  reportHeading: t(locale, 'ratiocheck.report.heading'),
+  reportRatio: t(locale, 'ratiocheck.report.ratio'),
+  reportDecimal: t(locale, 'ratiocheck.report.decimal'),
+  reportDims: t(locale, 'ratiocheck.report.dims'),
+  reportOrient: t(locale, 'ratiocheck.report.orient'),
+  reportStandard: t(locale, 'ratiocheck.report.standard'),
+  reportCss: t(locale, 'ratiocheck.report.css'),
+  reportFooter: t(locale, 'ratiocheck.report.footer'),
+  // Statuses
+  perfectFit: t(locale, 'ratiocheck.status.perfect'),
+  nearFit: t(locale, 'ratiocheck.status.near'),
+  cropSide: t(locale, 'ratiocheck.status.cropSide'),
+  cropTop: t(locale, 'ratiocheck.status.cropTop'),
+  // Orientations
+  landscape: t(locale, 'ratiocheck.orient.landscape'),
+  portrait: t(locale, 'ratiocheck.orient.portrait'),
+  square: t(locale, 'ratiocheck.orient.square'),
+  // Standard labels
+  std16_9: t(locale, 'ratiocheck.std.16_9'),
+  std9_16: t(locale, 'ratiocheck.std.9_16'),
+  std4_3: t(locale, 'ratiocheck.std.4_3'),
+  std3_4: t(locale, 'ratiocheck.std.3_4'),
+  std1_1: t(locale, 'ratiocheck.std.1_1'),
+  std3_2: t(locale, 'ratiocheck.std.3_2'),
+  std2_3: t(locale, 'ratiocheck.std.2_3'),
+  std4_5: t(locale, 'ratiocheck.std.4_5'),
+  std5_4: t(locale, 'ratiocheck.std.5_4'),
+  std21_9: t(locale, 'ratiocheck.std.21_9'),
+  std32_9: t(locale, 'ratiocheck.std.32_9'),
+  std191_100: t(locale, 'ratiocheck.std.191_100'),
+  std3_1: t(locale, 'ratiocheck.std.3_1'),
+  std2_1: t(locale, 'ratiocheck.std.2_1'),
+  stdCustom: t(locale, 'ratiocheck.std.custom'),
+  // Categories
+  catVideo: t(locale, 'ratiocheck.cat.video'),
+  catSocialVert: t(locale, 'ratiocheck.cat.social_vert'),
+  catClassic: t(locale, 'ratiocheck.cat.classic'),
+  catTablet: t(locale, 'ratiocheck.cat.tablet'),
+  catSquare: t(locale, 'ratiocheck.cat.square'),
+  catPhoto: t(locale, 'ratiocheck.cat.photo'),
+  catPhotoPort: t(locale, 'ratiocheck.cat.photo_port'),
+  catInstaPort: t(locale, 'ratiocheck.cat.insta_port'),
+  catPrint: t(locale, 'ratiocheck.cat.print'),
+  catCinema: t(locale, 'ratiocheck.cat.cinema'),
+  catGaming: t(locale, 'ratiocheck.cat.gaming'),
+  catSocialLand: t(locale, 'ratiocheck.cat.social_land'),
+  catBanner: t(locale, 'ratiocheck.cat.banner'),
+  catStreaming: t(locale, 'ratiocheck.cat.streaming'),
+  catCustomLand: t(locale, 'ratiocheck.cat.custom_land'),
+  catCustomPort: t(locale, 'ratiocheck.cat.custom_port'),
+  catCustomSq: t(locale, 'ratiocheck.cat.custom_sq'),
+  // Platforms
+  pInsta: t(locale, 'ratiocheck.platform.insta'),
+  pInstaSquare: t(locale, 'ratiocheck.platform.instaSquare'),
+  pInstaPortrait: t(locale, 'ratiocheck.platform.instaPortrait'),
+  pInstaStory: t(locale, 'ratiocheck.platform.instaStory'),
+  pYt: t(locale, 'ratiocheck.platform.yt'),
+  pYtVideo: t(locale, 'ratiocheck.platform.ytVideo'),
+  pYtShorts: t(locale, 'ratiocheck.platform.ytShorts'),
+  pTiktok: t(locale, 'ratiocheck.platform.tiktok'),
+  pTiktokVideo: t(locale, 'ratiocheck.platform.tiktokVideo'),
+  pFb: t(locale, 'ratiocheck.platform.fb'),
+  pFbPost: t(locale, 'ratiocheck.platform.fbPost'),
+  pTwitter: t(locale, 'ratiocheck.platform.twitter'),
+  pTwitterCard: t(locale, 'ratiocheck.platform.twitterCard'),
+  pLinkedin: t(locale, 'ratiocheck.platform.linkedin'),
+  pLinkedinPost: t(locale, 'ratiocheck.platform.linkedinPost'),
+  // Misc
+  totalPixelsLabel: t(locale, 'ratiocheck.metric.totalPixels'),
+  paddingTopLabel: t(locale, 'ratiocheck.metric.paddingTop'),
+  scaledResultText: t(locale, 'ratiocheck.scaler.resultText'),
+};
+---
+
+<div class="ratio-tool-wrapper" id="ratioToolContainer" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone View -->
+  <div class="ratio-dropzone-card" id="ratioDropzone">
+    <div class="ratio-dropzone-content">
+      <div class="ratio-icon-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+          <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+        </svg>
+      </div>
+      <h2 class="ratio-drop-title">{t(locale, 'ratiocheck.dropzone.title')}</h2>
+      <p class="ratio-drop-subtitle">{t(locale, 'ratiocheck.dropzone.subtitle')}</p>
+
+      <div class="ratio-btn-row">
+        <label for="ratioFileInput" class="btn btn-primary ratio-btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'ratiocheck.dropzone.browse')}</span>
+        </label>
+        <button type="button" class="btn btn-secondary ratio-sample-btn" id="ratioSampleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span>{t(locale, 'ratiocheck.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <input type="file" id="ratioFileInput" class="sr-only" accept="image/*,.jpg,.jpeg,.png,.webp,.svg,.gif,.avif,.bmp,.ico,.tiff" />
+      <p class="ratio-formats-hint">{t(locale, 'ratiocheck.dropzone.formats')}</p>
+
+      <div class="ratio-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'ratiocheck.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State Card -->
+  <div class="ratio-loading-card" id="ratioLoadingCard" style="display: none;">
+    <div class="ratio-spinner"></div>
+    <p class="ratio-loading-text">Analyzing image aspect ratio and proportions...</p>
+  </div>
+
+  <!-- Results View -->
+  <div class="ratio-results-view" id="ratioResultsView" style="display: none;">
+    <!-- Top Action Toolbar -->
+    <div class="ratio-action-bar">
+      <div class="ratio-status-badge">
+        <span class="ratio-status-dot"></span>
+        <span>{t(locale, 'ratiocheck.status.analyzed')}</span>
+      </div>
+      <div class="ratio-actions-group">
+        <button type="button" class="btn btn-secondary btn-sm" id="ratioCopyRatioBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span id="ratioCopyRatioLabel">{t(locale, 'ratiocheck.action.copyRatio')}</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="ratioCopyCssBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span id="ratioCopyCssLabel">{t(locale, 'ratiocheck.action.copyCss')}</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="ratioCopyReportBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span id="ratioCopyReportLabel">{t(locale, 'ratiocheck.action.copyReport')}</span>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="ratioNewImageBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'ratiocheck.action.newImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Visual Split: Preview & 4 Primary Metric Cards -->
+    <div class="ratio-hero-grid">
+      <!-- Left: Image Preview with Aspect Ratio Framing -->
+      <div class="ratio-preview-box">
+        <div class="ratio-preview-canvas-wrap">
+          <img id="ratioPreviewImg" src="" alt="Uploaded image aspect ratio preview" class="ratio-preview-image" />
+          <div class="ratio-preview-overlay">
+            <span class="ratio-overlay-tag ratio-tag-accent" id="ratioOverlayRatio">16:9</span>
+            <span class="ratio-overlay-tag" id="ratioOverlayDims">0 × 0 px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: 4 Primary Metric Cards -->
+      <div class="ratio-metrics-grid">
+        <!-- Card 1: Simplified Aspect Ratio -->
+        <div class="ratio-metric-card">
+          <div class="ratio-metric-header">
+            <div class="ratio-metric-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+                <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+              </svg>
+            </div>
+            <span class="ratio-metric-label">{t(locale, 'ratiocheck.metric.aspectRatio')}</span>
+          </div>
+          <div class="ratio-metric-value ratio-text-accent" id="ratioCardSimplified">16:9</div>
+          <span class="ratio-metric-sub" id="ratioCardOrientation">Landscape Orientation</span>
+        </div>
+
+        <!-- Card 2: Decimal Aspect Ratio -->
+        <div class="ratio-metric-card">
+          <div class="ratio-metric-header">
+            <div class="ratio-metric-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m10 15 5-3-5-3v6z"></path>
+              </svg>
+            </div>
+            <span class="ratio-metric-label">{t(locale, 'ratiocheck.metric.decimalRatio')}</span>
+          </div>
+          <div class="ratio-metric-value" id="ratioCardDecimal">1.78:1</div>
+          <span class="ratio-metric-sub" id="ratioCardPaddingTop">56.25% CSS Height</span>
+        </div>
+
+        <!-- Card 3: Exact Pixel Dimensions & MP -->
+        <div class="ratio-metric-card">
+          <div class="ratio-metric-header">
+            <div class="ratio-metric-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <span class="ratio-metric-label">{t(locale, 'ratiocheck.metric.dimensions')}</span>
+          </div>
+          <div class="ratio-metric-value" id="ratioCardDims">0 × 0 px</div>
+          <span class="ratio-metric-sub" id="ratioCardPixels">0.00 MP • 0 Total Pixels</span>
+        </div>
+
+        <!-- Card 4: Standard Match -->
+        <div class="ratio-metric-card highlight-card">
+          <div class="ratio-metric-header">
+            <div class="ratio-metric-icon highlight-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <span class="ratio-metric-label">{t(locale, 'ratiocheck.metric.standardMatch')}</span>
+          </div>
+          <div class="ratio-metric-value ratio-text-accent" id="ratioCardStandard">16:9 Widescreen</div>
+          <span class="ratio-metric-sub" id="ratioCardStandardCat">HD / 4K Video & Displays</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Social Media & Platform Compatibility Table -->
+    <div class="ratio-detail-card">
+      <div class="ratio-detail-header">
+        <div class="ratio-detail-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="ratio-detail-title">{t(locale, 'ratiocheck.section.platform')}</h3>
+          <p class="ratio-detail-subtitle">{t(locale, 'ratiocheck.section.platformSub')}</p>
+        </div>
+      </div>
+
+      <div class="ratio-table-wrap">
+        <table class="ratio-data-table">
+          <thead>
+            <tr>
+              <th>{t(locale, 'ratiocheck.table.platformCol')}</th>
+              <th>{t(locale, 'ratiocheck.table.formatCol')}</th>
+              <th>{t(locale, 'ratiocheck.table.targetRatioCol')}</th>
+              <th>{t(locale, 'ratiocheck.table.statusCol')}</th>
+            </tr>
+          </thead>
+          <tbody id="ratioPlatformTableBody">
+            <!-- Dynamically populated via JS with 100% localized strings -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 2: Interactive Target Dimension Scaler Widget -->
+    <div class="ratio-detail-card">
+      <div class="ratio-detail-header">
+        <div class="ratio-detail-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </div>
+        <div>
+          <h3 class="ratio-detail-title">{t(locale, 'ratiocheck.scaler.title')}</h3>
+          <p class="ratio-detail-subtitle">{t(locale, 'ratiocheck.scaler.subtitle')}</p>
+        </div>
+      </div>
+
+      <div class="ratio-scaler-widget">
+        <div class="ratio-scaler-inputs">
+          <div class="ratio-input-group">
+            <label for="ratioScaleWidth">{t(locale, 'ratiocheck.scaler.widthLabel')}</label>
+            <div class="ratio-input-wrapper">
+              <input type="number" id="ratioScaleWidth" min="1" max="50000" placeholder="1920" />
+              <span class="ratio-input-unit">px</span>
+            </div>
+          </div>
+
+          <div class="ratio-scaler-lock-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span id="ratioLockRatioText">16:9 Locked</span>
+          </div>
+
+          <div class="ratio-input-group">
+            <label for="ratioScaleHeight">{t(locale, 'ratiocheck.scaler.heightLabel')}</label>
+            <div class="ratio-input-wrapper">
+              <input type="number" id="ratioScaleHeight" min="1" max="50000" placeholder="1080" />
+              <span class="ratio-input-unit">px</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ratio-presets-row">
+          <span class="ratio-presets-label">{t(locale, 'ratiocheck.scaler.presetsLabel')}:</span>
+          <div class="ratio-presets-btns">
+            <button type="button" class="ratio-preset-btn" data-w="1920">1080p (1920w)</button>
+            <button type="button" class="ratio-preset-btn" data-w="1280">720p (1280w)</button>
+            <button type="button" class="ratio-preset-btn" data-w="3840">4K (3840w)</button>
+            <button type="button" class="ratio-preset-btn" data-w="1080">Instagram (1080w)</button>
+            <button type="button" class="ratio-preset-btn" data-w="1200">Twitter (1200w)</button>
+          </div>
+        </div>
+
+        <div class="ratio-scaler-output-bar">
+          <span id="ratioScalerResultText">{t(locale, 'ratiocheck.scaler.resultText')}: <strong>1920 × 1080 px</strong></span>
+          <button type="button" class="btn btn-secondary btn-sm" id="ratioCopyScaledBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="ratioCopyScaledLabel">{t(locale, 'ratiocheck.scaler.copyDims')}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: CSS & Web Code Snippets -->
+    <div class="ratio-detail-card">
+      <div class="ratio-detail-header">
+        <div class="ratio-detail-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h3 class="ratio-detail-title">{t(locale, 'ratiocheck.section.css')}</h3>
+          <p class="ratio-detail-subtitle">{t(locale, 'ratiocheck.section.cssSub')}</p>
+        </div>
+      </div>
+
+      <div class="ratio-code-grid">
+        <div class="ratio-code-box">
+          <div class="ratio-code-header">
+            <span>{t(locale, 'ratiocheck.css.modern')}</span>
+            <button type="button" class="ratio-code-copy-btn" id="ratioCopyCode1Btn">Copy</button>
+          </div>
+          <pre class="ratio-code-block"><code id="ratioCodeSnippet1">aspect-ratio: 16 / 9;</code></pre>
+        </div>
+
+        <div class="ratio-code-box">
+          <div class="ratio-code-header">
+            <span>{t(locale, 'ratiocheck.css.decimal')}</span>
+            <button type="button" class="ratio-code-copy-btn" id="ratioCopyCode2Btn">Copy</button>
+          </div>
+          <pre class="ratio-code-block"><code id="ratioCodeSnippet2">aspect-ratio: 1.7778;</code></pre>
+        </div>
+
+        <div class="ratio-code-box ratio-code-box-wide">
+          <div class="ratio-code-header">
+            <span>{t(locale, 'ratiocheck.css.htmlTag')}</span>
+            <button type="button" class="ratio-code-copy-btn" id="ratioCopyCode3Btn">Copy</button>
+          </div>
+          <pre class="ratio-code-block"><code id="ratioCodeSnippet3">&lt;img width="1920" height="1080" style="aspect-ratio: 16/9; width: 100%; height: auto;" alt="Image" /&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Technical Properties Table -->
+    <div class="ratio-detail-card">
+      <div class="ratio-detail-header">
+        <div class="ratio-detail-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+        </div>
+        <div>
+          <h3 class="ratio-detail-title">{t(locale, 'ratiocheck.section.technical')}</h3>
+          <p class="ratio-detail-subtitle">{t(locale, 'ratiocheck.section.technicalSub')}</p>
+        </div>
+      </div>
+
+      <div class="ratio-table-wrap">
+        <table class="ratio-data-table">
+          <tbody>
+            <tr>
+              <td class="ratio-prop-label">{t(locale, 'ratiocheck.table.filename')}</td>
+              <td class="ratio-prop-val" id="ratioPropFileName">-</td>
+            </tr>
+            <tr>
+              <td class="ratio-prop-label">{t(locale, 'ratiocheck.table.fileSize')}</td>
+              <td class="ratio-prop-val" id="ratioPropFileSize">-</td>
+            </tr>
+            <tr>
+              <td class="ratio-prop-label">{t(locale, 'ratiocheck.table.detectedFormat')}</td>
+              <td class="ratio-prop-val" id="ratioPropFormat">-</td>
+            </tr>
+            <tr>
+              <td class="ratio-prop-label">{t(locale, 'ratiocheck.table.colorDepth')}</td>
+              <td class="ratio-prop-val" id="ratioPropColorDepth">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Next Actions -->
+    <div class="ratio-next-actions">
+      <h4 class="ratio-next-title">{t(locale, 'ratiocheck.nextActions.title')}</h4>
+      <div class="ratio-next-btns">
+        <a href={exactUrl} class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+          <span>{t(locale, 'ratiocheck.nextActions.resize')}</span>
+        </a>
+        <a href={resCheckUrl} class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>{t(locale, 'ratiocheck.nextActions.resCheck')}</span>
+        </a>
+        <a href={webpUrl} class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+            <path d="M12 12v9"></path>
+            <path d="m8 17 4 4 4-4"></path>
+          </svg>
+          <span>{t(locale, 'ratiocheck.nextActions.compress')}</span>
+        </a>
+        <a href={fileSizeUrl} class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+          </svg>
+          <span>{t(locale, 'ratiocheck.nextActions.fileSize')}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { analyzeImageAspectRatio, generateSampleImage, calculateScaledDimension, type AspectRatioAnalysis } from '@/scripts/aspect-ratio-checker';
+
+  function initAspectRatioChecker() {
+    const container = document.getElementById('ratioToolContainer');
+    if (!container) return;
+
+    // Load localized dictionary from data attribute
+    const i18n = JSON.parse(container.dataset.i18n || '{}');
+
+    const dropzone = document.getElementById('ratioDropzone');
+    const fileInput = document.getElementById('ratioFileInput') as HTMLInputElement | null;
+    const sampleBtn = document.getElementById('ratioSampleBtn');
+    const loadingCard = document.getElementById('ratioLoadingCard');
+    const resultsView = document.getElementById('ratioResultsView');
+    const newImageBtn = document.getElementById('ratioNewImageBtn');
+
+    // Action buttons
+    const copyRatioBtn = document.getElementById('ratioCopyRatioBtn');
+    const copyRatioLabel = document.getElementById('ratioCopyRatioLabel');
+    const copyCssBtn = document.getElementById('ratioCopyCssBtn');
+    const copyCssLabel = document.getElementById('ratioCopyCssLabel');
+    const copyReportBtn = document.getElementById('ratioCopyReportBtn');
+    const copyReportLabel = document.getElementById('ratioCopyReportLabel');
+
+    // Hero metrics elements
+    const previewImg = document.getElementById('ratioPreviewImg') as HTMLImageElement | null;
+    const overlayRatio = document.getElementById('ratioOverlayRatio');
+    const overlayDims = document.getElementById('ratioOverlayDims');
+    const cardSimplified = document.getElementById('ratioCardSimplified');
+    const cardOrient = document.getElementById('ratioCardOrientation');
+    const cardDecimal = document.getElementById('ratioCardDecimal');
+    const cardPaddingTop = document.getElementById('ratioCardPaddingTop');
+    const cardDims = document.getElementById('ratioCardDims');
+    const cardPixels = document.getElementById('ratioCardPixels');
+    const cardStandard = document.getElementById('ratioCardStandard');
+    const cardStandardCat = document.getElementById('ratioCardStandardCat');
+
+    // Platform table
+    const platformTableBody = document.getElementById('ratioPlatformTableBody');
+
+    // Scaler Widget
+    const scaleWidthInput = document.getElementById('ratioScaleWidth') as HTMLInputElement | null;
+    const scaleHeightInput = document.getElementById('ratioScaleHeight') as HTMLInputElement | null;
+    const lockRatioText = document.getElementById('ratioLockRatioText');
+    const scalerResultText = document.getElementById('ratioScalerResultText');
+    const copyScaledBtn = document.getElementById('ratioCopyScaledBtn');
+    const copyScaledLabel = document.getElementById('ratioCopyScaledLabel');
+    const presetBtns = document.querySelectorAll('.ratio-preset-btn');
+
+    // Code snippets
+    const codeSnippet1 = document.getElementById('ratioCodeSnippet1');
+    const codeSnippet2 = document.getElementById('ratioCodeSnippet2');
+    const codeSnippet3 = document.getElementById('ratioCodeSnippet3');
+    const copyCode1Btn = document.getElementById('ratioCopyCode1Btn');
+    const copyCode2Btn = document.getElementById('ratioCopyCode2Btn');
+    const copyCode3Btn = document.getElementById('ratioCopyCode3Btn');
+
+    // Tech properties
+    const propFileName = document.getElementById('ratioPropFileName');
+    const propFileSize = document.getElementById('ratioPropFileSize');
+    const propFormat = document.getElementById('ratioPropFormat');
+    const propColorDepth = document.getElementById('ratioPropColorDepth');
+
+    let currentAnalysis: AspectRatioAnalysis | null = null;
+
+    async function handleFile(file: File) {
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Please select a valid image file (JPG, PNG, WebP, SVG, AVIF, GIF, etc.)');
+        return;
+      }
+
+      if (dropzone) dropzone.style.display = 'none';
+      if (resultsView) resultsView.style.display = 'none';
+      if (loadingCard) loadingCard.style.display = 'flex';
+
+      try {
+        currentAnalysis = await analyzeImageAspectRatio(file);
+        renderAnalysis(currentAnalysis);
+        if (loadingCard) loadingCard.style.display = 'none';
+        if (resultsView) resultsView.style.display = 'flex';
+      } catch (err) {
+        console.error(err);
+        if (loadingCard) loadingCard.style.display = 'none';
+        if (dropzone) dropzone.style.display = 'block';
+        alert('Could not analyze image aspect ratio. Please ensure the file is a valid image.');
+      }
+    }
+
+    function getLocalizedOrientation(orient: string): string {
+      if (orient === 'landscape') return i18n.landscape || 'Landscape Orientation';
+      if (orient === 'portrait') return i18n.portrait || 'Portrait Orientation';
+      return i18n.square || 'Square Orientation';
+    }
+
+    function getLocalizedPlatformName(key: string): string {
+      const map: Record<string, string> = {
+        'ratio.platform.insta': i18n.pInsta || 'Instagram',
+        'ratio.platform.yt': i18n.pYt || 'YouTube',
+        'ratio.platform.tiktok': i18n.pTiktok || 'TikTok',
+        'ratio.platform.fb': i18n.pFb || 'Facebook',
+        'ratio.platform.twitter': i18n.pTwitter || 'Twitter / X',
+        'ratio.platform.linkedin': i18n.pLinkedin || 'LinkedIn',
+      };
+      return map[key] || 'Platform';
+    }
+
+    function getLocalizedFormatName(key: string): string {
+      const map: Record<string, string> = {
+        'ratio.platform.instaSquare': i18n.pInstaSquare || 'Feed Post (Square)',
+        'ratio.platform.instaPortrait': i18n.pInstaPortrait || 'Feed Post (Portrait)',
+        'ratio.platform.instaStory': i18n.pInstaStory || 'Story / Reel (Full Screen)',
+        'ratio.platform.ytVideo': i18n.pYtVideo || 'Standard Video & Thumbnail',
+        'ratio.platform.ytShorts': i18n.pYtShorts || 'YouTube Shorts',
+        'ratio.platform.tiktokVideo': i18n.pTiktokVideo || 'Full Screen Video',
+        'ratio.platform.fbPost': i18n.pFbPost || 'Timeline Shared Link / Post',
+        'ratio.platform.twitterCard': i18n.pTwitterCard || 'Timeline Image / Link Card',
+        'ratio.platform.linkedinPost': i18n.pLinkedinPost || 'Feed Shared Post',
+      };
+      return map[key] || 'Format';
+    }
+
+    function getLocalizedStatus(fit: AspectRatioAnalysis['platformFits'][0]): { label: string; badgeClass: string } {
+      if (fit.status === 'perfect') {
+        return { label: i18n.perfectFit || 'Perfect Match', badgeClass: 'ratio-badge-perfect' };
+      }
+      if (fit.status === 'near') {
+        return { label: i18n.nearFit || 'Near Match', badgeClass: 'ratio-badge-near' };
+      }
+      if (fit.status === 'crop') {
+        return { label: i18n.cropSide || 'Requires Side Crop', badgeClass: 'ratio-badge-crop' };
+      }
+      return { label: i18n.cropTop || 'Requires Top/Bottom Crop', badgeClass: 'ratio-badge-crop' };
+    }
+
+    function getLocalizedStandardName(data: AspectRatioAnalysis): string {
+      const keyMap: Record<string, string> = {
+        'ratio.std.16_9': i18n.std16_9,
+        'ratio.std.9_16': i18n.std9_16,
+        'ratio.std.4_3': i18n.std4_3,
+        'ratio.std.3_4': i18n.std3_4,
+        'ratio.std.1_1': i18n.std1_1,
+        'ratio.std.3_2': i18n.std3_2,
+        'ratio.std.2_3': i18n.std2_3,
+        'ratio.std.4_5': i18n.std4_5,
+        'ratio.std.5_4': i18n.std5_4,
+        'ratio.std.21_9': i18n.std21_9,
+        'ratio.std.32_9': i18n.std32_9,
+        'ratio.std.191_100': i18n.std191_100,
+        'ratio.std.3_1': i18n.std3_1,
+        'ratio.std.2_1': i18n.std2_1,
+        'ratio.std.custom': i18n.stdCustom ? `${data.aspectRatio} ${i18n.stdCustom}` : data.standardMatch,
+      };
+      return keyMap[data.standardMatchKey] || data.standardMatch;
+    }
+
+    function getLocalizedCategoryName(data: AspectRatioAnalysis): string {
+      const keyMap: Record<string, string> = {
+        'ratio.cat.video': i18n.catVideo,
+        'ratio.cat.social_vert': i18n.catSocialVert,
+        'ratio.cat.classic': i18n.catClassic,
+        'ratio.cat.tablet': i18n.catTablet,
+        'ratio.cat.square': i18n.catSquare,
+        'ratio.cat.photo': i18n.catPhoto,
+        'ratio.cat.photo_port': i18n.catPhotoPort,
+        'ratio.cat.insta_port': i18n.catInstaPort,
+        'ratio.cat.print': i18n.catPrint,
+        'ratio.cat.cinema': i18n.catCinema,
+        'ratio.cat.gaming': i18n.catGaming,
+        'ratio.cat.social_land': i18n.catSocialLand,
+        'ratio.cat.banner': i18n.catBanner,
+        'ratio.cat.streaming': i18n.catStreaming,
+        'ratio.cat.custom_land': i18n.catCustomLand,
+        'ratio.cat.custom_port': i18n.catCustomPort,
+        'ratio.cat.custom_sq': i18n.catCustomSq,
+      };
+      return keyMap[data.standardCategoryKey] || data.standardCategory;
+    }
+
+    function renderAnalysis(data: AspectRatioAnalysis) {
+      if (previewImg) previewImg.src = data.previewUrl;
+      if (overlayRatio) overlayRatio.textContent = data.aspectRatio;
+      if (overlayDims) overlayDims.textContent = `${data.width.toLocaleString()} × ${data.height.toLocaleString()} px`;
+
+      if (cardSimplified) cardSimplified.textContent = data.aspectRatio;
+      if (cardOrient) cardOrient.textContent = getLocalizedOrientation(data.orientation);
+
+      if (cardDecimal) cardDecimal.textContent = `${data.aspectRatioDecimal}:1`;
+      if (cardPaddingTop) cardPaddingTop.textContent = `${data.paddingTopPercent} ${i18n.paddingTopLabel || 'CSS Height'}`;
+
+      if (cardDims) cardDims.textContent = `${data.width.toLocaleString()} × ${data.height.toLocaleString()} px`;
+      if (cardPixels) cardPixels.textContent = `${data.megapixels} MP • ${data.totalPixels.toLocaleString()} ${i18n.totalPixelsLabel || 'Total Pixels'}`;
+
+      if (cardStandard) cardStandard.textContent = getLocalizedStandardName(data);
+      if (cardStandardCat) cardStandardCat.textContent = getLocalizedCategoryName(data);
+
+      // Populate Social Platform Compatibility Table (100% Localized)
+      if (platformTableBody) {
+        platformTableBody.innerHTML = data.platformFits
+          .map((fit) => {
+            const st = getLocalizedStatus(fit);
+            return `
+            <tr>
+              <td><strong>${getLocalizedPlatformName(fit.nameKey)}</strong></td>
+              <td>${getLocalizedFormatName(fit.formatKey)}</td>
+              <td><code>${fit.targetRatioStr}</code></td>
+              <td><span class="ratio-status-pill ${st.badgeClass}">${st.label}</span></td>
+            </tr>
+          `;
+          })
+          .join('');
+      }
+
+      // Populate Scaler Widget
+      if (scaleWidthInput) scaleWidthInput.value = data.width.toString();
+      if (scaleHeightInput) scaleHeightInput.value = data.height.toString();
+      if (lockRatioText) lockRatioText.textContent = `${data.aspectRatio} (${data.aspectRatioDecimal}:1)`;
+      updateScalerResult(data.width, data.height);
+
+      // Populate Code Snippets
+      if (codeSnippet1) codeSnippet1.textContent = data.cssModern;
+      if (codeSnippet2) codeSnippet2.textContent = data.cssDecimal;
+      if (codeSnippet3) codeSnippet3.textContent = data.htmlSnippet;
+
+      // Populate Tech Properties
+      if (propFileName) propFileName.textContent = data.fileName;
+      if (propFileSize) propFileSize.textContent = data.fileSizeFormatted;
+      if (propFormat) propFormat.textContent = data.detectedFormat;
+      if (propColorDepth) propColorDepth.textContent = data.colorDepth;
+    }
+
+    function updateScalerResult(w: number, h: number) {
+      if (scalerResultText) {
+        const prefix = i18n.scaledResultText || 'Scaled Dimensions';
+        scalerResultText.innerHTML = `${prefix}: <strong>${w.toLocaleString()} × ${h.toLocaleString()} px</strong>`;
+      }
+    }
+
+    function resetView() {
+      currentAnalysis = null;
+      if (fileInput) fileInput.value = '';
+      if (resultsView) resultsView.style.display = 'none';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    // Drag and drop listeners
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('ratio-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('ratio-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e: DragEvent) => {
+        const file = e.dataTransfer?.files?.[0];
+        if (file) handleFile(file);
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) handleFile(file);
+      });
+    }
+
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        const sampleFile = await generateSampleImage();
+        handleFile(sampleFile);
+      });
+    }
+
+    // Global Paste Listener (Ctrl+V)
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleFile(file);
+            break;
+          }
+        }
+      }
+    });
+
+    // Scaler Width Change
+    if (scaleWidthInput) {
+      scaleWidthInput.addEventListener('input', () => {
+        if (!currentAnalysis) return;
+        const targetW = parseInt(scaleWidthInput.value, 10);
+        if (targetW > 0) {
+          const scaled = calculateScaledDimension(currentAnalysis.width, currentAnalysis.height, targetW, undefined);
+          if (scaleHeightInput) scaleHeightInput.value = scaled.height.toString();
+          updateScalerResult(scaled.width, scaled.height);
+        }
+      });
+    }
+
+    // Scaler Height Change
+    if (scaleHeightInput) {
+      scaleHeightInput.addEventListener('input', () => {
+        if (!currentAnalysis) return;
+        const targetH = parseInt(scaleHeightInput.value, 10);
+        if (targetH > 0) {
+          const scaled = calculateScaledDimension(currentAnalysis.width, currentAnalysis.height, undefined, targetH);
+          if (scaleWidthInput) scaleWidthInput.value = scaled.width.toString();
+          updateScalerResult(scaled.width, scaled.height);
+        }
+      });
+    }
+
+    // Preset button clicks
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!currentAnalysis) return;
+        const targetW = parseInt(btn.getAttribute('data-w') || '1920', 10);
+        if (scaleWidthInput) scaleWidthInput.value = targetW.toString();
+        const scaled = calculateScaledDimension(currentAnalysis.width, currentAnalysis.height, targetW, undefined);
+        if (scaleHeightInput) scaleHeightInput.value = scaled.height.toString();
+        updateScalerResult(scaled.width, scaled.height);
+      });
+    });
+
+    // Copy Scaled Dimensions
+    if (copyScaledBtn && copyScaledLabel) {
+      copyScaledBtn.addEventListener('click', () => {
+        const w = scaleWidthInput ? scaleWidthInput.value : '0';
+        const h = scaleHeightInput ? scaleHeightInput.value : '0';
+        navigator.clipboard.writeText(`${w} × ${h} px`).then(() => {
+          const orig = copyScaledLabel.textContent;
+          copyScaledLabel.textContent = i18n.copied || 'Copied!';
+          setTimeout(() => {
+            copyScaledLabel.textContent = orig;
+          }, 2000);
+        });
+      });
+    }
+
+    // Helper for snippet copy
+    function setupSnippetCopy(btn: HTMLElement | null, snippetEl: HTMLElement | null) {
+      if (!btn || !snippetEl) return;
+      btn.addEventListener('click', () => {
+        navigator.clipboard.writeText(snippetEl.textContent || '').then(() => {
+          const orig = btn.textContent;
+          btn.textContent = i18n.copied || 'Copied!';
+          setTimeout(() => {
+            btn.textContent = orig;
+          }, 2000);
+        });
+      });
+    }
+    setupSnippetCopy(copyCode1Btn, codeSnippet1);
+    setupSnippetCopy(copyCode2Btn, codeSnippet2);
+    setupSnippetCopy(copyCode3Btn, codeSnippet3);
+
+    // Copy Ratio button
+    if (copyRatioBtn && copyRatioLabel) {
+      copyRatioBtn.addEventListener('click', () => {
+        if (!currentAnalysis) return;
+        navigator.clipboard.writeText(currentAnalysis.aspectRatio).then(() => {
+          const orig = copyRatioLabel.textContent;
+          copyRatioLabel.textContent = i18n.copied || 'Copied!';
+          setTimeout(() => {
+            copyRatioLabel.textContent = orig;
+          }, 2000);
+        });
+      });
+    }
+
+    // Copy CSS button
+    if (copyCssBtn && copyCssLabel) {
+      copyCssBtn.addEventListener('click', () => {
+        if (!currentAnalysis) return;
+        navigator.clipboard.writeText(currentAnalysis.cssModern).then(() => {
+          const orig = copyCssLabel.textContent;
+          copyCssLabel.textContent = i18n.cssCopied || 'CSS Copied!';
+          setTimeout(() => {
+            copyCssLabel.textContent = orig;
+          }, 2000);
+        });
+      });
+    }
+
+    // Copy Markdown Report button
+    if (copyReportBtn && copyReportLabel) {
+      copyReportBtn.addEventListener('click', () => {
+        if (!currentAnalysis) return;
+        const hTitle = i18n.reportHeading || 'Image Aspect Ratio Report';
+        const rRatio = i18n.reportRatio || 'Aspect Ratio';
+        const rDec = i18n.reportDecimal || 'Decimal Ratio';
+        const rDims = i18n.reportDims || 'Pixel Dimensions';
+        const rOrient = i18n.reportOrient || 'Orientation';
+        const rStd = i18n.reportStandard || 'Standard';
+        const rCss = i18n.reportCss || 'CSS Code';
+        const rFoot = i18n.reportFooter || 'Checked privately with ImgFeel.com Image Aspect Ratio Checker';
+
+        const report = `### ${hTitle} (${currentAnalysis.fileName})
+- **${rRatio}**: ${currentAnalysis.aspectRatio}
+- **${rDec}**: ${currentAnalysis.aspectRatioDecimal}:1
+- **${rDims}**: ${currentAnalysis.width} × ${currentAnalysis.height} px (${currentAnalysis.megapixels} MP)
+- **${rOrient}**: ${getLocalizedOrientation(currentAnalysis.orientation)}
+- **${rStd}**: ${getLocalizedStandardName(currentAnalysis)} (${getLocalizedCategoryName(currentAnalysis)})
+- **${rCss}**: \`${currentAnalysis.cssModern}\`
+
+*${rFoot}*`;
+
+        navigator.clipboard.writeText(report).then(() => {
+          const orig = copyReportLabel.textContent;
+          copyReportLabel.textContent = i18n.reportCopied || 'Report Copied!';
+          setTimeout(() => {
+            copyReportLabel.textContent = orig;
+          }, 2000);
+        });
+      });
+    }
+
+    if (newImageBtn) {
+      newImageBtn.addEventListener('click', resetView);
+    }
+  }
+
+  initAspectRatioChecker();
+  document.addEventListener('astro:page-load', initAspectRatioChecker);
+</script>
+
+<style>
+  .ratio-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone Card */
+  .ratio-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .ratio-dropzone-card.ratio-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .ratio-dropzone-content {
+    max-width: 540px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ratio-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .ratio-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .ratio-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .ratio-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 460px;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .ratio-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .ratio-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .ratio-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .ratio-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+  }
+
+  .ratio-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .ratio-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading Card */
+  .ratio-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ratio-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: ratioSpin 0.8s linear infinite;
+  }
+
+  @keyframes ratioSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .ratio-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Results View */
+  .ratio-results-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-results-view {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Action Bar */
+  .ratio-action-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-action-bar {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .ratio-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .ratio-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .ratio-actions-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .ratio-actions-group #ratioNewImageBtn {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 600px) {
+    .ratio-actions-group {
+      display: flex;
+      width: auto;
+      flex-wrap: wrap;
+    }
+    .ratio-actions-group #ratioNewImageBtn {
+      grid-column: auto;
+    }
+  }
+
+  /* Hero Grid: Preview & 4 Primary Metrics */
+  .ratio-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+    align-items: start;
+  }
+
+  @media (min-width: 800px) {
+    .ratio-hero-grid {
+      grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.25fr);
+      gap: var(--space-5);
+      align-items: start;
+    }
+  }
+
+  .ratio-preview-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 180px;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-preview-box {
+      min-height: 220px;
+    }
+  }
+
+  .ratio-preview-canvas-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .ratio-preview-image {
+    max-width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-preview-image {
+      max-height: 300px;
+    }
+  }
+
+  .ratio-preview-overlay {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    pointer-events: none;
+    flex-wrap: wrap;
+  }
+
+  .ratio-overlay-tag {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .ratio-tag-accent {
+    background: rgba(99, 102, 241, 0.9);
+    border-color: rgba(165, 180, 252, 0.4);
+  }
+
+  /* 4 Metrics Grid */
+  .ratio-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    grid-auto-rows: auto;
+  }
+
+  @media (min-width: 480px) {
+    .ratio-metrics-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+  }
+
+  .ratio-metric-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 6px;
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    box-shadow: var(--shadow-xs);
+    overflow: visible;
+  }
+
+  .ratio-metric-card.highlight-card {
+    border-color: var(--color-accent-border);
+    background: var(--color-accent-light);
+  }
+
+  .ratio-metric-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 2px;
+  }
+
+  .ratio-metric-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ratio-metric-icon.highlight-icon {
+    background: #ffffff;
+    border-color: var(--color-accent-border);
+  }
+
+  .ratio-metric-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    flex: 1;
+    min-width: 0;
+    line-height: 1.35;
+  }
+
+  .ratio-metric-value {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+    text-align: left;
+    line-height: 1.3;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+    min-width: 0;
+    margin-block: 2px;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-metric-value {
+      font-size: var(--text-lg);
+    }
+  }
+
+  .ratio-text-accent {
+    color: var(--color-accent);
+  }
+
+  .ratio-metric-sub {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.45;
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+    min-width: 0;
+    display: block;
+    margin-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  /* Detail Cards */
+  .ratio-detail-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-detail-card {
+      padding: var(--space-5);
+    }
+  }
+
+  .ratio-detail-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3-5);
+  }
+
+  .ratio-detail-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ratio-detail-title {
+    font-size: var(--text-sm);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-detail-title {
+      font-size: var(--text-base);
+    }
+  }
+
+  .ratio-detail-subtitle {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Table Wrapper */
+  .ratio-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ratio-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 440px;
+  }
+
+  @media (min-width: 640px) {
+    .ratio-data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .ratio-data-table th,
+  .ratio-data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  @media (min-width: 640px) {
+    .ratio-data-table th,
+    .ratio-data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .ratio-data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  .ratio-data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .ratio-status-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .ratio-badge-perfect {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+
+  .ratio-badge-near {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  .ratio-badge-crop {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+  }
+
+  .ratio-prop-label {
+    font-weight: 700;
+    color: var(--color-text);
+    width: 35%;
+    background: var(--color-surface-subtle);
+  }
+
+  .ratio-prop-val {
+    color: var(--color-text-secondary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11.5px;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  /* Scaler Widget */
+  .ratio-scaler-widget {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3-5);
+  }
+
+  .ratio-scaler-inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  @media (min-width: 600px) {
+    .ratio-scaler-inputs {
+      grid-template-columns: 1fr auto 1fr;
+    }
+  }
+
+  .ratio-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ratio-input-group label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .ratio-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0 var(--space-3);
+    height: 40px;
+  }
+
+  .ratio-input-wrapper input {
+    border: none;
+    background: transparent;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    width: 100%;
+    outline: none;
+  }
+
+  .ratio-input-unit {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .ratio-scaler-lock-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .ratio-presets-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 600px) {
+    .ratio-presets-row {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .ratio-presets-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  .ratio-presets-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ratio-preset-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .ratio-preset-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .ratio-scaler-output-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  @media (min-width: 500px) {
+    .ratio-scaler-output-bar {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .ratio-scaler-output-bar span {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+  }
+
+  /* Code Snippets Grid */
+  .ratio-code-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 600px) {
+    .ratio-code-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .ratio-code-box {
+    background: #0f172a;
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+  }
+
+  .ratio-code-box-wide {
+    grid-column: 1 / -1;
+  }
+
+  .ratio-code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ratio-code-header span {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .ratio-code-copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .ratio-code-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .ratio-code-block {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: #38bdf8;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.4;
+  }
+
+  /* Next Actions */
+  .ratio-next-actions {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .ratio-next-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .ratio-next-btns {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  @media (min-width: 540px) {
+    .ratio-next-btns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 860px) {
+    .ratio-next-btns {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+</style>
