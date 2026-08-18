@@ -1,0 +1,574 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  { q: t(locale, 'vidtrim.faq.q1'), a: t(locale, 'vidtrim.faq.a1') },
+  { q: t(locale, 'vidtrim.faq.q2'), a: t(locale, 'vidtrim.faq.a2') },
+  { q: t(locale, 'vidtrim.faq.q3'), a: t(locale, 'vidtrim.faq.a3') },
+  { q: t(locale, 'vidtrim.faq.q4'), a: t(locale, 'vidtrim.faq.a4') },
+  { q: t(locale, 'vidtrim.faq.q5'), a: t(locale, 'vidtrim.faq.a5') },
+  { q: t(locale, 'vidtrim.faq.q6'), a: t(locale, 'vidtrim.faq.a6') },
+  { q: t(locale, 'vidtrim.faq.q7'), a: t(locale, 'vidtrim.faq.a7') },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction & Key Benefits -->
+      <h2>{t(locale, 'vidtrim.content.h1')}</h2>
+      <p>{t(locale, 'vidtrim.content.p1a')}</p>
+      <p>{t(locale, 'vidtrim.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="6" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+              <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+              <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidtrim.content.feat1Title')}</h4>
+          <p>{t(locale, 'vidtrim.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidtrim.content.feat2Title')}</h4>
+          <p>{t(locale, 'vidtrim.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidtrim.content.feat3Title')}</h4>
+          <p>{t(locale, 'vidtrim.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidtrim.content.feat4Title')}</h4>
+          <p>{t(locale, 'vidtrim.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Trimming vs Cropping vs Cutting vs Splitting -->
+      <h2>{t(locale, 'vidtrim.content.h2')}</h2>
+      <p>{t(locale, 'vidtrim.content.p2a')}</p>
+      <p>{t(locale, 'vidtrim.content.p2b')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>What It Modifies</th>
+              <th>Primary Purpose</th>
+              <th>Typical Scenario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Trimming</strong></td>
+              <td>Duration (Start & End Time)</td>
+              <td>Shortening video length & removing unwanted intros/outros</td>
+              <td>Cutting 10s from a 30s video for social upload</td>
+            </tr>
+            <tr>
+              <td><strong>Cropping</strong></td>
+              <td>Spatial Dimensions (Width × Height)</td>
+              <td>Changing frame area & aspect ratio (e.g. 16:9 to 9:16)</td>
+              <td>Focusing on a subject & removing outer borders</td>
+            </tr>
+            <tr>
+              <td><strong>Cutting / Splicing</strong></td>
+              <td>Internal Segment Removal</td>
+              <td>Removing a middle section or mistake and joining remaining parts</td>
+              <td>Editing out a sneeze or pause in a podcast</td>
+            </tr>
+            <tr>
+              <td><strong>Splitting</strong></td>
+              <td>File Separation</td>
+              <td>Dividing one long clip into multiple distinct video files</td>
+              <td>Splitting a 3-minute video into three 1-minute Reels</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 3: Step-by-Step Guide -->
+      <h2>{t(locale, 'vidtrim.content.h3')}</h2>
+      <p>{t(locale, 'vidtrim.content.p3a')}</p>
+      <p>{t(locale, 'vidtrim.content.p3b')}</p>
+
+      <!-- Section 4: Supported Video Formats and Codecs -->
+      <h2>{t(locale, 'vidtrim.content.h4')}</h2>
+      <p>{t(locale, 'vidtrim.content.p4a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Container Format</th>
+              <th>Standard Extension</th>
+              <th>Common Video Codecs</th>
+              <th>Compatibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MP4 (MPEG-4 Part 14)</strong></td>
+              <td><code>.mp4</code>, <code>.m4v</code></td>
+              <td>H.264 (AVC), H.265 (HEVC), AV1</td>
+              <td>Universal (All Browsers, iOS, Android, TV)</td>
+            </tr>
+            <tr>
+              <td><strong>WebM</strong></td>
+              <td><code>.webm</code></td>
+              <td>VP8, VP9, AV1 (Opus Audio)</td>
+              <td>Modern Web, Chrome, Firefox, Edge, Android</td>
+            </tr>
+            <tr>
+              <td><strong>QuickTime Movie</strong></td>
+              <td><code>.mov</code></td>
+              <td>Apple ProRes, H.264, HEVC</td>
+              <td>Apple Devices, Final Cut Pro, Safari</td>
+            </tr>
+            <tr>
+              <td><strong>Matroska Video</strong></td>
+              <td><code>.mkv</code></td>
+              <td>H.264, HEVC, VP9, AC3, DTS</td>
+              <td>Desktop Players, Archival Video</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: Social Media Video Length & Aspect Ratio Guide -->
+      <h2>{t(locale, 'vidtrim.content.h5')}</h2>
+      <p>{t(locale, 'vidtrim.content.p5a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Platform & Placement</th>
+              <th>Target Ratio</th>
+              <th>Ideal Length</th>
+              <th>Maximum Limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Instagram Reels</strong></td>
+              <td>9:16 (Vertical)</td>
+              <td>15 to 30 seconds</td>
+              <td>90 seconds</td>
+            </tr>
+            <tr>
+              <td><strong>TikTok Video</strong></td>
+              <td>9:16 (Vertical)</td>
+              <td>15 to 60 seconds</td>
+              <td>10 minutes</td>
+            </tr>
+            <tr>
+              <td><strong>YouTube Shorts</strong></td>
+              <td>9:16 (Vertical)</td>
+              <td>15 to 50 seconds</td>
+              <td>60 seconds</td>
+            </tr>
+            <tr>
+              <td><strong>WhatsApp Status</strong></td>
+              <td>9:16 (Vertical)</td>
+              <td>Up to 30 seconds</td>
+              <td>30 seconds per clip</td>
+            </tr>
+            <tr>
+              <td><strong>Twitter / X Video</strong></td>
+              <td>16:9 or 1:1</td>
+              <td>20 to 45 seconds</td>
+              <td>140 seconds</td>
+            </tr>
+            <tr>
+              <td><strong>Facebook Feed Video</strong></td>
+              <td>4:5 or 16:9</td>
+              <td>30 to 90 seconds</td>
+              <td>240 minutes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 6: Quality, Bitrate & Audio Management -->
+      <h2>{t(locale, 'vidtrim.content.h6')}</h2>
+      <p>{t(locale, 'vidtrim.content.p6a')}</p>
+      <p>{t(locale, 'vidtrim.content.p6b')}</p>
+
+      <!-- Section 7: 100% In-Browser Privacy & Speed -->
+      <h2>{t(locale, 'vidtrim.content.h7')}</h2>
+      <p>{t(locale, 'vidtrim.content.p7a')}</p>
+      <p>{t(locale, 'vidtrim.content.p7b')}</p>
+
+      <!-- Section 8: How to Trim Videos on Any Device -->
+      <h2>{t(locale, 'vidtrim.content.h8')}</h2>
+      <p>{t(locale, 'vidtrim.content.p8Intro')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <h4>Windows 10 / 11</h4>
+          <p>Open video in <strong>Photos</strong> or <strong>Clipchamp</strong>, click the <strong>Trim (Ctrl+E)</strong> icon, drag handles, and click <strong>Save</strong>.</p>
+        </div>
+        <div class="feature-box">
+          <h4>macOS</h4>
+          <p>Open video in <strong>QuickTime Player</strong>, press <kbd>Cmd</kbd> + <kbd>T</kbd>, adjust the yellow trim handles, click <strong>Trim</strong>, and save.</p>
+        </div>
+        <div class="feature-box">
+          <h4>iPhone / iPad (iOS)</h4>
+          <p>Open video in <strong>Photos</strong>, tap <strong>Edit</strong>, drag the timeline sliders at the bottom, and tap <strong>Done &gt; Save as New Clip</strong>.</p>
+        </div>
+        <div class="feature-box">
+          <h4>Android</h4>
+          <p>Open video in <strong>Google Photos</strong> or <strong>Gallery</strong>, tap <strong>Edit</strong>, adjust the start/end slider bars, and tap <strong>Save copy</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Section 9: FAQ Section -->
+      <div class="faq-container">
+        <h2>{t(locale, 'vidtrim.faq.heading')}</h2>
+        <div class="faq-list">
+          {
+            faqItems.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-question">{item.q}</summary>
+                <div class="faq-answer">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Feature Summary Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .feature-box kbd {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 10.5px;
+    font-family: inherit;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 440px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* FAQ */
+  .faq-container {
+    margin-top: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .faq-container {
+      margin-top: var(--space-10);
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-3-5) var(--space-5);
+      font-size: 14.5px;
+    }
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5) var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4) var(--space-5);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

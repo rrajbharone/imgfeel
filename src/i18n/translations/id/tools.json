@@ -31,5 +31,9 @@
   "tools.resolutionChecker.title": "Pemeriksa Resolusi Gambar",
   "tools.resolutionChecker.description": "Periksa resolusi gambar, dimensi piksel, megapiksel, ukuran cetak 300 DPI, dan ketajaman layar secara instan.",
   "tools.aspectRatioChecker.title": "Pemeriksa Rasio Aspek Gambar",
-  "tools.aspectRatioChecker.description": "Temukan rasio aspek pasti, proporsi desimal, dimensi media sosial, dan kode CSS aspect-ratio secara instan."
+  "tools.aspectRatioChecker.description": "Temukan rasio aspek pasti, proporsi desimal, dimensi media sosial, dan kode CSS aspect-ratio secara instan.",
+  "tools.videoTrimmer.title": "Pemotong Video Online",
+  "tools.videoTrimmer.description": "Potong, pangkas, dan perpendek klip video online dengan timeline visual interaktif, kontrol audio, dan 100% privasi di browser.",
+  "tools.videoRotator.title": "Pemutar Video Online",
+  "tools.videoRotator.description": "Putar, rotasikan, dan cerminkan klip video (90°, 180°, 270°) online dengan pratinjau langsung dan 100% privasi di peramban."
 }

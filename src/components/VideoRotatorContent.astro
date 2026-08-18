@@ -1,0 +1,511 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  { q: t(locale, 'vidrot.faq.q1'), a: t(locale, 'vidrot.faq.a1') },
+  { q: t(locale, 'vidrot.faq.q2'), a: t(locale, 'vidrot.faq.a2') },
+  { q: t(locale, 'vidrot.faq.q3'), a: t(locale, 'vidrot.faq.a3') },
+  { q: t(locale, 'vidrot.faq.q4'), a: t(locale, 'vidrot.faq.a4') },
+  { q: t(locale, 'vidrot.faq.q5'), a: t(locale, 'vidrot.faq.a5') },
+  { q: t(locale, 'vidrot.faq.q6'), a: t(locale, 'vidrot.faq.a6') },
+  { q: t(locale, 'vidrot.faq.q7'), a: t(locale, 'vidrot.faq.a7') },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction & Why Rotate Videos -->
+      <h2>{t(locale, 'vidrot.content.h1')}</h2>
+      <p>{t(locale, 'vidrot.content.p1a')}</p>
+      <p>{t(locale, 'vidrot.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidrot.content.feat1Title')}</h4>
+          <p>{t(locale, 'vidrot.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="7 8 3 12 7 16"></polyline>
+              <polyline points="17 8 21 12 17 16"></polyline>
+              <line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="3 3"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidrot.content.feat2Title')}</h4>
+          <p>{t(locale, 'vidrot.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidrot.content.feat3Title')}</h4>
+          <p>{t(locale, 'vidrot.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'vidrot.content.feat4Title')}</h4>
+          <p>{t(locale, 'vidrot.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Why Videos Record Sideways or Inverted -->
+      <h2>{t(locale, 'vidrot.content.h2')}</h2>
+      <p>{t(locale, 'vidrot.content.p2a')}</p>
+      <p>{t(locale, 'vidrot.content.p2b')}</p>
+
+      <!-- Section 3: Rotation vs Cropping vs Mirror Flipping Table -->
+      <h2>{t(locale, 'vidrot.content.h3')}</h2>
+      <p>{t(locale, 'vidrot.content.p3a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Transformation Applied</th>
+              <th>Dimension Effect</th>
+              <th>Typical Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rotate 90° CW / CCW</strong></td>
+              <td>90-degree angular pivot</td>
+              <td>Swaps Width and Height (16:9 to 9:16)</td>
+              <td>Fixing sideways smartphone videos</td>
+            </tr>
+            <tr>
+              <td><strong>Rotate 180°</strong></td>
+              <td>Half-turn inversion</td>
+              <td>Dimensions remain identical</td>
+              <td>Fixing upside-down mounted action cameras</td>
+            </tr>
+            <tr>
+              <td><strong>Horizontal Mirror Flip</strong></td>
+              <td>Reflects left-to-right across vertical axis</td>
+              <td>Dimensions remain identical</td>
+              <td>Correcting front-facing selfie camera mirror text</td>
+            </tr>
+            <tr>
+              <td><strong>Vertical Invert Flip</strong></td>
+              <td>Reflects top-to-bottom across horizontal axis</td>
+              <td>Dimensions remain identical</td>
+              <td>Drone or dashcam inverted bracket mounting</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Portrait vs Landscape for Social Media -->
+      <h2>{t(locale, 'vidrot.content.h4')}</h2>
+      <p>{t(locale, 'vidrot.content.p4a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Platform & Destination</th>
+              <th>Target Orientation</th>
+              <th>Standard Aspect Ratio</th>
+              <th>Ideal Resolution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>TikTok / IG Reels / YouTube Shorts</strong></td>
+              <td>Vertical (Portrait)</td>
+              <td>9:16</td>
+              <td>1080 × 1920 px (Full HD)</td>
+            </tr>
+            <tr>
+              <td><strong>YouTube Main / Desktop Web</strong></td>
+              <td>Horizontal (Landscape)</td>
+              <td>16:9</td>
+              <td>1920 × 1080 px or 3840 × 2160 (4K)</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram Feed / Square</strong></td>
+              <td>Square / Moderate Portrait</td>
+              <td>1:1 or 4:5</td>
+              <td>1080 × 1080 px or 1080 × 1350 px</td>
+            </tr>
+            <tr>
+              <td><strong>Twitter / X / LinkedIn Feed</strong></td>
+              <td>Landscape or Square</td>
+              <td>16:9 or 1:1</td>
+              <td>1280 × 720 px or 1080 × 1080 px</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: Step-by-Step Guide -->
+      <h2>{t(locale, 'vidrot.content.h5')}</h2>
+      <p>{t(locale, 'vidrot.content.p5a')}</p>
+      <p>{t(locale, 'vidrot.content.p5b')}</p>
+
+      <!-- Section 6: Video Quality, Bitrates & Audio Synchronization -->
+      <h2>{t(locale, 'vidrot.content.h6')}</h2>
+      <p>{t(locale, 'vidrot.content.p6a')}</p>
+      <p>{t(locale, 'vidrot.content.p6b')}</p>
+
+      <!-- Section 7: 100% In-Browser Privacy & Performance -->
+      <h2>{t(locale, 'vidrot.content.h7')}</h2>
+      <p>{t(locale, 'vidrot.content.p7a')}</p>
+      <p>{t(locale, 'vidrot.content.p7b')}</p>
+
+      <!-- Section 8: How to Rotate Videos Natively on Any Device -->
+      <h2>{t(locale, 'vidrot.content.h8')}</h2>
+      <p>{t(locale, 'vidrot.content.p8Intro')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <h4>iPhone / iPad (iOS)</h4>
+          <p>Open video in <strong>Photos</strong>, tap <strong>Edit</strong>, select the crop tool icon at the bottom, and tap the <strong>Rotate (box with arrow)</strong> button in the top corner.</p>
+        </div>
+        <div class="feature-box">
+          <h4>Android</h4>
+          <p>Open video in <strong>Google Photos</strong>, tap <strong>Edit</strong>, go to <strong>Crop</strong>, and tap <strong>Rotate</strong> until oriented properly, then tap <strong>Save copy</strong>.</p>
+        </div>
+        <div class="feature-box">
+          <h4>Windows 10 / 11</h4>
+          <p>Open video in <strong>Photos</strong> or <strong>Clipchamp</strong>, click the <strong>Rotate icon (Ctrl+R)</strong>, and export to save the corrected video.</p>
+        </div>
+        <div class="feature-box">
+          <h4>macOS</h4>
+          <p>Open video in <strong>QuickTime Player</strong>, go to the top menu <strong>Edit &gt; Rotate Left / Rotate Right / Flip Horizontal</strong>, and choose <strong>File &gt; Export As</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Section 9: FAQ Accordion -->
+      <div class="faq-container">
+        <h2>{t(locale, 'vidrot.faq.heading')}</h2>
+        <div class="faq-list">
+          {
+            faqItems.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-question">{item.q}</summary>
+                <div class="faq-answer">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Features Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 440px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* FAQ */
+  .faq-container {
+    margin-top: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .faq-container {
+      margin-top: var(--space-10);
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-3-5) var(--space-5);
+      font-size: 14.5px;
+    }
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5) var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4) var(--space-5);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

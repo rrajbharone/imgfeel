@@ -31,5 +31,9 @@
   "tools.resolutionChecker.title": "Resim Çözünürlük Kontrol Etme",
   "tools.resolutionChecker.description": "Görsel piksel çözünürlüğünü, megapikseli, 300 DPI baskı boyutlarını ve ekran netliğini anında inceleyin.",
   "tools.aspectRatioChecker.title": "Resim En Boy Oranı Kontrol Etme",
-  "tools.aspectRatioChecker.description": "Görselin tam en boy oranını, ondalık değerlerini, sosyal medya formatlarını ve duyarlı CSS aspect-ratio kodunu anında öğrenin."
+  "tools.aspectRatioChecker.description": "Görselin tam en boy oranını, ondalık değerlerini, sosyal medya formatlarını ve duyarlı CSS aspect-ratio kodunu anında öğrenin.",
+  "tools.videoTrimmer.title": "Video Kırpıcı ve Kesici",
+  "tools.videoTrimmer.description": "Etkileşimli zaman çizelgesi, ses yönetimi ve tarayıcı içi %100 gizlilikle video kliplerini online olarak kırpın ve kısaltın.",
+  "tools.videoRotator.title": "Video Döndürücü",
+  "tools.videoRotator.description": "Canlı önizleme ve tarayıcı içi %100 gizlilikle video kliplerini (90°, 180°, 270°) online döndürün, çevirin ve aynalayın."
 }

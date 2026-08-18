@@ -31,5 +31,9 @@
   "tools.resolutionChecker.title": "Controllo Risoluzione Immagine",
   "tools.resolutionChecker.description": "Verifica risoluzione in pixel, megapixel, formati di stampa a 300 DPI e nitidezza su schermo istantaneamente.",
   "tools.aspectRatioChecker.title": "Controllo Rapporto d'Aspetto Immagine",
-  "tools.aspectRatioChecker.description": "Scopri i rapporti d'aspetto esatti, moltiplicatori decimali, formati per i social media e codice CSS aspect-ratio istantaneamente."
+  "tools.aspectRatioChecker.description": "Scopri i rapporti d'aspetto esatti, moltiplicatori decimali, formati per i social media e codice CSS aspect-ratio istantaneamente.",
+  "tools.videoTrimmer.title": "Taglierina Video Online",
+  "tools.videoTrimmer.description": "Taglia, accorcia e ritaglia clip video online con controlli precisi sulla timeline visiva, gestione audio e privacy 100% nel browser.",
+  "tools.videoRotator.title": "Ruotatore Video Online",
+  "tools.videoRotator.description": "Ruota, gira e capovolgi video (90°, 180°, 270°) online con anteprima interattiva e totale privacy nel browser."
 }

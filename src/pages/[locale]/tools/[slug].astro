@@ -27,6 +27,10 @@ import ResolutionChecker from '@/components/ResolutionChecker.astro';
 import ResolutionCheckerContent from '@/components/ResolutionCheckerContent.astro';
 import AspectRatioChecker from '@/components/AspectRatioChecker.astro';
 import AspectRatioCheckerContent from '@/components/AspectRatioCheckerContent.astro';
+import VideoTrimmer from '@/components/VideoTrimmer.astro';
+import VideoTrimmerContent from '@/components/VideoTrimmerContent.astro';
+import VideoRotator from '@/components/VideoRotator.astro';
+import VideoRotatorContent from '@/components/VideoRotatorContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -64,6 +68,8 @@ const isDimCheck = toolId === 'image-dimensions-checker';
 const isFileSize = toolId === 'image-file-size-checker';
 const isResCheck = toolId === 'image-resolution-checker';
 const isRatioCheck = toolId === 'image-aspect-ratio-checker';
+const isVidTrim = toolId === 'video-trimmer';
+const isVidRotate = toolId === 'video-rotator';
 
 const metaTitle = isExact
   ? t(locale, 'exactresizer.meta.title')
@@ -89,7 +95,11 @@ const metaTitle = isExact
                       ? t(locale, 'sizecheck.meta.title')
                       : isResCheck
                         ? t(locale, 'rescheck.meta.title')
-                        : t(locale, 'ratiocheck.meta.title');
+                        : isRatioCheck
+                          ? t(locale, 'ratiocheck.meta.title')
+                          : isVidTrim
+                            ? t(locale, 'vidtrim.meta.title')
+                            : t(locale, 'vidrot.meta.title');
 
 const metaDesc = isExact
   ? t(locale, 'exactresizer.meta.description')
@@ -115,7 +125,11 @@ const metaDesc = isExact
                       ? t(locale, 'sizecheck.meta.description')
                       : isResCheck
                         ? t(locale, 'rescheck.meta.description')
-                        : t(locale, 'ratiocheck.meta.description');
+                        : isRatioCheck
+                          ? t(locale, 'ratiocheck.meta.description')
+                          : isVidTrim
+                            ? t(locale, 'vidtrim.meta.description')
+                            : t(locale, 'vidrot.meta.description');
 
 const heroTitle = isExact
   ? t(locale, 'exactresizer.hero.title')
@@ -141,7 +155,11 @@ const heroTitle = isExact
                       ? t(locale, 'sizecheck.hero.title')
                       : isResCheck
                         ? t(locale, 'rescheck.hero.title')
-                        : t(locale, 'ratiocheck.hero.title');
+                        : isRatioCheck
+                          ? t(locale, 'ratiocheck.hero.title')
+                          : isVidTrim
+                            ? t(locale, 'vidtrim.hero.title')
+                            : t(locale, 'vidrot.hero.title');
 
 const heroSubtitle = isExact
   ? t(locale, 'exactresizer.hero.subtitle')
@@ -167,7 +185,11 @@ const heroSubtitle = isExact
                       ? t(locale, 'sizecheck.hero.subtitle')
                       : isResCheck
                         ? t(locale, 'rescheck.hero.subtitle')
-                        : t(locale, 'ratiocheck.hero.subtitle');
+                        : isRatioCheck
+                          ? t(locale, 'ratiocheck.hero.subtitle')
+                          : isVidTrim
+                            ? t(locale, 'vidtrim.hero.subtitle')
+                            : t(locale, 'vidrot.hero.subtitle');
 ---
 
 <MainLayout
@@ -215,6 +237,8 @@ const heroSubtitle = isExact
       {isFileSize && <FileSizeChecker locale={locale} />}
       {isResCheck && <ResolutionChecker locale={locale} />}
       {isRatioCheck && <AspectRatioChecker locale={locale} />}
+      {isVidTrim && <VideoTrimmer locale={locale} />}
+      {isVidRotate && <VideoRotator locale={locale} />}
     </div>
   </div>
 
@@ -231,6 +255,8 @@ const heroSubtitle = isExact
   {isFileSize && <FileSizeCheckerContent locale={locale} />}
   {isResCheck && <ResolutionCheckerContent locale={locale} />}
   {isRatioCheck && <AspectRatioCheckerContent locale={locale} />}
+  {isVidTrim && <VideoTrimmerContent locale={locale} />}
+  {isVidRotate && <VideoRotatorContent locale={locale} />}
 </MainLayout>
 
 <style>

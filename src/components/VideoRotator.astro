@@ -1,0 +1,1573 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const i18nDict = {
+  statusAnalyzed: t(locale, 'vidrot.status.analyzed'),
+  errorLoad: t(locale, 'vidrot.error.load'),
+  errorFormat: t(locale, 'vidrot.error.format'),
+  originalSize: t(locale, 'vidrot.stat.originalSize'),
+  rotatedSize: t(locale, 'vidrot.stat.rotatedSize'),
+  newResolution: t(locale, 'vidrot.stat.newResolution'),
+  landscape: t(locale, 'vidrot.orientation.landscape'),
+  portrait: t(locale, 'vidrot.orientation.portrait'),
+  square: t(locale, 'vidrot.orientation.square'),
+};
+---
+
+<div class="video-tool-wrapper" id="videoRotatorApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Upload State -->
+  <div class="video-dropzone-card" id="rotDropzone">
+    <div class="video-dropzone-content">
+      <div class="video-icon-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+        </svg>
+      </div>
+
+      <h2 class="video-drop-title">{t(locale, 'vidrot.dropzone.title')}</h2>
+      <p class="video-drop-subtitle">{t(locale, 'vidrot.dropzone.subtitle')}</p>
+
+      <div class="video-btn-row">
+        <label class="btn btn-primary video-btn-primary" for="rotFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'vidrot.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="rotFileInput" accept="video/*,.mp4,.webm,.mov,.m4v,.mkv,.avi" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary video-sample-btn" id="rotSampleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+          </svg>
+          <span>{t(locale, 'vidrot.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="video-formats-hint">{t(locale, 'vidrot.dropzone.formats')}</p>
+
+      <div class="video-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'vidrot.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="video-loading-card" id="rotLoadingCard" style="display: none;">
+    <div class="video-spinner"></div>
+    <p class="video-loading-text" id="rotLoadingText">{t(locale, 'vidrot.status.analyzing')}</p>
+  </div>
+
+  <!-- Main Video Rotator Workspace -->
+  <div class="video-editor-view" id="rotEditorView" style="display: none;">
+    <!-- Top Action & Info Bar -->
+    <div class="video-editor-header">
+      <div class="video-meta-badge">
+        <span class="video-status-dot"></span>
+        <span id="rotMetaFileName" class="video-filename-label">video.mp4</span>
+        <span class="video-meta-tag" id="rotMetaResolution">1920 × 1080</span>
+        <span class="video-meta-tag" id="rotMetaDuration">00:06</span>
+      </div>
+
+      <div class="video-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="rotResetTransformBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <polyline points="23 20 23 14 17 14"></polyline>
+            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+          </svg>
+          <span>{t(locale, 'vidrot.action.reset')}</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="rotNewVideoBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'vidrot.action.newVideo')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Preview Screen with Live CSS Transformation -->
+    <div class="rot-screen-container">
+      <div class="rot-screen-stage" id="rotStage">
+        <video id="rotPlayer" class="rot-main-player" playsinline preload="auto" loop></video>
+        <div class="rot-player-overlay" id="rotPlayerOverlay">
+          <button type="button" class="rot-big-play-btn" id="rotBigPlayBtn" aria-label="Play video">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Playback Mini-Controls Bar -->
+      <div class="rot-controls-bar">
+        <div class="rot-ctrl-left">
+          <button type="button" class="ctrl-btn" id="rotPlayPauseBtn" title="Play/Pause">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="rotPlayIcon" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="rotPauseIcon" style="display: none;" aria-hidden="true">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+
+          <div class="rot-time-display">
+            <span id="rotCurrentTimeText">00:00</span> / <span id="rotTotalDurationText">00:00</span>
+          </div>
+        </div>
+
+        <div class="rot-ctrl-right">
+          <button type="button" class="ctrl-btn ctrl-btn-step" id="rotStepBackBtn" title="Step Back 0.1s">-0.1s</button>
+          <button type="button" class="ctrl-btn ctrl-btn-step" id="rotStepFwdBtn" title="Step Forward 0.1s">+0.1s</button>
+          <button type="button" class="ctrl-btn" id="rotMuteBtn" title="Mute/Unmute">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="rotVolumeIcon" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="rotMutedIcon" style="display: none;" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rotation & Orientation Controls Toolbar -->
+    <div class="rotation-tools-card">
+      <div class="rot-tools-header">
+        <span class="rot-tools-title">{t(locale, 'vidrot.controls.heading')}</span>
+        <div class="current-angle-pill">
+          <span>{t(locale, 'vidrot.controls.angle')}:</span>
+          <strong id="rotAngleBadge">0°</strong>
+        </div>
+      </div>
+
+      <!-- Main Action Rotation Buttons Grid -->
+      <div class="rot-buttons-grid">
+        <!-- 90° Clockwise -->
+        <button type="button" class="rot-action-btn" id="rotBtn90CW">
+          <div class="rot-btn-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+          </div>
+          <span class="rot-btn-title">{t(locale, 'vidrot.btn.cw90')}</span>
+          <span class="rot-btn-desc">{t(locale, 'vidrot.btn.cw90sub')}</span>
+        </button>
+
+        <!-- 90° Counter-Clockwise -->
+        <button type="button" class="rot-action-btn" id="rotBtn90CCW">
+          <div class="rot-btn-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38L-2.44 1.52"></path>
+            </svg>
+          </div>
+          <span class="rot-btn-title">{t(locale, 'vidrot.btn.ccw90')}</span>
+          <span class="rot-btn-desc">{t(locale, 'vidrot.btn.ccw90sub')}</span>
+        </button>
+
+        <!-- 180° Flip Upside Down -->
+        <button type="button" class="rot-action-btn" id="rotBtn180">
+          <div class="rot-btn-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 10v12M17 14v-12M11 6l-4-4-4 4M21 18l-4 4-4-4"></path>
+            </svg>
+          </div>
+          <span class="rot-btn-title">{t(locale, 'vidrot.btn.rot180')}</span>
+          <span class="rot-btn-desc">{t(locale, 'vidrot.btn.rot180sub')}</span>
+        </button>
+
+        <!-- Flip Horizontal (Mirror) -->
+        <button type="button" class="rot-action-btn" id="rotBtnFlipH">
+          <div class="rot-btn-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="7 8 3 12 7 16"></polyline>
+              <polyline points="17 8 21 12 17 16"></polyline>
+              <line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="3 3"></line>
+            </svg>
+          </div>
+          <span class="rot-btn-title">{t(locale, 'vidrot.btn.flipH')}</span>
+          <span class="rot-btn-desc">{t(locale, 'vidrot.btn.flipHsub')}</span>
+        </button>
+
+        <!-- Flip Vertical -->
+        <button type="button" class="rot-action-btn" id="rotBtnFlipV">
+          <div class="rot-btn-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="8 7 12 3 16 7"></polyline>
+              <polyline points="8 17 12 21 16 17"></polyline>
+              <line x1="2" y1="12" x2="22" y2="12" stroke-dasharray="3 3"></line>
+            </svg>
+          </div>
+          <span class="rot-btn-title">{t(locale, 'vidrot.btn.flipV')}</span>
+          <span class="rot-btn-desc">{t(locale, 'vidrot.btn.flipVsub')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Dimension & Aspect Ratio Transformation Card -->
+    <div class="rot-dimensions-card">
+      <div class="dim-compare-grid">
+        <div class="dim-compare-box">
+          <span class="dim-box-label">{t(locale, 'vidrot.dim.original')}</span>
+          <strong id="rotDimOrigText">1920 × 1080</strong>
+          <span class="dim-badge" id="rotRatioOrigText">16:9 Landscape</span>
+        </div>
+
+        <div class="dim-arrow-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <div class="dim-compare-box highlight-box">
+          <span class="dim-box-label">{t(locale, 'vidrot.dim.output')}</span>
+          <strong id="rotDimOutText">1920 × 1080</strong>
+          <span class="dim-badge badge-accent" id="rotRatioOutText">16:9 Landscape</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export & Audio Options -->
+    <div class="export-card">
+      <div class="export-options-row">
+        <!-- Audio Track Toggle -->
+        <label class="audio-toggle-label">
+          <input type="checkbox" id="rotKeepAudioCheckbox" checked class="checkbox-custom" />
+          <span class="toggle-text">
+            <strong>{t(locale, 'vidrot.export.audioTitle')}</strong>
+            <span class="toggle-subtext">{t(locale, 'vidrot.export.audioSub')}</span>
+          </span>
+        </label>
+
+        <!-- Format Selector -->
+        <div class="format-select-wrap">
+          <label for="rotFormatSelect" class="format-label">{t(locale, 'vidrot.export.format')}:</label>
+          <select id="rotFormatSelect" class="format-select">
+            <option value="mp4">MP4 (Universal)</option>
+            <option value="webm">WebM (Optimized)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Main Action Button -->
+      <button type="button" class="btn btn-primary btn-lg video-export-btn" id="rotExportBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+        </svg>
+        <span>{t(locale, 'vidrot.action.rotateVideo')}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Processing Modal / Progress State -->
+  <div class="video-progress-card" id="rotProgressCard" style="display: none;">
+    <div class="progress-header">
+      <h3>{t(locale, 'vidrot.progress.title')}</h3>
+      <p>{t(locale, 'vidrot.progress.subtitle')}</p>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="rotProgressBarFill" style="width: 0%;"></div>
+    </div>
+
+    <div class="progress-stats">
+      <span id="rotProgressPercentText">0%</span>
+      <span id="rotProgressTimeText">Rendering rotated video frames...</span>
+    </div>
+  </div>
+
+  <!-- Completed / Download Card -->
+  <div class="video-completed-card" id="rotCompletedCard" style="display: none;">
+    <div class="completed-header">
+      <div class="completed-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h3>{t(locale, 'vidrot.done.title')}</h3>
+      <p>{t(locale, 'vidrot.done.subtitle')}</p>
+    </div>
+
+    <!-- Rotated Result Video Player -->
+    <div class="result-player-wrap">
+      <video id="rotResultPlayer" controls playsinline class="result-video"></video>
+    </div>
+
+    <!-- Stats Comparison Grid -->
+    <div class="completed-stats-grid">
+      <div class="stat-box">
+        <span class="stat-label">{t(locale, 'vidrot.stat.originalSize')}</span>
+        <strong id="rotStatOrigSize">0 MB</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">{t(locale, 'vidrot.stat.rotatedSize')}</span>
+        <strong id="rotStatRotatedSize" class="stat-highlight">0 MB</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">{t(locale, 'vidrot.stat.newResolution')}</span>
+        <strong id="rotStatNewRes">1920 × 1080</strong>
+      </div>
+    </div>
+
+    <!-- Download & Next Action Buttons -->
+    <div class="completed-actions">
+      <a id="rotDownloadLink" href="#" download="rotated-video.mp4" class="btn btn-primary btn-lg download-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>{t(locale, 'vidrot.action.download')}</span>
+      </a>
+
+      <button type="button" class="btn btn-secondary btn-lg" id="rotRotateAnotherBtn">
+        <span>{t(locale, 'vidrot.action.rotateAnother')}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    loadVideoMetadata,
+    rotateVideo,
+    generateSampleVideo,
+    calculateAspectRatio,
+    formatTime,
+    type VideoMetadata,
+  } from '@/scripts/video-rotator';
+
+  function initVideoRotator() {
+    const container = document.getElementById('videoRotatorApp');
+    if (!container) return;
+
+    let i18n = {
+      statusAnalyzed: 'Video Loaded',
+      errorLoad: 'Failed to load video',
+      errorFormat: 'Unsupported video format',
+      originalSize: 'Original Size',
+      rotatedSize: 'Rotated Size',
+      newResolution: 'New Resolution',
+      landscape: 'Landscape',
+      portrait: 'Portrait',
+      square: 'Square',
+    };
+
+    try {
+      const dataAttr = container.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {
+      // fallback
+    }
+
+    // Elements
+    const dropzone = document.getElementById('rotDropzone');
+    const fileInput = document.getElementById('rotFileInput') as HTMLInputElement | null;
+    const sampleBtn = document.getElementById('rotSampleBtn');
+    const loadingCard = document.getElementById('rotLoadingCard');
+    const loadingText = document.getElementById('rotLoadingText');
+    const editorView = document.getElementById('rotEditorView');
+    const progressCard = document.getElementById('rotProgressCard');
+    const completedCard = document.getElementById('rotCompletedCard');
+
+    // Video Player
+    const player = document.getElementById('rotPlayer') as HTMLVideoElement | null;
+    const stage = document.getElementById('rotStage');
+    const playerOverlay = document.getElementById('rotPlayerOverlay');
+    const bigPlayBtn = document.getElementById('rotBigPlayBtn');
+    const playPauseBtn = document.getElementById('rotPlayPauseBtn');
+    const playIcon = document.getElementById('rotPlayIcon');
+    const pauseIcon = document.getElementById('rotPauseIcon');
+    const currentTimeText = document.getElementById('rotCurrentTimeText');
+    const totalDurationText = document.getElementById('rotTotalDurationText');
+    const stepBackBtn = document.getElementById('rotStepBackBtn');
+    const stepFwdBtn = document.getElementById('rotStepFwdBtn');
+    const muteBtn = document.getElementById('rotMuteBtn');
+    const volumeIcon = document.getElementById('rotVolumeIcon');
+    const mutedIcon = document.getElementById('rotMutedIcon');
+
+    // Header & Meta Elements
+    const metaFileName = document.getElementById('rotMetaFileName');
+    const metaResolution = document.getElementById('rotMetaResolution');
+    const metaDuration = document.getElementById('rotMetaDuration');
+    const resetTransformBtn = document.getElementById('rotResetTransformBtn');
+    const newVideoBtn = document.getElementById('rotNewVideoBtn');
+
+    // Transformation Buttons & Badges
+    const rotAngleBadge = document.getElementById('rotAngleBadge');
+    const btn90CW = document.getElementById('rotBtn90CW');
+    const btn90CCW = document.getElementById('rotBtn90CCW');
+    const btn180 = document.getElementById('rotBtn180');
+    const btnFlipH = document.getElementById('rotBtnFlipH');
+    const btnFlipV = document.getElementById('rotBtnFlipV');
+
+    // Dimension Compare Elements
+    const dimOrigText = document.getElementById('rotDimOrigText');
+    const ratioOrigText = document.getElementById('rotRatioOrigText');
+    const dimOutText = document.getElementById('rotDimOutText');
+    const ratioOutText = document.getElementById('rotRatioOutText');
+
+    // Export Controls
+    const keepAudioCheckbox = document.getElementById('rotKeepAudioCheckbox') as HTMLInputElement | null;
+    const formatSelect = document.getElementById('rotFormatSelect') as HTMLSelectElement | null;
+    const exportBtn = document.getElementById('rotExportBtn');
+
+    // Progress Elements
+    const progressBarFill = document.getElementById('rotProgressBarFill');
+    const progressPercentText = document.getElementById('rotProgressPercentText');
+    const progressTimeText = document.getElementById('rotProgressTimeText');
+
+    // Completed Elements
+    const resultPlayer = document.getElementById('rotResultPlayer') as HTMLVideoElement | null;
+    const statOrigSize = document.getElementById('rotStatOrigSize');
+    const statRotatedSize = document.getElementById('rotStatRotatedSize');
+    const statNewRes = document.getElementById('rotStatNewRes');
+    const downloadLink = document.getElementById('rotDownloadLink') as HTMLAnchorElement | null;
+    const rotateAnotherBtn = document.getElementById('rotRotateAnotherBtn');
+
+    // App State
+    let currentVideo: VideoMetadata | null = null;
+    let rotation = 0; // 0, 90, 180, 270
+    let flipH = false;
+    let flipV = false;
+
+    // Load Video File
+    async function handleFile(file: File) {
+      if (!dropzone || !loadingCard || !editorView) return;
+
+      dropzone.style.display = 'none';
+      editorView.style.display = 'none';
+      if (completedCard) completedCard.style.display = 'none';
+      loadingCard.style.display = 'flex';
+
+      try {
+        currentVideo = await loadVideoMetadata(file);
+        rotation = 0;
+        flipH = false;
+        flipV = false;
+
+        // Player src
+        if (player) {
+          player.src = currentVideo.url;
+          player.load();
+        }
+
+        // Header info
+        if (metaFileName) metaFileName.textContent = currentVideo.name;
+        if (metaResolution) metaResolution.textContent = `${currentVideo.width} × ${currentVideo.height} (${currentVideo.aspectRatio})`;
+        if (metaDuration) metaDuration.textContent = currentVideo.durationFormatted;
+        if (totalDurationText) totalDurationText.textContent = currentVideo.durationFormatted;
+
+        // Dimension Compare
+        if (dimOrigText) dimOrigText.textContent = `${currentVideo.width} × ${currentVideo.height}`;
+        if (ratioOrigText) {
+          const orientation = currentVideo.width > currentVideo.height ? i18n.landscape : (currentVideo.width < currentVideo.height ? i18n.portrait : i18n.square);
+          ratioOrigText.textContent = `${currentVideo.aspectRatio} ${orientation}`;
+        }
+
+        updateTransformUI();
+
+        loadingCard.style.display = 'none';
+        editorView.style.display = 'flex';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : i18n.errorLoad);
+        resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      currentVideo = null;
+      if (player) {
+        player.pause();
+        player.src = '';
+      }
+      if (fileInput) fileInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (editorView) editorView.style.display = 'none';
+      if (progressCard) progressCard.style.display = 'none';
+      if (completedCard) completedCard.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    function updateTransformUI() {
+      if (!currentVideo) return;
+
+      const isSwapped = rotation === 90 || rotation === 270;
+      const outW = isSwapped ? currentVideo.height : currentVideo.width;
+      const outH = isSwapped ? currentVideo.width : currentVideo.height;
+      const { ratio } = calculateAspectRatio(outW, outH);
+
+      // Update badge
+      if (rotAngleBadge) {
+        let text = `${rotation}°`;
+        if (flipH) text += ' (Flip H)';
+        if (flipV) text += ' (Flip V)';
+        rotAngleBadge.textContent = text;
+      }
+
+      // Update Live CSS Transform
+      if (player) {
+        const scaleX = flipH ? -1 : 1;
+        const scaleY = flipV ? -1 : 1;
+        player.style.transform = `rotate(${rotation}deg) scale(${scaleX}, ${scaleY})`;
+      }
+
+      // Update Output Dimension Box
+      if (dimOutText) dimOutText.textContent = `${outW} × ${outH}`;
+      if (ratioOutText) {
+        const orientation = outW > outH ? i18n.landscape : (outW < outH ? i18n.portrait : i18n.square);
+        ratioOutText.textContent = `${ratio} ${orientation}`;
+      }
+
+      // Active state on buttons
+      if (btnFlipH) btnFlipH.classList.toggle('active', flipH);
+      if (btnFlipV) btnFlipV.classList.toggle('active', flipV);
+    }
+
+    // Rotation Control Button Events
+    if (btn90CW) {
+      btn90CW.addEventListener('click', () => {
+        rotation = (rotation + 90) % 360;
+        updateTransformUI();
+      });
+    }
+
+    if (btn90CCW) {
+      btn90CCW.addEventListener('click', () => {
+        rotation = (rotation - 90 + 360) % 360;
+        updateTransformUI();
+      });
+    }
+
+    if (btn180) {
+      btn180.addEventListener('click', () => {
+        rotation = (rotation + 180) % 360;
+        updateTransformUI();
+      });
+    }
+
+    if (btnFlipH) {
+      btnFlipH.addEventListener('click', () => {
+        flipH = !flipH;
+        updateTransformUI();
+      });
+    }
+
+    if (btnFlipV) {
+      btnFlipV.addEventListener('click', () => {
+        flipV = !flipV;
+        updateTransformUI();
+      });
+    }
+
+    if (resetTransformBtn) {
+      resetTransformBtn.addEventListener('click', () => {
+        rotation = 0;
+        flipH = false;
+        flipV = false;
+        updateTransformUI();
+      });
+    }
+
+    if (newVideoBtn) newVideoBtn.addEventListener('click', resetToDropzone);
+
+    // Player Playback Controls
+    function togglePlay() {
+      if (!player) return;
+      if (player.paused) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    }
+
+    if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlay);
+    if (bigPlayBtn) bigPlayBtn.addEventListener('click', togglePlay);
+
+    if (player) {
+      player.addEventListener('play', () => {
+        if (playIcon) playIcon.style.display = 'none';
+        if (pauseIcon) pauseIcon.style.display = 'block';
+        if (playerOverlay) playerOverlay.style.opacity = '0';
+      });
+
+      player.addEventListener('pause', () => {
+        if (playIcon) playIcon.style.display = 'block';
+        if (pauseIcon) pauseIcon.style.display = 'none';
+        if (playerOverlay) playerOverlay.style.opacity = '1';
+      });
+
+      player.addEventListener('timeupdate', () => {
+        if (currentTimeText) currentTimeText.textContent = formatTime(player.currentTime);
+      });
+    }
+
+    if (stepBackBtn) {
+      stepBackBtn.addEventListener('click', () => {
+        if (!player) return;
+        player.currentTime = Math.max(0, player.currentTime - 0.1);
+      });
+    }
+
+    if (stepFwdBtn) {
+      stepFwdBtn.addEventListener('click', () => {
+        if (!player || !currentVideo) return;
+        player.currentTime = Math.min(currentVideo.duration, player.currentTime + 0.1);
+      });
+    }
+
+    if (muteBtn && player) {
+      muteBtn.addEventListener('click', () => {
+        player.muted = !player.muted;
+        if (volumeIcon) volumeIcon.style.display = player.muted ? 'none' : 'block';
+        if (mutedIcon) mutedIcon.style.display = player.muted ? 'block' : 'none';
+      });
+    }
+
+    // Export Process
+    if (exportBtn) {
+      exportBtn.addEventListener('click', async () => {
+        if (!currentVideo) return;
+
+        if (player) player.pause();
+        if (editorView) editorView.style.display = 'none';
+        if (progressCard) progressCard.style.display = 'block';
+
+        const keepAudio = keepAudioCheckbox ? keepAudioCheckbox.checked : true;
+        const outFormat = (formatSelect ? formatSelect.value : 'mp4') as 'mp4' | 'webm';
+
+        try {
+          const result = await rotateVideo(currentVideo.url, {
+            rotation,
+            flipH,
+            flipV,
+            keepAudio,
+            outputFormat: outFormat,
+            onProgress: (percent) => {
+              if (progressBarFill) progressBarFill.style.width = `${percent}%`;
+              if (progressPercentText) progressPercentText.textContent = `${percent}%`;
+              if (progressTimeText) progressTimeText.textContent = `Rendering frame-accurate rotated video... ${percent}%`;
+            },
+          });
+
+          if (progressCard) progressCard.style.display = 'none';
+          if (completedCard) completedCard.style.display = 'block';
+
+          if (resultPlayer) {
+            resultPlayer.src = result.url;
+            resultPlayer.load();
+          }
+
+          if (statOrigSize) statOrigSize.textContent = currentVideo.sizeFormatted;
+          if (statRotatedSize) statRotatedSize.textContent = result.sizeFormatted;
+          if (statNewRes) statNewRes.textContent = `${result.width} × ${result.height} (${result.aspectRatio})`;
+
+          if (downloadLink) {
+            const base = currentVideo.name.replace(/\.[^/.]+$/, '');
+            downloadLink.href = result.url;
+            downloadLink.download = `${base}-rotated-${rotation}deg.${result.format.toLowerCase()}`;
+          }
+        } catch (err) {
+          alert(err instanceof Error ? err.message : 'Error processing video.');
+          if (progressCard) progressCard.style.display = 'none';
+          if (editorView) editorView.style.display = 'flex';
+        }
+      });
+    }
+
+    if (rotateAnotherBtn) {
+      rotateAnotherBtn.addEventListener('click', resetToDropzone);
+    }
+
+    // Sample video button
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        if (dropzone && loadingCard) {
+          dropzone.style.display = 'none';
+          loadingCard.style.display = 'flex';
+          if (loadingText) loadingText.textContent = 'Generating sample orientation video...';
+        }
+        const sampleFile = await generateSampleVideo();
+        handleFile(sampleFile);
+      });
+    }
+
+    // Drag and Drop files onto dropzone
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('video-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('video-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files[0]) {
+          handleFile(dt.files[0]);
+        }
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+          handleFile(target.files[0]);
+        }
+      });
+    }
+
+    // Paste listener (Ctrl+V)
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('video') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleFile(file);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  initVideoRotator();
+  document.addEventListener('astro:page-load', initVideoRotator);
+</script>
+
+<style>
+  .video-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone Card */
+  .video-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .video-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .video-dropzone-card.video-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .video-dropzone-content {
+    max-width: 540px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .video-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .video-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .video-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .video-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .video-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 460px;
+  }
+
+  @media (min-width: 640px) {
+    .video-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .video-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .video-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .video-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .video-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+  }
+
+  .video-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .video-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .video-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .video-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: vidSpin 0.8s linear infinite;
+  }
+
+  @keyframes vidSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .video-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Main Workspace */
+  .video-editor-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .video-editor-view {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Header */
+  .video-editor-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .video-editor-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .video-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .video-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .video-filename-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 480px) {
+    .video-filename-label {
+      max-width: 320px;
+    }
+  }
+
+  .video-meta-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+  }
+
+  .video-header-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* Screen Container */
+  .rot-screen-container {
+    background: #0f172a;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .rot-screen-stage {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+    overflow: hidden;
+  }
+
+  .rot-main-player {
+    max-width: 90%;
+    max-height: 400px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center center;
+  }
+
+  .rot-player-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .rot-big-play-btn {
+    pointer-events: auto;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .rot-big-play-btn:hover {
+    transform: scale(1.08);
+    background: var(--color-accent-hover);
+  }
+
+  /* Mini Controls Bar */
+  .rot-controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2-5) var(--space-4);
+    background: #1e293b;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .rot-ctrl-left,
+  .rot-ctrl-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .ctrl-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    border-radius: var(--radius-md);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+  }
+
+  .ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .ctrl-btn-step {
+    font-family: monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .rot-time-display {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-left: 4px;
+  }
+
+  /* Rotation Tools Toolbar */
+  .rotation-tools-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .rot-tools-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .rot-tools-title {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+  }
+
+  .current-angle-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    color: var(--color-accent);
+  }
+
+  .rot-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2-5);
+  }
+
+  @media (min-width: 640px) {
+    .rot-buttons-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-3);
+    }
+  }
+
+  .rot-action-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+
+  .rot-action-btn:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+
+  .rot-action-btn.active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .rot-btn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .rot-btn-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .rot-btn-desc {
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Dimension Compare Card */
+  .rot-dimensions-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+  }
+
+  .dim-compare-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  @media (min-width: 600px) {
+    .dim-compare-grid {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .dim-compare-box {
+    flex: 1;
+    width: 100%;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+
+  .dim-box-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .dim-compare-box strong {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    font-family: monospace;
+  }
+
+  .dim-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border-light);
+  }
+
+  .dim-badge.badge-accent {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-color: var(--color-accent-border);
+  }
+
+  .dim-arrow-icon {
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Export Card */
+  .export-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .export-options-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 600px) {
+    .export-options-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .audio-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2-5);
+    cursor: pointer;
+  }
+
+  .checkbox-custom {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  .toggle-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .toggle-text strong {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+  }
+
+  .toggle-subtext {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+
+  .format-select-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .format-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .format-select {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 6px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .video-export-btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: var(--text-base);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  /* Progress Card */
+  .video-progress-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10) var(--space-6);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .progress-header h3 {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 4px 0;
+  }
+
+  .progress-header p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 12px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent), #06b6d4);
+    border-radius: var(--radius-full);
+    transition: width 0.15s ease;
+  }
+
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* Completed Card */
+  .video-completed-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    text-align: center;
+  }
+
+  .completed-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .completed-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .completed-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .completed-header p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .result-player-wrap {
+    background: #000000;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .result-video {
+    max-width: 100%;
+    max-height: 400px;
+  }
+
+  .completed-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2-5);
+  }
+
+  .stat-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .stat-box strong {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .stat-highlight {
+    color: #059669 !important;
+  }
+
+  .completed-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+  }
+
+  @media (min-width: 500px) {
+    .completed-actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .download-btn {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-6);
+  }
+</style>

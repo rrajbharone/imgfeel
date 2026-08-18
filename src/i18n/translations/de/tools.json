@@ -31,5 +31,9 @@
   "tools.resolutionChecker.title": "Bildauflösung prüfen",
   "tools.resolutionChecker.description": "Überprüfen Sie Bildauflösung, Pixelmaße, Megapixel, 300-DPI-Druckgrößen und Bildschirmschärfe sofort.",
   "tools.aspectRatioChecker.title": "Bild-Seitenverhältnis prüfen",
-  "tools.aspectRatioChecker.description": "Ermitteln Sie exakte Seitenverhältnisse, Dezimalwerte, Social-Media-Formate und responsiven CSS aspect-ratio-Code sofort."
+  "tools.aspectRatioChecker.description": "Ermitteln Sie exakte Seitenverhältnisse, Dezimalwerte, Social-Media-Formate und responsiven CSS aspect-ratio-Code sofort.",
+  "tools.videoTrimmer.title": "Video-Trimmer & Video Schneider",
+  "tools.videoTrimmer.description": "Kürzen und schneiden Sie Videoclips online mit interaktiver Zeitleiste, Tonspur-Steuerung und 100% Datenschutz im Browser.",
+  "tools.videoRotator.title": "Video-Rotator & Video Dreher",
+  "tools.videoRotator.description": "Drehen, kippen und spiegeln Sie Videos (90°, 180°, 270°) online mit Live-Vorschau und 100% Datenschutz direkt im Browser."
 }

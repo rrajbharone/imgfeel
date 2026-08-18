@@ -31,5 +31,9 @@
   "tools.resolutionChecker.title": "Verificador de Resolução de Imagem",
   "tools.resolutionChecker.description": "Verifique resolução em pixels, megapixels, medidas de impressão a 300 DPI e nitidez em telas instantaneamente.",
   "tools.aspectRatioChecker.title": "Verificador de Proporção de Imagem",
-  "tools.aspectRatioChecker.description": "Descubra proporções exatas de aspecto, multiplicadores decimais, medidas para redes sociais e código CSS aspect-ratio instantaneamente."
+  "tools.aspectRatioChecker.description": "Descubra proporções exatas de aspecto, multiplicadores decimais, medidas para redes sociais e código CSS aspect-ratio instantaneamente.",
+  "tools.videoTrimmer.title": "Cortador de Vídeo",
+  "tools.videoTrimmer.description": "Corte, apare e reduza a duração de vídeos online com linha do tempo visual interativa, controle de áudio e 100% de privacidade no navegador.",
+  "tools.videoRotator.title": "Rotacionador de Vídeo",
+  "tools.videoRotator.description": "Gire, rotacione e inverta vídeos (90°, 180°, 270°) online com pré-visualização ao vivo e 100% de privacidade no navegador."
 }

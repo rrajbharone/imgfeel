@@ -1,0 +1,1945 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+// Pass fully-typed dictionary to client-side script for 100% multilingual support
+const i18nDict = {
+  statusAnalyzed: t(locale, 'vidtrim.status.analyzed'),
+  copied: t(locale, 'vidtrim.action.copied'),
+  errorFormat: t(locale, 'vidtrim.error.format'),
+  errorLoad: t(locale, 'vidtrim.error.load'),
+  errorMinDuration: t(locale, 'vidtrim.error.minDuration'),
+  trimming: t(locale, 'vidtrim.status.trimming'),
+  completed: t(locale, 'vidtrim.status.completed'),
+  originalSize: t(locale, 'vidtrim.stat.originalSize'),
+  trimmedSize: t(locale, 'vidtrim.stat.trimmedSize'),
+  durationSaved: t(locale, 'vidtrim.stat.durationSaved'),
+};
+---
+
+<div class="video-tool-wrapper" id="videoTrimmerApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Upload State -->
+  <div class="video-dropzone-card" id="vidDropzone">
+    <div class="video-dropzone-content">
+      <div class="video-icon-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+          <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+          <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+        </svg>
+      </div>
+
+      <h2 class="video-drop-title">{t(locale, 'vidtrim.dropzone.title')}</h2>
+      <p class="video-drop-subtitle">{t(locale, 'vidtrim.dropzone.subtitle')}</p>
+
+      <div class="video-btn-row">
+        <label class="btn btn-primary video-btn-primary" for="vidFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'vidtrim.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="vidFileInput" accept="video/*,.mp4,.webm,.mov,.m4v,.mkv,.avi" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary video-sample-btn" id="vidSampleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+          </svg>
+          <span>{t(locale, 'vidtrim.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="video-formats-hint">{t(locale, 'vidtrim.dropzone.formats')}</p>
+
+      <div class="video-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'vidtrim.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="video-loading-card" id="vidLoadingCard" style="display: none;">
+    <div class="video-spinner"></div>
+    <p class="video-loading-text" id="vidLoadingText">{t(locale, 'vidtrim.status.analyzing')}</p>
+  </div>
+
+  <!-- Main Video Trimmer Editor Workspace -->
+  <div class="video-editor-view" id="vidEditorView" style="display: none;">
+    <!-- Top Action & Info Bar -->
+    <div class="video-editor-header">
+      <div class="video-meta-badge">
+        <span class="video-status-dot"></span>
+        <span id="vidMetaFileName" class="video-filename-label">video.mp4</span>
+        <span class="video-meta-tag" id="vidMetaResolution">1920 × 1080</span>
+        <span class="video-meta-tag" id="vidMetaDuration">00:00:10</span>
+      </div>
+
+      <div class="video-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="vidResetSelectionBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <polyline points="23 20 23 14 17 14"></polyline>
+            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+          </svg>
+          <span>{t(locale, 'vidtrim.action.reset')}</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="vidNewVideoBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'vidtrim.action.newVideo')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Preview Player Screen -->
+    <div class="video-player-container">
+      <div class="video-screen-wrap">
+        <video id="vidPlayer" class="video-main-player" playsinline preload="auto"></video>
+        <div class="video-player-overlay" id="vidPlayerOverlay">
+          <button type="button" class="video-big-play-btn" id="vidBigPlayBtn" aria-label="Play video">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Playback Controls Bar -->
+      <div class="video-controls-bar">
+        <div class="video-ctrl-left">
+          <button type="button" class="ctrl-btn" id="vidPlayPauseBtn" title="Play/Pause (Space)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="vidPlayIcon" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="vidPauseIcon" style="display: none;" aria-hidden="true">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+
+          <button type="button" class="ctrl-btn" id="vidPlayTrimBtn" title="Play Trimmed Selection Only">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="6" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+              <polygon points="12 9 17 12 12 15 12 9" fill="currentColor"></polygon>
+            </svg>
+            <span class="ctrl-btn-text">{t(locale, 'vidtrim.action.playSelection')}</span>
+          </button>
+
+          <div class="video-time-display">
+            <span id="vidCurrentTimeText">00:00.0</span> / <span id="vidTotalDurationText">00:00.0</span>
+          </div>
+        </div>
+
+        <div class="video-ctrl-right">
+          <!-- Step Frame Buttons -->
+          <button type="button" class="ctrl-btn ctrl-btn-step" id="vidStepBackBtn" title="Step Back 0.1s">
+            -0.1s
+          </button>
+          <button type="button" class="ctrl-btn ctrl-btn-step" id="vidStepFwdBtn" title="Step Forward 0.1s">
+            +0.1s
+          </button>
+
+          <!-- Volume Toggle -->
+          <button type="button" class="ctrl-btn" id="vidMuteBtn" title="Mute/Unmute">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="vidVolumeIcon" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="vidMutedIcon" style="display: none;" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dual-Handle Interactive Filmstrip Timeline -->
+    <div class="timeline-card">
+      <div class="timeline-header">
+        <span class="timeline-title">{t(locale, 'vidtrim.timeline.title')}</span>
+        <div class="selection-pill" id="vidSelectionDurationPill">
+          <span class="selection-label">{t(locale, 'vidtrim.timeline.selected')}:</span>
+          <strong id="vidSelectedDurationText">00:00:05.000</strong>
+          <span class="selection-percent" id="vidSelectedPercentText">(50%)</span>
+        </div>
+      </div>
+
+      <div class="timeline-track-wrap" id="vidTimelineTrackWrap">
+        <!-- Filmstrip thumbnails background -->
+        <div class="timeline-filmstrip" id="vidTimelineFilmstrip"></div>
+
+        <!-- Dimmed unselected regions -->
+        <div class="timeline-dim timeline-dim-left" id="vidDimLeft"></div>
+        <div class="timeline-dim timeline-dim-right" id="vidDimRight"></div>
+
+        <!-- Selected Active Highlight Zone -->
+        <div class="timeline-selection-bar" id="vidSelectionBar"></div>
+
+        <!-- Start Handle (Left) -->
+        <div class="timeline-handle handle-start" id="vidHandleStart" tabindex="0" role="slider" aria-label="Start time handle">
+          <div class="handle-grip">
+            <span></span><span></span>
+          </div>
+          <div class="handle-tooltip" id="vidTooltipStart">00:00.0</div>
+        </div>
+
+        <!-- End Handle (Right) -->
+        <div class="timeline-handle handle-end" id="vidHandleEnd" tabindex="0" role="slider" aria-label="End time handle">
+          <div class="handle-grip">
+            <span></span><span></span>
+          </div>
+          <div class="handle-tooltip" id="vidTooltipEnd">00:00.0</div>
+        </div>
+
+        <!-- Current Playhead Scrubber -->
+        <div class="timeline-playhead" id="vidPlayhead">
+          <div class="playhead-line"></div>
+          <div class="playhead-cap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Precision Timecode & Presets Panel -->
+    <div class="trim-controls-grid">
+      <!-- Start Time Box -->
+      <div class="time-control-box">
+        <div class="time-box-header">
+          <label for="vidStartTimeInput" class="time-label">{t(locale, 'vidtrim.controls.start')}</label>
+          <button type="button" class="btn-micro" id="vidSetCurrentAsStartBtn">{t(locale, 'vidtrim.controls.setStartHere')}</button>
+        </div>
+        <div class="time-input-group">
+          <input type="text" class="time-input" id="vidStartTimeInput" value="00:00:00.000" />
+          <div class="time-step-btns">
+            <button type="button" class="btn-step-sm" id="vidStartMinus1" title="Minus 1s">-1s</button>
+            <button type="button" class="btn-step-sm" id="vidStartMinus01" title="Minus 0.1s">-0.1s</button>
+            <button type="button" class="btn-step-sm" id="vidStartPlus01" title="Plus 0.1s">+0.1s</button>
+            <button type="button" class="btn-step-sm" id="vidStartPlus1" title="Plus 1s">+1s</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- End Time Box -->
+      <div class="time-control-box">
+        <div class="time-box-header">
+          <label for="vidEndTimeInput" class="time-label">{t(locale, 'vidtrim.controls.end')}</label>
+          <button type="button" class="btn-micro" id="vidSetCurrentAsEndBtn">{t(locale, 'vidtrim.controls.setEndHere')}</button>
+        </div>
+        <div class="time-input-group">
+          <input type="text" class="time-input" id="vidEndTimeInput" value="00:00:10.000" />
+          <div class="time-step-btns">
+            <button type="button" class="btn-step-sm" id="vidEndMinus1" title="Minus 1s">-1s</button>
+            <button type="button" class="btn-step-sm" id="vidEndMinus01" title="Minus 0.1s">-0.1s</button>
+            <button type="button" class="btn-step-sm" id="vidEndPlus01" title="Plus 0.1s">+0.1s</button>
+            <button type="button" class="btn-step-sm" id="vidEndPlus1" title="Plus 1s">+1s</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Preset Buttons -->
+    <div class="presets-card">
+      <div class="presets-header">
+        <span class="presets-title">{t(locale, 'vidtrim.presets.title')}:</span>
+      </div>
+      <div class="presets-row">
+        <button type="button" class="btn-preset" data-preset="wa30">{t(locale, 'vidtrim.presets.wa30')}</button>
+        <button type="button" class="btn-preset" data-preset="shorts60">{t(locale, 'vidtrim.presets.shorts60')}</button>
+        <button type="button" class="btn-preset" data-preset="tiktok15">{t(locale, 'vidtrim.presets.tiktok15')}</button>
+        <button type="button" class="btn-preset" data-preset="first5">{t(locale, 'vidtrim.presets.first5')}</button>
+        <button type="button" class="btn-preset" data-preset="last5">{t(locale, 'vidtrim.presets.last5')}</button>
+      </div>
+    </div>
+
+    <!-- Export & Audio Options -->
+    <div class="export-card">
+      <div class="export-options-row">
+        <!-- Audio Track Toggle -->
+        <label class="audio-toggle-label">
+          <input type="checkbox" id="vidKeepAudioCheckbox" checked class="checkbox-custom" />
+          <span class="toggle-text">
+            <strong>{t(locale, 'vidtrim.export.audioTitle')}</strong>
+            <span class="toggle-subtext">{t(locale, 'vidtrim.export.audioSub')}</span>
+          </span>
+        </label>
+
+        <!-- Format Selector -->
+        <div class="format-select-wrap">
+          <label for="vidFormatSelect" class="format-label">{t(locale, 'vidtrim.export.format')}:</label>
+          <select id="vidFormatSelect" class="format-select">
+            <option value="mp4">MP4 (Universal)</option>
+            <option value="webm">WebM (Optimized)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Main Action Button -->
+      <button type="button" class="btn btn-primary btn-lg video-export-btn" id="vidExportBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+          <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+          <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+        </svg>
+        <span>{t(locale, 'vidtrim.action.trimVideo')}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Processing Modal / Progress State -->
+  <div class="video-progress-card" id="vidProgressCard" style="display: none;">
+    <div class="progress-header">
+      <h3>{t(locale, 'vidtrim.progress.title')}</h3>
+      <p>{t(locale, 'vidtrim.progress.subtitle')}</p>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="vidProgressBarFill" style="width: 0%;"></div>
+    </div>
+
+    <div class="progress-stats">
+      <span id="vidProgressPercentText">0%</span>
+      <span id="vidProgressTimeText">Processing clip...</span>
+    </div>
+  </div>
+
+  <!-- Completed / Download Card -->
+  <div class="video-completed-card" id="vidCompletedCard" style="display: none;">
+    <div class="completed-header">
+      <div class="completed-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h3>{t(locale, 'vidtrim.done.title')}</h3>
+      <p>{t(locale, 'vidtrim.done.subtitle')}</p>
+    </div>
+
+    <!-- Trimmed Result Video Player -->
+    <div class="result-player-wrap">
+      <video id="vidResultPlayer" controls playsinline class="result-video"></video>
+    </div>
+
+    <!-- Stats Comparison Grid -->
+    <div class="completed-stats-grid">
+      <div class="stat-box">
+        <span class="stat-label">{t(locale, 'vidtrim.stat.originalSize')}</span>
+        <strong id="vidStatOrigSize">0 MB</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">{t(locale, 'vidtrim.stat.trimmedSize')}</span>
+        <strong id="vidStatTrimmedSize" class="stat-highlight">0 MB</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">{t(locale, 'vidtrim.stat.durationSaved')}</span>
+        <strong id="vidStatSavedPercent">0%</strong>
+      </div>
+    </div>
+
+    <!-- Download & Next Action Buttons -->
+    <div class="completed-actions">
+      <a id="vidDownloadLink" href="#" download="trimmed-video.mp4" class="btn btn-primary btn-lg download-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>{t(locale, 'vidtrim.action.download')}</span>
+      </a>
+
+      <button type="button" class="btn btn-secondary btn-lg" id="vidTrimAnotherBtn">
+        <span>{t(locale, 'vidtrim.action.trimAnother')}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    loadVideoMetadata,
+    generateFilmstripThumbnails,
+    trimVideo,
+    generateSampleVideo,
+    formatTimecode,
+    parseTimecode,
+    type VideoMetadata,
+  } from '@/scripts/video-trimmer';
+
+  function initVideoTrimmer() {
+    const container = document.getElementById('videoTrimmerApp');
+    if (!container) return;
+
+    let i18n = {
+      statusAnalyzed: 'Video Analyzed',
+      copied: 'Copied!',
+      errorFormat: 'Unsupported video format',
+      errorLoad: 'Failed to load video',
+      errorMinDuration: 'Selection must be at least 0.1 seconds',
+      trimming: 'Trimming Video...',
+      completed: 'Trimming Complete',
+      originalSize: 'Original Size',
+      trimmedSize: 'Trimmed Size',
+      durationSaved: 'Duration Saved',
+    };
+
+    try {
+      const dataAttr = container.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {
+      // fallback to English defaults
+    }
+
+    // Elements
+    const dropzone = document.getElementById('vidDropzone');
+    const fileInput = document.getElementById('vidFileInput') as HTMLInputElement | null;
+    const sampleBtn = document.getElementById('vidSampleBtn');
+    const loadingCard = document.getElementById('vidLoadingCard');
+    const loadingText = document.getElementById('vidLoadingText');
+    const editorView = document.getElementById('vidEditorView');
+    const progressCard = document.getElementById('vidProgressCard');
+    const completedCard = document.getElementById('vidCompletedCard');
+
+    // Video Player
+    const player = document.getElementById('vidPlayer') as HTMLVideoElement | null;
+    const playerOverlay = document.getElementById('vidPlayerOverlay');
+    const bigPlayBtn = document.getElementById('vidBigPlayBtn');
+    const playPauseBtn = document.getElementById('vidPlayPauseBtn');
+    const playIcon = document.getElementById('vidPlayIcon');
+    const pauseIcon = document.getElementById('vidPauseIcon');
+    const playTrimBtn = document.getElementById('vidPlayTrimBtn');
+    const currentTimeText = document.getElementById('vidCurrentTimeText');
+    const totalDurationText = document.getElementById('vidTotalDurationText');
+    const stepBackBtn = document.getElementById('vidStepBackBtn');
+    const stepFwdBtn = document.getElementById('vidStepFwdBtn');
+    const muteBtn = document.getElementById('vidMuteBtn');
+    const volumeIcon = document.getElementById('vidVolumeIcon');
+    const mutedIcon = document.getElementById('vidMutedIcon');
+
+    // Meta Header
+    const metaFileName = document.getElementById('vidMetaFileName');
+    const metaResolution = document.getElementById('vidMetaResolution');
+    const metaDuration = document.getElementById('vidMetaDuration');
+    const resetSelectionBtn = document.getElementById('vidResetSelectionBtn');
+    const newVideoBtn = document.getElementById('vidNewVideoBtn');
+
+    // Timeline Elements
+    const trackWrap = document.getElementById('vidTimelineTrackWrap');
+    const filmstrip = document.getElementById('vidTimelineFilmstrip');
+    const dimLeft = document.getElementById('vidDimLeft');
+    const dimRight = document.getElementById('vidDimRight');
+    const selectionBar = document.getElementById('vidSelectionBar');
+    const handleStart = document.getElementById('vidHandleStart');
+    const handleEnd = document.getElementById('vidHandleEnd');
+    const playhead = document.getElementById('vidPlayhead');
+    const tooltipStart = document.getElementById('vidTooltipStart');
+    const tooltipEnd = document.getElementById('vidTooltipEnd');
+    const selectedDurationText = document.getElementById('vidSelectedDurationText');
+    const selectedPercentText = document.getElementById('vidSelectedPercentText');
+
+    // Time Input Elements
+    const startTimeInput = document.getElementById('vidStartTimeInput') as HTMLInputElement | null;
+    const endTimeInput = document.getElementById('vidEndTimeInput') as HTMLInputElement | null;
+    const setCurrentAsStartBtn = document.getElementById('vidSetCurrentAsStartBtn');
+    const setCurrentAsEndBtn = document.getElementById('vidSetCurrentAsEndBtn');
+    const startMinus1 = document.getElementById('vidStartMinus1');
+    const startMinus01 = document.getElementById('vidStartMinus01');
+    const startPlus01 = document.getElementById('vidStartPlus01');
+    const startPlus1 = document.getElementById('vidStartPlus1');
+    const endMinus1 = document.getElementById('vidEndMinus1');
+    const endMinus01 = document.getElementById('vidEndMinus01');
+    const endPlus01 = document.getElementById('vidEndPlus01');
+    const endPlus1 = document.getElementById('vidEndPlus1');
+
+    // Export Controls
+    const presetBtns = container.querySelectorAll('.btn-preset');
+    const keepAudioCheckbox = document.getElementById('vidKeepAudioCheckbox') as HTMLInputElement | null;
+    const formatSelect = document.getElementById('vidFormatSelect') as HTMLSelectElement | null;
+    const exportBtn = document.getElementById('vidExportBtn');
+
+    // Progress Elements
+    const progressBarFill = document.getElementById('vidProgressBarFill');
+    const progressPercentText = document.getElementById('vidProgressPercentText');
+    const progressTimeText = document.getElementById('vidProgressTimeText');
+
+    // Completed Elements
+    const resultPlayer = document.getElementById('vidResultPlayer') as HTMLVideoElement | null;
+    const statOrigSize = document.getElementById('vidStatOrigSize');
+    const statTrimmedSize = document.getElementById('vidStatTrimmedSize');
+    const statSavedPercent = document.getElementById('vidStatSavedPercent');
+    const downloadLink = document.getElementById('vidDownloadLink') as HTMLAnchorElement | null;
+    const trimAnotherBtn = document.getElementById('vidTrimAnotherBtn');
+
+    // App State
+    let currentVideo: VideoMetadata | null = null;
+    let startTime = 0;
+    let endTime = 0;
+    let isPlayingSelectionOnly = false;
+    let isDragging: 'start' | 'end' | 'playhead' | null = null;
+
+    // Load and Analyze Video File
+    async function handleFile(file: File) {
+      if (!dropzone || !loadingCard || !editorView) return;
+
+      dropzone.style.display = 'none';
+      editorView.style.display = 'none';
+      if (completedCard) completedCard.style.display = 'none';
+      loadingCard.style.display = 'flex';
+
+      try {
+        currentVideo = await loadVideoMetadata(file);
+        startTime = 0;
+        endTime = currentVideo.duration;
+
+        // Populate Player
+        if (player) {
+          player.src = currentVideo.url;
+          player.load();
+        }
+
+        // Populate Header
+        if (metaFileName) metaFileName.textContent = currentVideo.name;
+        if (metaResolution) metaResolution.textContent = `${currentVideo.width} × ${currentVideo.height} (${currentVideo.aspectRatio})`;
+        if (metaDuration) metaDuration.textContent = formatTimecode(currentVideo.duration, false);
+        if (totalDurationText) totalDurationText.textContent = formatTimecode(currentVideo.duration, false);
+
+        // Populate Inputs
+        updateTimeInputs();
+        updateTimelineUI();
+
+        // Generate Timeline Filmstrip
+        if (filmstrip) {
+          filmstrip.innerHTML = '';
+          generateFilmstripThumbnails(currentVideo.url, currentVideo.duration, 8).then((thumbs) => {
+            thumbs.forEach((src) => {
+              const img = document.createElement('img');
+              img.src = src;
+              img.className = 'timeline-thumb';
+              filmstrip.appendChild(img);
+            });
+          });
+        }
+
+        loadingCard.style.display = 'none';
+        editorView.style.display = 'flex';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : i18n.errorLoad);
+        resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      currentVideo = null;
+      if (player) {
+        player.pause();
+        player.src = '';
+      }
+      if (fileInput) fileInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (editorView) editorView.style.display = 'none';
+      if (progressCard) progressCard.style.display = 'none';
+      if (completedCard) completedCard.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    // Timecode & Timeline Synchronization
+    function updateTimeInputs() {
+      if (startTimeInput) startTimeInput.value = formatTimecode(startTime, true);
+      if (endTimeInput) endTimeInput.value = formatTimecode(endTime, true);
+    }
+
+    function updateTimelineUI() {
+      if (!currentVideo || currentVideo.duration <= 0) return;
+      const dur = currentVideo.duration;
+
+      const startPercent = (startTime / dur) * 100;
+      const endPercent = (endTime / dur) * 100;
+      const selectedDur = Math.max(0, endTime - startTime);
+      const selectedPct = Math.round((selectedDur / dur) * 100);
+
+      // Handles & Selection Bar
+      if (handleStart) handleStart.style.left = `${startPercent}%`;
+      if (handleEnd) handleEnd.style.left = `${endPercent}%`;
+      if (dimLeft) dimLeft.style.width = `${startPercent}%`;
+      if (dimRight) dimRight.style.left = `${endPercent}%`;
+      if (selectionBar) {
+        selectionBar.style.left = `${startPercent}%`;
+        selectionBar.style.width = `${Math.max(0, endPercent - startPercent)}%`;
+      }
+
+      // Tooltips & Pill
+      if (tooltipStart) tooltipStart.textContent = formatTimecode(startTime, false);
+      if (tooltipEnd) tooltipEnd.textContent = formatTimecode(endTime, false);
+      if (selectedDurationText) selectedDurationText.textContent = formatTimecode(selectedDur, true);
+      if (selectedPercentText) selectedPercentText.textContent = `(${selectedPct}%)`;
+    }
+
+    function updatePlayheadUI(time: number) {
+      if (!currentVideo || currentVideo.duration <= 0) return;
+      const percent = (time / currentVideo.duration) * 100;
+      if (playhead) playhead.style.left = `${Math.min(100, Math.max(0, percent))}%`;
+      if (currentTimeText) currentTimeText.textContent = formatTimecode(time, false);
+    }
+
+    // Player Playback Events
+    if (player) {
+      player.addEventListener('timeupdate', () => {
+        updatePlayheadUI(player.currentTime);
+
+        if (isPlayingSelectionOnly && player.currentTime >= endTime) {
+          player.pause();
+          player.currentTime = startTime;
+          isPlayingSelectionOnly = false;
+        }
+      });
+
+      player.addEventListener('play', () => {
+        if (playIcon) playIcon.style.display = 'none';
+        if (pauseIcon) pauseIcon.style.display = 'block';
+        if (playerOverlay) playerOverlay.style.opacity = '0';
+      });
+
+      player.addEventListener('pause', () => {
+        if (playIcon) playIcon.style.display = 'block';
+        if (pauseIcon) pauseIcon.style.display = 'none';
+        if (playerOverlay) playerOverlay.style.opacity = '1';
+      });
+    }
+
+    // Play / Pause Buttons
+    function togglePlay() {
+      if (!player) return;
+      if (player.paused) {
+        if (player.currentTime < startTime || player.currentTime >= endTime) {
+          player.currentTime = startTime;
+        }
+        player.play();
+      } else {
+        player.pause();
+      }
+    }
+
+    if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlay);
+    if (bigPlayBtn) bigPlayBtn.addEventListener('click', togglePlay);
+
+    // Play Selection Only
+    if (playTrimBtn) {
+      playTrimBtn.addEventListener('click', () => {
+        if (!player) return;
+        isPlayingSelectionOnly = true;
+        player.currentTime = startTime;
+        player.play();
+      });
+    }
+
+    // Stepping
+    if (stepBackBtn) {
+      stepBackBtn.addEventListener('click', () => {
+        if (!player) return;
+        player.currentTime = Math.max(0, player.currentTime - 0.1);
+      });
+    }
+    if (stepFwdBtn) {
+      stepFwdBtn.addEventListener('click', () => {
+        if (!player || !currentVideo) return;
+        player.currentTime = Math.min(currentVideo.duration, player.currentTime + 0.1);
+      });
+    }
+
+    // Mute Toggle
+    if (muteBtn && player) {
+      muteBtn.addEventListener('click', () => {
+        player.muted = !player.muted;
+        if (volumeIcon) volumeIcon.style.display = player.muted ? 'none' : 'block';
+        if (mutedIcon) mutedIcon.style.display = player.muted ? 'block' : 'none';
+      });
+    }
+
+    // Timeline Drag & Drop (Mouse + Touch)
+    if (trackWrap) {
+      function getTrackTimeFromEvent(e: MouseEvent | TouchEvent): number {
+        if (!trackWrap || !currentVideo) return 0;
+        const rect = trackWrap.getBoundingClientRect();
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        const offset = Math.max(0, Math.min(rect.width, clientX - rect.left));
+        const fraction = offset / rect.width;
+        return fraction * currentVideo.duration;
+      }
+
+      function handleDragMove(e: MouseEvent | TouchEvent) {
+        if (!isDragging || !currentVideo) return;
+        const t = getTrackTimeFromEvent(e);
+
+        if (isDragging === 'start') {
+          startTime = Math.max(0, Math.min(endTime - 0.1, t));
+          if (player) player.currentTime = startTime;
+        } else if (isDragging === 'end') {
+          endTime = Math.min(currentVideo.duration, Math.max(startTime + 0.1, t));
+          if (player) player.currentTime = endTime;
+        } else if (isDragging === 'playhead') {
+          if (player) player.currentTime = t;
+        }
+
+        updateTimeInputs();
+        updateTimelineUI();
+      }
+
+      function handleDragEnd() {
+        isDragging = null;
+        window.removeEventListener('mousemove', handleDragMove);
+        window.removeEventListener('mouseup', handleDragEnd);
+        window.removeEventListener('touchmove', handleDragMove);
+        window.removeEventListener('touchend', handleDragEnd);
+      }
+
+      if (handleStart) {
+        const startDrag = (e: Event) => {
+          e.stopPropagation();
+          isDragging = 'start';
+          window.addEventListener('mousemove', handleDragMove);
+          window.addEventListener('mouseup', handleDragEnd);
+          window.addEventListener('touchmove', handleDragMove);
+          window.addEventListener('touchend', handleDragEnd);
+        };
+        handleStart.addEventListener('mousedown', startDrag);
+        handleStart.addEventListener('touchstart', startDrag);
+      }
+
+      if (handleEnd) {
+        const endDrag = (e: Event) => {
+          e.stopPropagation();
+          isDragging = 'end';
+          window.addEventListener('mousemove', handleDragMove);
+          window.addEventListener('mouseup', handleDragEnd);
+          window.addEventListener('touchmove', handleDragMove);
+          window.addEventListener('touchend', handleDragEnd);
+        };
+        handleEnd.addEventListener('mousedown', endDrag);
+        handleEnd.addEventListener('touchstart', endDrag);
+      }
+
+      // Track Click (Seek Playhead)
+      trackWrap.addEventListener('mousedown', (e) => {
+        if (e.target === handleStart || e.target === handleEnd) return;
+        const t = getTrackTimeFromEvent(e);
+        if (player) player.currentTime = t;
+        isDragging = 'playhead';
+        window.addEventListener('mousemove', handleDragMove);
+        window.addEventListener('mouseup', handleDragEnd);
+      });
+    }
+
+    // Set Current As Start / End
+    if (setCurrentAsStartBtn) {
+      setCurrentAsStartBtn.addEventListener('click', () => {
+        if (!player) return;
+        startTime = Math.max(0, Math.min(endTime - 0.1, player.currentTime));
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    }
+
+    if (setCurrentAsEndBtn) {
+      setCurrentAsEndBtn.addEventListener('click', () => {
+        if (!player || !currentVideo) return;
+        endTime = Math.min(currentVideo.duration, Math.max(startTime + 0.1, player.currentTime));
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    }
+
+    // Timecode Input Changes
+    if (startTimeInput) {
+      startTimeInput.addEventListener('change', () => {
+        const parsed = parseTimecode(startTimeInput.value);
+        startTime = Math.max(0, Math.min(endTime - 0.1, parsed));
+        if (player) player.currentTime = startTime;
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    }
+
+    if (endTimeInput) {
+      endTimeInput.addEventListener('change', () => {
+        if (!currentVideo) return;
+        const parsed = parseTimecode(endTimeInput.value);
+        endTime = Math.min(currentVideo.duration, Math.max(startTime + 0.1, parsed));
+        if (player) player.currentTime = endTime;
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    }
+
+    // Fine-Step Buttons for Start & End Time
+    function addStep(btn: HTMLElement | null, isStart: boolean, delta: number) {
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        if (!currentVideo) return;
+        if (isStart) {
+          startTime = Math.max(0, Math.min(endTime - 0.1, startTime + delta));
+          if (player) player.currentTime = startTime;
+        } else {
+          endTime = Math.min(currentVideo.duration, Math.max(startTime + 0.1, endTime + delta));
+          if (player) player.currentTime = endTime;
+        }
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    }
+
+    addStep(startMinus1, true, -1.0);
+    addStep(startMinus01, true, -0.1);
+    addStep(startPlus01, true, 0.1);
+    addStep(startPlus1, true, 1.0);
+
+    addStep(endMinus1, false, -1.0);
+    addStep(endMinus01, false, -0.1);
+    addStep(endPlus01, false, 0.1);
+    addStep(endPlus1, false, 1.0);
+
+    // Social Media Presets
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!currentVideo) return;
+        const preset = btn.getAttribute('data-preset');
+        const dur = currentVideo.duration;
+
+        if (preset === 'wa30') {
+          startTime = 0;
+          endTime = Math.min(dur, 30);
+        } else if (preset === 'shorts60') {
+          startTime = 0;
+          endTime = Math.min(dur, 60);
+        } else if (preset === 'tiktok15') {
+          startTime = 0;
+          endTime = Math.min(dur, 15);
+        } else if (preset === 'first5') {
+          startTime = 0;
+          endTime = Math.min(dur, 5);
+        } else if (preset === 'last5') {
+          startTime = Math.max(0, dur - 5);
+          endTime = dur;
+        }
+
+        if (player) player.currentTime = startTime;
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    });
+
+    if (resetSelectionBtn) {
+      resetSelectionBtn.addEventListener('click', () => {
+        if (!currentVideo) return;
+        startTime = 0;
+        endTime = currentVideo.duration;
+        if (player) player.currentTime = 0;
+        updateTimeInputs();
+        updateTimelineUI();
+      });
+    }
+
+    if (newVideoBtn) newVideoBtn.addEventListener('click', resetToDropzone);
+
+    // Export / Trim Video Process
+    if (exportBtn) {
+      exportBtn.addEventListener('click', async () => {
+        if (!currentVideo) return;
+        const trimDuration = endTime - startTime;
+        if (trimDuration < 0.1) {
+          alert(i18n.errorMinDuration);
+          return;
+        }
+
+        if (player) player.pause();
+        if (editorView) editorView.style.display = 'none';
+        if (progressCard) progressCard.style.display = 'block';
+
+        const keepAudio = keepAudioCheckbox ? keepAudioCheckbox.checked : true;
+        const outFormat = (formatSelect ? formatSelect.value : 'mp4') as 'mp4' | 'webm';
+
+        try {
+          const result = await trimVideo(currentVideo.url, {
+            startTime,
+            endTime,
+            keepAudio,
+            outputFormat: outFormat,
+            onProgress: (percent) => {
+              if (progressBarFill) progressBarFill.style.width = `${percent}%`;
+              if (progressPercentText) progressPercentText.textContent = `${percent}%`;
+              if (progressTimeText) progressTimeText.textContent = `Rendering frame-accurate clip... ${percent}%`;
+            },
+          });
+
+          if (progressCard) progressCard.style.display = 'none';
+          if (completedCard) completedCard.style.display = 'block';
+
+          // Set Result Player
+          if (resultPlayer) {
+            resultPlayer.src = result.url;
+            resultPlayer.load();
+          }
+
+          // Stats
+          if (statOrigSize) statOrigSize.textContent = currentVideo.sizeFormatted;
+          if (statTrimmedSize) statTrimmedSize.textContent = result.sizeFormatted;
+          if (statSavedPercent) {
+            const savedPct = Math.round((1 - (trimDuration / currentVideo.duration)) * 100);
+            statSavedPercent.textContent = `${Math.max(0, savedPct)}% reduction`;
+          }
+
+          // Download link
+          if (downloadLink) {
+            const base = currentVideo.name.replace(/\.[^/.]+$/, '');
+            downloadLink.href = result.url;
+            downloadLink.download = `${base}-trimmed.${result.format.toLowerCase()}`;
+          }
+        } catch (err) {
+          alert(err instanceof Error ? err.message : 'Error trimming video.');
+          if (progressCard) progressCard.style.display = 'none';
+          if (editorView) editorView.style.display = 'flex';
+        }
+      });
+    }
+
+    if (trimAnotherBtn) {
+      trimAnotherBtn.addEventListener('click', resetToDropzone);
+    }
+
+    // Sample video button
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        if (dropzone && loadingCard) {
+          dropzone.style.display = 'none';
+          loadingCard.style.display = 'flex';
+          if (loadingText) loadingText.textContent = 'Generating sample video in browser...';
+        }
+        const sampleFile = await generateSampleVideo();
+        handleFile(sampleFile);
+      });
+    }
+
+    // Drag and Drop files onto dropzone
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('video-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('video-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files[0]) {
+          handleFile(dt.files[0]);
+        }
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+          handleFile(target.files[0]);
+        }
+      });
+    }
+
+    // Global Paste Listener (Ctrl+V)
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('video') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleFile(file);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  initVideoTrimmer();
+  document.addEventListener('astro:page-load', initVideoTrimmer);
+</script>
+
+<style>
+  .video-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone Card */
+  .video-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .video-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .video-dropzone-card.video-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .video-dropzone-content {
+    max-width: 540px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .video-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .video-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .video-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .video-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .video-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 460px;
+  }
+
+  @media (min-width: 640px) {
+    .video-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .video-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .video-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .video-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .video-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+  }
+
+  .video-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .video-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .video-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .video-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: vidSpin 0.8s linear infinite;
+  }
+
+  @keyframes vidSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .video-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Main Video Editor Workspace */
+  .video-editor-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .video-editor-view {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Editor Header */
+  .video-editor-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .video-editor-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .video-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .video-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .video-filename-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 480px) {
+    .video-filename-label {
+      max-width: 320px;
+    }
+  }
+
+  .video-meta-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+  }
+
+  .video-header-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* Video Player Container */
+  .video-player-container {
+    background: #0f172a;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .video-screen-wrap {
+    position: relative;
+    width: 100%;
+    max-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+  }
+
+  .video-main-player {
+    width: 100%;
+    max-height: 480px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .video-player-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .video-big-play-btn {
+    pointer-events: auto;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .video-big-play-btn:hover {
+    transform: scale(1.08);
+    background: var(--color-accent-hover);
+  }
+
+  /* Controls Bar */
+  .video-controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2-5) var(--space-4);
+    background: #1e293b;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .video-ctrl-left,
+  .video-ctrl-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .ctrl-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    border-radius: var(--radius-md);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+  }
+
+  .ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .ctrl-btn-text {
+    font-size: 11.5px;
+  }
+
+  .ctrl-btn-step {
+    font-family: monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .video-time-display {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-left: 4px;
+  }
+
+  /* Dual-Handle Filmstrip Timeline */
+  .timeline-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .timeline-title {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+  }
+
+  .selection-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    color: var(--color-accent);
+  }
+
+  .timeline-track-wrap {
+    position: relative;
+    width: 100%;
+    height: 72px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #0f172a;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .timeline-filmstrip {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  :global(.timeline-thumb) {
+    flex: 1;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+  }
+
+  .timeline-dim {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .timeline-dim-left {
+    left: 0;
+    width: 0%;
+  }
+
+  .timeline-dim-right {
+    right: 0;
+    left: 100%;
+  }
+
+  .timeline-selection-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0%;
+    width: 100%;
+    border-top: 3px solid var(--color-accent);
+    border-bottom: 3px solid var(--color-accent);
+    pointer-events: none;
+    z-index: 3;
+    background: rgba(99, 102, 241, 0.08);
+  }
+
+  /* Handles */
+  .timeline-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 22px;
+    background: var(--color-accent);
+    cursor: ew-resize;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    touch-action: none;
+  }
+
+  .handle-start {
+    left: 0%;
+    transform: translateX(-50%);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
+
+  .handle-end {
+    left: 100%;
+    transform: translateX(-50%);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+  }
+
+  .handle-grip {
+    display: flex;
+    gap: 3px;
+    pointer-events: none;
+  }
+
+  .handle-grip span {
+    width: 2px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 1px;
+  }
+
+  .handle-tooltip {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 10.5px;
+    font-weight: 700;
+    font-family: monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Playhead */
+  .timeline-playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0%;
+    width: 2px;
+    background: #ffffff;
+    z-index: 6;
+    pointer-events: none;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+  }
+
+  .playhead-cap {
+    position: absolute;
+    top: 0;
+    left: -4px;
+    width: 10px;
+    height: 10px;
+    background: #ffffff;
+    border-radius: 50%;
+  }
+
+  /* Precision Controls Grid */
+  .trim-controls-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .trim-controls-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+  }
+
+  .time-control-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .time-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .time-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-micro {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+
+  .time-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .time-input {
+    width: 100%;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    color: var(--color-text);
+    box-sizing: border-box;
+  }
+
+  .time-step-btns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+
+  .btn-step-sm {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 4px 0;
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.1s ease;
+  }
+
+  .btn-step-sm:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* Presets Card */
+  .presets-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .presets-header {
+    margin-bottom: var(--space-2);
+  }
+
+  .presets-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .presets-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn-preset {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-full);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-preset:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  /* Export Card */
+  .export-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .export-options-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 600px) {
+    .export-options-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .audio-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2-5);
+    cursor: pointer;
+  }
+
+  .checkbox-custom {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  .toggle-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .toggle-text strong {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+  }
+
+  .toggle-subtext {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+
+  .format-select-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .format-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .format-select {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 6px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .video-export-btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: var(--text-base);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  /* Progress Card */
+  .video-progress-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10) var(--space-6);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .progress-header h3 {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 4px 0;
+  }
+
+  .progress-header p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 12px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent), #06b6d4);
+    border-radius: var(--radius-full);
+    transition: width 0.15s ease;
+  }
+
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* Completed State */
+  .video-completed-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    text-align: center;
+  }
+
+  .completed-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .completed-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .completed-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .completed-header p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .result-player-wrap {
+    background: #000000;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .result-video {
+    width: 100%;
+    max-height: 360px;
+  }
+
+  .completed-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2-5);
+  }
+
+  .stat-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .stat-box strong {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .stat-highlight {
+    color: #059669 !important;
+  }
+
+  .completed-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+  }
+
+  @media (min-width: 500px) {
+    .completed-actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .download-btn {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-6);
+  }
+</style>

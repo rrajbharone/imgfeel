@@ -31,5 +31,9 @@
   "tools.resolutionChecker.title": "Image Resolution Checker",
   "tools.resolutionChecker.description": "Check image resolution, pixel dimensions, megapixels, 300 DPI print sizes, and screen display clarity instantly.",
   "tools.aspectRatioChecker.title": "Image Aspect Ratio Checker",
-  "tools.aspectRatioChecker.description": "Find exact aspect ratios, decimal proportions, social media dimensions, and responsive CSS aspect-ratio code instantly."
+  "tools.aspectRatioChecker.description": "Find exact aspect ratios, decimal proportions, social media dimensions, and responsive CSS aspect-ratio code instantly.",
+  "tools.videoTrimmer.title": "Video Trimmer",
+  "tools.videoTrimmer.description": "Trim, cut, and shorten video clips online with interactive visual timeline controls, audio toggle, and 100% in-browser privacy.",
+  "tools.videoRotator.title": "Video Rotator",
+  "tools.videoRotator.description": "Rotate, turn, and mirror flip video clips (90°, 180°, 270°) online with live preview and 100% in-browser privacy."
 }
