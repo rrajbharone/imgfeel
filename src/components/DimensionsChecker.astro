@@ -1,12 +1,16 @@
 ---
 import { t } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
+const cmMmUrl = getToolUrl('cm-mm-resizer', locale);
 ---
 
 <div
@@ -337,7 +341,7 @@ const { locale } = Astro.props;
         <div class="tool-links-box">
           <p class="tool-links-title">{t(locale, 'dimcheck.nextActions.title')}</p>
           <div class="tool-quick-links">
-            <a href={locale === 'en' ? '/tools/resize-image-to-exact-dimensions/' : `/${locale}/tools/redimensionar-imagen-a-dimensiones-exactas/`} class="btn btn-secondary btn-sm">
+            <a href={exactUrl} class="btn btn-secondary btn-sm">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="15 3 21 3 21 9"></polyline>
                 <polyline points="9 21 3 21 3 15"></polyline>
@@ -346,13 +350,13 @@ const { locale } = Astro.props;
               </svg>
               <span>{t(locale, 'dimcheck.nextActions.resize')}</span>
             </a>
-            <a href={locale === 'en' ? '/tools/webp-image-compressor/' : `/${locale}/tools/compresor-de-imagenes-webp/`} class="btn btn-secondary btn-sm">
+            <a href={webpUrl} class="btn btn-secondary btn-sm">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
               </svg>
               <span>{t(locale, 'dimcheck.nextActions.compress')}</span>
             </a>
-            <a href={locale === 'en' ? '/tools/resize-image-in-cm-mm/' : `/${locale}/tools/redimensionar-imagen-en-cm-mm/`} class="btn btn-secondary btn-sm">
+            <a href={cmMmUrl} class="btn btn-secondary btn-sm">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4Z"></path>
               </svg>

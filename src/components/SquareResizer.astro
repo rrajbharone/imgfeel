@@ -1,0 +1,1308 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const ratioUrl = getToolUrl('image-aspect-ratio-checker', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const cmMmUrl = getToolUrl('cm-mm-resizer', locale);
+
+const i18nDict = {
+  statusReady: t(locale, 'squareresizer.status.ready'),
+  statusProcessing: t(locale, 'squareresizer.status.processing'),
+  errorLoad: t(locale, 'squareresizer.error.load'),
+  matchLargerSide: t(locale, 'squareresizer.preset.matchLarger'),
+  matchSmallerSide: t(locale, 'squareresizer.preset.matchSmaller'),
+  downloadName: t(locale, 'squareresizer.download.filename'),
+};
+---
+
+<div class="sq-tool-wrapper" id="squareResizerApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Upload State -->
+  <div class="sq-dropzone-card" id="sqDropzone">
+    <div class="sq-dropzone-content">
+      <div class="sq-icon-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+          <line x1="15" y1="3" x2="15" y2="21"></line>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="3" y1="15" x2="21" y2="15"></line>
+        </svg>
+      </div>
+
+      <h2 class="sq-drop-title">{t(locale, 'squareresizer.dropzone.title')}</h2>
+      <p class="sq-drop-subtitle">{t(locale, 'squareresizer.dropzone.subtitle')}</p>
+
+      <div class="sq-btn-row">
+        <label class="btn btn-primary sq-btn-primary" for="sqFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'squareresizer.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="sqFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary sq-sample-btn" id="sqSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span>{t(locale, 'squareresizer.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="sq-formats-hint">{t(locale, 'squareresizer.dropzone.formats')}</p>
+
+      <div class="sq-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'squareresizer.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="sq-loading-card" id="sqLoadingCard" style="display: none;">
+    <div class="sq-spinner"></div>
+    <p class="sq-loading-text">{t(locale, 'squareresizer.status.processing')}</p>
+  </div>
+
+  <!-- Main Workspace -->
+  <div class="sq-workspace" id="sqWorkspace" style="display: none;">
+    <!-- Top Meta & Action Bar -->
+    <div class="sq-workspace-header">
+      <div class="sq-meta-badge">
+        <span class="sq-status-dot"></span>
+        <span id="sqFileName" class="sq-filename-label">image.jpg</span>
+        <span class="sq-meta-tag" id="sqOriginalDimsTag">1200 × 800 px</span>
+        <span class="sq-meta-tag" id="sqOriginalSizeTag">450 KB</span>
+      </div>
+
+      <div class="sq-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="sqChangeImageBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'squareresizer.action.changeImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Controls & Preview Grid -->
+    <div class="sq-main-grid">
+      <!-- Left Column: Controls Panel -->
+      <div class="sq-controls-panel">
+        <!-- Section 1: Resizing Mode -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'squareresizer.mode.label')}</label>
+          <div class="sq-mode-tabs" role="tablist">
+            <button type="button" class="sq-mode-tab active" data-mode="fit-pad" role="tab" aria-selected="true">
+              <span class="tab-title">{t(locale, 'squareresizer.mode.fitPad')}</span>
+              <span class="tab-sub">{t(locale, 'squareresizer.mode.fitPadDesc')}</span>
+            </button>
+            <button type="button" class="sq-mode-tab" data-mode="crop-fill" role="tab" aria-selected="false">
+              <span class="tab-title">{t(locale, 'squareresizer.mode.cropFill')}</span>
+              <span class="tab-sub">{t(locale, 'squareresizer.mode.cropFillDesc')}</span>
+            </button>
+            <button type="button" class="sq-mode-tab" data-mode="stretch" role="tab" aria-selected="false">
+              <span class="tab-title">{t(locale, 'squareresizer.mode.stretch')}</span>
+              <span class="tab-sub">{t(locale, 'squareresizer.mode.stretchDesc')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 2: Background Fill Options (Visible only in fit-pad mode) -->
+        <div class="control-group" id="sqBgFillGroup">
+          <label class="control-label">{t(locale, 'squareresizer.bg.label')}</label>
+          
+          <div class="sq-bg-types-row">
+            <label class="sq-radio-label">
+              <input type="radio" name="sqBgType" value="solid" checked />
+              <span>{t(locale, 'squareresizer.bg.solid')}</span>
+            </label>
+            <label class="sq-radio-label">
+              <input type="radio" name="sqBgType" value="blur" />
+              <span>{t(locale, 'squareresizer.bg.blur')}</span>
+            </label>
+            <label class="sq-radio-label">
+              <input type="radio" name="sqBgType" value="transparent" />
+              <span>{t(locale, 'squareresizer.bg.transparent')}</span>
+            </label>
+          </div>
+
+          <!-- Color Swatches & Picker (Visible when solid is selected) -->
+          <div class="sq-color-picker-row" id="sqColorPickerRow">
+            <input type="color" id="sqBgColorInput" value="#ffffff" class="sq-color-input" title="Custom color" />
+            <div class="sq-swatches">
+              <button type="button" class="swatch-btn active" data-color="#ffffff" style="background:#ffffff;" title="White"></button>
+              <button type="button" class="swatch-btn" data-color="#000000" style="background:#000000;" title="Black"></button>
+              <button type="button" class="swatch-btn" data-color="#f3f4f6" style="background:#f3f4f6;" title="Light Grey"></button>
+              <button type="button" class="swatch-btn" data-color="#1e293b" style="background:#1e293b;" title="Slate Dark"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Target Square Dimension Presets -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'squareresizer.size.label')}</label>
+          
+          <div class="sq-presets-grid">
+            <button type="button" class="sq-preset-btn active" data-size="1080">
+              <strong>1080 × 1080 px</strong>
+              <span>{t(locale, 'squareresizer.preset.instagram')}</span>
+            </button>
+            <button type="button" class="sq-preset-btn" data-size="500">
+              <strong>500 × 500 px</strong>
+              <span>{t(locale, 'squareresizer.preset.avatar')}</span>
+            </button>
+            <button type="button" class="sq-preset-btn" data-size="1024">
+              <strong>1024 × 1024 px</strong>
+              <span>{t(locale, 'squareresizer.preset.appIcon')}</span>
+            </button>
+            <button type="button" class="sq-preset-btn" data-size="2000">
+              <strong>2000 × 2000 px</strong>
+              <span>{t(locale, 'squareresizer.preset.ecommerce')}</span>
+            </button>
+            <button type="button" class="sq-preset-btn" id="sqPresetMatchMaxBtn" data-size="max">
+              <strong id="sqPresetMatchMaxVal">Original Max</strong>
+              <span id="sqPresetMatchMaxSub">{t(locale, 'squareresizer.preset.matchLarger')}</span>
+            </button>
+            <button type="button" class="sq-preset-btn" data-size="custom" id="sqPresetCustomBtn">
+              <strong>{t(locale, 'squareresizer.preset.custom')}</strong>
+              <span>{t(locale, 'squareresizer.preset.customDesc')}</span>
+            </button>
+          </div>
+
+          <!-- Custom px input row (Shown when custom is selected) -->
+          <div class="sq-custom-input-row" id="sqCustomInputRow" style="display: none;">
+            <label for="sqCustomSizeInput" class="sq-custom-label">{t(locale, 'squareresizer.size.customInput')}:</label>
+            <div class="sq-input-wrap">
+              <input type="number" id="sqCustomSizeInput" value="1200" min="16" max="8000" step="1" class="sq-number-input" />
+              <span class="sq-input-unit">px (1:1)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Format & Quality -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'squareresizer.format.label')}</label>
+          <div class="sq-format-row">
+            <select id="sqFormatSelect" class="sq-select">
+              <option value="image/jpeg">JPG / JPEG (Standard Photo)</option>
+              <option value="image/png">PNG (Lossless / Transparency)</option>
+              <option value="image/webp" selected>WebP (Modern Compact)</option>
+            </select>
+          </div>
+
+          <div class="sq-quality-group" id="sqQualityGroup">
+            <div class="sq-quality-header">
+              <span class="quality-label">{t(locale, 'squareresizer.quality.label')}:</span>
+              <strong id="sqQualityVal" class="quality-val">90%</strong>
+            </div>
+            <input type="range" id="sqQualitySlider" min="10" max="100" value="90" step="1" class="sq-range-slider" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Canvas Preview & Download -->
+      <div class="sq-preview-panel">
+        <div class="sq-preview-canvas-box">
+          <img id="sqPreviewImg" src="" alt="1:1 square preview" class="sq-preview-img" />
+        </div>
+
+        <!-- Output Metrics Grid -->
+        <div class="sq-metrics-grid">
+          <div class="metric-card">
+            <span class="metric-k">{t(locale, 'squareresizer.metrics.outputDimensions')}:</span>
+            <strong class="metric-v" id="sqMetricOutputDims">1080 × 1080 px</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-k">{t(locale, 'squareresizer.metrics.aspectRatio')}:</span>
+            <strong class="metric-v">1:1 (Square)</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-k">{t(locale, 'squareresizer.metrics.estimatedSize')}:</span>
+            <strong class="metric-v" id="sqMetricOutputSize">-- KB</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-k">{t(locale, 'squareresizer.metrics.originalDimensions')}:</span>
+            <strong class="metric-v" id="sqMetricOriginalDims">-- × -- px</strong>
+          </div>
+        </div>
+
+        <!-- Primary Action Download Button -->
+        <button type="button" class="btn btn-primary sq-download-btn" id="sqDownloadBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>{t(locale, 'squareresizer.action.download')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Action Tool Recommendations -->
+    <div class="sq-cross-links-row">
+      <a href={ratioUrl} class="btn btn-secondary sq-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+          <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+        </svg>
+        <span>{t(locale, 'squareresizer.cross.ratio')}</span>
+      </a>
+
+      <a href={webpUrl} class="btn btn-secondary sq-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>{t(locale, 'squareresizer.cross.compress')}</span>
+      </a>
+
+      <a href={exactUrl} class="btn btn-secondary sq-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <polyline points="9 21 3 21 3 15"></polyline>
+          <line x1="21" y1="3" x2="14" y2="10"></line>
+          <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+        <span>{t(locale, 'squareresizer.cross.exact')}</span>
+      </a>
+
+      <a href={cmMmUrl} class="btn btn-secondary sq-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0l12.6 12.6z"></path>
+          <path d="m7.5 10.5 2 2"></path>
+          <path d="m10.5 7.5 2 2"></path>
+        </svg>
+        <span>{t(locale, 'squareresizer.cross.cmMm')}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    resizeImageToSquare,
+    generateSampleLandscape,
+    type SquareMode,
+    type BgFillType,
+    type OutputFormat,
+    type ResizeResult,
+  } from '@/scripts/square-resizer';
+
+  function initSquareResizer() {
+    const container = document.getElementById('squareResizerApp');
+    if (!container) return;
+
+    let i18n = {
+      statusReady: 'Ready',
+      statusProcessing: 'Processing 1:1 Square Resize...',
+      errorLoad: 'Failed to resize image',
+      matchLargerSide: 'Match Larger Side',
+      matchSmallerSide: 'Match Smaller Side',
+      downloadName: 'image-1x1-square',
+    };
+
+    try {
+      const dataAttr = container.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // Elements
+    const dropzone = document.getElementById('sqDropzone');
+    const fileInput = document.getElementById('sqFileInput') as HTMLInputElement | null;
+    const sampleBtn = document.getElementById('sqSampleBtn');
+    const loadingCard = document.getElementById('sqLoadingCard');
+    const workspace = document.getElementById('sqWorkspace');
+
+    // Header elements
+    const fileNameEl = document.getElementById('sqFileName');
+    const origDimsTag = document.getElementById('sqOriginalDimsTag');
+    const origSizeTag = document.getElementById('sqOriginalSizeTag');
+    const changeImageBtn = document.getElementById('sqChangeImageBtn');
+
+    // Controls
+    const modeTabs = document.querySelectorAll('.sq-mode-tab');
+    const bgFillGroup = document.getElementById('sqBgFillGroup');
+    const bgRadioInputs = document.querySelectorAll('input[name="sqBgType"]');
+    const colorPickerRow = document.getElementById('sqColorPickerRow');
+    const bgColorInput = document.getElementById('sqBgColorInput') as HTMLInputElement | null;
+    const swatchBtns = document.querySelectorAll('.swatch-btn');
+
+    // Presets
+    const presetBtns = document.querySelectorAll('.sq-preset-btn');
+    const presetMatchMaxBtn = document.getElementById('sqPresetMatchMaxBtn');
+    const presetMatchMaxVal = document.getElementById('sqPresetMatchMaxVal');
+    const customInputRow = document.getElementById('sqCustomInputRow');
+    const customSizeInput = document.getElementById('sqCustomSizeInput') as HTMLInputElement | null;
+
+    // Format & Quality
+    const formatSelect = document.getElementById('sqFormatSelect') as HTMLSelectElement | null;
+    const qualityGroup = document.getElementById('sqQualityGroup');
+    const qualitySlider = document.getElementById('sqQualitySlider') as HTMLInputElement | null;
+    const qualityValEl = document.getElementById('sqQualityVal');
+
+    // Preview & Download
+    const previewImg = document.getElementById('sqPreviewImg') as HTMLImageElement | null;
+    const outputDimsEl = document.getElementById('sqMetricOutputDims');
+    const outputSizeEl = document.getElementById('sqMetricOutputSize');
+    const origDimsMetric = document.getElementById('sqMetricOriginalDims');
+    const downloadBtn = document.getElementById('sqDownloadBtn');
+
+    // State
+    let currentFile: File | null = null;
+    let originalWidth = 0;
+    let originalHeight = 0;
+    let activeMode: SquareMode = 'fit-pad';
+    let activeBgType: BgFillType = 'solid';
+    let activeBgColor = '#ffffff';
+    let activeSizeSetting: string | number = 1080;
+    let lastResult: ResizeResult | null = null;
+    let debounceTimer: number | null = null;
+
+    function getTargetSize(): number {
+      if (activeSizeSetting === 'max') {
+        return Math.max(originalWidth, originalHeight) || 1080;
+      }
+      if (activeSizeSetting === 'min') {
+        return Math.min(originalWidth, originalHeight) || 1080;
+      }
+      if (activeSizeSetting === 'custom') {
+        return customSizeInput ? parseInt(customSizeInput.value, 10) || 1080 : 1080;
+      }
+      return typeof activeSizeSetting === 'number' ? activeSizeSetting : 1080;
+    }
+
+    async function processResize() {
+      if (!currentFile) return;
+
+      const targetSize = getTargetSize();
+      const format = (formatSelect?.value as OutputFormat) || 'image/webp';
+      const quality = qualitySlider ? parseInt(qualitySlider.value, 10) / 100 : 0.9;
+
+      try {
+        const result = await resizeImageToSquare(currentFile, {
+          targetSize,
+          mode: activeMode,
+          bgType: activeBgType,
+          bgColor: activeBgColor,
+          format,
+          quality,
+        });
+
+        lastResult = result;
+
+        if (previewImg) previewImg.src = result.dataUrl;
+        if (outputDimsEl) outputDimsEl.textContent = `${result.width} × ${result.height} px`;
+        if (outputSizeEl) outputSizeEl.textContent = result.fileSizeFormatted;
+        if (origDimsMetric) origDimsMetric.textContent = `${result.originalWidth} × ${result.originalHeight} px`;
+      } catch (err) {
+        console.error('Resize error:', err);
+      }
+    }
+
+    function triggerDebouncedResize() {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(processResize, 120);
+    }
+
+    async function loadNewFile(file: File) {
+      if (!dropzone || !loadingCard || !workspace) return;
+
+      dropzone.style.display = 'none';
+      workspace.style.display = 'none';
+      loadingCard.style.display = 'flex';
+
+      try {
+        currentFile = file;
+
+        // Measure natural dimensions
+        const img = new Image();
+        const loadPromise = new Promise<{ w: number; h: number }>((resolve) => {
+          img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+          img.onerror = () => resolve({ w: 1080, h: 1080 });
+        });
+        img.src = URL.createObjectURL(file);
+        const dims = await loadPromise;
+        originalWidth = dims.w;
+        originalHeight = dims.h;
+
+        // Update header & Max preset button
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (origDimsTag) origDimsTag.textContent = `${originalWidth} × ${originalHeight} px`;
+        if (origSizeTag) origSizeTag.textContent = `${(file.size / 1024).toFixed(1)} KB`;
+
+        const maxSide = Math.max(originalWidth, originalHeight);
+        if (presetMatchMaxVal) presetMatchMaxVal.textContent = `${maxSide} × ${maxSide} px`;
+
+        // Process first output
+        await processResize();
+
+        loadingCard.style.display = 'none';
+        workspace.style.display = 'flex';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : i18n.errorLoad);
+        resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      currentFile = null;
+      if (fileInput) fileInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (workspace) workspace.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    if (changeImageBtn) changeImageBtn.addEventListener('click', resetToDropzone);
+
+    // Mode tabs
+    modeTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach((t) => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        activeMode = (tab.getAttribute('data-mode') as SquareMode) || 'fit-pad';
+
+        if (bgFillGroup) {
+          bgFillGroup.style.display = activeMode === 'fit-pad' ? 'block' : 'none';
+        }
+
+        processResize();
+      });
+    });
+
+    // Background type radios
+    bgRadioInputs.forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        activeBgType = (target.value as BgFillType) || 'solid';
+        if (colorPickerRow) {
+          colorPickerRow.style.display = activeBgType === 'solid' ? 'flex' : 'none';
+        }
+        processResize();
+      });
+    });
+
+    // Color picker
+    if (bgColorInput) {
+      bgColorInput.addEventListener('input', (e) => {
+        activeBgColor = (e.target as HTMLInputElement).value;
+        swatchBtns.forEach((btn) => btn.classList.remove('active'));
+        triggerDebouncedResize();
+      });
+    }
+
+    // Color swatches
+    swatchBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const col = btn.getAttribute('data-color') || '#ffffff';
+        activeBgColor = col;
+        if (bgColorInput) bgColorInput.value = col;
+        swatchBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        processResize();
+      });
+    });
+
+    // Presets
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const rawSize = btn.getAttribute('data-size');
+        if (rawSize === 'max' || rawSize === 'min' || rawSize === 'custom') {
+          activeSizeSetting = rawSize;
+        } else {
+          activeSizeSetting = parseInt(rawSize || '1080', 10);
+        }
+
+        if (customInputRow) {
+          customInputRow.style.display = activeSizeSetting === 'custom' ? 'flex' : 'none';
+        }
+
+        processResize();
+      });
+    });
+
+    if (customSizeInput) {
+      customSizeInput.addEventListener('input', triggerDebouncedResize);
+    }
+
+    // Format & Quality
+    if (formatSelect) {
+      formatSelect.addEventListener('change', () => {
+        if (qualityGroup) {
+          qualityGroup.style.display = formatSelect.value === 'image/png' ? 'none' : 'block';
+        }
+        processResize();
+      });
+    }
+
+    if (qualitySlider) {
+      qualitySlider.addEventListener('input', () => {
+        if (qualityValEl) qualityValEl.textContent = `${qualitySlider.value}%`;
+        triggerDebouncedResize();
+      });
+    }
+
+    // Download Button
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        if (!lastResult) return;
+
+        const extMap: Record<string, string> = {
+          'image/jpeg': '.jpg',
+          'image/png': '.png',
+          'image/webp': '.webp',
+        };
+        const ext = extMap[formatSelect?.value || 'image/webp'] || '.jpg';
+        const baseName = currentFile ? currentFile.name.replace(/\.[^/.]+$/, '') : 'image';
+        const filename = `${baseName}-1x1-square${ext}`;
+
+        const a = document.createElement('a');
+        a.href = lastResult.dataUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
+
+    // Sample button
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        const file = await generateSampleLandscape();
+        loadNewFile(file);
+      });
+    }
+
+    // File Input change
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+          loadNewFile(target.files[0]);
+        }
+      });
+    }
+
+    // Drag and drop
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('sq-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('sq-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files[0]) {
+          loadNewFile(dt.files[0]);
+        }
+      });
+    }
+
+    // Paste listener (Ctrl+V)
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            loadNewFile(file);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  initSquareResizer();
+  document.addEventListener('astro:page-load', initSquareResizer);
+</script>
+
+<style>
+  .sq-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone */
+  .sq-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .sq-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .sq-dropzone-card.sq-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .sq-dropzone-content {
+    max-width: 580px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sq-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .sq-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .sq-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .sq-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .sq-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 480px;
+  }
+
+  @media (min-width: 640px) {
+    .sq-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .sq-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 440px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .sq-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .sq-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .sq-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+  }
+
+  .sq-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .sq-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .sq-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sq-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: sqSpin 0.8s linear infinite;
+  }
+
+  @keyframes sqSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .sq-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Main Workspace */
+  .sq-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .sq-workspace {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Header */
+  .sq-workspace-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .sq-workspace-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .sq-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .sq-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .sq-filename-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 480px) {
+    .sq-filename-label {
+      max-width: 320px;
+    }
+  }
+
+  .sq-meta-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+  }
+
+  .sq-header-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* Main Grid */
+  .sq-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 900px) {
+    .sq-main-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-5);
+    }
+  }
+
+  /* Controls Panel */
+  .sq-controls-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .sq-controls-panel {
+      padding: var(--space-6);
+    }
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+  }
+
+  .control-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Mode Tabs */
+  .sq-mode-tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 500px) {
+    .sq-mode-tabs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .sq-mode-tab {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-2-5);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.15s ease;
+  }
+
+  .sq-mode-tab:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .sq-mode-tab.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .tab-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .tab-sub {
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.3;
+  }
+
+  /* Background options */
+  .sq-bg-types-row {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .sq-radio-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .sq-color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-1);
+  }
+
+  .sq-color-input {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    padding: 0;
+    background: none;
+  }
+
+  .sq-swatches {
+    display: flex;
+    gap: 6px;
+  }
+
+  .swatch-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .swatch-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .swatch-btn.active {
+    box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-accent);
+  }
+
+  /* Presets Grid */
+  .sq-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 500px) {
+    .sq-presets-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .sq-preset-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2-5) var(--space-2);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.15s ease;
+  }
+
+  .sq-preset-btn:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .sq-preset-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .sq-preset-btn strong {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .sq-preset-btn span {
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.25;
+  }
+
+  .sq-custom-input-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+    margin-top: var(--space-1);
+  }
+
+  .sq-custom-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .sq-input-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sq-number-input {
+    width: 100px;
+    padding: 4px 8px;
+    font-size: var(--text-xs);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .sq-input-unit {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+  }
+
+  /* Format & Quality */
+  .sq-select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .sq-quality-group {
+    margin-top: var(--space-2);
+  }
+
+  .sq-quality-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .quality-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+
+  .quality-val {
+    font-size: 11px;
+    color: var(--color-text);
+    font-family: monospace;
+  }
+
+  .sq-range-slider {
+    width: 100%;
+    accent-color: var(--color-accent);
+  }
+
+  /* Preview Panel */
+  .sq-preview-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .sq-preview-panel {
+      padding: var(--space-6);
+    }
+  }
+
+  .sq-preview-canvas-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 380px;
+    margin-inline: auto;
+    background: repeating-conic-gradient(#f1f5f9 0% 25%, #ffffff 0% 50%) 50% / 16px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .sq-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Metrics Grid */
+  .sq-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+
+  .metric-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-2-5);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .metric-k {
+    font-size: 10.5px;
+    color: var(--color-text-muted);
+  }
+
+  .metric-v {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .sq-download-btn {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  /* Cross Links */
+  .sq-cross-links-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 600px) {
+    .sq-cross-links-row {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+
+  .sq-cross-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+</style>

@@ -1,0 +1,492 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  { q: t(locale, 'squareresizer.faq.q1'), a: t(locale, 'squareresizer.faq.a1') },
+  { q: t(locale, 'squareresizer.faq.q2'), a: t(locale, 'squareresizer.faq.a2') },
+  { q: t(locale, 'squareresizer.faq.q3'), a: t(locale, 'squareresizer.faq.a3') },
+  { q: t(locale, 'squareresizer.faq.q4'), a: t(locale, 'squareresizer.faq.a4') },
+  { q: t(locale, 'squareresizer.faq.q5'), a: t(locale, 'squareresizer.faq.a5') },
+  { q: t(locale, 'squareresizer.faq.q6'), a: t(locale, 'squareresizer.faq.a6') },
+  { q: t(locale, 'squareresizer.faq.q7'), a: t(locale, 'squareresizer.faq.a7') },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction -->
+      <h2>{t(locale, 'squareresizer.content.h1')}</h2>
+      <p>{t(locale, 'squareresizer.content.p1a')}</p>
+      <p>{t(locale, 'squareresizer.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="3" y1="15" x2="21" y2="15"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'squareresizer.content.feat1Title')}</h4>
+          <p>{t(locale, 'squareresizer.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+              <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'squareresizer.content.feat2Title')}</h4>
+          <p>{t(locale, 'squareresizer.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h4>{t(locale, 'squareresizer.content.feat3Title')}</h4>
+          <p>{t(locale, 'squareresizer.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'squareresizer.content.feat4Title')}</h4>
+          <p>{t(locale, 'squareresizer.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Fit vs Crop vs Stretch -->
+      <h2>{t(locale, 'squareresizer.content.h2')}</h2>
+      <p>{t(locale, 'squareresizer.content.p2a')}</p>
+      <p>{t(locale, 'squareresizer.content.p2b')}</p>
+
+      <!-- Section 3: Social Media Square Standards -->
+      <h2>{t(locale, 'squareresizer.content.h3')}</h2>
+      <p>{t(locale, 'squareresizer.content.p3a')}</p>
+      <p>{t(locale, 'squareresizer.content.p3b')}</p>
+
+      <!-- Section 4: Master Square Dimensions Reference Table -->
+      <h2>{t(locale, 'squareresizer.content.h4')}</h2>
+      <p>{t(locale, 'squareresizer.content.p4a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Platform / Use Case</th>
+              <th>Recommended Size</th>
+              <th>Aspect Ratio</th>
+              <th>Optimal Format</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Instagram Feed Post</strong></td>
+              <td>1080 × 1080 px</td>
+              <td>1:1 Square</td>
+              <td>JPG / WebP</td>
+            </tr>
+            <tr>
+              <td><strong>WhatsApp Profile DP</strong></td>
+              <td>500 × 500 px</td>
+              <td>1:1 Square</td>
+              <td>JPG / PNG</td>
+            </tr>
+            <tr>
+              <td><strong>Discord &amp; Slack Avatar</strong></td>
+              <td>512 × 512 px</td>
+              <td>1:1 Square</td>
+              <td>PNG / WebP</td>
+            </tr>
+            <tr>
+              <td><strong>YouTube Channel Icon</strong></td>
+              <td>800 × 800 px</td>
+              <td>1:1 Square (Circular Mask)</td>
+              <td>PNG / JPG</td>
+            </tr>
+            <tr>
+              <td><strong>E-Commerce (Amazon / Shopify)</strong></td>
+              <td>2000 × 2000 px</td>
+              <td>1:1 Square (Zoom Enabled)</td>
+              <td>JPG / WebP</td>
+            </tr>
+            <tr>
+              <td><strong>iOS / Android App Icon</strong></td>
+              <td>1024 × 1024 px</td>
+              <td>1:1 Square (No Transparency for iOS)</td>
+              <td>PNG</td>
+            </tr>
+            <tr>
+              <td><strong>LinkedIn Profile Photo</strong></td>
+              <td>400 × 400 px</td>
+              <td>1:1 Square (Circular Crop)</td>
+              <td>JPG / PNG</td>
+            </tr>
+            <tr>
+              <td><strong>X / Twitter Profile Picture</strong></td>
+              <td>400 × 400 px</td>
+              <td>1:1 Square</td>
+              <td>JPG / PNG</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: E-Commerce Product Photography -->
+      <h2>{t(locale, 'squareresizer.content.h5')}</h2>
+      <p>{t(locale, 'squareresizer.content.p5a')}</p>
+      <p>{t(locale, 'squareresizer.content.p5b')}</p>
+
+      <!-- Section 6: Avoiding Distortion & Quality Loss -->
+      <h2>{t(locale, 'squareresizer.content.h6')}</h2>
+      <p>{t(locale, 'squareresizer.content.p6a')}</p>
+      <p>{t(locale, 'squareresizer.content.p6b')}</p>
+
+      <!-- Section 7: How to Square Images Natively -->
+      <h2>{t(locale, 'squareresizer.content.h7')}</h2>
+      <p>{t(locale, 'squareresizer.content.p7Intro')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <h4>iPhone &amp; iPad (iOS)</h4>
+          <p>Open <strong>Photos</strong> &gt; Tap <strong>Edit</strong> &gt; Tap the <strong>Crop icon</strong> &gt; Tap the <strong>Aspect Ratio icon</strong> in the top corner &gt; Choose <strong>Square</strong>.</p>
+        </div>
+        <div class="feature-box">
+          <h4>Android (Google Photos)</h4>
+          <p>Open image &gt; Tap <strong>Edit</strong> &gt; Select <strong>Crop</strong> &gt; Tap <strong>Ratio</strong> &gt; Select <strong>1:1 (Square)</strong> &gt; Save Copy.</p>
+        </div>
+        <div class="feature-box">
+          <h4>macOS Preview</h4>
+          <p>Open image &gt; Click <strong>Markup Toolbar</strong> &gt; Select <strong>Rectangular Selection</strong> while holding <strong>Shift</strong> to constrain 1:1 &gt; Press <strong>Cmd + K</strong> (Crop).</p>
+        </div>
+        <div class="feature-box">
+          <h4>ImgFeel 1:1 Resizer</h4>
+          <p>Drag and drop any image to fit without cropping using frosted blur padding, transparent canvas, or smart center crop with instant 1-click download.</p>
+        </div>
+      </div>
+
+      <!-- Section 8: FAQ Accordion -->
+      <div class="faq-container">
+        <h2>{t(locale, 'squareresizer.faq.heading')}</h2>
+        <div class="faq-list">
+          {
+            faqItems.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-question">{item.q}</summary>
+                <div class="faq-answer">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Features Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 520px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* FAQ */
+  .faq-container {
+    margin-top: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .faq-container {
+      margin-top: var(--space-10);
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-3-5) var(--space-5);
+      font-size: 14.5px;
+    }
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5) var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4) var(--space-5);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

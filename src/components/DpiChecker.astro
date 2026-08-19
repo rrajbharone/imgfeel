@@ -1,0 +1,1425 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const cmMmUrl = getToolUrl('cm-mm-resizer', locale);
+
+const i18nDict = {
+  statusAnalyzed: t(locale, 'dpicheck.status.analyzed'),
+  errorLoad: t(locale, 'dpicheck.error.load'),
+  errorFormat: t(locale, 'dpicheck.error.format'),
+  noDpiTag: t(locale, 'dpicheck.verdict.noTag'),
+  foundDpiTag: t(locale, 'dpicheck.verdict.foundTag'),
+  readyPrint: t(locale, 'dpicheck.verdict.readyPrint'),
+  webDisplay: t(locale, 'dpicheck.verdict.webDisplay'),
+  statusExcellent: t(locale, 'dpicheck.status.excellent'),
+  statusGood: t(locale, 'dpicheck.status.good'),
+  statusAcceptable: t(locale, 'dpicheck.status.acceptable'),
+  statusPoor: t(locale, 'dpicheck.status.poor'),
+  inches: t(locale, 'dpicheck.unit.inches'),
+  cm: t(locale, 'dpicheck.unit.cm'),
+  mm: t(locale, 'dpicheck.unit.mm'),
+};
+---
+
+<div class="dpi-tool-wrapper" id="dpiCheckerApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Upload State -->
+  <div class="dpi-dropzone-card" id="dpiDropzone">
+    <div class="dpi-dropzone-content">
+      <div class="dpi-icon-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+      </div>
+
+      <h2 class="dpi-drop-title">{t(locale, 'dpicheck.dropzone.title')}</h2>
+      <p class="dpi-drop-subtitle">{t(locale, 'dpicheck.dropzone.subtitle')}</p>
+
+      <div class="dpi-btn-row">
+        <label class="btn btn-primary dpi-btn-primary" for="dpiFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'dpicheck.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="dpiFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,.gif" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary dpi-sample-btn" id="dpiSample300Btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>{t(locale, 'dpicheck.dropzone.sample300')}</span>
+        </button>
+      </div>
+
+      <p class="dpi-formats-hint">{t(locale, 'dpicheck.dropzone.formats')}</p>
+
+      <div class="dpi-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'dpicheck.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="dpi-loading-card" id="dpiLoadingCard" style="display: none;">
+    <div class="dpi-spinner"></div>
+    <p class="dpi-loading-text">{t(locale, 'dpicheck.status.analyzing')}</p>
+  </div>
+
+  <!-- Results Workspace -->
+  <div class="dpi-results-view" id="dpiResultsView" style="display: none;">
+    <!-- Top Action & Info Bar -->
+    <div class="dpi-results-header">
+      <div class="dpi-meta-badge">
+        <span class="dpi-status-dot"></span>
+        <span id="dpiMetaFileName" class="dpi-filename-label">image.jpg</span>
+        <span class="dpi-meta-tag" id="dpiMetaResolution">1800 × 1200 px</span>
+        <span class="dpi-meta-tag" id="dpiMetaFileSize">1.2 MB</span>
+      </div>
+
+      <div class="dpi-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="dpiNewImageBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'dpicheck.action.newImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DPI Hero Verdict Banner -->
+    <div class="dpi-verdict-card" id="dpiVerdictCard">
+      <div class="dpi-verdict-left">
+        <span class="verdict-label">{t(locale, 'dpicheck.card.embeddedDpi')}</span>
+        <div class="verdict-dpi-val">
+          <strong id="dpiHeroValue">300 DPI</strong>
+          <span class="verdict-tag" id="dpiHeroTag">EXIF APP1</span>
+        </div>
+        <p class="verdict-desc" id="dpiHeroDesc">Ready for high-quality 300 DPI printing.</p>
+      </div>
+
+      <div class="dpi-verdict-right">
+        <div class="preview-thumb-wrap">
+          <img id="dpiPreviewImg" src="" alt="Analyzed image preview" class="preview-thumb" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Key Responsive Stat Metric Boxes -->
+    <div class="dpi-metrics-grid">
+      <!-- Box 1: Density & Tag -->
+      <div class="metric-box">
+        <div class="metric-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+        </div>
+        <span class="metric-title">{t(locale, 'dpicheck.box.densityTitle')}</span>
+        <strong class="metric-val" id="boxDensityVal">300 × 300 DPI</strong>
+        <span class="metric-sub" id="boxDensitySub">Dots Per Inch (Inches)</span>
+      </div>
+
+      <!-- Box 2: Physical Size at Current DPI -->
+      <div class="metric-box highlight-box">
+        <div class="metric-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"></path>
+            <line x1="14.5" y1="5.5" x2="18.5" y2="9.5"></line>
+          </svg>
+        </div>
+        <span class="metric-title">{t(locale, 'dpicheck.box.printSizeTitle')}</span>
+        <strong class="metric-val" id="boxPrintSizeVal">6.0 × 4.0 in</strong>
+        <span class="metric-sub" id="boxPrintSizeSub">15.2 × 10.2 cm (152 × 102 mm)</span>
+      </div>
+
+      <!-- Box 3: Pixel Resolution -->
+      <div class="metric-box">
+        <div class="metric-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <span class="metric-title">{t(locale, 'dpicheck.box.pixelResTitle')}</span>
+        <strong class="metric-val" id="boxPixelResVal">1800 × 1200 px</strong>
+        <span class="metric-sub" id="boxPixelResSub">2.16 Megapixels (3:2)</span>
+      </div>
+
+      <!-- Box 4: Max 300 DPI Print Potential -->
+      <div class="metric-box">
+        <div class="metric-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <span class="metric-title">{t(locale, 'dpicheck.box.max300Title')}</span>
+        <strong class="metric-val" id="boxMax300Val">6.0 × 4.0 in</strong>
+        <span class="metric-sub" id="boxMax300Sub">15.2 × 10.2 cm (300 DPI Standard)</span>
+      </div>
+    </div>
+
+    <!-- Interactive Target DPI & Print Size Calculator -->
+    <div class="dpi-calculator-card">
+      <div class="calc-header">
+        <div class="calc-header-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="16" y1="14" x2="16" y2="18"></line>
+            <path d="M16 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M8 14h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M8 18h.01"></path>
+          </svg>
+          <h3>{t(locale, 'dpicheck.calc.title')}</h3>
+        </div>
+        <p class="calc-subtitle">{t(locale, 'dpicheck.calc.subtitle')}</p>
+      </div>
+
+      <!-- Presets Pill Row -->
+      <div class="dpi-presets-row">
+        <span class="preset-label">{t(locale, 'dpicheck.calc.presets')}:</span>
+        <div class="preset-buttons">
+          <button type="button" class="dpi-preset-btn" data-dpi="72">72 DPI (Web)</button>
+          <button type="button" class="dpi-preset-btn" data-dpi="150">150 DPI (Poster)</button>
+          <button type="button" class="dpi-preset-btn" data-dpi="200">200 DPI (Magazine)</button>
+          <button type="button" class="dpi-preset-btn active" data-dpi="300">300 DPI (Photo/Fine Art)</button>
+          <button type="button" class="dpi-preset-btn" data-dpi="600">600 DPI (Ultra HD)</button>
+        </div>
+      </div>
+
+      <!-- Live Calculation Display -->
+      <div class="calc-results-grid">
+        <div class="calc-input-col">
+          <label for="dpiTargetInput" class="calc-input-label">{t(locale, 'dpicheck.calc.customLabel')}:</label>
+          <div class="calc-input-wrap">
+            <input type="number" id="dpiTargetInput" value="300" min="10" max="2400" step="1" class="calc-input-field" />
+            <span class="calc-input-addon">DPI</span>
+          </div>
+        </div>
+
+        <div class="calc-output-box">
+          <span class="calc-out-label">{t(locale, 'dpicheck.calc.outInches')}</span>
+          <strong id="calcOutInches">6.00 × 4.00 in</strong>
+        </div>
+
+        <div class="calc-output-box">
+          <span class="calc-out-label">{t(locale, 'dpicheck.calc.outCm')}</span>
+          <strong id="calcOutCm">15.24 × 10.16 cm</strong>
+        </div>
+
+        <div class="calc-output-box">
+          <span class="calc-out-label">{t(locale, 'dpicheck.calc.outMm')}</span>
+          <strong id="calcOutMm">152 × 102 mm</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard Print Format Suitability Matrix Table -->
+    <div class="dpi-table-card">
+      <div class="table-card-header">
+        <h3>{t(locale, 'dpicheck.table.title')}</h3>
+        <p>{t(locale, 'dpicheck.table.subtitle')}</p>
+      </div>
+
+      <div class="table-responsive-wrap">
+        <table class="dpi-suitability-table">
+          <thead>
+            <tr>
+              <th>{t(locale, 'dpicheck.th.format')}</th>
+              <th>{t(locale, 'dpicheck.th.sizeInches')}</th>
+              <th>{t(locale, 'dpicheck.th.sizeCm')}</th>
+              <th>{t(locale, 'dpicheck.th.req300')}</th>
+              <th>{t(locale, 'dpicheck.th.effDpi')}</th>
+              <th>{t(locale, 'dpicheck.th.status')}</th>
+            </tr>
+          </thead>
+          <tbody id="dpiSuitabilityBody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Technical Specs & Metadata Accordion -->
+    <details class="dpi-specs-accordion">
+      <summary class="specs-summary">
+        <span>{t(locale, 'dpicheck.specs.heading')}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-arrow" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+
+      <div class="specs-grid">
+        <div class="spec-item">
+          <span class="spec-k">{t(locale, 'dpicheck.spec.fileType')}:</span>
+          <strong class="spec-v" id="specFileType">JPEG</strong>
+        </div>
+        <div class="spec-item">
+          <span class="spec-k">{t(locale, 'dpicheck.spec.sourceTag')}:</span>
+          <strong class="spec-v" id="specSourceTag">EXIF APP1</strong>
+        </div>
+        <div class="spec-item">
+          <span class="spec-k">{t(locale, 'dpicheck.spec.units')}:</span>
+          <strong class="spec-v" id="specUnits">Inches</strong>
+        </div>
+        <div class="spec-item">
+          <span class="spec-k">{t(locale, 'dpicheck.spec.aspect')}:</span>
+          <strong class="spec-v" id="specAspect">3:2 Landscape</strong>
+        </div>
+        <div class="spec-item">
+          <span class="spec-k">{t(locale, 'dpicheck.spec.megapixels')}:</span>
+          <strong class="spec-v" id="specMegapixels">2.16 MP</strong>
+        </div>
+        <div class="spec-item">
+          <span class="spec-k">{t(locale, 'dpicheck.spec.fileSize')}:</span>
+          <strong class="spec-v" id="specFileSize">1.2 MB</strong>
+        </div>
+      </div>
+    </details>
+
+    <!-- Quick Action Navigation Row -->
+    <div class="dpi-actions-row">
+      <a href={cmMmUrl} class="btn btn-secondary action-link-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"></path>
+          <line x1="14.5" y1="5.5" x2="18.5" y2="9.5"></line>
+        </svg>
+        <span>{t(locale, 'dpicheck.action.goToCmMm')}</span>
+      </a>
+
+      <button type="button" class="btn btn-primary action-link-btn" id="dpiCheckAnotherBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <span>{t(locale, 'dpicheck.action.checkAnother')}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    analyzeImageDpi,
+    calculatePrintSuitability,
+    generate300DpiSample,
+    type DpiMetadata,
+  } from '@/scripts/dpi-checker';
+
+  function initDpiChecker() {
+    const container = document.getElementById('dpiCheckerApp');
+    if (!container) return;
+
+    let i18n = {
+      statusAnalyzed: 'DPI Analyzed',
+      errorLoad: 'Failed to analyze image',
+      errorFormat: 'Unsupported image format',
+      noDpiTag: 'No embedded DPI metadata found (Default 72 DPI)',
+      foundDpiTag: 'Embedded DPI metadata detected',
+      readyPrint: 'Optimal for high-resolution 300 DPI printing',
+      webDisplay: 'Optimized for digital and web screen display',
+      statusExcellent: 'Excellent (Crisp Print)',
+      statusGood: 'Good (Photo Quality)',
+      statusAcceptable: 'Acceptable (Viewing Distance)',
+      statusPoor: 'Low (May Pixelate)',
+      inches: 'in',
+      cm: 'cm',
+      mm: 'mm',
+    };
+
+    try {
+      const dataAttr = container.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {
+      // fallback
+    }
+
+    // Elements
+    const dropzone = document.getElementById('dpiDropzone');
+    const fileInput = document.getElementById('dpiFileInput') as HTMLInputElement | null;
+    const sample300Btn = document.getElementById('dpiSample300Btn');
+    const loadingCard = document.getElementById('dpiLoadingCard');
+    const resultsView = document.getElementById('dpiResultsView');
+
+    // Header info
+    const metaFileName = document.getElementById('dpiMetaFileName');
+    const metaResolution = document.getElementById('dpiMetaResolution');
+    const metaFileSize = document.getElementById('dpiMetaFileSize');
+    const newImageBtn = document.getElementById('dpiNewImageBtn');
+    const checkAnotherBtn = document.getElementById('dpiCheckAnotherBtn');
+
+    // Hero Verdict
+    const heroValue = document.getElementById('dpiHeroValue');
+    const heroTag = document.getElementById('dpiHeroTag');
+    const heroDesc = document.getElementById('dpiHeroDesc');
+    const previewImg = document.getElementById('dpiPreviewImg') as HTMLImageElement | null;
+
+    // 4 Key Stat Boxes
+    const boxDensityVal = document.getElementById('boxDensityVal');
+    const boxDensitySub = document.getElementById('boxDensitySub');
+    const boxPrintSizeVal = document.getElementById('boxPrintSizeVal');
+    const boxPrintSizeSub = document.getElementById('boxPrintSizeSub');
+    const boxPixelResVal = document.getElementById('boxPixelResVal');
+    const boxPixelResSub = document.getElementById('boxPixelResSub');
+    const boxMax300Val = document.getElementById('boxMax300Val');
+    const boxMax300Sub = document.getElementById('boxMax300Sub');
+
+    // Target Calculator
+    const targetInput = document.getElementById('dpiTargetInput') as HTMLInputElement | null;
+    const calcOutInches = document.getElementById('calcOutInches');
+    const calcOutCm = document.getElementById('calcOutCm');
+    const calcOutMm = document.getElementById('calcOutMm');
+    const presetButtons = document.querySelectorAll('.dpi-preset-btn');
+
+    // Suitability Table
+    const suitabilityBody = document.getElementById('dpiSuitabilityBody');
+
+    // Specs
+    const specFileType = document.getElementById('specFileType');
+    const specSourceTag = document.getElementById('specSourceTag');
+    const specUnits = document.getElementById('specUnits');
+    const specAspect = document.getElementById('specAspect');
+    const specMegapixels = document.getElementById('specMegapixels');
+    const specFileSize = document.getElementById('specFileSize');
+
+    let currentMeta: DpiMetadata | null = null;
+
+    async function handleFile(file: File) {
+      if (!dropzone || !loadingCard || !resultsView) return;
+
+      dropzone.style.display = 'none';
+      resultsView.style.display = 'none';
+      loadingCard.style.display = 'flex';
+
+      try {
+        currentMeta = await analyzeImageDpi(file);
+
+        // Header info
+        if (metaFileName) metaFileName.textContent = currentMeta.name;
+        if (metaResolution) metaResolution.textContent = `${currentMeta.width} × ${currentMeta.height} px`;
+        if (metaFileSize) metaFileSize.textContent = currentMeta.sizeFormatted;
+
+        // Preview image
+        if (previewImg) previewImg.src = currentMeta.url;
+
+        // Hero Verdict
+        if (heroValue) {
+          heroValue.textContent = currentMeta.hasEmbeddedDpi
+            ? `${currentMeta.dpiX} DPI`
+            : `${currentMeta.dpiX} DPI (${i18n.noDpiTag})`;
+        }
+        if (heroTag) {
+          heroTag.textContent = currentMeta.sourceTag;
+          heroTag.className = currentMeta.hasEmbeddedDpi ? 'verdict-tag tag-success' : 'verdict-tag tag-warning';
+        }
+        if (heroDesc) {
+          if (currentMeta.effectiveDpi >= 300) {
+            heroDesc.textContent = `${i18n.readyPrint}: ${currentMeta.printWidthInches} × ${currentMeta.printHeightInches} ${i18n.inches} (${currentMeta.printWidthCm} × ${currentMeta.printHeightCm} ${i18n.cm}).`;
+          } else if (currentMeta.hasEmbeddedDpi) {
+            heroDesc.textContent = `Embedded density tag found (${currentMeta.dpiX} DPI). Prints at ${currentMeta.printWidthInches} × ${currentMeta.printHeightInches} in.`;
+          } else {
+            heroDesc.textContent = `${i18n.webDisplay}. For fine-art 300 DPI printing, maximum crisp dimensions are ${currentMeta.maxPrint300Inches.width} × ${currentMeta.maxPrint300Inches.height} in (${currentMeta.maxPrint300Cm.width} × ${currentMeta.maxPrint300Cm.height} cm).`;
+          }
+        }
+
+        // Box 1: Density
+        if (boxDensityVal) boxDensityVal.textContent = `${currentMeta.dpiX} × ${currentMeta.dpiY} DPI`;
+        if (boxDensitySub) boxDensitySub.textContent = `${currentMeta.sourceTag} (${currentMeta.unit === 'cm' ? 'Dots / cm' : 'Dots / inch'})`;
+
+        // Box 2: Print Size at current
+        if (boxPrintSizeVal) boxPrintSizeVal.textContent = `${currentMeta.printWidthInches} × ${currentMeta.printHeightInches} in`;
+        if (boxPrintSizeSub) boxPrintSizeSub.textContent = `${currentMeta.printWidthCm} × ${currentMeta.printHeightCm} cm (${currentMeta.printWidthMm} × ${currentMeta.printHeightMm} mm)`;
+
+        // Box 3: Pixel Res
+        if (boxPixelResVal) boxPixelResVal.textContent = `${currentMeta.width} × ${currentMeta.height} px`;
+        if (boxPixelResSub) boxPixelResSub.textContent = `${currentMeta.megapixels} MP (${currentMeta.aspectRatio})`;
+
+        // Box 4: Max 300 DPI
+        if (boxMax300Val) boxMax300Val.textContent = `${currentMeta.maxPrint300Inches.width} × ${currentMeta.maxPrint300Inches.height} in`;
+        if (boxMax300Sub) boxMax300Sub.textContent = `${currentMeta.maxPrint300Cm.width} × ${currentMeta.maxPrint300Cm.height} cm (300 DPI Standard)`;
+
+        // Calculator initial state
+        const initialDpi = currentMeta.hasEmbeddedDpi ? currentMeta.dpiX : 300;
+        if (targetInput) targetInput.value = String(initialDpi);
+        updateCalculator(initialDpi);
+        updatePresetActive(initialDpi);
+
+        // Suitability Table
+        renderSuitabilityTable(currentMeta.width, currentMeta.height);
+
+        // Specs
+        if (specFileType) specFileType.textContent = currentMeta.type.replace('image/', '').toUpperCase();
+        if (specSourceTag) specSourceTag.textContent = currentMeta.sourceTag;
+        if (specUnits) specUnits.textContent = currentMeta.unit === 'cm' ? 'Centimeters' : (currentMeta.unit === 'inch' ? 'Inches' : 'Default (Web)');
+        if (specAspect) specAspect.textContent = `${currentMeta.aspectRatio} (${currentMeta.width > currentMeta.height ? 'Landscape' : (currentMeta.width < currentMeta.height ? 'Portrait' : 'Square')})`;
+        if (specMegapixels) specMegapixels.textContent = `${currentMeta.megapixels} MP`;
+        if (specFileSize) specFileSize.textContent = currentMeta.sizeFormatted;
+
+        loadingCard.style.display = 'none';
+        resultsView.style.display = 'flex';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : i18n.errorLoad);
+        resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      currentMeta = null;
+      if (fileInput) fileInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (resultsView) resultsView.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    function updateCalculator(dpi: number) {
+      if (!currentMeta || dpi <= 0) return;
+      const wIn = (currentMeta.width / dpi).toFixed(2);
+      const hIn = (currentMeta.height / dpi).toFixed(2);
+      const wCm = (parseFloat(wIn) * 2.54).toFixed(2);
+      const hCm = (parseFloat(hIn) * 2.54).toFixed(2);
+      const wMm = Math.round(parseFloat(wCm) * 10);
+      const hMm = Math.round(parseFloat(hCm) * 10);
+
+      if (calcOutInches) calcOutInches.textContent = `${wIn} × ${hIn} in`;
+      if (calcOutCm) calcOutCm.textContent = `${wCm} × ${hCm} cm`;
+      if (calcOutMm) calcOutMm.textContent = `${wMm} × ${hMm} mm`;
+    }
+
+    function updatePresetActive(dpi: number) {
+      presetButtons.forEach((btn) => {
+        const val = parseInt(btn.getAttribute('data-dpi') || '0', 10);
+        btn.classList.toggle('active', val === dpi);
+      });
+    }
+
+    function renderSuitabilityTable(wPx: number, hPx: number) {
+      if (!suitabilityBody) return;
+      const list = calculatePrintSuitability(wPx, hPx);
+
+      suitabilityBody.innerHTML = list.map((item) => {
+        let badgeClass = 'badge-poor';
+        let badgeLabel = i18n.statusPoor;
+
+        if (item.status === 'excellent') {
+          badgeClass = 'badge-excellent';
+          badgeLabel = i18n.statusExcellent;
+        } else if (item.status === 'good') {
+          badgeClass = 'badge-good';
+          badgeLabel = i18n.statusGood;
+        } else if (item.status === 'acceptable') {
+          badgeClass = 'badge-acceptable';
+          badgeLabel = i18n.statusAcceptable;
+        }
+
+        return `
+          <tr>
+            <td><strong>${item.name}</strong></td>
+            <td>${item.sizeInches}</td>
+            <td>${item.sizeCm}</td>
+            <td>${item.reqWidth300} × ${item.reqHeight300} px</td>
+            <td><strong>${item.effectiveDpi} DPI</strong></td>
+            <td><span class="status-badge ${badgeClass}">${badgeLabel}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Target Calculator Input Events
+    if (targetInput) {
+      targetInput.addEventListener('input', (e) => {
+        const val = parseInt((e.target as HTMLInputElement).value, 10);
+        if (val > 0) {
+          updateCalculator(val);
+          updatePresetActive(val);
+        }
+      });
+    }
+
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const val = parseInt(btn.getAttribute('data-dpi') || '300', 10);
+        if (targetInput) targetInput.value = String(val);
+        updateCalculator(val);
+        updatePresetActive(val);
+      });
+    });
+
+    if (newImageBtn) newImageBtn.addEventListener('click', resetToDropzone);
+    if (checkAnotherBtn) checkAnotherBtn.addEventListener('click', resetToDropzone);
+
+    // Sample 300 DPI button
+    if (sample300Btn) {
+      sample300Btn.addEventListener('click', async () => {
+        const sampleFile = await generate300DpiSample();
+        handleFile(sampleFile);
+      });
+    }
+
+    // Drag and Drop
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('dpi-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('dpi-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files[0]) {
+          handleFile(dt.files[0]);
+        }
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+          handleFile(target.files[0]);
+        }
+      });
+    }
+
+    // Paste listener (Ctrl+V)
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleFile(file);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  initDpiChecker();
+  document.addEventListener('astro:page-load', initDpiChecker);
+</script>
+
+<style>
+  .dpi-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone Card */
+  .dpi-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .dpi-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .dpi-dropzone-card.dpi-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .dpi-dropzone-content {
+    max-width: 540px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dpi-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .dpi-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .dpi-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .dpi-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .dpi-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 460px;
+  }
+
+  @media (min-width: 640px) {
+    .dpi-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .dpi-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .dpi-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .dpi-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .dpi-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+  }
+
+  .dpi-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .dpi-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .dpi-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dpi-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: dpiSpin 0.8s linear infinite;
+  }
+
+  @keyframes dpiSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .dpi-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Main Workspace */
+  .dpi-results-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .dpi-results-view {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Header */
+  .dpi-results-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .dpi-results-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .dpi-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .dpi-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .dpi-filename-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 480px) {
+    .dpi-filename-label {
+      max-width: 320px;
+    }
+  }
+
+  .dpi-meta-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+  }
+
+  .dpi-header-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* Hero Verdict Banner */
+  .dpi-verdict-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .dpi-verdict-card {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-6);
+    }
+  }
+
+  .dpi-verdict-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .verdict-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .verdict-dpi-val {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .verdict-dpi-val strong {
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 640px) {
+    .verdict-dpi-val strong {
+      font-size: 36px;
+    }
+  }
+
+  .verdict-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .verdict-tag.tag-success {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+  }
+
+  .verdict-tag.tag-warning {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fde68a;
+  }
+
+  .verdict-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 640px) {
+    .verdict-desc {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .dpi-verdict-right {
+    flex-shrink: 0;
+  }
+
+  .preview-thumb-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 640px) {
+    .preview-thumb-wrap {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .preview-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 4 Metric Boxes Grid */
+  .dpi-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 480px) {
+    .dpi-metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .dpi-metrics-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3-5);
+    }
+  }
+
+  .metric-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .metric-box.highlight-box {
+    border-color: var(--color-accent-border);
+    background: linear-gradient(to bottom, var(--color-surface), var(--color-accent-light));
+  }
+
+  .metric-icon-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+
+  .metric-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .metric-val {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+    font-family: monospace;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .metric-sub {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Interactive Target Calculator */
+  .dpi-calculator-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .calc-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text);
+  }
+
+  .calc-header-title h3 {
+    font-size: var(--text-base);
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .calc-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 2px 0 0 0;
+  }
+
+  .dpi-presets-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .dpi-presets-row {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-3);
+    }
+  }
+
+  .preset-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .dpi-preset-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .dpi-preset-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .dpi-preset-btn.active {
+    background: var(--color-accent);
+    color: #ffffff;
+    border-color: var(--color-accent);
+  }
+
+  .calc-results-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 600px) {
+    .calc-results-grid {
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    }
+  }
+
+  .calc-input-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .calc-input-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .calc-input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    overflow: hidden;
+  }
+
+  .calc-input-field {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 10px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    font-family: monospace;
+    width: 100%;
+    outline: none;
+  }
+
+  .calc-input-addon {
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border-left: 1px solid var(--color-border-light);
+  }
+
+  .calc-output-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .calc-out-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .calc-output-box strong {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    font-family: monospace;
+  }
+
+  /* Table Card */
+  .dpi-table-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .table-card-header {
+    margin-bottom: var(--space-3);
+  }
+
+  .table-card-header h3 {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 2px 0;
+  }
+
+  .table-card-header p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .table-responsive-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .dpi-suitability-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 520px;
+  }
+
+  .dpi-suitability-table th,
+  .dpi-suitability-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  .dpi-suitability-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .dpi-suitability-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .status-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    display: inline-block;
+  }
+
+  .badge-excellent {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+  }
+
+  .badge-good {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+  }
+
+  .badge-acceptable {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fde68a;
+  }
+
+  .badge-poor {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+
+  /* Technical Specs Accordion */
+  .dpi-specs-accordion {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .specs-summary {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+
+  .specs-grid {
+    padding: var(--space-3) var(--space-4) var(--space-4) var(--space-4);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2-5);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  @media (min-width: 640px) {
+    .specs-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .spec-k {
+    font-size: 10.5px;
+    color: var(--color-text-muted);
+  }
+
+  .spec-v {
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    font-family: monospace;
+  }
+
+  /* Actions Row */
+  .dpi-actions-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 500px) {
+    .dpi-actions-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .action-link-btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+</style>

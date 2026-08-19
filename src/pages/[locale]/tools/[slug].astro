@@ -31,6 +31,18 @@ import VideoTrimmer from '@/components/VideoTrimmer.astro';
 import VideoTrimmerContent from '@/components/VideoTrimmerContent.astro';
 import VideoRotator from '@/components/VideoRotator.astro';
 import VideoRotatorContent from '@/components/VideoRotatorContent.astro';
+import DpiChecker from '@/components/DpiChecker.astro';
+import DpiCheckerContent from '@/components/DpiCheckerContent.astro';
+import FormatChecker from '@/components/FormatChecker.astro';
+import FormatCheckerContent from '@/components/FormatCheckerContent.astro';
+import SquareResizer from '@/components/SquareResizer.astro';
+import SquareResizerContent from '@/components/SquareResizerContent.astro';
+import CircleCropper from '@/components/CircleCropper.astro';
+import CircleCropperContent from '@/components/CircleCropperContent.astro';
+import GrayscaleConverter from '@/components/GrayscaleConverter.astro';
+import GrayscaleConverterContent from '@/components/GrayscaleConverterContent.astro';
+import ImageInverter from '@/components/ImageInverter.astro';
+import ImageInverterContent from '@/components/ImageInverterContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -68,6 +80,12 @@ const isDimCheck = toolId === 'image-dimensions-checker';
 const isFileSize = toolId === 'image-file-size-checker';
 const isResCheck = toolId === 'image-resolution-checker';
 const isRatioCheck = toolId === 'image-aspect-ratio-checker';
+const isDpiCheck = toolId === 'image-dpi-checker';
+const isFmtCheck = toolId === 'image-format-checker';
+const isSquareResizer = toolId === 'resize-image-to-1-1';
+const isCircleCropper = toolId === 'circle-image-cropper';
+const isGrayscale = toolId === 'image-grayscale-converter';
+const isInverter = toolId === 'image-inverter';
 const isVidTrim = toolId === 'video-trimmer';
 const isVidRotate = toolId === 'video-rotator';
 
@@ -97,9 +115,21 @@ const metaTitle = isExact
                         ? t(locale, 'rescheck.meta.title')
                         : isRatioCheck
                           ? t(locale, 'ratiocheck.meta.title')
-                          : isVidTrim
-                            ? t(locale, 'vidtrim.meta.title')
-                            : t(locale, 'vidrot.meta.title');
+                          : isDpiCheck
+                            ? t(locale, 'dpicheck.meta.title')
+                            : isFmtCheck
+                              ? t(locale, 'fmtcheck.meta.title')
+                              : isSquareResizer
+                                ? t(locale, 'squareresizer.meta.title')
+                                : isCircleCropper
+                                  ? t(locale, 'circlecrop.meta.title')
+                                  : isGrayscale
+                                    ? t(locale, 'grayconv.meta.title')
+                                    : isInverter
+                                      ? t(locale, 'inverter.meta.title')
+                                      : isVidTrim
+                                        ? t(locale, 'vidtrim.meta.title')
+                                        : t(locale, 'vidrot.meta.title');
 
 const metaDesc = isExact
   ? t(locale, 'exactresizer.meta.description')
@@ -127,9 +157,21 @@ const metaDesc = isExact
                         ? t(locale, 'rescheck.meta.description')
                         : isRatioCheck
                           ? t(locale, 'ratiocheck.meta.description')
-                          : isVidTrim
-                            ? t(locale, 'vidtrim.meta.description')
-                            : t(locale, 'vidrot.meta.description');
+                          : isDpiCheck
+                            ? t(locale, 'dpicheck.meta.description')
+                            : isFmtCheck
+                              ? t(locale, 'fmtcheck.meta.description')
+                              : isSquareResizer
+                                ? t(locale, 'squareresizer.meta.description')
+                                : isCircleCropper
+                                  ? t(locale, 'circlecrop.meta.description')
+                                  : isGrayscale
+                                    ? t(locale, 'grayconv.meta.description')
+                                    : isInverter
+                                      ? t(locale, 'inverter.meta.description')
+                                      : isVidTrim
+                                        ? t(locale, 'vidtrim.meta.description')
+                                        : t(locale, 'vidrot.meta.description');
 
 const heroTitle = isExact
   ? t(locale, 'exactresizer.hero.title')
@@ -157,9 +199,21 @@ const heroTitle = isExact
                         ? t(locale, 'rescheck.hero.title')
                         : isRatioCheck
                           ? t(locale, 'ratiocheck.hero.title')
-                          : isVidTrim
-                            ? t(locale, 'vidtrim.hero.title')
-                            : t(locale, 'vidrot.hero.title');
+                          : isDpiCheck
+                            ? t(locale, 'dpicheck.hero.title')
+                            : isFmtCheck
+                              ? t(locale, 'fmtcheck.hero.title')
+                              : isSquareResizer
+                                ? t(locale, 'squareresizer.hero.title')
+                                : isCircleCropper
+                                  ? t(locale, 'circlecrop.hero.title')
+                                  : isGrayscale
+                                    ? t(locale, 'grayconv.hero.title')
+                                    : isInverter
+                                      ? t(locale, 'inverter.hero.title')
+                                      : isVidTrim
+                                        ? t(locale, 'vidtrim.hero.title')
+                                        : t(locale, 'vidrot.hero.title');
 
 const heroSubtitle = isExact
   ? t(locale, 'exactresizer.hero.subtitle')
@@ -187,9 +241,21 @@ const heroSubtitle = isExact
                         ? t(locale, 'rescheck.hero.subtitle')
                         : isRatioCheck
                           ? t(locale, 'ratiocheck.hero.subtitle')
-                          : isVidTrim
-                            ? t(locale, 'vidtrim.hero.subtitle')
-                            : t(locale, 'vidrot.hero.subtitle');
+                          : isDpiCheck
+                            ? t(locale, 'dpicheck.hero.subtitle')
+                            : isFmtCheck
+                              ? t(locale, 'fmtcheck.hero.subtitle')
+                              : isSquareResizer
+                                ? t(locale, 'squareresizer.hero.subtitle')
+                                : isCircleCropper
+                                  ? t(locale, 'circlecrop.hero.subtitle')
+                                  : isGrayscale
+                                    ? t(locale, 'grayconv.hero.subtitle')
+                                    : isInverter
+                                      ? t(locale, 'inverter.hero.subtitle')
+                                      : isVidTrim
+                                        ? t(locale, 'vidtrim.hero.subtitle')
+                                        : t(locale, 'vidrot.hero.subtitle');
 ---
 
 <MainLayout
@@ -237,6 +303,12 @@ const heroSubtitle = isExact
       {isFileSize && <FileSizeChecker locale={locale} />}
       {isResCheck && <ResolutionChecker locale={locale} />}
       {isRatioCheck && <AspectRatioChecker locale={locale} />}
+      {isDpiCheck && <DpiChecker locale={locale} />}
+      {isFmtCheck && <FormatChecker locale={locale} />}
+      {isSquareResizer && <SquareResizer locale={locale} />}
+      {isCircleCropper && <CircleCropper locale={locale} />}
+      {isGrayscale && <GrayscaleConverter locale={locale} />}
+      {isInverter && <ImageInverter locale={locale} />}
       {isVidTrim && <VideoTrimmer locale={locale} />}
       {isVidRotate && <VideoRotator locale={locale} />}
     </div>
@@ -255,6 +327,12 @@ const heroSubtitle = isExact
   {isFileSize && <FileSizeCheckerContent locale={locale} />}
   {isResCheck && <ResolutionCheckerContent locale={locale} />}
   {isRatioCheck && <AspectRatioCheckerContent locale={locale} />}
+  {isDpiCheck && <DpiCheckerContent locale={locale} />}
+  {isFmtCheck && <FormatCheckerContent locale={locale} />}
+  {isSquareResizer && <SquareResizerContent locale={locale} />}
+  {isCircleCropper && <CircleCropperContent locale={locale} />}
+  {isGrayscale && <GrayscaleConverterContent locale={locale} />}
+  {isInverter && <ImageInverterContent locale={locale} />}
   {isVidTrim && <VideoTrimmerContent locale={locale} />}
   {isVidRotate && <VideoRotatorContent locale={locale} />}
 </MainLayout>

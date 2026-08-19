@@ -1,0 +1,501 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  { q: t(locale, 'dpicheck.faq.q1'), a: t(locale, 'dpicheck.faq.a1') },
+  { q: t(locale, 'dpicheck.faq.q2'), a: t(locale, 'dpicheck.faq.a2') },
+  { q: t(locale, 'dpicheck.faq.q3'), a: t(locale, 'dpicheck.faq.a3') },
+  { q: t(locale, 'dpicheck.faq.q4'), a: t(locale, 'dpicheck.faq.a4') },
+  { q: t(locale, 'dpicheck.faq.q5'), a: t(locale, 'dpicheck.faq.a5') },
+  { q: t(locale, 'dpicheck.faq.q6'), a: t(locale, 'dpicheck.faq.a6') },
+  { q: t(locale, 'dpicheck.faq.q7'), a: t(locale, 'dpicheck.faq.a7') },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction & What is DPI -->
+      <h2>{t(locale, 'dpicheck.content.h1')}</h2>
+      <p>{t(locale, 'dpicheck.content.p1a')}</p>
+      <p>{t(locale, 'dpicheck.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dpicheck.content.feat1Title')}</h4>
+          <p>{t(locale, 'dpicheck.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+              <line x1="16" y1="14" x2="16" y2="18"></line>
+              <path d="M16 10h.01"></path>
+              <path d="M12 10h.01"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dpicheck.content.feat2Title')}</h4>
+          <p>{t(locale, 'dpicheck.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dpicheck.content.feat3Title')}</h4>
+          <p>{t(locale, 'dpicheck.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'dpicheck.content.feat4Title')}</h4>
+          <p>{t(locale, 'dpicheck.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Pixels vs DPI -->
+      <h2>{t(locale, 'dpicheck.content.h2')}</h2>
+      <p>{t(locale, 'dpicheck.content.p2a')}</p>
+      <p>{t(locale, 'dpicheck.content.p2b')}</p>
+
+      <!-- Section 3: Why 300 DPI Is Industry Standard -->
+      <h2>{t(locale, 'dpicheck.content.h3')}</h2>
+      <p>{t(locale, 'dpicheck.content.p3a')}</p>
+
+      <!-- Section 4: Comprehensive DPI Requirements Table -->
+      <h2>{t(locale, 'dpicheck.content.h4')}</h2>
+      <p>{t(locale, 'dpicheck.content.p4a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Application / Medium</th>
+              <th>Recommended DPI</th>
+              <th>Typical Viewing Distance</th>
+              <th>Quality Expectation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Fine Art & Gallery Prints</strong></td>
+              <td>300 – 600 DPI</td>
+              <td>10 – 30 cm (Close Inspection)</td>
+              <td>Ultra-sharp, no visible dot pattern</td>
+            </tr>
+            <tr>
+              <td><strong>Photo Prints & Books (4x6, 8x10, A4)</strong></td>
+              <td>300 DPI</td>
+              <td>30 – 50 cm (Arm's length)</td>
+              <td>Sharp, crisp text and vibrant details</td>
+            </tr>
+            <tr>
+              <td><strong>Magazines & Marketing Brochures</strong></td>
+              <td>240 – 300 DPI</td>
+              <td>30 – 50 cm</td>
+              <td>Professional commercial offset quality</td>
+            </tr>
+            <tr>
+              <td><strong>Newspapers & Newsprint</strong></td>
+              <td>150 – 200 DPI</td>
+              <td>40 – 60 cm</td>
+              <td>Good quality on absorbent paper</td>
+            </tr>
+            <tr>
+              <td><strong>Posters & Wall Art (A3 / A2 / A1)</strong></td>
+              <td>150 – 200 DPI</td>
+              <td>1 – 2 meters</td>
+              <td>Clean viewing from normal room distance</td>
+            </tr>
+            <tr>
+              <td><strong>Large Banners & Trade Show Displays</strong></td>
+              <td>100 – 150 DPI</td>
+              <td>2 – 5 meters</td>
+              <td>Optimized for medium-distance signage</td>
+            </tr>
+            <tr>
+              <td><strong>Outdoor Billboards</strong></td>
+              <td>20 – 50 DPI</td>
+              <td>10 – 50 meters</td>
+              <td>Seamless visual illusion from afar</td>
+            </tr>
+            <tr>
+              <td><strong>Web & Digital Screens</strong></td>
+              <td>72 – 96 DPI (Default)</td>
+              <td>Varies by monitor</td>
+              <td>Governed entirely by pixel resolution</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: Why Web Images Lack DPI -->
+      <h2>{t(locale, 'dpicheck.content.h5')}</h2>
+      <p>{t(locale, 'dpicheck.content.p5a')}</p>
+      <p>{t(locale, 'dpicheck.content.p5b')}</p>
+
+      <!-- Section 6: Calculating Print Dimensions -->
+      <h2>{t(locale, 'dpicheck.content.h6')}</h2>
+      <p>{t(locale, 'dpicheck.content.p6a')}</p>
+      <p>{t(locale, 'dpicheck.content.p6b')}</p>
+
+      <!-- Section 7: Can You Increase DPI? -->
+      <h2>{t(locale, 'dpicheck.content.h7')}</h2>
+      <p>{t(locale, 'dpicheck.content.p7a')}</p>
+      <p>{t(locale, 'dpicheck.content.p7b')}</p>
+
+      <!-- Section 8: Checking DPI Natively -->
+      <h2>{t(locale, 'dpicheck.content.h8')}</h2>
+      <p>{t(locale, 'dpicheck.content.p8Intro')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <h4>Windows 10 / 11</h4>
+          <p>Right-click the image file, select <strong>Properties</strong>, open the <strong>Details</strong> tab, and look for <strong>Horizontal resolution</strong> and <strong>Vertical resolution</strong> (in dpi).</p>
+        </div>
+        <div class="feature-box">
+          <h4>macOS (Preview)</h4>
+          <p>Open the image in <strong>Preview</strong>, press <strong>Cmd + I</strong> (Tools &gt; Show Inspector), and read the <strong>Image DPI</strong> value under General Info.</p>
+        </div>
+        <div class="feature-box">
+          <h4>Adobe Photoshop</h4>
+          <p>Go to top menu <strong>Image &gt; Image Size (Alt + Ctrl + I)</strong> and inspect the <strong>Resolution</strong> field (set in Pixels/Inch).</p>
+        </div>
+        <div class="feature-box">
+          <h4>ImgFeel Online Checker</h4>
+          <p>Drag and drop your file into ImgFeel for instant 100% in-browser density parsing with full print format compatibility checks.</p>
+        </div>
+      </div>
+
+      <!-- Section 9: FAQ Accordion -->
+      <div class="faq-container">
+        <h2>{t(locale, 'dpicheck.faq.heading')}</h2>
+        <div class="faq-list">
+          {
+            faqItems.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-question">{item.q}</summary>
+                <div class="faq-answer">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Features Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 460px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* FAQ */
+  .faq-container {
+    margin-top: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .faq-container {
+      margin-top: var(--space-10);
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-3-5) var(--space-5);
+      font-size: 14.5px;
+    }
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5) var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4) var(--space-5);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

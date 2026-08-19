@@ -1,0 +1,1381 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const grayscaleUrl = getToolUrl('image-grayscale-converter', locale);
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+const circleUrl = getToolUrl('circle-image-cropper', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
+
+const i18nDict = {
+  statusReady: t(locale, 'inverter.status.ready'),
+  statusProcessing: t(locale, 'inverter.status.processing'),
+  errorLoad: t(locale, 'inverter.error.load'),
+  originalLabel: t(locale, 'inverter.split.original'),
+  invertedLabel: t(locale, 'inverter.split.inverted'),
+  downloadName: t(locale, 'inverter.download.filename'),
+};
+---
+
+<div class="invert-tool-wrapper" id="inverterApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Upload State -->
+  <div class="invert-dropzone-card" id="invertDropzone">
+    <div class="invert-dropzone-content">
+      <div class="invert-icon-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v18"></path>
+          <path d="M12 3a9 9 0 0 1 9 9 9 9 0 0 1-9 9"></path>
+          <path d="M12 3a9 9 0 0 0-9 9 9 9 0 0 0 9 9" fill="currentColor"></path>
+        </svg>
+      </div>
+
+      <h2 class="invert-drop-title">{t(locale, 'inverter.dropzone.title')}</h2>
+      <p class="invert-drop-subtitle">{t(locale, 'inverter.dropzone.subtitle')}</p>
+
+      <div class="invert-btn-row">
+        <label class="btn btn-primary invert-btn-primary" for="invertFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'inverter.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="invertFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary invert-sample-btn" id="invertSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>{t(locale, 'inverter.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="invert-formats-hint">{t(locale, 'inverter.dropzone.formats')}</p>
+
+      <div class="invert-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'inverter.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="invert-loading-card" id="invertLoadingCard" style="display: none;">
+    <div class="invert-spinner"></div>
+    <p class="invert-loading-text">{t(locale, 'inverter.status.processing')}</p>
+  </div>
+
+  <!-- Main Inverter Workspace -->
+  <div class="invert-workspace" id="invertWorkspace" style="display: none;">
+    <!-- Header Bar -->
+    <div class="invert-workspace-header">
+      <div class="invert-meta-badge">
+        <span class="invert-status-dot"></span>
+        <span id="invertFileName" class="invert-filename-label">image.png</span>
+        <span class="invert-meta-tag" id="invertOriginalDimsTag">1200 × 800 px</span>
+        <span class="invert-meta-tag" id="invertOriginalSizeTag">250 KB</span>
+      </div>
+
+      <div class="invert-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="invertChangeImageBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'inverter.action.changeImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Main Layout: Interactive Preview on Left, Inversion Controls on Right -->
+    <div class="invert-main-grid">
+      <!-- Left Column: Interactive Before/After Preview -->
+      <div class="invert-preview-card">
+        <!-- View Mode Tabs -->
+        <div class="preview-mode-tabs">
+          <button type="button" class="preview-tab active" data-view="split" id="viewModeSplitBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="3" x2="12" y2="21"></line>
+              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            </svg>
+            <span>{t(locale, 'inverter.view.split')}</span>
+          </button>
+          <button type="button" class="preview-tab" data-view="side" id="viewModeSideBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="9" height="18" rx="2"></rect>
+              <rect x="13" y="3" width="9" height="18" rx="2"></rect>
+            </svg>
+            <span>{t(locale, 'inverter.view.side')}</span>
+          </button>
+          <button type="button" class="preview-tab" data-view="result" id="viewModeResultBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+            </svg>
+            <span>{t(locale, 'inverter.view.result')}</span>
+          </button>
+        </div>
+
+        <!-- Split Slider Container -->
+        <div class="split-viewport-wrapper" id="splitViewportWrapper">
+          <div class="split-comparison-box" id="splitComparisonBox">
+            <canvas id="invertCanvasUnder" class="split-canvas"></canvas>
+            <canvas id="invertCanvasOver" class="split-canvas over-canvas"></canvas>
+            
+            <div class="split-divider-line" id="splitDividerLine" style="left: 50%;">
+              <div class="split-drag-handle" title="Drag to compare">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </div>
+            </div>
+
+            <span class="split-tag tag-left">{t(locale, 'inverter.split.original')}</span>
+            <span class="split-tag tag-right">{t(locale, 'inverter.split.inverted')}</span>
+          </div>
+          <p class="split-hint-text">{t(locale, 'inverter.split.hint')}</p>
+        </div>
+
+        <!-- Side-by-Side Container (Hidden by default) -->
+        <div class="side-viewport-wrapper" id="sideViewportWrapper" style="display: none;">
+          <div class="side-box">
+            <span class="side-badge">{t(locale, 'inverter.split.original')}</span>
+            <img id="sideOriginalImg" src="" alt="Original" class="side-img" />
+          </div>
+          <div class="side-box">
+            <span class="side-badge">{t(locale, 'inverter.split.inverted')}</span>
+            <img id="sideInvertedImg" src="" alt="Inverted" class="side-img" />
+          </div>
+        </div>
+
+        <!-- Inverted Only Viewport (Hidden by default) -->
+        <div class="single-viewport-wrapper" id="singleViewportWrapper" style="display: none;">
+          <img id="singleInvertedImg" src="" alt="Inverted preview" class="single-img" />
+        </div>
+      </div>
+
+      <!-- Right Column: Inversion Controls & Export Settings -->
+      <div class="invert-controls-panel">
+        <!-- Section 1: Inversion Modes -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'inverter.mode.label')}</label>
+          <div class="mode-chips-grid">
+            <button type="button" class="invert-mode-btn active" data-mode="full">
+              <strong>{t(locale, 'inverter.mode.full')}</strong>
+              <span>{t(locale, 'inverter.mode.fullDesc')}</span>
+            </button>
+            <button type="button" class="invert-mode-btn" data-mode="luminance">
+              <strong>{t(locale, 'inverter.mode.luminance')}</strong>
+              <span>{t(locale, 'inverter.mode.luminanceDesc')}</span>
+            </button>
+            <button type="button" class="invert-mode-btn" data-mode="grayscale-invert">
+              <strong>{t(locale, 'inverter.mode.grayscale')}</strong>
+              <span>{t(locale, 'inverter.mode.grayscaleDesc')}</span>
+            </button>
+            <button type="button" class="invert-mode-btn" data-mode="invert-red">
+              <strong>{t(locale, 'inverter.mode.red')}</strong>
+              <span>{t(locale, 'inverter.mode.redDesc')}</span>
+            </button>
+            <button type="button" class="invert-mode-btn" data-mode="invert-green">
+              <strong>{t(locale, 'inverter.mode.green')}</strong>
+              <span>{t(locale, 'inverter.mode.greenDesc')}</span>
+            </button>
+            <button type="button" class="invert-mode-btn" data-mode="invert-blue">
+              <strong>{t(locale, 'inverter.mode.blue')}</strong>
+              <span>{t(locale, 'inverter.mode.blueDesc')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 2: Fine-Tuning Sliders -->
+        <div class="control-group">
+          <div class="slider-header-row">
+            <label for="invertIntensitySlider" class="control-label">{t(locale, 'inverter.slider.intensity')}</label>
+            <span id="invertIntensityVal" class="val-pill">100%</span>
+          </div>
+          <input type="range" id="invertIntensitySlider" min="0" max="100" value="100" step="1" class="invert-range" />
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header-row">
+            <label for="invertBrightnessSlider" class="control-label">{t(locale, 'inverter.slider.brightness')}</label>
+            <span id="invertBrightnessVal" class="val-pill">0</span>
+          </div>
+          <input type="range" id="invertBrightnessSlider" min="-100" max="100" value="0" step="1" class="invert-range" />
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header-row">
+            <label for="invertContrastSlider" class="control-label">{t(locale, 'inverter.slider.contrast')}</label>
+            <span id="invertContrastVal" class="val-pill">0</span>
+          </div>
+          <input type="range" id="invertContrastSlider" min="-100" max="100" value="0" step="1" class="invert-range" />
+        </div>
+
+        <div class="reset-adjustments-row">
+          <button type="button" class="btn btn-secondary btn-sm" id="invertResetAdjustmentsBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>{t(locale, 'inverter.action.resetSliders')}</span>
+          </button>
+        </div>
+
+        <!-- Section 3: Format & Quality Selection -->
+        <div class="control-group">
+          <label for="invertFormatSelect" class="control-label">{t(locale, 'inverter.format.label')}</label>
+          <select id="invertFormatSelect" class="invert-select">
+            <option value="original" selected>{t(locale, 'inverter.format.original')}</option>
+            <option value="image/png">PNG (Lossless / Transparent)</option>
+            <option value="image/jpeg">JPG / JPEG (Standard)</option>
+            <option value="image/webp">WebP (Modern Compressed)</option>
+          </select>
+        </div>
+
+        <!-- Section 4: Live Metrics & Download -->
+        <div class="invert-metrics-card">
+          <div class="metric-row">
+            <span class="metric-label">{t(locale, 'inverter.metrics.dimensions')}:</span>
+            <strong id="invertMetricDims">1200 × 800 px</strong>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">{t(locale, 'inverter.metrics.fileWeight')}:</span>
+            <strong id="invertMetricWeight">-- KB</strong>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">{t(locale, 'inverter.metrics.alphaStatus')}:</span>
+            <strong>{t(locale, 'inverter.metrics.alphaPreserved')}</strong>
+          </div>
+        </div>
+
+        <!-- Single-Click Download Button -->
+        <button type="button" class="btn btn-primary invert-download-btn" id="invertDownloadBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>{t(locale, 'inverter.action.download')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Navigation to Related Tools -->
+    <div class="invert-cross-links-row">
+      <a href={grayscaleUrl} class="btn btn-secondary invert-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 3a9 9 0 0 1 0 18v-18z" fill="currentColor"></path>
+        </svg>
+        <span>{t(locale, 'inverter.cross.grayscale')}</span>
+      </a>
+
+      <a href={squareUrl} class="btn btn-secondary invert-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        </svg>
+        <span>{t(locale, 'inverter.cross.square')}</span>
+      </a>
+
+      <a href={circleUrl} class="btn btn-secondary invert-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+        </svg>
+        <span>{t(locale, 'inverter.cross.circle')}</span>
+      </a>
+
+      <a href={webpUrl} class="btn btn-secondary invert-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>{t(locale, 'inverter.cross.compress')}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    invertImage,
+    generateSampleInvertImage,
+    loadImage,
+    applyInversionToImageData,
+    type InvertMode,
+    type InvertResult,
+  } from '@/scripts/image-inverter';
+
+  function initInverterApp() {
+    const container = document.getElementById('inverterApp');
+    if (!container) return;
+
+    let i18n = {
+      statusReady: 'Ready',
+      statusProcessing: 'Inverting Image Colors...',
+      errorLoad: 'Failed to process image file',
+      downloadName: 'image-inverted',
+    };
+
+    try {
+      const dataAttr = container.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // Elements
+    const dropzone = document.getElementById('invertDropzone');
+    const fileInput = document.getElementById('invertFileInput') as HTMLInputElement | null;
+    const sampleBtn = document.getElementById('invertSampleBtn');
+    const loadingCard = document.getElementById('invertLoadingCard');
+    const workspace = document.getElementById('invertWorkspace');
+
+    // Header
+    const fileNameEl = document.getElementById('invertFileName');
+    const origDimsTag = document.getElementById('invertOriginalDimsTag');
+    const origSizeTag = document.getElementById('invertOriginalSizeTag');
+    const changeImageBtn = document.getElementById('invertChangeImageBtn');
+
+    // View tabs
+    const viewTabs = document.querySelectorAll('.preview-tab');
+    const splitWrapper = document.getElementById('splitViewportWrapper');
+    const sideWrapper = document.getElementById('sideViewportWrapper');
+    const singleWrapper = document.getElementById('singleViewportWrapper');
+
+    // Canvases for Split View
+    const canvasUnder = document.getElementById('invertCanvasUnder') as HTMLCanvasElement | null;
+    const canvasOver = document.getElementById('invertCanvasOver') as HTMLCanvasElement | null;
+    const splitBox = document.getElementById('splitComparisonBox');
+    const splitDivider = document.getElementById('splitDividerLine');
+
+    // Side & Single images
+    const sideOrigImg = document.getElementById('sideOriginalImg') as HTMLImageElement | null;
+    const sideInvertImg = document.getElementById('sideInvertedImg') as HTMLImageElement | null;
+    const singleInvertImg = document.getElementById('singleInvertedImg') as HTMLImageElement | null;
+
+    // Controls
+    const modeBtns = document.querySelectorAll('.invert-mode-btn');
+    const intensitySlider = document.getElementById('invertIntensitySlider') as HTMLInputElement | null;
+    const intensityVal = document.getElementById('invertIntensityVal');
+    const brightnessSlider = document.getElementById('invertBrightnessSlider') as HTMLInputElement | null;
+    const brightnessVal = document.getElementById('invertBrightnessVal');
+    const contrastSlider = document.getElementById('invertContrastSlider') as HTMLInputElement | null;
+    const contrastVal = document.getElementById('invertContrastVal');
+    const resetAdjustmentsBtn = document.getElementById('invertResetAdjustmentsBtn');
+    const formatSelect = document.getElementById('invertFormatSelect') as HTMLSelectElement | null;
+
+    // Metrics & Download
+    const metricDims = document.getElementById('invertMetricDims');
+    const metricWeight = document.getElementById('invertMetricWeight');
+    const downloadBtn = document.getElementById('invertDownloadBtn');
+
+    // State
+    let currentFile: File | null = null;
+    let loadedImageObj: HTMLImageElement | null = null;
+    let originalWidth = 0;
+    let originalHeight = 0;
+
+    let activeMode: InvertMode = 'full';
+    let intensity = 100;
+    let brightness = 0;
+    let contrast = 0;
+    let splitPosPercent = 50;
+    let isDraggingSplit = false;
+
+    let lastResult: InvertResult | null = null;
+    let renderDebounceTimer: number | null = null;
+
+    function renderSplitCanvases() {
+      if (!canvasUnder || !canvasOver || !loadedImageObj) return;
+
+      const maxDisplayW = 600;
+      const aspect = originalHeight / originalWidth;
+      const displayW = Math.min(originalWidth, maxDisplayW);
+      const displayH = Math.round(displayW * aspect);
+
+      canvasUnder.width = displayW;
+      canvasUnder.height = displayH;
+      canvasOver.width = displayW;
+      canvasOver.height = displayH;
+
+      const ctxUnder = canvasUnder.getContext('2d', { willReadFrequently: true });
+      const ctxOver = canvasOver.getContext('2d', { willReadFrequently: true });
+      if (!ctxUnder || !ctxOver) return;
+
+      // 1. Draw original color image in Under canvas
+      ctxUnder.drawImage(loadedImageObj, 0, 0, displayW, displayH);
+
+      // 2. Draw and process inverted in Over canvas
+      ctxOver.drawImage(loadedImageObj, 0, 0, displayW, displayH);
+      const imgData = ctxOver.getImageData(0, 0, displayW, displayH);
+      applyInversionToImageData(imgData, {
+        mode: activeMode,
+        intensity,
+        brightness,
+        contrast,
+        format: 'image/png',
+        quality: 0.9,
+      });
+      ctxOver.putImageData(imgData, 0, 0);
+
+      // Apply clip-path to Over canvas based on splitPosPercent
+      canvasOver.style.clipPath = `inset(0 0 0 ${splitPosPercent}%)`;
+      if (splitDivider) {
+        splitDivider.style.left = `${splitPosPercent}%`;
+      }
+    }
+
+    async function processFullExport() {
+      if (!currentFile) return;
+
+      const format = (formatSelect?.value as 'image/jpeg' | 'image/png' | 'image/webp' | 'original') || 'original';
+
+      try {
+        const result = await invertImage(currentFile, {
+          mode: activeMode,
+          intensity,
+          brightness,
+          contrast,
+          format,
+          quality: 0.92,
+        });
+
+        lastResult = result;
+
+        if (sideInvertImg) sideInvertImg.src = result.dataUrl;
+        if (singleInvertImg) singleInvertImg.src = result.dataUrl;
+        if (metricDims) metricDims.textContent = `${result.width} × ${result.height} px`;
+        if (metricWeight) metricWeight.textContent = result.fileSizeFormatted;
+      } catch (err) {
+        console.error('Inversion export error:', err);
+      }
+    }
+
+    function triggerUpdate() {
+      renderSplitCanvases();
+      if (renderDebounceTimer) clearTimeout(renderDebounceTimer);
+      renderDebounceTimer = window.setTimeout(processFullExport, 80);
+    }
+
+    async function loadFile(file: File) {
+      if (!dropzone || !loadingCard || !workspace) return;
+
+      dropzone.style.display = 'none';
+      workspace.style.display = 'none';
+      loadingCard.style.display = 'flex';
+
+      try {
+        currentFile = file;
+        loadedImageObj = await loadImage(file);
+        originalWidth = loadedImageObj.naturalWidth || loadedImageObj.width;
+        originalHeight = loadedImageObj.naturalHeight || loadedImageObj.height;
+
+        // Reset adjustments
+        activeMode = 'full';
+        modeBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-mode') === 'full'));
+        intensity = 100;
+        brightness = 0;
+        contrast = 0;
+        splitPosPercent = 50;
+
+        if (intensitySlider) intensitySlider.value = '100';
+        if (intensityVal) intensityVal.textContent = '100%';
+        if (brightnessSlider) brightnessSlider.value = '0';
+        if (brightnessVal) brightnessVal.textContent = '0';
+        if (contrastSlider) contrastSlider.value = '0';
+        if (contrastVal) contrastVal.textContent = '0';
+
+        // Header info
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (origDimsTag) origDimsTag.textContent = `${originalWidth} × ${originalHeight} px`;
+        if (origSizeTag) origSizeTag.textContent = `${(file.size / 1024).toFixed(1)} KB`;
+
+        const origUrl = URL.createObjectURL(file);
+        if (sideOrigImg) sideOrigImg.src = origUrl;
+
+        renderSplitCanvases();
+        await processFullExport();
+
+        loadingCard.style.display = 'none';
+        workspace.style.display = 'flex';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : i18n.errorLoad);
+        resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      currentFile = null;
+      loadedImageObj = null;
+      if (fileInput) fileInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (workspace) workspace.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    if (changeImageBtn) changeImageBtn.addEventListener('click', resetToDropzone);
+
+    // View mode switching
+    viewTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        viewTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const mode = tab.getAttribute('data-view');
+        if (splitWrapper) splitWrapper.style.display = mode === 'split' ? 'flex' : 'none';
+        if (sideWrapper) sideWrapper.style.display = mode === 'side' ? 'grid' : 'none';
+        if (singleWrapper) singleWrapper.style.display = mode === 'result' ? 'block' : 'none';
+      });
+    });
+
+    // Split dragging logic
+    function handleSplitMove(clientX: number) {
+      if (!splitBox) return;
+      const rect = splitBox.getBoundingClientRect();
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      splitPosPercent = Math.round((x / rect.width) * 100);
+
+      if (splitDivider) splitDivider.style.left = `${splitPosPercent}%`;
+      if (canvasOver) canvasOver.style.clipPath = `inset(0 0 0 ${splitPosPercent}%)`;
+    }
+
+    if (splitBox) {
+      splitBox.addEventListener('mousedown', (e) => {
+        isDraggingSplit = true;
+        handleSplitMove(e.clientX);
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDraggingSplit) return;
+        handleSplitMove(e.clientX);
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDraggingSplit = false;
+      });
+
+      splitBox.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDraggingSplit = true;
+          handleSplitMove(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      splitBox.addEventListener('touchmove', (e) => {
+        if (!isDraggingSplit || e.touches.length !== 1) return;
+        handleSplitMove(e.touches[0].clientX);
+      }, { passive: true });
+
+      splitBox.addEventListener('touchend', () => {
+        isDraggingSplit = false;
+      });
+    }
+
+    // Modes
+    modeBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeMode = (btn.getAttribute('data-mode') as InvertMode) || 'full';
+        triggerUpdate();
+      });
+    });
+
+    // Sliders
+    if (intensitySlider) {
+      intensitySlider.addEventListener('input', () => {
+        intensity = parseInt(intensitySlider.value, 10);
+        if (intensityVal) intensityVal.textContent = `${intensity}%`;
+        triggerUpdate();
+      });
+    }
+
+    if (brightnessSlider) {
+      brightnessSlider.addEventListener('input', () => {
+        brightness = parseInt(brightnessSlider.value, 10);
+        if (brightnessVal) brightnessVal.textContent = `${brightness > 0 ? '+' : ''}${brightness}`;
+        triggerUpdate();
+      });
+    }
+
+    if (contrastSlider) {
+      contrastSlider.addEventListener('input', () => {
+        contrast = parseInt(contrastSlider.value, 10);
+        if (contrastVal) contrastVal.textContent = `${contrast > 0 ? '+' : ''}${contrast}`;
+        triggerUpdate();
+      });
+    }
+
+    if (resetAdjustmentsBtn) {
+      resetAdjustmentsBtn.addEventListener('click', () => {
+        intensity = 100;
+        brightness = 0;
+        contrast = 0;
+        if (intensitySlider) intensitySlider.value = '100';
+        if (intensityVal) intensityVal.textContent = '100%';
+        if (brightnessSlider) brightnessSlider.value = '0';
+        if (brightnessVal) brightnessVal.textContent = '0';
+        if (contrastSlider) contrastSlider.value = '0';
+        if (contrastVal) contrastVal.textContent = '0';
+        triggerUpdate();
+      });
+    }
+
+    // Format select
+    if (formatSelect) {
+      formatSelect.addEventListener('change', triggerUpdate);
+    }
+
+    // Download Button
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        if (!lastResult) return;
+
+        let ext = '.png';
+        const selFormat = formatSelect?.value || 'original';
+        if (selFormat === 'image/png') ext = '.png';
+        else if (selFormat === 'image/webp') ext = '.webp';
+        else if (selFormat === 'image/jpeg') ext = '.jpg';
+        else if (currentFile) {
+          const match = currentFile.name.match(/\.[^/.]+$/);
+          if (match) ext = match[0];
+        }
+
+        const baseName = currentFile ? currentFile.name.replace(/\.[^/.]+$/, '') : 'image';
+        const filename = `${baseName}-inverted${ext}`;
+
+        const a = document.createElement('a');
+        a.href = lastResult.dataUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
+
+    // Sample button
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        const file = await generateSampleInvertImage();
+        loadFile(file);
+      });
+    }
+
+    // File input change
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+          loadFile(target.files[0]);
+        }
+      });
+    }
+
+    // Drag and drop
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('invert-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('invert-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files[0]) {
+          loadFile(dt.files[0]);
+        }
+      });
+    }
+
+    // Paste listener (Ctrl+V)
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            loadFile(file);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  initInverterApp();
+  document.addEventListener('astro:page-load', initInverterApp);
+</script>
+
+<style>
+  .invert-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone */
+  .invert-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .invert-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .invert-dropzone-card.invert-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .invert-dropzone-content {
+    max-width: 580px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .invert-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .invert-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .invert-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .invert-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .invert-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 480px;
+  }
+
+  @media (min-width: 640px) {
+    .invert-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .invert-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 440px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .invert-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .invert-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .invert-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+  }
+
+  .invert-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .invert-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .invert-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .invert-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: invertSpin 0.8s linear infinite;
+  }
+
+  @keyframes invertSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .invert-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Workspace */
+  .invert-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .invert-workspace {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Header */
+  .invert-workspace-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .invert-workspace-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .invert-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .invert-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .invert-filename-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 480px) {
+    .invert-filename-label {
+      max-width: 320px;
+    }
+  }
+
+  .invert-meta-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+  }
+
+  .invert-header-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* 2-Column Grid */
+  .invert-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 900px) {
+    .invert-main-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-5);
+    }
+  }
+
+  /* Preview Card (Left Column) */
+  .invert-preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .invert-preview-card {
+      padding: var(--space-5);
+    }
+  }
+
+  .preview-mode-tabs {
+    display: flex;
+    gap: var(--space-2);
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: var(--space-3);
+  }
+
+  .preview-tab {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 6px 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+
+  .preview-tab.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* Split Viewport */
+  .split-viewport-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .split-comparison-box {
+    width: 100%;
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: repeating-conic-gradient(#f1f5f9 0% 25%, #ffffff 0% 50%) 50% / 16px 16px;
+    border: 1px solid var(--color-border);
+    cursor: ew-resize;
+    user-select: none;
+    touch-action: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+
+  .split-canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .split-canvas.over-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .split-divider-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ffffff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .split-drag-handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0f172a;
+  }
+
+  .split-tag {
+    position: absolute;
+    bottom: 10px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+  }
+
+  .split-tag.tag-left {
+    left: 10px;
+  }
+
+  .split-tag.tag-right {
+    right: 10px;
+  }
+
+  .split-hint-text {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* Side-by-Side */
+  .side-viewport-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .side-box {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface-subtle);
+  }
+
+  .side-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .side-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Single Result */
+  .single-viewport-wrapper {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .single-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Controls Panel (Right Column) */
+  .invert-controls-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .invert-controls-panel {
+      padding: var(--space-5);
+    }
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .control-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .slider-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .val-pill {
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .invert-range {
+    width: 100%;
+    accent-color: var(--color-accent);
+  }
+
+  /* Inversion Modes Grid */
+  .mode-chips-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-1-5);
+  }
+
+  @media (min-width: 480px) {
+    .mode-chips-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .invert-mode-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-2-5);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.15s ease;
+  }
+
+  .invert-mode-btn:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .invert-mode-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .invert-mode-btn strong {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .invert-mode-btn span {
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+  }
+
+  .reset-adjustments-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .invert-select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  /* Metrics Card */
+  .invert-metrics-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+
+  .metric-row strong {
+    color: var(--color-text);
+  }
+
+  .invert-download-btn {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  /* Cross Links */
+  .invert-cross-links-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 600px) {
+    .invert-cross-links-row {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+
+  .invert-cross-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+</style>

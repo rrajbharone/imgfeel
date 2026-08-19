@@ -1,12 +1,16 @@
 ---
-import { t, getLocalizedPath } from '@/i18n/utils';
+import { t } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
+const fileSizeUrl = getToolUrl('image-file-size-checker', locale);
 ---
 
 <div class="res-tool-wrapper" id="resCheckerApp" data-locale={locale}>
@@ -287,7 +291,7 @@ const { locale } = Astro.props;
     <div class="res-next-actions">
       <h4 class="res-next-title">{t(locale, 'rescheck.nextActions.title')}</h4>
       <div class="res-next-btns">
-        <a href={getLocalizedPath('/tools/resize-image-to-exact-dimensions/', locale)} class="res-btn res-btn-sm res-btn-secondary">
+        <a href={exactUrl} class="res-btn res-btn-sm res-btn-secondary">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M15 3h6v6"></path>
             <path d="M9 21H3v-6"></path>
@@ -297,7 +301,7 @@ const { locale } = Astro.props;
           <span>{t(locale, 'rescheck.nextActions.resize')}</span>
         </a>
 
-        <a href={getLocalizedPath('/tools/webp-image-compressor/', locale)} class="res-btn res-btn-sm res-btn-secondary">
+        <a href={webpUrl} class="res-btn res-btn-sm res-btn-secondary">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="4 14 10 14 10 20"></polyline>
             <polyline points="20 10 14 10 14 4"></polyline>
@@ -307,7 +311,7 @@ const { locale } = Astro.props;
           <span>{t(locale, 'rescheck.nextActions.compress')}</span>
         </a>
 
-        <a href={getLocalizedPath('/tools/image-file-size-checker/', locale)} class="res-btn res-btn-sm res-btn-secondary">
+        <a href={fileSizeUrl} class="res-btn res-btn-sm res-btn-secondary">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>

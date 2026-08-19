@@ -45,6 +45,8 @@ const ALLOWED_IDENTICAL = new Set([
   'MM',
   'cm',
   'mm',
+  'in',
+  'Acceptable (150+ DPI)',
   'A4',
   'A3',
   'A5',
@@ -167,6 +169,17 @@ const ALLOWED_IDENTICAL = new Set([
   '90°',
   '180°',
   '270°',
+  'Image DPI Checker',
+  '72 DPI (Web)',
+  '300 DPI',
+  '72 DPI',
+  '150 DPI',
+  '200 DPI',
+  '600 DPI',
+  'EXIF APP1',
+  'JFIF APP0',
+  'PNG pHYs',
+  'BMP Header',
 ]);
 
 let errors = [];

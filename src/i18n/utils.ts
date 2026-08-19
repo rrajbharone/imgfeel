@@ -19,6 +19,12 @@ import enDimCheck from './translations/en/dimensions-checker.json';
 import enSizeCheck from './translations/en/file-size-checker.json';
 import enResCheck from './translations/en/resolution-checker.json';
 import enRatioCheck from './translations/en/aspect-ratio-checker.json';
+import enDpiCheck from './translations/en/dpi-checker.json';
+import enFmtCheck from './translations/en/format-checker.json';
+import enSquareResizer from './translations/en/square-resizer.json';
+import enCircleCropper from './translations/en/circle-cropper.json';
+import enGrayscaleConverter from './translations/en/grayscale-converter.json';
+import enImageInverter from './translations/en/image-inverter.json';
 import enVidTrim from './translations/en/video-trimmer.json';
 import enVidRotate from './translations/en/video-rotator.json';
 
@@ -39,6 +45,12 @@ import esDimCheck from './translations/es/dimensions-checker.json';
 import esSizeCheck from './translations/es/file-size-checker.json';
 import esResCheck from './translations/es/resolution-checker.json';
 import esRatioCheck from './translations/es/aspect-ratio-checker.json';
+import esDpiCheck from './translations/es/dpi-checker.json';
+import esFmtCheck from './translations/es/format-checker.json';
+import esSquareResizer from './translations/es/square-resizer.json';
+import esCircleCropper from './translations/es/circle-cropper.json';
+import esGrayscaleConverter from './translations/es/grayscale-converter.json';
+import esImageInverter from './translations/es/image-inverter.json';
 import esVidTrim from './translations/es/video-trimmer.json';
 import esVidRotate from './translations/es/video-rotator.json';
 
@@ -59,6 +71,12 @@ import ptDimCheck from './translations/pt/dimensions-checker.json';
 import ptSizeCheck from './translations/pt/file-size-checker.json';
 import ptResCheck from './translations/pt/resolution-checker.json';
 import ptRatioCheck from './translations/pt/aspect-ratio-checker.json';
+import ptDpiCheck from './translations/pt/dpi-checker.json';
+import ptFmtCheck from './translations/pt/format-checker.json';
+import ptSquareResizer from './translations/pt/square-resizer.json';
+import ptCircleCropper from './translations/pt/circle-cropper.json';
+import ptGrayscaleConverter from './translations/pt/grayscale-converter.json';
+import ptImageInverter from './translations/pt/image-inverter.json';
 import ptVidTrim from './translations/pt/video-trimmer.json';
 import ptVidRotate from './translations/pt/video-rotator.json';
 
@@ -79,6 +97,12 @@ import frDimCheck from './translations/fr/dimensions-checker.json';
 import frSizeCheck from './translations/fr/file-size-checker.json';
 import frResCheck from './translations/fr/resolution-checker.json';
 import frRatioCheck from './translations/fr/aspect-ratio-checker.json';
+import frDpiCheck from './translations/fr/dpi-checker.json';
+import frFmtCheck from './translations/fr/format-checker.json';
+import frSquareResizer from './translations/fr/square-resizer.json';
+import frCircleCropper from './translations/fr/circle-cropper.json';
+import frGrayscaleConverter from './translations/fr/grayscale-converter.json';
+import frImageInverter from './translations/fr/image-inverter.json';
 import frVidTrim from './translations/fr/video-trimmer.json';
 import frVidRotate from './translations/fr/video-rotator.json';
 
@@ -99,6 +123,12 @@ import deDimCheck from './translations/de/dimensions-checker.json';
 import deSizeCheck from './translations/de/file-size-checker.json';
 import deResCheck from './translations/de/resolution-checker.json';
 import deRatioCheck from './translations/de/aspect-ratio-checker.json';
+import deDpiCheck from './translations/de/dpi-checker.json';
+import deFmtCheck from './translations/de/format-checker.json';
+import deSquareResizer from './translations/de/square-resizer.json';
+import deCircleCropper from './translations/de/circle-cropper.json';
+import deGrayscaleConverter from './translations/de/grayscale-converter.json';
+import deImageInverter from './translations/de/image-inverter.json';
 import deVidTrim from './translations/de/video-trimmer.json';
 import deVidRotate from './translations/de/video-rotator.json';
 
@@ -119,6 +149,12 @@ import idDimCheck from './translations/id/dimensions-checker.json';
 import idSizeCheck from './translations/id/file-size-checker.json';
 import idResCheck from './translations/id/resolution-checker.json';
 import idRatioCheck from './translations/id/aspect-ratio-checker.json';
+import idDpiCheck from './translations/id/dpi-checker.json';
+import idFmtCheck from './translations/id/format-checker.json';
+import idSquareResizer from './translations/id/square-resizer.json';
+import idCircleCropper from './translations/id/circle-cropper.json';
+import idGrayscaleConverter from './translations/id/grayscale-converter.json';
+import idImageInverter from './translations/id/image-inverter.json';
 import idVidTrim from './translations/id/video-trimmer.json';
 import idVidRotate from './translations/id/video-rotator.json';
 
@@ -139,6 +175,12 @@ import trDimCheck from './translations/tr/dimensions-checker.json';
 import trSizeCheck from './translations/tr/file-size-checker.json';
 import trResCheck from './translations/tr/resolution-checker.json';
 import trRatioCheck from './translations/tr/aspect-ratio-checker.json';
+import trDpiCheck from './translations/tr/dpi-checker.json';
+import trFmtCheck from './translations/tr/format-checker.json';
+import trSquareResizer from './translations/tr/square-resizer.json';
+import trCircleCropper from './translations/tr/circle-cropper.json';
+import trGrayscaleConverter from './translations/tr/grayscale-converter.json';
+import trImageInverter from './translations/tr/image-inverter.json';
 import trVidTrim from './translations/tr/video-trimmer.json';
 import trVidRotate from './translations/tr/video-rotator.json';
 
@@ -159,6 +201,12 @@ import itDimCheck from './translations/it/dimensions-checker.json';
 import itSizeCheck from './translations/it/file-size-checker.json';
 import itResCheck from './translations/it/resolution-checker.json';
 import itRatioCheck from './translations/it/aspect-ratio-checker.json';
+import itDpiCheck from './translations/it/dpi-checker.json';
+import itFmtCheck from './translations/it/format-checker.json';
+import itSquareResizer from './translations/it/square-resizer.json';
+import itCircleCropper from './translations/it/circle-cropper.json';
+import itGrayscaleConverter from './translations/it/grayscale-converter.json';
+import itImageInverter from './translations/it/image-inverter.json';
 import itVidTrim from './translations/it/video-trimmer.json';
 import itVidRotate from './translations/it/video-rotator.json';
 
@@ -166,14 +214,14 @@ type TranslationMap = Record<string, string>;
 
 /** All translations indexed by locale, with all namespaces merged into a flat map */
 const translations: Record<Locale, TranslationMap> = {
-  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enVidTrim, ...enVidRotate },
-  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esVidTrim, ...esVidRotate },
-  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptVidTrim, ...ptVidRotate },
-  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frVidTrim, ...frVidRotate },
-  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deVidTrim, ...deVidRotate },
-  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idVidTrim, ...idVidRotate },
-  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trVidTrim, ...trVidRotate },
-  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itVidTrim, ...itVidRotate },
+  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enVidTrim, ...enVidRotate },
+  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esVidTrim, ...esVidRotate },
+  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptVidTrim, ...ptVidRotate },
+  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frVidTrim, ...frVidRotate },
+  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deVidTrim, ...deVidRotate },
+  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idVidTrim, ...idVidRotate },
+  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trVidTrim, ...trVidRotate },
+  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itVidTrim, ...itVidRotate },
 };
 
 /**

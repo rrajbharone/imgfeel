@@ -1,0 +1,520 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqItems = [
+  { q: t(locale, 'fmtcheck.faq.q1'), a: t(locale, 'fmtcheck.faq.a1') },
+  { q: t(locale, 'fmtcheck.faq.q2'), a: t(locale, 'fmtcheck.faq.a2') },
+  { q: t(locale, 'fmtcheck.faq.q3'), a: t(locale, 'fmtcheck.faq.a3') },
+  { q: t(locale, 'fmtcheck.faq.q4'), a: t(locale, 'fmtcheck.faq.a4') },
+  { q: t(locale, 'fmtcheck.faq.q5'), a: t(locale, 'fmtcheck.faq.a5') },
+  { q: t(locale, 'fmtcheck.faq.q6'), a: t(locale, 'fmtcheck.faq.a6') },
+  { q: t(locale, 'fmtcheck.faq.q7'), a: t(locale, 'fmtcheck.faq.a7') },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction & What is an Image Format -->
+      <h2>{t(locale, 'fmtcheck.content.h1')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p1a')}</p>
+      <p>{t(locale, 'fmtcheck.content.p1b')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <polyline points="9 15 11 17 15 13"></polyline>
+            </svg>
+          </div>
+          <h4>{t(locale, 'fmtcheck.content.feat1Title')}</h4>
+          <p>{t(locale, 'fmtcheck.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <h4>{t(locale, 'fmtcheck.content.feat2Title')}</h4>
+          <p>{t(locale, 'fmtcheck.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+              <path d="M2 12h20"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'fmtcheck.content.feat3Title')}</h4>
+          <p>{t(locale, 'fmtcheck.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>{t(locale, 'fmtcheck.content.feat4Title')}</h4>
+          <p>{t(locale, 'fmtcheck.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Magic Bytes vs File Extensions -->
+      <h2>{t(locale, 'fmtcheck.content.h2')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p2a')}</p>
+      <p>{t(locale, 'fmtcheck.content.p2b')}</p>
+
+      <!-- Section 3: Deep Dive into Popular Image Formats -->
+      <h2>{t(locale, 'fmtcheck.content.h3')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p3a')}</p>
+      <p>{t(locale, 'fmtcheck.content.p3b')}</p>
+
+      <!-- Section 4: Master Image Format Comparison Table -->
+      <h2>{t(locale, 'fmtcheck.content.h4')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p4a')}</p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>MIME Type</th>
+              <th>Compression</th>
+              <th>Transparency</th>
+              <th>Animation</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>JPEG / JPG</strong></td>
+              <td><code>image/jpeg</code></td>
+              <td>Lossy (DCT)</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Photographs, realistic scenes, complex gradients</td>
+            </tr>
+            <tr>
+              <td><strong>PNG</strong></td>
+              <td><code>image/png</code></td>
+              <td>Lossless (Deflate)</td>
+              <td>Yes (8-bit alpha)</td>
+              <td>APNG only</td>
+              <td>Logos, screenshots, UI icons, line art</td>
+            </tr>
+            <tr>
+              <td><strong>WebP</strong></td>
+              <td><code>image/webp</code></td>
+              <td>Lossy &amp; Lossless</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Modern web graphics, e-commerce, banners</td>
+            </tr>
+            <tr>
+              <td><strong>AVIF</strong></td>
+              <td><code>image/avif</code></td>
+              <td>Lossy &amp; Lossless (AV1)</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Next-gen high-efficiency web publishing &amp; HDR</td>
+            </tr>
+            <tr>
+              <td><strong>GIF</strong></td>
+              <td><code>image/gif</code></td>
+              <td>Lossless (LZW, 256 colors)</td>
+              <td>Binary 1-bit</td>
+              <td>Yes</td>
+              <td>Short animated memes, simple retro graphics</td>
+            </tr>
+            <tr>
+              <td><strong>SVG</strong></td>
+              <td><code>image/svg+xml</code></td>
+              <td>Vector (XML Code)</td>
+              <td>Yes</td>
+              <td>Yes (CSS/SMIL)</td>
+              <td>Scalable logos, icons, illustrations, charts</td>
+            </tr>
+            <tr>
+              <td><strong>HEIC / HEIF</strong></td>
+              <td><code>image/heic</code></td>
+              <td>Lossy &amp; Lossless (HEVC)</td>
+              <td>Yes</td>
+              <td>Yes (Live Photos)</td>
+              <td>Apple iOS camera storage, high bit-depth photos</td>
+            </tr>
+            <tr>
+              <td><strong>BMP</strong></td>
+              <td><code>image/bmp</code></td>
+              <td>Uncompressed / RLE</td>
+              <td>Limited</td>
+              <td>No</td>
+              <td>Legacy Windows software, raw raster bitmaps</td>
+            </tr>
+            <tr>
+              <td><strong>TIFF</strong></td>
+              <td><code>image/tiff</code></td>
+              <td>Lossless / Uncompressed</td>
+              <td>Yes</td>
+              <td>Multi-page</td>
+              <td>Fine art scanning, commercial printing, desktop publishing</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: Lossy vs Lossless vs Vector -->
+      <h2>{t(locale, 'fmtcheck.content.h5')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p5a')}</p>
+      <p>{t(locale, 'fmtcheck.content.p5b')}</p>
+
+      <!-- Section 6: Next-Gen Web Formats -->
+      <h2>{t(locale, 'fmtcheck.content.h6')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p6a')}</p>
+      <p>{t(locale, 'fmtcheck.content.p6b')}</p>
+
+      <!-- Section 7: Checking Image Formats Natively -->
+      <h2>{t(locale, 'fmtcheck.content.h7')}</h2>
+      <p>{t(locale, 'fmtcheck.content.p7Intro')}</p>
+
+      <div class="features-summary-grid">
+        <div class="feature-box">
+          <h4>Windows 10 / 11</h4>
+          <p>Right-click the file &gt; <strong>Properties</strong> &gt; <strong>Details</strong> tab to inspect the <strong>Item type</strong> and container attributes.</p>
+        </div>
+        <div class="feature-box">
+          <h4>macOS Finder</h4>
+          <p>Select the image, press <strong>Cmd + I</strong> (Get Info), or open in <strong>Preview</strong> and press <strong>Cmd + I</strong> to see the exact file format and color profile.</p>
+        </div>
+        <div class="feature-box">
+          <h4>Linux Terminal</h4>
+          <p>Run <code>file -b --mime-type filename</code> or <code>xxd -l 16 filename</code> to read the true binary signature and MIME type directly.</p>
+        </div>
+        <div class="feature-box">
+          <h4>ImgFeel Format Checker</h4>
+          <p>Drag and drop any file to inspect binary magic bytes, MIME type, compression, alpha channel, and format mismatches instantly in your browser.</p>
+        </div>
+      </div>
+
+      <!-- Section 8: FAQ Accordion -->
+      <div class="faq-container">
+        <h2>{t(locale, 'fmtcheck.faq.heading')}</h2>
+        <div class="faq-list">
+          {
+            faqItems.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-question">{item.q}</summary>
+                <div class="faq-answer">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding-block: var(--space-12);
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .content-body p {
+      font-size: var(--text-base);
+      line-height: 1.75;
+    }
+  }
+
+  /* Features Grid */
+  .features-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 600px) {
+    .features-summary-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-block: var(--space-6);
+    }
+  }
+
+  .feature-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  .feature-box-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-box-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .feature-box h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-box p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Data Table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      border-radius: var(--radius-lg);
+      margin-block: var(--space-6);
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    text-align: left;
+    min-width: 520px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table {
+      font-size: var(--text-xs);
+      min-width: auto;
+    }
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding: 10px 14px;
+    }
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10.5px;
+  }
+
+  @media (min-width: 640px) {
+    .data-table th {
+      font-size: 11px;
+    }
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* FAQ */
+  .faq-container {
+    margin-top: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .faq-container {
+      margin-top: var(--space-10);
+    }
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  @media (min-width: 640px) {
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 640px) {
+    .faq-question {
+      padding: var(--space-3-5) var(--space-5);
+      font-size: 14.5px;
+    }
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-3-5) var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer {
+      padding: 0 var(--space-5) var(--space-4) var(--space-5);
+    }
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .faq-answer p {
+      font-size: var(--text-sm);
+    }
+  }
+</style>
