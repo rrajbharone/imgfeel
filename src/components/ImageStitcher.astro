@@ -1,0 +1,1477 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const blurUrl = getToolUrl('image-blur-tool', locale);
+const grayscaleUrl = getToolUrl('image-grayscale-converter', locale);
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+const circleUrl = getToolUrl('circle-image-cropper', locale);
+
+const i18nDict = {
+  statusReady: t(locale, 'stitch.status.ready'),
+  statusProcessing: t(locale, 'stitch.status.processing'),
+  errorLoad: t(locale, 'stitch.error.load'),
+  downloadName: t(locale, 'stitch.download.filename'),
+};
+---
+
+<div class="stitch-tool-wrapper" id="stitchApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Empty State -->
+  <div class="stitch-dropzone-card" id="stitchDropzone">
+    <div class="stitch-dropzone-content">
+      <div class="stitch-icon-circle">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="8" height="18" rx="1"></rect>
+          <rect x="13" y="3" width="8" height="18" rx="1"></rect>
+          <path d="M11 8h2M11 12h2M11 16h2"></path>
+        </svg>
+      </div>
+
+      <h2 class="stitch-drop-title">{t(locale, 'stitch.dropzone.title')}</h2>
+      <p class="stitch-drop-subtitle">{t(locale, 'stitch.dropzone.subtitle')}</p>
+
+      <div class="stitch-btn-row">
+        <label class="btn btn-primary stitch-btn-primary" for="stitchFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'stitch.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="stitchFileInput" multiple accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary stitch-sample-btn" id="stitchSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>{t(locale, 'stitch.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="stitch-formats-hint">{t(locale, 'stitch.dropzone.formats')}</p>
+
+      <div class="stitch-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'stitch.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="stitch-loading-card" id="stitchLoadingCard" style="display: none;">
+    <div class="stitch-spinner"></div>
+    <p class="stitch-loading-text">{t(locale, 'stitch.status.processing')}</p>
+  </div>
+
+  <!-- Main Stitch Workspace -->
+  <div class="stitch-workspace" id="stitchWorkspace" style="display: none;">
+    <!-- Top Image Manager & Reorder Bar -->
+    <div class="stitch-manager-card">
+      <div class="manager-header">
+        <div class="manager-title-row">
+          <span class="stitch-status-dot"></span>
+          <h3 class="manager-title">{t(locale, 'stitch.manager.title')} (<span id="stitchCountTag">0</span>)</h3>
+        </div>
+        <div class="manager-actions">
+          <label class="btn btn-secondary btn-sm add-more-btn" for="stitchAddMoreInput">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>{t(locale, 'stitch.manager.addMore')}</span>
+          </label>
+          <input type="file" id="stitchAddMoreInput" multiple accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+          <button type="button" class="btn btn-secondary btn-sm" id="stitchClearAllBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span>{t(locale, 'stitch.manager.clearAll')}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Horizontal Thumbnails Strip -->
+      <div class="thumbnails-scroll-container" id="thumbnailsContainer">
+        <!-- Dynamically rendered thumbnail cards with reorder & delete buttons -->
+      </div>
+    </div>
+
+    <!-- 2-Column Layout: Canvas Viewport on Left, Stitching Controls on Right -->
+    <div class="stitch-main-grid">
+      <!-- Left Column: Live Canvas Viewport -->
+      <div class="stitch-preview-card">
+        <div class="viewport-header">
+          <span class="viewport-label">{t(locale, 'stitch.preview.title')}</span>
+          <div class="viewport-meta">
+            <span class="viewport-tag" id="stitchDimsBadge">0 × 0 px</span>
+          </div>
+        </div>
+
+        <div class="stitch-canvas-viewport">
+          <div class="canvas-checkerboard-wrap" id="canvasWrap">
+            <canvas id="mainStitchCanvas" class="main-canvas"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Stitching Controls & Layout Settings -->
+      <div class="stitch-controls-panel">
+        <!-- Section 1: Direction / Layout -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'stitch.direction.label')}</label>
+          <div class="direction-chips-grid">
+            <button type="button" class="stitch-dir-btn active" data-dir="horizontal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="5" width="9" height="14" rx="1"></rect>
+                <rect x="13" y="5" width="9" height="14" rx="1"></rect>
+              </svg>
+              <span>{t(locale, 'stitch.direction.horizontal')}</span>
+            </button>
+
+            <button type="button" class="stitch-dir-btn" data-dir="vertical">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2" width="14" height="9" rx="1"></rect>
+                <rect x="5" y="13" width="14" height="9" rx="1"></rect>
+              </svg>
+              <span>{t(locale, 'stitch.direction.vertical')}</span>
+            </button>
+
+            <button type="button" class="stitch-dir-btn" data-dir="grid2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="8" height="8" rx="1"></rect>
+                <rect x="13" y="3" width="8" height="8" rx="1"></rect>
+                <rect x="3" y="13" width="8" height="8" rx="1"></rect>
+                <rect x="13" y="13" width="8" height="8" rx="1"></rect>
+              </svg>
+              <span>{t(locale, 'stitch.direction.grid2')}</span>
+            </button>
+
+            <button type="button" class="stitch-dir-btn" data-dir="grid3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="5.5" height="8" rx="1"></rect>
+                <rect x="9.25" y="3" width="5.5" height="8" rx="1"></rect>
+                <rect x="16.5" y="3" width="5.5" height="8" rx="1"></rect>
+                <rect x="2" y="13" width="5.5" height="8" rx="1"></rect>
+                <rect x="9.25" y="13" width="5.5" height="8" rx="1"></rect>
+                <rect x="16.5" y="13" width="5.5" height="8" rx="1"></rect>
+              </svg>
+              <span>{t(locale, 'stitch.direction.grid3')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 2: Dimension Matching & Alignment -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'stitch.sizing.label')}</label>
+          <div class="toggle-chips-row">
+            <button type="button" class="stitch-size-btn active" data-sizing="match">
+              <strong>{t(locale, 'stitch.sizing.match')}</strong>
+              <span>{t(locale, 'stitch.sizing.matchDesc')}</span>
+            </button>
+            <button type="button" class="stitch-size-btn" data-sizing="original">
+              <strong>{t(locale, 'stitch.sizing.original')}</strong>
+              <span>{t(locale, 'stitch.sizing.originalDesc')}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'stitch.alignment.label')}</label>
+          <div class="align-chips-row">
+            <button type="button" class="stitch-align-btn" data-align="start">{t(locale, 'stitch.alignment.start')}</button>
+            <button type="button" class="stitch-align-btn active" data-align="center">{t(locale, 'stitch.alignment.center')}</button>
+            <button type="button" class="stitch-align-btn" data-align="end">{t(locale, 'stitch.alignment.end')}</button>
+          </div>
+        </div>
+
+        <!-- Section 3: Spacing, Margins & Corner Radius -->
+        <div class="control-group">
+          <div class="slider-header-row">
+            <label for="stitchGapSlider" class="control-label">{t(locale, 'stitch.spacing.gap')}</label>
+            <span id="stitchGapVal" class="val-pill">12 px</span>
+          </div>
+          <input type="range" id="stitchGapSlider" min="0" max="80" value="12" step="2" class="stitch-range" />
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header-row">
+            <label for="stitchPaddingSlider" class="control-label">{t(locale, 'stitch.spacing.padding')}</label>
+            <span id="stitchPaddingVal" class="val-pill">16 px</span>
+          </div>
+          <input type="range" id="stitchPaddingSlider" min="0" max="80" value="16" step="2" class="stitch-range" />
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header-row">
+            <label for="stitchRadiusSlider" class="control-label">{t(locale, 'stitch.spacing.radius')}</label>
+            <span id="stitchRadiusVal" class="val-pill">8 px</span>
+          </div>
+          <input type="range" id="stitchRadiusSlider" min="0" max="40" value="8" step="2" class="stitch-range" />
+        </div>
+
+        <!-- Section 4: Background Color -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'stitch.bg.label')}</label>
+          <div class="bg-color-picker-row">
+            <button type="button" class="bg-chip active" data-color="transparent" title="Transparent">
+              <span class="bg-check-pattern"></span>
+            </button>
+            <button type="button" class="bg-chip" data-color="#ffffff" style="background: #ffffff;" title="White"></button>
+            <button type="button" class="bg-chip" data-color="#0f172a" style="background: #0f172a;" title="Dark Slate"></button>
+            <button type="button" class="bg-chip" data-color="#f8fafc" style="background: #f8fafc;" title="Soft Cream"></button>
+            <button type="button" class="bg-chip" data-color="#000000" style="background: #000000;" title="Pure Black"></button>
+            <label class="bg-custom-label" title="Custom Hex Color">
+              <input type="color" id="stitchCustomColorInput" value="#3b82f6" class="sr-only" />
+              <span class="bg-custom-dot" id="customColorDot"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section 5: Format & Quality Selection -->
+        <div class="control-group">
+          <label for="stitchFormatSelect" class="control-label">{t(locale, 'stitch.format.label')}</label>
+          <select id="stitchFormatSelect" class="stitch-select">
+            <option value="original" selected>{t(locale, 'stitch.format.original')}</option>
+            <option value="image/png">PNG (Lossless / Transparent)</option>
+            <option value="image/jpeg">JPG / JPEG (Standard)</option>
+            <option value="image/webp">WebP (Modern Compressed)</option>
+          </select>
+        </div>
+
+        <!-- Section 6: Live Metrics & Download -->
+        <div class="stitch-metrics-card">
+          <div class="metric-row">
+            <span class="metric-label">{t(locale, 'stitch.metrics.dimensions')}:</span>
+            <strong id="metricDims">0 × 0 px</strong>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">{t(locale, 'stitch.metrics.fileWeight')}:</span>
+            <strong id="metricWeight">-- KB</strong>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">{t(locale, 'stitch.metrics.privacyStatus')}:</span>
+            <strong>{t(locale, 'stitch.metrics.clientSafe')}</strong>
+          </div>
+        </div>
+
+        <!-- Single-Click Download Button -->
+        <button type="button" class="btn btn-primary stitch-download-btn" id="stitchDownloadBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>{t(locale, 'stitch.action.download')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Navigation to Related Tools -->
+    <div class="stitch-cross-links-row">
+      <a href={blurUrl} class="btn btn-secondary stitch-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+          <circle cx="12" cy="12" r="5" stroke-dasharray="1 2"></circle>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        </svg>
+        <span>{t(locale, 'stitch.cross.blur')}</span>
+      </a>
+
+      <a href={squareUrl} class="btn btn-secondary stitch-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        </svg>
+        <span>{t(locale, 'stitch.cross.square')}</span>
+      </a>
+
+      <a href={circleUrl} class="btn btn-secondary stitch-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+        </svg>
+        <span>{t(locale, 'stitch.cross.circle')}</span>
+      </a>
+
+      <a href={grayscaleUrl} class="btn btn-secondary stitch-cross-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 3a9 9 0 0 1 0 18v-18z" fill="currentColor"></path>
+        </svg>
+        <span>{t(locale, 'stitch.cross.grayscale')}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    type StitchImageItem,
+    type StitchDirection,
+    type SizingMode,
+    type AlignmentMode,
+    type StitchResult,
+    loadImageFromFile,
+    renderStitchedCanvas,
+    exportStitchedImage,
+    generateSampleStitchImages,
+  } from '@/scripts/image-stitcher';
+
+  function initStitchApp() {
+    const container = document.getElementById('stitchApp');
+    if (!container) return;
+
+    let i18n = {
+      statusReady: 'Ready',
+      statusProcessing: 'Stitching Images...',
+      errorLoad: 'Failed to process images.',
+      downloadName: 'imgfeel-stitched',
+    };
+
+    try {
+      const dataAttr = container.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // Elements
+    const dropzone = document.getElementById('stitchDropzone');
+    const fileInput = document.getElementById('stitchFileInput') as HTMLInputElement | null;
+    const addMoreInput = document.getElementById('stitchAddMoreInput') as HTMLInputElement | null;
+    const sampleBtn = document.getElementById('stitchSampleBtn');
+    const loadingCard = document.getElementById('stitchLoadingCard');
+    const workspace = document.getElementById('stitchWorkspace');
+
+    // Manager
+    const countTag = document.getElementById('stitchCountTag');
+    const clearAllBtn = document.getElementById('stitchClearAllBtn');
+    const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+
+    // Canvas Viewport
+    const mainCanvas = document.getElementById('mainStitchCanvas') as HTMLCanvasElement | null;
+    const dimsBadge = document.getElementById('stitchDimsBadge');
+
+    // Controls
+    const dirBtns = document.querySelectorAll('.stitch-dir-btn');
+    const sizeBtns = document.querySelectorAll('.stitch-size-btn');
+    const alignBtns = document.querySelectorAll('.stitch-align-btn');
+    const gapSlider = document.getElementById('stitchGapSlider') as HTMLInputElement | null;
+    const gapVal = document.getElementById('stitchGapVal');
+    const paddingSlider = document.getElementById('stitchPaddingSlider') as HTMLInputElement | null;
+    const paddingVal = document.getElementById('stitchPaddingVal');
+    const radiusSlider = document.getElementById('stitchRadiusSlider') as HTMLInputElement | null;
+    const radiusVal = document.getElementById('stitchRadiusVal');
+    const bgChips = document.querySelectorAll('.bg-chip');
+    const customColorInput = document.getElementById('stitchCustomColorInput') as HTMLInputElement | null;
+    const customColorDot = document.getElementById('customColorDot');
+    const formatSelect = document.getElementById('stitchFormatSelect') as HTMLSelectElement | null;
+
+    // Metrics & Download
+    const metricDims = document.getElementById('metricDims');
+    const metricWeight = document.getElementById('metricWeight');
+    const downloadBtn = document.getElementById('stitchDownloadBtn');
+
+    // State
+    let loadedItems: StitchImageItem[] = [];
+    let direction: StitchDirection = 'horizontal';
+    let sizing: SizingMode = 'match';
+    let alignment: AlignmentMode = 'center';
+    let gap = 12;
+    let padding = 16;
+    let radius = 8;
+    let backgroundColor = 'transparent';
+    let lastResult: StitchResult | null = null;
+    let debounceTimer: number | null = null;
+
+    function renderThumbnails() {
+      if (!thumbnailsContainer) return;
+      thumbnailsContainer.innerHTML = '';
+
+      if (countTag) countTag.textContent = String(loadedItems.length);
+
+      loadedItems.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'thumb-item-card';
+
+        card.innerHTML = `
+          <div class="thumb-img-box">
+            <img src="${item.previewUrl}" alt="${item.name}" class="thumb-img" />
+            <span class="thumb-index-badge">#${index + 1}</span>
+          </div>
+          <div class="thumb-info-box">
+            <span class="thumb-name" title="${item.name}">${item.name}</span>
+            <span class="thumb-dims">${item.originalWidth} × ${item.originalHeight}</span>
+          </div>
+          <div class="thumb-controls">
+            <button type="button" class="btn-thumb-action btn-move-left" data-index="${index}" title="Move left / up" ${index === 0 ? 'disabled' : ''}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button type="button" class="btn-thumb-action btn-move-right" data-index="${index}" title="Move right / down" ${index === loadedItems.length - 1 ? 'disabled' : ''}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <button type="button" class="btn-thumb-action btn-remove-item" data-index="${index}" title="Remove image">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        `;
+
+        thumbnailsContainer.appendChild(card);
+      });
+
+      // Attach button event listeners
+      thumbnailsContainer.querySelectorAll('.btn-move-left').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-index') || '0', 10);
+          if (idx > 0) {
+            const temp = loadedItems[idx];
+            loadedItems[idx] = loadedItems[idx - 1];
+            loadedItems[idx - 1] = temp;
+            renderThumbnails();
+            triggerUpdate();
+          }
+        });
+      });
+
+      thumbnailsContainer.querySelectorAll('.btn-move-right').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-index') || '0', 10);
+          if (idx < loadedItems.length - 1) {
+            const temp = loadedItems[idx];
+            loadedItems[idx] = loadedItems[idx + 1];
+            loadedItems[idx + 1] = temp;
+            renderThumbnails();
+            triggerUpdate();
+          }
+        });
+      });
+
+      thumbnailsContainer.querySelectorAll('.btn-remove-item').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-index') || '0', 10);
+          loadedItems.splice(idx, 1);
+          if (loadedItems.length === 0) {
+            resetToDropzone();
+          } else {
+            renderThumbnails();
+            triggerUpdate();
+          }
+        });
+      });
+    }
+
+    function renderCanvas() {
+      if (!mainCanvas || loadedItems.length === 0) return;
+
+      renderStitchedCanvas(loadedItems, mainCanvas, {
+        direction,
+        sizing,
+        alignment,
+        gap,
+        padding,
+        radius,
+        backgroundColor,
+        format: 'image/png',
+        quality: 0.9,
+      });
+
+      if (dimsBadge) dimsBadge.textContent = `${mainCanvas.width} × ${mainCanvas.height} px`;
+    }
+
+    async function processFullExport() {
+      if (loadedItems.length === 0) return;
+
+      const format = (formatSelect?.value as 'image/jpeg' | 'image/png' | 'image/webp' | 'original') || 'original';
+
+      try {
+        const result = await exportStitchedImage(loadedItems, {
+          direction,
+          sizing,
+          alignment,
+          gap,
+          padding,
+          radius,
+          backgroundColor,
+          format,
+          quality: 0.92,
+        });
+
+        lastResult = result;
+
+        if (metricDims) metricDims.textContent = `${result.width} × ${result.height} px`;
+        if (metricWeight) metricWeight.textContent = result.fileSizeFormatted;
+      } catch (err) {
+        console.error('Stitch export error:', err);
+      }
+    }
+
+    function triggerUpdate() {
+      renderCanvas();
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(processFullExport, 80);
+    }
+
+    async function addFiles(files: File[]) {
+      if (files.length === 0) return;
+      if (!dropzone || !loadingCard || !workspace) return;
+
+      if (loadedItems.length === 0) {
+        dropzone.style.display = 'none';
+        workspace.style.display = 'none';
+        loadingCard.style.display = 'flex';
+      }
+
+      try {
+        for (const file of files) {
+          const img = await loadImageFromFile(file);
+          loadedItems.push({
+            id: Math.random().toString(36).substring(2, 9),
+            file,
+            img,
+            name: file.name,
+            originalWidth: img.naturalWidth || img.width,
+            originalHeight: img.naturalHeight || img.height,
+            previewUrl: URL.createObjectURL(file),
+          });
+        }
+
+        renderThumbnails();
+        renderCanvas();
+        await processFullExport();
+
+        loadingCard.style.display = 'none';
+        workspace.style.display = 'flex';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : i18n.errorLoad);
+        if (loadedItems.length === 0) resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      loadedItems = [];
+      if (fileInput) fileInput.value = '';
+      if (addMoreInput) addMoreInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (workspace) workspace.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    if (clearAllBtn) clearAllBtn.addEventListener('click', resetToDropzone);
+
+    // Direction switcher
+    dirBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dirBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        direction = (btn.getAttribute('data-dir') as StitchDirection) || 'horizontal';
+        triggerUpdate();
+      });
+    });
+
+    // Sizing switcher
+    sizeBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        sizeBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        sizing = (btn.getAttribute('data-sizing') as SizingMode) || 'match';
+        triggerUpdate();
+      });
+    });
+
+    // Alignment switcher
+    alignBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        alignBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        alignment = (btn.getAttribute('data-align') as AlignmentMode) || 'center';
+        triggerUpdate();
+      });
+    });
+
+    // Sliders
+    if (gapSlider) {
+      gapSlider.addEventListener('input', () => {
+        gap = parseInt(gapSlider.value, 10);
+        if (gapVal) gapVal.textContent = `${gap} px`;
+        triggerUpdate();
+      });
+    }
+
+    if (paddingSlider) {
+      paddingSlider.addEventListener('input', () => {
+        padding = parseInt(paddingSlider.value, 10);
+        if (paddingVal) paddingVal.textContent = `${padding} px`;
+        triggerUpdate();
+      });
+    }
+
+    if (radiusSlider) {
+      radiusSlider.addEventListener('input', () => {
+        radius = parseInt(radiusSlider.value, 10);
+        if (radiusVal) radiusVal.textContent = `${radius} px`;
+        triggerUpdate();
+      });
+    }
+
+    // Background color chips
+    bgChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        bgChips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        backgroundColor = chip.getAttribute('data-color') || 'transparent';
+        triggerUpdate();
+      });
+    });
+
+    if (customColorInput) {
+      customColorInput.addEventListener('input', () => {
+        bgChips.forEach((c) => c.classList.remove('active'));
+        backgroundColor = customColorInput.value;
+        if (customColorDot) customColorDot.style.background = backgroundColor;
+        triggerUpdate();
+      });
+    }
+
+    // Format select
+    if (formatSelect) {
+      formatSelect.addEventListener('change', triggerUpdate);
+    }
+
+    // Download Button
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        if (!lastResult) return;
+
+        let ext = '.png';
+        const selFormat = formatSelect?.value || 'original';
+        if (selFormat === 'image/png') ext = '.png';
+        else if (selFormat === 'image/webp') ext = '.webp';
+        else if (selFormat === 'image/jpeg') ext = '.jpg';
+
+        const filename = `${i18n.downloadName}${ext}`;
+        const a = document.createElement('a');
+        a.href = lastResult.dataUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
+
+    // Sample button
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        const files = await generateSampleStitchImages();
+        addFiles(files);
+      });
+    }
+
+    // File input changes
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files.length > 0) {
+          addFiles(Array.from(target.files));
+        }
+      });
+    }
+
+    if (addMoreInput) {
+      addMoreInput.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files.length > 0) {
+          addFiles(Array.from(target.files));
+        }
+      });
+    }
+
+    // Drag and drop on dropzone
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('stitch-drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('stitch-drag-active');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files.length > 0) {
+          addFiles(Array.from(dt.files));
+        }
+      });
+    }
+
+    // Global Paste (Ctrl+V) listener
+    window.addEventListener('paste', (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      const files: File[] = [];
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) files.push(file);
+        }
+      }
+      if (files.length > 0) {
+        addFiles(files);
+      }
+    });
+  }
+
+  initStitchApp();
+  document.addEventListener('astro:page-load', initStitchApp);
+</script>
+
+<style>
+  .stitch-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  /* Dropzone */
+  .stitch-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .stitch-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .stitch-dropzone-card.stitch-drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .stitch-dropzone-content {
+    max-width: 580px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .stitch-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .stitch-icon-circle {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .stitch-drop-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .stitch-drop-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  .stitch-drop-subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 480px;
+  }
+
+  @media (min-width: 640px) {
+    .stitch-drop-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .stitch-btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    width: 100%;
+    max-width: 440px;
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 480px) {
+    .stitch-btn-row {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .stitch-btn-primary {
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-5);
+  }
+
+  .stitch-sample-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+  }
+
+  .stitch-formats-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .stitch-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .stitch-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .stitch-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-accent-light);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: stitchSpin 0.8s linear infinite;
+  }
+
+  @keyframes stitchSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .stitch-loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Workspace */
+  .stitch-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .stitch-workspace {
+      gap: var(--space-5);
+    }
+  }
+
+  /* Manager Top Strip */
+  .stitch-manager-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-sizing: border-box;
+  }
+
+  .manager-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 600px) {
+    .manager-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .manager-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stitch-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+    box-shadow: 0 0 0 2px #d1fae5;
+  }
+
+  .manager-title {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .manager-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .add-more-btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .thumbnails-scroll-container {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
+    scrollbar-width: thin;
+  }
+
+  .thumb-item-card {
+    flex: 0 0 140px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-sizing: border-box;
+  }
+
+  .thumb-img-box {
+    width: 100%;
+    height: 80px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumb-index-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+
+  .thumb-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .thumb-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .thumb-dims {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+  }
+
+  .thumb-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .btn-thumb-action {
+    flex: 1;
+    height: 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-thumb-action:hover:not(:disabled) {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-thumb-action:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .btn-remove-item:hover {
+    background: #fee2e2 !important;
+    color: #ef4444 !important;
+    border-color: #fca5a5 !important;
+  }
+
+  /* 2-Column Grid */
+  .stitch-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 900px) {
+    .stitch-main-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-5);
+    }
+  }
+
+  /* Preview Card (Left Column) */
+  .stitch-preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .stitch-preview-card {
+      padding: var(--space-5);
+    }
+  }
+
+  .viewport-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: var(--space-3);
+  }
+
+  .viewport-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .viewport-tag {
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .stitch-canvas-viewport {
+    width: 100%;
+    min-height: 300px;
+    max-height: 520px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-conic-gradient(#f1f5f9 0% 25%, #ffffff 0% 50%) 50% / 16px 16px;
+    padding: var(--space-4);
+    box-sizing: border-box;
+  }
+
+  .canvas-checkerboard-wrap {
+    display: inline-block;
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .main-canvas {
+    max-width: 100%;
+    max-height: 460px;
+    width: auto;
+    height: auto;
+    display: block;
+  }
+
+  /* Controls Panel (Right Column) */
+  .stitch-controls-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .stitch-controls-panel {
+      padding: var(--space-5);
+    }
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .control-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .slider-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .val-pill {
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .stitch-range {
+    width: 100%;
+    accent-color: var(--color-accent);
+  }
+
+  /* Direction Chips */
+  .direction-chips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+
+  .stitch-dir-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .stitch-dir-btn:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .stitch-dir-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  /* Sizing Toggle */
+  .toggle-chips-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+
+  .stitch-size-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 8px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.15s ease;
+  }
+
+  .stitch-size-btn:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .stitch-size-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .stitch-size-btn strong {
+    font-size: 11px;
+    color: var(--color-text);
+  }
+
+  .stitch-size-btn span {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Alignment Chips */
+  .align-chips-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+  }
+
+  .stitch-align-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .stitch-align-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* Background Pickers */
+  .bg-color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bg-chip {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .bg-chip.active {
+    border-color: var(--color-accent);
+    transform: scale(1.15);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
+  }
+
+  .bg-check-pattern {
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(#cbd5e1 0% 25%, #ffffff 0% 50%) 50% / 8px 8px;
+  }
+
+  .bg-custom-label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg-custom-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    border: 2px dashed var(--color-border);
+    background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+    display: block;
+    transition: transform 0.15s ease;
+  }
+
+  .bg-custom-dot:hover {
+    transform: scale(1.1);
+  }
+
+  .stitch-select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  /* Metrics Card */
+  .stitch-metrics-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+
+  .metric-row strong {
+    color: var(--color-text);
+  }
+
+  .stitch-download-btn {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  /* Cross Links */
+  .stitch-cross-links-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 600px) {
+    .stitch-cross-links-row {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+
+  .stitch-cross-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+</style>
