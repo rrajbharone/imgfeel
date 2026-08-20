@@ -30,7 +30,7 @@ const ALLOWED_IDENTICAL = new Set([
   'WebP',
   'Blog',
   'Canvas',
-  '© 2025 ImgFeel. All rights reserved.',
+  '© 2026 ImgFeel. All rights reserved.',
   // International cognates — these words are legitimately the same in many languages
   'Menu',
   'Contact',
