@@ -1,0 +1,1372 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+import { BLEND_MODES } from '@/scripts/overlay-engine';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const stitchUrl = getToolUrl('image-stitcher', locale);
+const beautifyUrl = getToolUrl('screenshot-beautifier', locale);
+const blurUrl = getToolUrl('image-blur-tool', locale);
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+
+const i18nDict = {
+  copySuccess: t(locale, 'overlay.action.copied'),
+  downloadName: t(locale, 'overlay.download.filename'),
+  dropBaseText: t(locale, 'overlay.upload.dropBase'),
+  dropOverlayText: t(locale, 'overlay.upload.dropOverlay'),
+  baseLoaded: t(locale, 'overlay.upload.baseLoaded'),
+  overlayLoaded: t(locale, 'overlay.upload.overlayLoaded'),
+};
+---
+
+<div class="overlay-tool-wrapper" id="overlayApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Initial Empty State (Visible by default) -->
+  <div class="overlay-dropzone-card" id="overlayDropzoneCard">
+    <div class="overlay-dropzone-content">
+      <div class="overlay-icon-circle">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+
+      <h2 class="overlay-drop-title">{t(locale, 'overlay.dropzone.title')}</h2>
+      <p class="overlay-drop-subtitle">{t(locale, 'overlay.dropzone.subtitle')}</p>
+
+      <div class="overlay-btn-row">
+        <label class="btn btn-primary overlay-btn-primary" for="overlayMainFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'overlay.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="overlayMainFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp,.svg" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary overlay-sample-btn" id="overlaySampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>{t(locale, 'overlay.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="overlay-formats-hint">{t(locale, 'overlay.dropzone.formats')}</p>
+
+      <div class="overlay-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'overlay.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace (Hidden initially until base image is loaded) -->
+  <div class="overlay-workspace-container" id="overlayWorkspaceContainer" style="display: none;">
+    <!-- Workspace Header Bar -->
+    <div class="overlay-workspace-header">
+      <div class="overlay-meta-badge">
+        <span class="overlay-status-dot"></span>
+        <span id="overlayFileName" class="overlay-filename-label">base-image.png</span>
+        <span class="overlay-meta-tag" id="overlayBaseDimsTag">0 × 0 px</span>
+        <span class="overlay-meta-tag" id="overlayBaseSizeTag">0 KB</span>
+      </div>
+
+      <div class="overlay-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="overlayChangeBaseBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'overlay.action.changeBase')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Grid: Left is Viewport, Right is Controls -->
+    <div class="overlay-main-grid">
+      <!-- Left: Live Preview & Canvas Viewport -->
+      <div class="preview-column">
+        <div class="preview-card">
+          <!-- Viewport Header -->
+          <div class="viewport-header">
+            <div class="header-left">
+              <span class="viewport-label">{t(locale, 'overlay.preview.title')}</span>
+            </div>
+            <div class="header-right">
+              <span class="viewport-tag" id="canvasDimsBadge">-- × -- px</span>
+            </div>
+          </div>
+
+          <!-- Interactive Canvas Viewport Area -->
+          <div class="canvas-viewport" id="canvasViewport">
+            <!-- Canvas container -->
+            <div class="canvas-container" id="canvasContainer">
+              <div class="canvas-inner-wrap" id="canvasInnerWrap">
+                <canvas id="mainOverlayCanvas" class="main-canvas"></canvas>
+                <!-- Interactive overlay drag handle box -->
+                <div class="overlay-drag-box" id="overlayDragBox" style="display: none;">
+                  <div class="drag-handle tl"></div>
+                  <div class="drag-handle tr"></div>
+                  <div class="drag-handle bl"></div>
+                  <div class="drag-handle br"></div>
+                  <span class="drag-label" id="dragLabel">Overlay</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics & Info Row -->
+          <div class="preview-metrics-row">
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'overlay.metrics.baseDims')}</span>
+              <strong id="metricBaseDims">-- × -- px</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'overlay.metrics.overlayDims')}</span>
+              <strong id="metricOverlayDims">-- × -- px</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'overlay.metrics.position')}</span>
+              <strong id="metricPosition">X: 0, Y: 0</strong>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons-group">
+            <div class="primary-actions-row">
+              <button type="button" class="btn btn-primary action-btn-main" id="overlayDownloadBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>{t(locale, 'overlay.action.download')}</span>
+              </button>
+
+              <button type="button" class="btn btn-secondary action-btn-copy" id="overlayCopyBtn" title="Copy Image to Clipboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyBtnText">{t(locale, 'overlay.action.copyImage')}</span>
+              </button>
+            </div>
+
+            <div class="secondary-actions-row">
+              <button type="button" class="btn-snippet" id="swapLayersBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
+                <span>{t(locale, 'overlay.action.swap')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="resetOverlayBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <span>{t(locale, 'overlay.action.reset')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="clearAllBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>{t(locale, 'overlay.action.clear')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Settings Panel & Control Cards -->
+      <div class="controls-column">
+        <div class="controls-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">{t(locale, 'overlay.panel.title')}</h2>
+          </div>
+
+          <!-- Section 1: Overlay Layer Selector -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'overlay.layer.overlay')}</label>
+            </div>
+
+            <div class="layer-dropzone" id="overlayDropZone">
+              <input type="file" id="overlayFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp,.svg" class="sr-only" />
+              <div class="layer-drop-content">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span id="overlayDropText">{t(locale, 'overlay.upload.selectOverlay')}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Position, Alignment & Scale -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'overlay.section.position')}</label>
+            </div>
+
+            <!-- Quick Alignment 3x3 Grid -->
+            <div class="align-grid-wrapper">
+              <label class="field-sublabel">{t(locale, 'overlay.align.grid')}</label>
+              <div class="align-grid-3x3">
+                <button type="button" class="align-btn" data-align="top-left" title="Top Left">↖</button>
+                <button type="button" class="align-btn" data-align="top-center" title="Top Center">↑</button>
+                <button type="button" class="align-btn" data-align="top-right" title="Top Right">↗</button>
+                <button type="button" class="align-btn" data-align="center-left" title="Center Left">←</button>
+                <button type="button" class="align-btn active" data-align="center" title="Center">●</button>
+                <button type="button" class="align-btn" data-align="center-right" title="Center Right">→</button>
+                <button type="button" class="align-btn" data-align="bottom-left" title="Bottom Left">↙</button>
+                <button type="button" class="align-btn" data-align="bottom-center" title="Bottom Center">↓</button>
+                <button type="button" class="align-btn" data-align="bottom-right" title="Bottom Right">↘</button>
+              </div>
+            </div>
+
+            <!-- Scale Slider -->
+            <div class="slider-field">
+              <div class="slider-header">
+                <label for="sliderScale" class="field-sublabel">{t(locale, 'overlay.scale.label')}</label>
+                <span class="val-badge" id="valScaleBadge">50%</span>
+              </div>
+              <input type="range" id="sliderScale" min="5" max="300" value="50" class="range-slider" />
+            </div>
+
+            <!-- Rotation Slider -->
+            <div class="slider-field">
+              <div class="slider-header">
+                <label for="sliderRotation" class="field-sublabel">{t(locale, 'overlay.rotate.label')}</label>
+                <span class="val-badge" id="valRotationBadge">0°</span>
+              </div>
+              <input type="range" id="sliderRotation" min="-180" max="180" value="0" class="range-slider" />
+            </div>
+          </div>
+
+          <!-- Section 3: Blending & Opacity -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'overlay.section.opacityBlend')}</label>
+            </div>
+
+            <!-- Opacity Slider -->
+            <div class="slider-field">
+              <div class="slider-header">
+                <label for="sliderOpacity" class="field-sublabel">{t(locale, 'overlay.opacity.label')}</label>
+                <span class="val-badge" id="valOpacityBadge">100%</span>
+              </div>
+              <input type="range" id="sliderOpacity" min="0" max="100" value="100" class="range-slider" />
+            </div>
+
+            <!-- Blend Mode Select -->
+            <div class="input-field">
+              <label for="selectBlendMode" class="field-sublabel">{t(locale, 'overlay.blend.label')}</label>
+              <select id="selectBlendMode" class="form-select">
+                {BLEND_MODES.map(mode => (
+                  <option value={mode.id}>{mode.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 4: Export Format & Output Quality -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'overlay.section.export')}</label>
+            </div>
+
+            <div class="export-options-grid">
+              <div class="input-field">
+                <label for="exportFormatSelect" class="field-sublabel">{t(locale, 'overlay.export.format')}</label>
+                <select id="exportFormatSelect" class="form-select">
+                  <option value="image/png">PNG (Lossless & Alpha)</option>
+                  <option value="image/webp" selected>WebP (Optimized)</option>
+                  <option value="image/jpeg">JPG / JPEG (Standard)</option>
+                </select>
+              </div>
+
+              <div class="input-field" id="qualityControlGroup">
+                <div class="quality-label-row">
+                  <label for="exportQualitySlider" class="field-sublabel">{t(locale, 'overlay.export.quality')}</label>
+                  <span class="quality-val-badge" id="qualityValBadge">92%</span>
+                </div>
+                <input type="range" id="exportQualitySlider" min="10" max="100" value="92" class="range-slider" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Related Tools Navigation -->
+  <div class="overlay-cross-links-row">
+    <a href={stitchUrl} class="btn btn-secondary overlay-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="8" height="18" rx="1"></rect>
+        <rect x="13" y="3" width="8" height="18" rx="1"></rect>
+        <path d="M11 8h2M11 12h2M11 16h2"></path>
+      </svg>
+      <span>{t(locale, 'overlay.cross.stitch')}</span>
+    </a>
+
+    <a href={beautifyUrl} class="btn btn-secondary overlay-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"></path>
+      </svg>
+      <span>{t(locale, 'overlay.cross.beautify')}</span>
+    </a>
+
+    <a href={blurUrl} class="btn btn-secondary overlay-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+      </svg>
+      <span>{t(locale, 'overlay.cross.blur')}</span>
+    </a>
+
+    <a href={exactUrl} class="btn btn-secondary overlay-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="4 14 10 14 10 20"></polyline>
+        <polyline points="20 10 14 10 14 4"></polyline>
+        <line x1="14" y1="10" x2="21" y2="3"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      <span>{t(locale, 'overlay.cross.exact')}</span>
+    </a>
+
+    <a href={squareUrl} class="btn btn-secondary overlay-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+      </svg>
+      <span>{t(locale, 'overlay.cross.square')}</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  import {
+    renderOverlayToCanvas,
+    exportCompositeImage,
+    copyCompositeToClipboard,
+    loadImageFromFile,
+    type AlignmentPreset,
+    type BlendMode,
+    type OverlayOptions,
+  } from '@/scripts/overlay-engine';
+
+  function initOverlayApp() {
+    const app = document.getElementById('overlayApp');
+    if (!app) return;
+
+    let i18n = {
+      copySuccess: 'Image Copied to Clipboard!',
+      downloadName: 'imgfeel-overlay',
+      dropOverlayText: 'Drop overlay image here',
+      overlayLoaded: 'Overlay Image Loaded',
+    };
+
+    try {
+      const dataAttr = app.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // State
+    let baseImg: HTMLImageElement | null = null;
+    let overlayImg: HTMLImageElement | null = null;
+    let baseFileName = 'base-image.png';
+    let baseFileSize = 0;
+    let overlayFileName = '';
+
+    let options: OverlayOptions = {
+      x: 0,
+      y: 0,
+      alignment: 'center',
+      margin: 20,
+      scale: 0.5,
+      rotation: 0,
+      opacity: 1,
+      blendMode: 'source-over',
+      canvasFit: 'base',
+      bgColor: 'transparent',
+      flipH: false,
+      flipV: false,
+      format: 'image/png',
+      quality: 0.92,
+    };
+
+    // DOM Elements
+    const dropzoneCard = document.getElementById('overlayDropzoneCard');
+    const workspaceContainer = document.getElementById('overlayWorkspaceContainer');
+    const mainFileInput = document.getElementById('overlayMainFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('overlaySampleBtn');
+    const changeBaseBtn = document.getElementById('overlayChangeBaseBtn');
+
+    const fileNameEl = document.getElementById('overlayFileName');
+    const baseDimsTag = document.getElementById('overlayBaseDimsTag');
+    const baseSizeTag = document.getElementById('overlayBaseSizeTag');
+
+    const overlayDropZone = document.getElementById('overlayDropZone');
+    const overlayFileInput = document.getElementById('overlayFileInput') as HTMLInputElement;
+    const overlayDropText = document.getElementById('overlayDropText');
+
+    const mainCanvas = document.getElementById('mainOverlayCanvas') as HTMLCanvasElement;
+    const canvasDimsBadge = document.getElementById('canvasDimsBadge');
+    const metricBaseDims = document.getElementById('metricBaseDims');
+    const metricOverlayDims = document.getElementById('metricOverlayDims');
+    const metricPosition = document.getElementById('metricPosition');
+
+    const downloadBtn = document.getElementById('overlayDownloadBtn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('overlayCopyBtn') as HTMLButtonElement;
+    const copyBtnText = document.getElementById('copyBtnText');
+    const swapLayersBtn = document.getElementById('swapLayersBtn') as HTMLButtonElement;
+    const resetOverlayBtn = document.getElementById('resetOverlayBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+
+    const sliderScale = document.getElementById('sliderScale') as HTMLInputElement;
+    const valScaleBadge = document.getElementById('valScaleBadge');
+    const sliderRotation = document.getElementById('sliderRotation') as HTMLInputElement;
+    const valRotationBadge = document.getElementById('valRotationBadge');
+    const sliderOpacity = document.getElementById('sliderOpacity') as HTMLInputElement;
+    const valOpacityBadge = document.getElementById('valOpacityBadge');
+    const selectBlendMode = document.getElementById('selectBlendMode') as HTMLSelectElement;
+
+    const exportFormatSelect = document.getElementById('exportFormatSelect') as HTMLSelectElement;
+    const exportQualitySlider = document.getElementById('exportQualitySlider') as HTMLInputElement;
+    const qualityValBadge = document.getElementById('qualityValBadge');
+    const qualityControlGroup = document.getElementById('qualityControlGroup');
+
+    function formatBytes(bytes: number): string {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function showWorkspace() {
+      if (dropzoneCard) dropzoneCard.style.display = 'none';
+      if (workspaceContainer) workspaceContainer.style.display = 'block';
+    }
+
+    function showDropzone() {
+      if (dropzoneCard) dropzoneCard.style.display = 'block';
+      if (workspaceContainer) workspaceContainer.style.display = 'none';
+      baseImg = null;
+      overlayImg = null;
+      if (mainFileInput) mainFileInput.value = '';
+      if (overlayFileInput) overlayFileInput.value = '';
+      if (overlayDropText) overlayDropText.textContent = i18n.dropOverlayText;
+    }
+
+    function render() {
+      if (!mainCanvas) return;
+      if (!baseImg) {
+        showDropzone();
+        return;
+      }
+
+      showWorkspace();
+      const meta = renderOverlayToCanvas(mainCanvas, baseImg, overlayImg, options);
+
+      const dimsStr = `${meta.canvasWidth} × ${meta.canvasHeight} px`;
+      if (canvasDimsBadge) canvasDimsBadge.textContent = dimsStr;
+      if (metricBaseDims) metricBaseDims.textContent = `${baseImg.width} × ${baseImg.height} px`;
+
+      if (overlayImg) {
+        if (metricOverlayDims) metricOverlayDims.textContent = `${meta.overlayWidth} × ${meta.overlayHeight} px`;
+        if (metricPosition) metricPosition.textContent = `X: ${Math.round(meta.overlayX)}, Y: ${Math.round(meta.overlayY)}`;
+      } else {
+        if (metricOverlayDims) metricOverlayDims.textContent = 'None';
+        if (metricPosition) metricPosition.textContent = 'X: 0, Y: 0';
+      }
+    }
+
+    // Load Base File
+    async function loadBaseFile(file: File) {
+      try {
+        baseImg = await loadImageFromFile(file);
+        baseFileName = file.name;
+        baseFileSize = file.size;
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (baseDimsTag) baseDimsTag.textContent = `${baseImg.width} × ${baseImg.height} px`;
+        if (baseSizeTag) baseSizeTag.textContent = formatBytes(file.size);
+        render();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Load Overlay File
+    async function loadOverlayFile(file: File) {
+      try {
+        overlayImg = await loadImageFromFile(file);
+        overlayFileName = file.name;
+        if (overlayDropText) overlayDropText.textContent = `${i18n.overlayLoaded}: ${file.name}`;
+        render();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Base file upload listeners
+    if (mainFileInput) {
+      mainFileInput.addEventListener('change', () => {
+        const file = mainFileInput.files?.[0];
+        if (file) loadBaseFile(file);
+      });
+    }
+
+    if (changeBaseBtn) {
+      changeBaseBtn.addEventListener('click', () => {
+        showDropzone();
+      });
+    }
+
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', () => {
+        // Create demo base and overlay canvases
+        const canvas1 = document.createElement('canvas');
+        canvas1.width = 1200;
+        canvas1.height = 800;
+        const ctx1 = canvas1.getContext('2d')!;
+        const grad1 = ctx1.createLinearGradient(0, 0, 1200, 800);
+        grad1.addColorStop(0, '#3b82f6');
+        grad1.addColorStop(1, '#1d4ed8');
+        ctx1.fillStyle = grad1;
+        ctx1.fillRect(0, 0, 1200, 800);
+
+        const canvas2 = document.createElement('canvas');
+        canvas2.width = 400;
+        canvas2.height = 400;
+        const ctx2 = canvas2.getContext('2d')!;
+        const grad2 = ctx2.createLinearGradient(0, 0, 400, 400);
+        grad2.addColorStop(0, '#ec4899');
+        grad2.addColorStop(1, '#8b5cf6');
+        ctx2.fillStyle = grad2;
+        ctx2.fillRect(0, 0, 400, 400);
+
+        const img1 = new Image();
+        img1.src = canvas1.toDataURL();
+        img1.onload = () => {
+          baseImg = img1;
+          baseFileName = 'demo-base.png';
+          baseFileSize = 120000;
+          if (fileNameEl) fileNameEl.textContent = 'demo-base.png';
+          if (baseDimsTag) baseDimsTag.textContent = '1200 × 800 px';
+          if (baseSizeTag) baseSizeTag.textContent = '120 KB';
+
+          const img2 = new Image();
+          img2.src = canvas2.toDataURL();
+          img2.onload = () => {
+            overlayImg = img2;
+            overlayFileName = 'demo-badge.png';
+            if (overlayDropText) overlayDropText.textContent = `${i18n.overlayLoaded}: demo-badge.png`;
+            render();
+          };
+        };
+      });
+    }
+
+    // Dropzone for base image
+    if (dropzoneCard) {
+      dropzoneCard.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('button, label, a, input')) return;
+        if (mainFileInput) mainFileInput.click();
+      });
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropzoneCard.addEventListener(evt, e => {
+          e.preventDefault();
+          dropzoneCard.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropzoneCard.addEventListener(evt, e => {
+          e.preventDefault();
+          dropzoneCard.classList.remove('drag-over');
+        });
+      });
+
+      dropzoneCard.addEventListener('drop', (e: DragEvent) => {
+        const file = e.dataTransfer?.files?.[0];
+        if (file) loadBaseFile(file);
+      });
+    }
+
+    // Overlay Dropzone in right panel
+    if (overlayDropZone && overlayFileInput) {
+      overlayDropZone.addEventListener('click', (e) => {
+        if (e.target === overlayFileInput) return;
+        overlayFileInput.click();
+      });
+
+      overlayFileInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      overlayFileInput.addEventListener('change', () => {
+        const file = overlayFileInput.files?.[0];
+        if (file) loadOverlayFile(file);
+      });
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        overlayDropZone.addEventListener(evt, e => {
+          e.preventDefault();
+          overlayDropZone.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        overlayDropZone.addEventListener(evt, e => {
+          e.preventDefault();
+          overlayDropZone.classList.remove('drag-over');
+        });
+      });
+
+      overlayDropZone.addEventListener('drop', (e: DragEvent) => {
+        const file = e.dataTransfer?.files?.[0];
+        if (file) loadOverlayFile(file);
+      });
+    }
+
+    // Alignment 3x3 buttons
+    const alignBtns = document.querySelectorAll('.align-btn');
+    alignBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const align = btn.getAttribute('data-align') as AlignmentPreset;
+        if (!align) return;
+
+        alignBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        options.alignment = align;
+        options.x = 0;
+        options.y = 0;
+        render();
+      });
+    });
+
+    // Sliders
+    if (sliderScale) {
+      sliderScale.addEventListener('input', () => {
+        const val = parseInt(sliderScale.value, 10);
+        options.scale = val / 100;
+        if (valScaleBadge) valScaleBadge.textContent = `${val}%`;
+        render();
+      });
+    }
+
+    if (sliderRotation) {
+      sliderRotation.addEventListener('input', () => {
+        const val = parseInt(sliderRotation.value, 10);
+        options.rotation = val;
+        if (valRotationBadge) valRotationBadge.textContent = `${val}°`;
+        render();
+      });
+    }
+
+    if (sliderOpacity) {
+      sliderOpacity.addEventListener('input', () => {
+        const val = parseInt(sliderOpacity.value, 10);
+        options.opacity = val / 100;
+        if (valOpacityBadge) valOpacityBadge.textContent = `${val}%`;
+        render();
+      });
+    }
+
+    if (selectBlendMode) {
+      selectBlendMode.addEventListener('change', () => {
+        options.blendMode = selectBlendMode.value as BlendMode;
+        render();
+      });
+    }
+
+    // Swap Layers
+    if (swapLayersBtn) {
+      swapLayersBtn.addEventListener('click', () => {
+        if (!baseImg || !overlayImg) return;
+        const tempImg = baseImg;
+        baseImg = overlayImg;
+        overlayImg = tempImg;
+
+        const tempName = baseFileName;
+        baseFileName = overlayFileName;
+        overlayFileName = tempName;
+
+        if (fileNameEl) fileNameEl.textContent = baseFileName;
+        if (baseDimsTag) baseDimsTag.textContent = `${baseImg.width} × ${baseImg.height} px`;
+        if (overlayDropText) overlayDropText.textContent = `${i18n.overlayLoaded}: ${overlayFileName}`;
+
+        render();
+      });
+    }
+
+    // Reset
+    if (resetOverlayBtn) {
+      resetOverlayBtn.addEventListener('click', () => {
+        options.scale = 0.5;
+        options.rotation = 0;
+        options.opacity = 1;
+        options.blendMode = 'source-over';
+        options.alignment = 'center';
+        options.x = 0;
+        options.y = 0;
+        options.margin = 20;
+        options.flipH = false;
+        options.flipV = false;
+
+        if (sliderScale) sliderScale.value = '50';
+        if (sliderRotation) sliderRotation.value = '0';
+        if (sliderOpacity) sliderOpacity.value = '100';
+        if (valScaleBadge) valScaleBadge.textContent = '50%';
+        if (valRotationBadge) valRotationBadge.textContent = '0°';
+        if (valOpacityBadge) valOpacityBadge.textContent = '100%';
+        if (selectBlendMode) selectBlendMode.value = 'source-over';
+
+        alignBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-align') === 'center'));
+        render();
+      });
+    }
+
+    // Clear All
+    if (clearAllBtn) {
+      clearAllBtn.addEventListener('click', () => {
+        showDropzone();
+      });
+    }
+
+    // Export formats
+    if (exportFormatSelect) {
+      exportFormatSelect.addEventListener('change', () => {
+        options.format = exportFormatSelect.value as any;
+        if (qualityControlGroup) {
+          qualityControlGroup.style.display = options.format === 'image/png' ? 'none' : 'block';
+        }
+      });
+    }
+
+    if (exportQualitySlider && qualityValBadge) {
+      exportQualitySlider.addEventListener('input', () => {
+        const val = parseInt(exportQualitySlider.value, 10);
+        options.quality = val / 100;
+        qualityValBadge.textContent = `${val}%`;
+      });
+    }
+
+    // Download
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', async () => {
+        if (!baseImg) return;
+        try {
+          const res = await exportCompositeImage(baseImg, overlayImg, options);
+          const ext = options.format === 'image/png' ? 'png' : options.format === 'image/webp' ? 'webp' : 'jpg';
+          const link = document.createElement('a');
+          link.href = res.dataUrl;
+          link.download = `${i18n.downloadName}-${res.width}x${res.height}.${ext}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Copy to Clipboard
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        if (!baseImg) return;
+        try {
+          await copyCompositeToClipboard(baseImg, overlayImg, options);
+          if (copyBtnText) {
+            const orig = copyBtnText.textContent;
+            copyBtnText.textContent = i18n.copySuccess;
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+              copyBtnText.textContent = orig;
+              copyBtn.classList.remove('copied');
+            }, 2200);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOverlayApp);
+  } else {
+    initOverlayApp();
+  }
+</script>
+
+<style>
+  .overlay-tool-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ----------------------------------------
+     Dropzone Initial Card
+  ---------------------------------------- */
+  .overlay-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .overlay-dropzone-card.drag-over {
+    border-color: var(--color-primary);
+    background: var(--color-surface-subtle);
+    transform: scale(1.005);
+  }
+
+  .overlay-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .overlay-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .overlay-drop-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+  }
+
+  .overlay-drop-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .overlay-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .overlay-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .overlay-sample-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+  }
+
+  .overlay-formats-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+    margin-bottom: var(--space-4);
+  }
+
+  .overlay-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* ----------------------------------------
+     Workspace Layout
+  ---------------------------------------- */
+  .overlay-workspace-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .overlay-workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .overlay-meta-badge {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .overlay-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+  }
+
+  .overlay-filename-label {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .overlay-meta-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Main Grid */
+  .overlay-main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--space-6);
+    align-items: start;
+    min-width: 0;
+  }
+
+  /* Left: Preview */
+  .preview-column {
+    min-width: 0;
+  }
+
+  .preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .viewport-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+  }
+
+  .viewport-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .viewport-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .canvas-viewport {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    background: var(--color-surface-subtle);
+    background-image: 
+      linear-gradient(45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--color-border-light) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--color-border-light) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+  }
+
+  .canvas-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .canvas-inner-wrap {
+    position: relative;
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .main-canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Metrics */
+  .preview-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-2);
+    border-right: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .metric-item:last-child {
+    border-right: none;
+  }
+
+  .metric-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 2px;
+  }
+
+  .metric-item strong {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  /* Actions */
+  .action-buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-surface);
+  }
+
+  .primary-actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+  }
+
+  .action-btn-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .action-btn-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: 0.75rem 1rem;
+    min-width: 140px;
+  }
+
+  .action-btn-copy.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .secondary-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn-snippet {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-snippet:hover {
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Controls Panel */
+  .controls-column {
+    min-width: 0;
+  }
+
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .panel-header {
+    margin-bottom: var(--space-1);
+  }
+
+  .panel-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .control-section {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .section-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .layer-dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-align: center;
+    background: var(--color-surface);
+    cursor: pointer;
+  }
+
+  .layer-drop-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .align-grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .align-grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .align-btn {
+    width: 44px;
+    height: 38px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .align-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .align-btn.active {
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary);
+  }
+
+  .slider-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .field-sublabel {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .val-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .range-slider {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+  }
+
+  .export-options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .quality-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .quality-val-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  /* Cross Links */
+  .overlay-cross-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .overlay-cross-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .overlay-main-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .primary-actions-row {
+      grid-template-columns: 1fr;
+    }
+
+    .action-btn-copy {
+      width: 100%;
+    }
+  }
+</style>

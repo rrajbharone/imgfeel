@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Ritagliare Immagine Liberamente - Ritaglio Foto Gratis Online",
+  "freeformCrop.meta.description": "Ritaglia immagini liberamente con riquadro interattivo, 8 maniglie di ridimensionamento, dimensioni personalizzate, proporzioni bloccabili, rotazione ed export HD. 100% privato.",
+  "freeformCrop.hero.title": "Ritagliare Immagine Liberamente",
+  "freeformCrop.hero.subtitle": "Ritaglia, ruota, rifletti e inquadra liberamente qualsiasi foto su dimensioni personalizzate o proporzioni standard con precisione millimetrica.",
+
+  "freeformCrop.preview.title": "Area di Ritaglio Interattiva",
+  "freeformCrop.panel.title": "Controlli e Impostazioni",
+
+  "freeformCrop.empty.title": "Nessuna Immagine Caricata",
+  "freeformCrop.empty.subtitle": "Carica un'immagine dal pannello di destra o prova con un'immagine demo per testare il ritaglio libero.",
+  "freeformCrop.empty.loadDemo": "Carica Immagine Demo",
+
+  "freeformCrop.dropzone.title": "Trascina qui la tua immagine o clicca per selezionare",
+  "freeformCrop.dropzone.subtitle": "Ritaglia, ruota, rifletti e inquadra foto su dimensioni personalizzate o proporzioni standard",
+  "freeformCrop.dropzone.browse": "Seleziona Immagine",
+  "freeformCrop.dropzone.sample": "Prova Immagine Demo",
+  "freeformCrop.dropzone.formats": "Supporta JPG, PNG, WebP, AVIF, BMP • Incolla con Ctrl+V",
+  "freeformCrop.privacy.badge": "100% Privacy nel Browser — Nessun Caricamento su Server",
+  "freeformCrop.action.changeImage": "Cambia Immagine",
+
+  "freeformCrop.upload.dropText": "Trascina qui un'immagine o clicca (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Nessun file",
+
+  "freeformCrop.section.upload": "1. Immagine di Origine",
+  "freeformCrop.section.ratios": "2. Proporzioni d'Aspetto",
+  "freeformCrop.section.dimensions": "3. Dimensioni di Ritaglio (px)",
+  "freeformCrop.section.transform": "4. Orientamento e Riflesso",
+  "freeformCrop.section.export": "5. Formato e Qualità di Esportazione",
+
+  "freeformCrop.ratio.free": "Libero",
+  "freeformCrop.ratio.original": "Originale",
+  "freeformCrop.dim.width": "Larghezza",
+  "freeformCrop.dim.height": "Altezza",
+
+  "freeformCrop.transform.rotateLeft": "Ruota -90°",
+  "freeformCrop.transform.rotateRight": "Ruota +90°",
+  "freeformCrop.transform.flipH": "Rifletti Orizzontale",
+  "freeformCrop.transform.flipV": "Rifletti Verticale",
+
+  "freeformCrop.export.format": "Formato Immagine",
+  "freeformCrop.export.quality": "Qualità di Esportazione",
+
+  "freeformCrop.metrics.original": "Dimensione Originale",
+  "freeformCrop.metrics.cropped": "Area Ritagliata",
+  "freeformCrop.metrics.ratio": "Proporzione",
+
+  "freeformCrop.action.download": "Scarica Immagine Ritagliata",
+  "freeformCrop.action.copyImage": "Copia negli Appunti",
+  "freeformCrop.action.copied": "Immagine Copiata negli Appunti!",
+  "freeformCrop.action.maximize": "Seleziona Tutto",
+  "freeformCrop.action.clear": "Cancella Tutto",
+  "freeformCrop.action.reset": "Ripristina",
+  "freeformCrop.download.filename": "imgfeel-ritaglio",
+
+  "freeformCrop.cross.circle": "Ritaglio Circolare",
+  "freeformCrop.cross.square": "Ridimensiona a 1:1",
+  "freeformCrop.cross.mosaic": "Creatore Mosaico",
+  "freeformCrop.cross.overlay": "Sovrapporre Immagini",
+  "freeformCrop.cross.stitch": "Unire Immagini",
+
+  "freeformCrop.feat.freeTitle": "Ritaglio Libero senza Vincoli",
+  "freeformCrop.feat.freeDesc": "Trascina qualsiasi maniglia agli angoli o sui bordi per ritagliare rettangoli su misura senza proporzioni imposte.",
+  "freeformCrop.feat.gridTitle": "Griglia Regola dei Terzi",
+  "freeformCrop.feat.gridDesc": "Linee guida integrate per comporre inquadrature fotografiche equilibrate e professionali.",
+  "freeformCrop.feat.transformTitle": "Strumenti di Rotazione e Riflesso",
+  "freeformCrop.feat.transformDesc": "Ruota a passi di 90° e rifletti orizzontalmente o verticalmente prima del ritaglio per correggere l'angolo.",
+  "freeformCrop.feat.privacyTitle": "100% Privacy nel Browser",
+  "freeformCrop.feat.privacyDesc": "Le tue foto restano sul tuo dispositivo. Tutte le elaborazioni avvengono localmente con HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "Cos'è il Ritaglio Libero di Immagini e perché è Utile?",
+  "freeformCrop.content.p1a": "Il ritaglio libero consente di ritagliare e reinquadrare una foto secondo dimensioni personalizzate senza dover rispettare vincoli geometrici predefiniti come 1:1 o 16:9. Offre la massima libertà per isolare soggetti, rimuovere sfondi indesiderati o creare banner su misura.",
+  "freeformCrop.content.p1b": "Lo strumento ImgFeel include 8 maniglie interattive, lettura in tempo reale dei pixel ed esportazione ad alta definizione senza compressioni distruttive.",
+
+  "freeformCrop.content.h2": "Proporzioni Fisse vs. Ritaglio Libero",
+  "freeformCrop.content.p2a": "Le proporzioni fisse sono perfette per i formati standard richiesti da social come Instagram o YouTube.",
+  "freeformCrop.content.p2b": "Il ritaglio libero è insostituibile per banner web personalizzati, panorami orizzontali o ritagli precisi di prodotti per e-commerce.",
+
+  "freeformCrop.content.h3": "Tecniche di Composizione: La Regola dei Terzi",
+  "freeformCrop.content.p3a": "La griglia 3×3 guida il posizionamento degli elementi salienti lungo le intersezioni dove l'occhio umano si concentra naturalmente.",
+  "freeformCrop.content.p3b": "Allinea l'orizzonte o il soggetto principale alle guide per rendere i tuoi scatti più armoniosi e dinamici.",
+
+  "freeformCrop.content.h4": "Preservazione della Nitidezza e Qualità dei Pixel",
+  "freeformCrop.content.p4a": "ImgFeel ritaglia direttamente dai dati dei pixel originali senza degradare la qualità visiva.",
+  "freeformCrop.content.p4b": "Esporta in PNG lossless, moderno WebP o classico JPG con regolazione della qualità e supporto per la trasparenza.",
+
+  "freeformCrop.content.h5": "Casi d'Uso Frequenti per il Ritaglio",
+  "freeformCrop.content.p5a": "Ottimo per pulire scansioni di documenti, rifinire scatti per negozi online ed estrarre dettagli nitidi da foto ad altissima risoluzione.",
+  "freeformCrop.content.p5b": "Combina la rotazione e il riflesso per raddrizzare foto scattate con inclinazioni errate prima del salvataggio.",
+
+  "freeformCrop.content.h6": "Come Ritagliare un'Immagine in 4 Semplici Passaggi",
+  "freeformCrop.content.step1Title": "Carica la Foto",
+  "freeformCrop.content.step1Desc": "Trascina un file PNG, JPG o WebP nell'area di caricamento.",
+  "freeformCrop.content.step2Title": "Regola il Riquadro",
+  "freeformCrop.content.step2Desc": "Trascina le 8 maniglie per definire l'area da ritagliare.",
+  "freeformCrop.content.step3Title": "Ruota o Imposta le Proporzioni",
+  "freeformCrop.content.step3Desc": "Ruota l'immagine o blocca una proporzione specifica se desiderato.",
+  "freeformCrop.content.step4Title": "Scarica o Copia",
+  "freeformCrop.content.step4Desc": "Seleziona il formato e clicca su Scarica Immagine o Copia negli Appunti.",
+
+  "freeformCrop.faq.heading": "Domande Frequenti sul Ritaglio Libero di Immagini",
+  "freeformCrop.faq.q1": "Qual è la differenza tra ritaglio libero e proporzionale?",
+  "freeformCrop.faq.a1": "Il ritaglio libero permette di modificare larghezza e altezza in modo autonomo, mentre il ritaglio proporzionale mantiene un rapporto fisso.",
+  "freeformCrop.faq.q2": "Le mie immagini vengono inviate a un server?",
+  "freeformCrop.faq.a2": "No. Tutte le operazioni vengono eseguite al 100% in locale nel browser tramite HTML5 Canvas.",
+  "freeformCrop.faq.q3": "Il ritaglio riduce la qualità o la nitidezza della foto?",
+  "freeformCrop.faq.a3": "No. I pixel vengono estratti direttamente dall'immagine originale preservando la risoluzione nativa.",
+  "freeformCrop.faq.q4": "Posso ritagliare immagini trasparenti PNG e WebP?",
+  "freeformCrop.faq.a4": "Sì, la trasparenza del canale alpha viene mantenuta intatta.",
+  "freeformCrop.faq.q5": "Come funziona su smartphone e tablet?",
+  "freeformCrop.faq.a5": "ImgFeel è completamente touch-friendly e consente di trascinare le maniglie comodamente con le dita.",
+  "freeformCrop.faq.q6": "Posso ruotare o riflettere la foto prima di ritagliarla?",
+  "freeformCrop.faq.a6": "Sì, sono disponibili pulsanti per la rotazione a 90° e il riflesso speculare.",
+  "freeformCrop.faq.q7": "Lo strumento è gratuito e senza limiti?",
+  "freeformCrop.faq.a7": "Sì, è gratuito al 100% senza limiti di utilizzo o filigrane."
+}

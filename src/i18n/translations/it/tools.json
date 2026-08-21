@@ -48,8 +48,20 @@
   "tools.imageBlur.description": "Sfoca foto, crea sfondi bokeh eleganti e censura dati sensibili con sfocatura gaussiana, bagliore morbido e 100% di privacy.",
   "tools.imageStitcher.title": "Unire Immagini (Combinare & Affiancare Foto Online)",
   "tools.imageStitcher.description": "Unisci più foto in una sola immagine in orizzontale, verticale o in griglia con spaziatura personalizzata e 100% di privacy nel browser.",
+  "tools.screenshotBeautifier.title": "Abbellire Screenshot (Creare Mockup Online)",
+  "tools.screenshotBeautifier.description": "Trasforma screenshot semplici in grafiche d'impatto per social media e presentazioni con gradienti, cornici macOS, ombre 3D e il 100% di privacy nel browser.",
+  "tools.imagePlaceholder.title": "Generatore Immagini Placeholder (Immagini Dummy Online)",
+  "tools.imagePlaceholder.description": "Crea immagini segnaposto e mockup wireframe per web design, sviluppo software e prototipi con dimensioni su misura, esportazione SVG e il 100% di privacy nel browser.",
+  "tools.imageOverlay.title": "Strumento per Sovrapporre Immagini (Mettere Foto su Foto Online)",
+  "tools.imageOverlay.description": "Sovrapponi un'immagine su un'altra con posizionamento interattivo, regolazione dell'opacità, metodi di fusione, rotazione e il 100% di privacy nel browser.",
+  "tools.imageMosaic.title": "Creatore Mosaico Foto (Generatore Mosaici Immagini Online)",
+  "tools.imageMosaic.description": "Trasforma le tue fotografie in mosaici ad alta definizione, collage simmetrici a griglia e motivi geometrici con il 100% di privacy nel browser.",
+  "tools.freeformCrop.title": "Ritagliare Immagine Liberamente (Ritaglio Foto Online)",
+  "tools.freeformCrop.description": "Ritaglia immagini liberamente con riquadro interattivo, 8 maniglie di ridimensionamento, dimensioni personalizzate, proporzioni bloccabili, rotazione e 100% di privacy.",
   "tools.videoTrimmer.title": "Taglierina Video Online",
   "tools.videoTrimmer.description": "Taglia, accorcia e ritaglia clip video online con controlli precisi sulla timeline visiva, gestione audio e privacy 100% nel browser.",
   "tools.videoRotator.title": "Ruotatore Video Online",
-  "tools.videoRotator.description": "Ruota, gira e capovolgi video (90°, 180°, 270°) online con anteprima interattiva e totale privacy nel browser."
+  "tools.videoRotator.description": "Ruota, gira e capovolgi video (90°, 180°, 270°) online con anteprima interattiva e totale privacy nel browser.",
+  "tools.noiseReducer.title": "Riduzione Rumore Immagine (Rimuovi Rumore & Grana Online)",
+  "tools.noiseReducer.description": "Riduci il rumore dell'immagine e rimuovi la grana fotografica online gratis. Elimina le macchie di colore con scarsa luminosità, il rumore ISO elevato e 100% privacy."
 }

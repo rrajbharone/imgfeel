@@ -27,6 +27,12 @@ import enGrayscaleConverter from './translations/en/grayscale-converter.json';
 import enImageInverter from './translations/en/image-inverter.json';
 import enImageBlur from './translations/en/image-blur.json';
 import enImageStitcher from './translations/en/image-stitcher.json';
+import enScreenshotBeautifier from './translations/en/screenshot-beautifier.json';
+import enPlaceholderGenerator from './translations/en/image-placeholder-generator.json';
+import enImageOverlay from './translations/en/image-overlay-tool.json';
+import enImageMosaic from './translations/en/image-mosaic-generator.json';
+import enFreeformCrop from './translations/en/freeform-image-cropper.json';
+import enNoiseReducer from './translations/en/image-noise-reducer.json';
 import enVidTrim from './translations/en/video-trimmer.json';
 import enVidRotate from './translations/en/video-rotator.json';
 
@@ -55,6 +61,12 @@ import esGrayscaleConverter from './translations/es/grayscale-converter.json';
 import esImageInverter from './translations/es/image-inverter.json';
 import esImageBlur from './translations/es/image-blur.json';
 import esImageStitcher from './translations/es/image-stitcher.json';
+import esScreenshotBeautifier from './translations/es/screenshot-beautifier.json';
+import esPlaceholderGenerator from './translations/es/image-placeholder-generator.json';
+import esImageOverlay from './translations/es/image-overlay-tool.json';
+import esImageMosaic from './translations/es/image-mosaic-generator.json';
+import esFreeformCrop from './translations/es/freeform-image-cropper.json';
+import esNoiseReducer from './translations/es/image-noise-reducer.json';
 import esVidTrim from './translations/es/video-trimmer.json';
 import esVidRotate from './translations/es/video-rotator.json';
 
@@ -83,6 +95,12 @@ import ptGrayscaleConverter from './translations/pt/grayscale-converter.json';
 import ptImageInverter from './translations/pt/image-inverter.json';
 import ptImageBlur from './translations/pt/image-blur.json';
 import ptImageStitcher from './translations/pt/image-stitcher.json';
+import ptScreenshotBeautifier from './translations/pt/screenshot-beautifier.json';
+import ptPlaceholderGenerator from './translations/pt/image-placeholder-generator.json';
+import ptImageOverlay from './translations/pt/image-overlay-tool.json';
+import ptImageMosaic from './translations/pt/image-mosaic-generator.json';
+import ptFreeformCrop from './translations/pt/freeform-image-cropper.json';
+import ptNoiseReducer from './translations/pt/image-noise-reducer.json';
 import ptVidTrim from './translations/pt/video-trimmer.json';
 import ptVidRotate from './translations/pt/video-rotator.json';
 
@@ -111,6 +129,12 @@ import frGrayscaleConverter from './translations/fr/grayscale-converter.json';
 import frImageInverter from './translations/fr/image-inverter.json';
 import frImageBlur from './translations/fr/image-blur.json';
 import frImageStitcher from './translations/fr/image-stitcher.json';
+import frScreenshotBeautifier from './translations/fr/screenshot-beautifier.json';
+import frPlaceholderGenerator from './translations/fr/image-placeholder-generator.json';
+import frImageOverlay from './translations/fr/image-overlay-tool.json';
+import frImageMosaic from './translations/fr/image-mosaic-generator.json';
+import frFreeformCrop from './translations/fr/freeform-image-cropper.json';
+import frNoiseReducer from './translations/fr/image-noise-reducer.json';
 import frVidTrim from './translations/fr/video-trimmer.json';
 import frVidRotate from './translations/fr/video-rotator.json';
 
@@ -139,6 +163,12 @@ import deGrayscaleConverter from './translations/de/grayscale-converter.json';
 import deImageInverter from './translations/de/image-inverter.json';
 import deImageBlur from './translations/de/image-blur.json';
 import deImageStitcher from './translations/de/image-stitcher.json';
+import deScreenshotBeautifier from './translations/de/screenshot-beautifier.json';
+import dePlaceholderGenerator from './translations/de/image-placeholder-generator.json';
+import deImageOverlay from './translations/de/image-overlay-tool.json';
+import deImageMosaic from './translations/de/image-mosaic-generator.json';
+import deFreeformCrop from './translations/de/freeform-image-cropper.json';
+import deNoiseReducer from './translations/de/image-noise-reducer.json';
 import deVidTrim from './translations/de/video-trimmer.json';
 import deVidRotate from './translations/de/video-rotator.json';
 
@@ -167,6 +197,12 @@ import idGrayscaleConverter from './translations/id/grayscale-converter.json';
 import idImageInverter from './translations/id/image-inverter.json';
 import idImageBlur from './translations/id/image-blur.json';
 import idImageStitcher from './translations/id/image-stitcher.json';
+import idScreenshotBeautifier from './translations/id/screenshot-beautifier.json';
+import idPlaceholderGenerator from './translations/id/image-placeholder-generator.json';
+import idImageOverlay from './translations/id/image-overlay-tool.json';
+import idImageMosaic from './translations/id/image-mosaic-generator.json';
+import idFreeformCrop from './translations/id/freeform-image-cropper.json';
+import idNoiseReducer from './translations/id/image-noise-reducer.json';
 import idVidTrim from './translations/id/video-trimmer.json';
 import idVidRotate from './translations/id/video-rotator.json';
 
@@ -195,6 +231,12 @@ import trGrayscaleConverter from './translations/tr/grayscale-converter.json';
 import trImageInverter from './translations/tr/image-inverter.json';
 import trImageBlur from './translations/tr/image-blur.json';
 import trImageStitcher from './translations/tr/image-stitcher.json';
+import trScreenshotBeautifier from './translations/tr/screenshot-beautifier.json';
+import trPlaceholderGenerator from './translations/tr/image-placeholder-generator.json';
+import trImageOverlay from './translations/tr/image-overlay-tool.json';
+import trImageMosaic from './translations/tr/image-mosaic-generator.json';
+import trFreeformCrop from './translations/tr/freeform-image-cropper.json';
+import trNoiseReducer from './translations/tr/image-noise-reducer.json';
 import trVidTrim from './translations/tr/video-trimmer.json';
 import trVidRotate from './translations/tr/video-rotator.json';
 
@@ -223,6 +265,12 @@ import itGrayscaleConverter from './translations/it/grayscale-converter.json';
 import itImageInverter from './translations/it/image-inverter.json';
 import itImageBlur from './translations/it/image-blur.json';
 import itImageStitcher from './translations/it/image-stitcher.json';
+import itScreenshotBeautifier from './translations/it/screenshot-beautifier.json';
+import itPlaceholderGenerator from './translations/it/image-placeholder-generator.json';
+import itImageOverlay from './translations/it/image-overlay-tool.json';
+import itImageMosaic from './translations/it/image-mosaic-generator.json';
+import itFreeformCrop from './translations/it/freeform-image-cropper.json';
+import itNoiseReducer from './translations/it/image-noise-reducer.json';
 import itVidTrim from './translations/it/video-trimmer.json';
 import itVidRotate from './translations/it/video-rotator.json';
 
@@ -230,14 +278,14 @@ type TranslationMap = Record<string, string>;
 
 /** All translations indexed by locale, with all namespaces merged into a flat map */
 const translations: Record<Locale, TranslationMap> = {
-  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enVidTrim, ...enVidRotate },
-  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esVidTrim, ...esVidRotate },
-  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptVidTrim, ...ptVidRotate },
-  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frVidTrim, ...frVidRotate },
-  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deVidTrim, ...deVidRotate },
-  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idVidTrim, ...idVidRotate },
-  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trVidTrim, ...trVidRotate },
-  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itVidTrim, ...itVidRotate },
+  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enVidTrim, ...enVidRotate },
+  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esVidTrim, ...esVidRotate },
+  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptVidTrim, ...ptVidRotate },
+  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frVidTrim, ...frVidRotate },
+  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deVidTrim, ...deVidRotate },
+  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idVidTrim, ...idVidRotate },
+  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trVidTrim, ...trVidRotate },
+  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itVidTrim, ...itVidRotate },
 };
 
 /**

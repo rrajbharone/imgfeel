@@ -47,6 +47,18 @@ import ImageBlur from '@/components/ImageBlur.astro';
 import ImageBlurContent from '@/components/ImageBlurContent.astro';
 import ImageStitcher from '@/components/ImageStitcher.astro';
 import ImageStitcherContent from '@/components/ImageStitcherContent.astro';
+import ScreenshotBeautifier from '@/components/ScreenshotBeautifier.astro';
+import ScreenshotBeautifierContent from '@/components/ScreenshotBeautifierContent.astro';
+import ImagePlaceholderGenerator from '@/components/ImagePlaceholderGenerator.astro';
+import ImagePlaceholderContent from '@/components/ImagePlaceholderContent.astro';
+import ImageOverlayTool from '@/components/ImageOverlayTool.astro';
+import ImageOverlayContent from '@/components/ImageOverlayContent.astro';
+import ImageMosaicTool from '@/components/ImageMosaicTool.astro';
+import ImageMosaicContent from '@/components/ImageMosaicContent.astro';
+import FreeformCropTool from '@/components/FreeformCropTool.astro';
+import FreeformCropContent from '@/components/FreeformCropContent.astro';
+import ImageNoiseReducer from '@/components/ImageNoiseReducer.astro';
+import ImageNoiseReducerContent from '@/components/ImageNoiseReducerContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -92,6 +104,12 @@ const isGrayscale = toolId === 'image-grayscale-converter';
 const isInverter = toolId === 'image-inverter';
 const isBlur = toolId === 'image-blur-tool';
 const isStitch = toolId === 'image-stitcher';
+const isBeautify = toolId === 'screenshot-beautifier';
+const isPlaceholder = toolId === 'image-placeholder-generator';
+const isOverlay = toolId === 'image-overlay-tool';
+const isMosaic = toolId === 'image-mosaic-generator';
+const isFreeformCrop = toolId === 'freeform-image-cropper';
+const isNoiseReducer = toolId === 'image-noise-reducer';
 const isVidTrim = toolId === 'video-trimmer';
 const isVidRotate = toolId === 'video-rotator';
 
@@ -137,9 +155,21 @@ const metaTitle = isExact
                                         ? t(locale, 'blur.meta.title')
                                         : isStitch
                                           ? t(locale, 'stitch.meta.title')
-                                          : isVidTrim
-                                            ? t(locale, 'vidtrim.meta.title')
-                                            : t(locale, 'vidrot.meta.title');
+                                          : isBeautify
+                                            ? t(locale, 'beautify.meta.title')
+                                            : isPlaceholder
+                                              ? t(locale, 'placeholder.meta.title')
+                                              : isOverlay
+                                                ? t(locale, 'overlay.meta.title')
+                                                : isMosaic
+                                                  ? t(locale, 'mosaic.meta.title')
+                                                   : isFreeformCrop
+                                                     ? t(locale, 'freeformCrop.meta.title')
+                                                     : isNoiseReducer
+                                                       ? t(locale, 'noiseReducer.meta.title')
+                                                       : isVidTrim
+                                                         ? t(locale, 'vidtrim.meta.title')
+                                                         : t(locale, 'vidrot.meta.title');
 
 const metaDesc = isExact
   ? t(locale, 'exactresizer.meta.description')
@@ -183,9 +213,21 @@ const metaDesc = isExact
                                         ? t(locale, 'blur.meta.description')
                                         : isStitch
                                           ? t(locale, 'stitch.meta.description')
-                                          : isVidTrim
-                                            ? t(locale, 'vidtrim.meta.description')
-                                            : t(locale, 'vidrot.meta.description');
+                                          : isBeautify
+                                            ? t(locale, 'beautify.meta.description')
+                                            : isPlaceholder
+                                              ? t(locale, 'placeholder.meta.description')
+                                              : isOverlay
+                                                ? t(locale, 'overlay.meta.description')
+                                                : isMosaic
+                                                  ? t(locale, 'mosaic.meta.description')
+                                                  : isFreeformCrop
+                                                    ? t(locale, 'freeformCrop.meta.description')
+                                                    : isNoiseReducer
+                                                      ? t(locale, 'noiseReducer.meta.description')
+                                                      : isVidTrim
+                                                        ? t(locale, 'vidtrim.meta.description')
+                                                        : t(locale, 'vidrot.meta.description');
 
 const heroTitle = isExact
   ? t(locale, 'exactresizer.hero.title')
@@ -229,9 +271,21 @@ const heroTitle = isExact
                                         ? t(locale, 'blur.hero.title')
                                         : isStitch
                                           ? t(locale, 'stitch.hero.title')
-                                          : isVidTrim
-                                            ? t(locale, 'vidtrim.hero.title')
-                                            : t(locale, 'vidrot.hero.title');
+                                          : isBeautify
+                                            ? t(locale, 'beautify.hero.title')
+                                            : isPlaceholder
+                                              ? t(locale, 'placeholder.hero.title')
+                                              : isOverlay
+                                                ? t(locale, 'overlay.hero.title')
+                                                : isMosaic
+                                                  ? t(locale, 'mosaic.hero.title')
+                                                  : isFreeformCrop
+                                                    ? t(locale, 'freeformCrop.hero.title')
+                                                    : isNoiseReducer
+                                                      ? t(locale, 'noiseReducer.hero.title')
+                                                      : isVidTrim
+                                                        ? t(locale, 'vidtrim.hero.title')
+                                                        : t(locale, 'vidrot.hero.title');
 
 const heroSubtitle = isExact
   ? t(locale, 'exactresizer.hero.subtitle')
@@ -275,9 +329,21 @@ const heroSubtitle = isExact
                                         ? t(locale, 'blur.hero.subtitle')
                                         : isStitch
                                           ? t(locale, 'stitch.hero.subtitle')
-                                          : isVidTrim
-                                            ? t(locale, 'vidtrim.hero.subtitle')
-                                            : t(locale, 'vidrot.hero.subtitle');
+                                          : isBeautify
+                                            ? t(locale, 'beautify.hero.subtitle')
+                                            : isPlaceholder
+                                              ? t(locale, 'placeholder.hero.subtitle')
+                                              : isOverlay
+                                                ? t(locale, 'overlay.hero.subtitle')
+                                                : isMosaic
+                                                  ? t(locale, 'mosaic.hero.subtitle')
+                                                  : isFreeformCrop
+                                                    ? t(locale, 'freeformCrop.hero.subtitle')
+                                                    : isNoiseReducer
+                                                      ? t(locale, 'noiseReducer.hero.subtitle')
+                                                      : isVidTrim
+                                                        ? t(locale, 'vidtrim.hero.subtitle')
+                                                        : t(locale, 'vidrot.hero.subtitle');
 ---
 
 <MainLayout
@@ -333,6 +399,12 @@ const heroSubtitle = isExact
       {isInverter && <ImageInverter locale={locale} />}
       {isBlur && <ImageBlur locale={locale} />}
       {isStitch && <ImageStitcher locale={locale} />}
+      {isBeautify && <ScreenshotBeautifier locale={locale} />}
+      {isPlaceholder && <ImagePlaceholderGenerator locale={locale} />}
+      {isOverlay && <ImageOverlayTool locale={locale} />}
+      {isMosaic && <ImageMosaicTool locale={locale} />}
+      {isFreeformCrop && <FreeformCropTool locale={locale} />}
+      {isNoiseReducer && <ImageNoiseReducer locale={locale} />}
       {isVidTrim && <VideoTrimmer locale={locale} />}
       {isVidRotate && <VideoRotator locale={locale} />}
     </div>
@@ -359,6 +431,12 @@ const heroSubtitle = isExact
   {isInverter && <ImageInverterContent locale={locale} />}
   {isBlur && <ImageBlurContent locale={locale} />}
   {isStitch && <ImageStitcherContent locale={locale} />}
+  {isBeautify && <ScreenshotBeautifierContent locale={locale} />}
+  {isPlaceholder && <ImagePlaceholderContent locale={locale} />}
+  {isOverlay && <ImageOverlayContent locale={locale} />}
+  {isMosaic && <ImageMosaicContent locale={locale} />}
+  {isFreeformCrop && <FreeformCropContent locale={locale} />}
+  {isNoiseReducer && <ImageNoiseReducerContent locale={locale} />}
   {isVidTrim && <VideoTrimmerContent locale={locale} />}
   {isVidRotate && <VideoRotatorContent locale={locale} />}
 </MainLayout>

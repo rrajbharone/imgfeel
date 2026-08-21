@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Recadrer une Image Librement - Recadrage Photo Gratuit en Ligne",
+  "freeformCrop.meta.description": "Recadrez librement vos images avec boîte interactive, 8 poignées d'ajustement, dimensions sur mesure, verrouillage de ratio, rotation et export haute résolution. 100% privé.",
+  "freeformCrop.hero.title": "Recadrer une Image Librement",
+  "freeformCrop.hero.subtitle": "Recadrez, faites pivoter, retournez et cadrez librement n'importe quelle photo avec des dimensions personnalisées ou des ratios standard.",
+
+  "freeformCrop.preview.title": "Zone Interactive de Recadrage",
+  "freeformCrop.panel.title": "Contrôles et Réglages de Recadrage",
+
+  "freeformCrop.empty.title": "Aucune Image Chargée",
+  "freeformCrop.empty.subtitle": "Importez une image depuis le panneau de droite ou chargez une photo de démonstration.",
+  "freeformCrop.empty.loadDemo": "Charger une Photo Démo",
+
+  "freeformCrop.dropzone.title": "Glissez-déposez votre image ici ou cliquez pour parcourir",
+  "freeformCrop.dropzone.subtitle": "Recadrez, faites pivoter, retournez et cadrez vos photos avec des dimensions sur mesure ou des ratios standard",
+  "freeformCrop.dropzone.browse": "Sélectionner une Image",
+  "freeformCrop.dropzone.sample": "Essayer l'Image Démo",
+  "freeformCrop.dropzone.formats": "Prend en charge JPG, PNG, WebP, AVIF, BMP • Coller avec Ctrl+V",
+  "freeformCrop.privacy.badge": "100% de Confidentialité Navigateur — Zéro Envoi Serveur",
+  "freeformCrop.action.changeImage": "Changer d'Image",
+
+  "freeformCrop.upload.dropText": "Cliquez ou glissez une image ici (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Aucun fichier",
+
+  "freeformCrop.section.upload": "1. Image Source",
+  "freeformCrop.section.ratios": "2. Ratios d'Aspect Prédéfinis",
+  "freeformCrop.section.dimensions": "3. Dimensions de Recadrage (px)",
+  "freeformCrop.section.transform": "4. Orientation et Miroir",
+  "freeformCrop.section.export": "5. Format et Qualité d'Export",
+
+  "freeformCrop.ratio.free": "Libre",
+  "freeformCrop.ratio.original": "Original",
+  "freeformCrop.dim.width": "Largeur",
+  "freeformCrop.dim.height": "Hauteur",
+
+  "freeformCrop.transform.rotateLeft": "Pivoter -90°",
+  "freeformCrop.transform.rotateRight": "Pivoter +90°",
+  "freeformCrop.transform.flipH": "Miroir Horizontal",
+  "freeformCrop.transform.flipV": "Miroir Vertical",
+
+  "freeformCrop.export.format": "Format d'Image",
+  "freeformCrop.export.quality": "Qualité d'Export",
+
+  "freeformCrop.metrics.original": "Taille d'Origine",
+  "freeformCrop.metrics.cropped": "Zone Recadrée",
+  "freeformCrop.metrics.ratio": "Ratio",
+
+  "freeformCrop.action.download": "Télécharger l'Image Recadrée",
+  "freeformCrop.action.copyImage": "Copier dans le Presse-papiers",
+  "freeformCrop.action.copied": "Image Copiée dans le Presse-papiers !",
+  "freeformCrop.action.maximize": "Sélectionner Toute l'Image",
+  "freeformCrop.action.clear": "Tout Effacer",
+  "freeformCrop.action.reset": "Réinitialiser",
+  "freeformCrop.download.filename": "imgfeel-recadrage",
+
+  "freeformCrop.cross.circle": "Recadrage Circulaire",
+  "freeformCrop.cross.square": "Redimensionner en 1:1",
+  "freeformCrop.cross.mosaic": "Générateur de Mosaïque",
+  "freeformCrop.cross.overlay": "Superposer des Images",
+  "freeformCrop.cross.stitch": "Assembler des Images",
+
+  "freeformCrop.feat.freeTitle": "Recadrage Libre sans Contraintes",
+  "freeformCrop.feat.freeDesc": "Déplacez n'importe quelle poignée pour découper un rectangle sur mesure sans ratio imposé.",
+  "freeformCrop.feat.gridTitle": "Grille de la Règle des Tiers",
+  "freeformCrop.feat.gridDesc": "Guide visuel pour composer des cadrages harmonieux et professionnels.",
+  "freeformCrop.feat.transformTitle": "Rotation et Effet Miroir",
+  "freeformCrop.feat.transformDesc": "Pivotez par pas de 90° et retournez horizontalement ou verticalement avant de recadrer.",
+  "freeformCrop.feat.privacyTitle": "100% de Confidentialité Navigateur",
+  "freeformCrop.feat.privacyDesc": "Vos photos restent sur votre appareil. Les calculs sont effectués en local avec HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "Qu'est-ce que le Recadrage Libre et Quels sont ses Avantages ?",
+  "freeformCrop.content.p1a": "Le recadrage libre permet d'ajuster et de redéfinir le cadre d'une image selon des dimensions entièrement personnalisées, sans dépendre de proportions rigides comme 1:1 ou 16:9. Cela offre une liberté totale pour isoler un sujet ou supprimer des éléments indésirables.",
+  "freeformCrop.content.p1b": "L'outil ImgFeel met à votre disposition 8 poignées interactives, un affichage précis des dimensions en temps réel et un export haute résolution sans altération de netteté.",
+
+  "freeformCrop.content.h2": "Ratios Fixes vs. Recadrage Libre",
+  "freeformCrop.content.p2a": "Les ratios fixes conviennent parfaitement aux formats standards des réseaux sociaux comme Instagram ou YouTube.",
+  "freeformCrop.content.p2b": "Le recadrage libre est idéal pour concevoir des bannières personnalisées, des panoramas ou des visuels produits ajustés sur mesure.",
+
+  "freeformCrop.content.h3": "Composition : Appliquer la Règle des Tiers",
+  "freeformCrop.content.p3a": "La grille intégrée divise l'image en 9 sections afin d'aligner les points focaux sur les intersections clés.",
+  "freeformCrop.content.p3b": "Positionnez l'horizon ou votre sujet principal le long des repères pour dynamiser vos compositions photographiques.",
+
+  "freeformCrop.content.h4": "Maintien de la Résolution et Qualité des Pixels",
+  "freeformCrop.content.p4a": "ImgFeel effectue le recadrage directement sur la matrice de pixels d'origine sans sous-échantillonnage intermédiaire.",
+  "freeformCrop.content.p4b": "Exportez en PNG sans perte, WebP optimisé ou JPG avec réglage de compression et gestion de la transparence.",
+
+  "freeformCrop.content.h5": "Exemples d'Utilisation Fréquents",
+  "freeformCrop.content.p5a": "Idéal pour éliminer les bords de numérisation, ajuster des visuels e-commerce et extraire des détails nets de photos haute définition.",
+  "freeformCrop.content.p5b": "Combinez la rotation et le miroir pour corriger l'orientation de vos photos avant le recadrage final.",
+
+  "freeformCrop.content.h6": "Comment Recadrer une Image en 4 Étapes Faciles",
+  "freeformCrop.content.step1Title": "Importez votre Photo",
+  "freeformCrop.content.step1Desc": "Glissez-déposez une photo PNG, JPG ou WebP dans la zone de dépôt.",
+  "freeformCrop.content.step2Title": "Ajustez le Cadre",
+  "freeformCrop.content.step2Desc": "Déplacez les poignées des coins et des bords pour redimensionner le cadre.",
+  "freeformCrop.content.step3Title": "Pivotez ou Verrouillez le Ratio",
+  "freeformCrop.content.step3Desc": "Ajustez l'orientation ou choisissez un ratio prédéfini si nécessaire.",
+  "freeformCrop.content.step4Title": "Téléchargez le Résultat",
+  "freeformCrop.content.step4Desc": "Sélectionnez le format et cliquez sur Télécharger ou Copier dans le Presse-papiers.",
+
+  "freeformCrop.faq.heading": "Questions Fréquentes sur le Recadrage Libre",
+  "freeformCrop.faq.q1": "Quelle est la différence entre recadrage libre et ratio fixe ?",
+  "freeformCrop.faq.a1": "Le recadrage libre vous permet de modifier largeur et hauteur séparément, tandis que le ratio fixe conserve une proportion géométrique constante.",
+  "freeformCrop.faq.q2": "Mes photos sont-elles transférées sur un serveur ?",
+  "freeformCrop.faq.a2": "Non. Toutes les opérations s'exécutent localement dans votre navigateur grâce à HTML5 Canvas.",
+  "freeformCrop.faq.q3": "Le recadrage dégrade-t-il la netteté de l'image ?",
+  "freeformCrop.faq.a3": "Non. Les pixels sont extraits directement de l'image originale avec leur résolution native.",
+  "freeformCrop.faq.q4": "Puis-je recadrer des images transparentes PNG ou WebP ?",
+  "freeformCrop.faq.a4": "Oui, la transparence alpha est intégralement conservée.",
+  "freeformCrop.faq.q5": "Comment utiliser l'outil sur smartphone ou tablette ?",
+  "freeformCrop.faq.a5": "ImgFeel est 100% tactile et permet de manipuler les poignées facilement au doigt.",
+  "freeformCrop.faq.q6": "Puis-je pivoter ma photo avant de la recadrer ?",
+  "freeformCrop.faq.a6": "Oui, vous disposez de boutons de rotation par 90° et d'effet miroir.",
+  "freeformCrop.faq.q7": "L'outil est-il gratuit et illimité ?",
+  "freeformCrop.faq.a7": "Oui, l'outil est 100% gratuit, sans filigrane ni inscription requise."
+}

@@ -48,8 +48,20 @@
   "tools.imageBlur.description": "Floutez des photos, créez des arrière-plans bokeh élégants et masquez des données sensibles avec le flou gaussien et 100% de confidentialité.",
   "tools.imageStitcher.title": "Fusionner des Images (Assembler & Combiner des Photos)",
   "tools.imageStitcher.description": "Assemblez plusieurs photos en une seule image horizontalement, verticalement ou en grille avec espacement personnalisé et 100% de confidentialité locale.",
+  "tools.screenshotBeautifier.title": "Embellisseur de Captures d'Écran (Créateur de Mockups)",
+  "tools.screenshotBeautifier.description": "Transformez des captures d'écran brutes en visuels percutants pour les réseaux sociaux et présentations avec dégradés, cadres macOS et 100% de confidentialité locale.",
+  "tools.imagePlaceholder.title": "Générateur d'Images Placeholder (Images Fictives en Ligne)",
+  "tools.imagePlaceholder.description": "Créez des images de remplacement et maquettes wireframe pour le web et les applications avec dimensions sur mesure, export SVG et 100% de confidentialité locale.",
+  "tools.imageOverlay.title": "Outil pour Superposer des Images (Ajouter une Photo sur une Autre)",
+  "tools.imageOverlay.description": "Superposez une image sur une autre avec positionnement interactif, réglage de l'opacité, modes de fusion, rotation et 100% de confidentialité locale.",
+  "tools.imageMosaic.title": "Générateur de Mosaïque Photo (Créer des Mosaïques d'Images en Ligne)",
+  "tools.imageMosaic.description": "Transformez vos clichés en mosaïques haute définition, grilles symétriques et motifs géométriques avec 100% de confidentialité locale.",
+  "tools.freeformCrop.title": "Recadrer une Image Librement (Recadrage Photo en Ligne)",
+  "tools.freeformCrop.description": "Recadrez librement vos images avec boîte interactive, 8 poignées d'ajustement, dimensions sur mesure, verrouillage de ratio, rotation et 100% de confidentialité.",
   "tools.videoTrimmer.title": "Coupeur de Vidéo en Ligne",
   "tools.videoTrimmer.description": "Coupez, élaguez et raccourcissez vos vidéos en ligne avec une frise chronologique interactive, gestion du son et confidentialité 100% dans le navigateur.",
   "tools.videoRotator.title": "Outil de Rotation Vidéo",
-  "tools.videoRotator.description": "Pivotez, tournez et inversez vos vidéos (90°, 180°, 270°) en ligne avec prévisualisation en direct et confidentialité 100% dans le navigateur."
+  "tools.videoRotator.description": "Pivotez, tournez et inversez vos vidéos (90°, 180°, 270°) en ligne avec prévisualisation en direct et confidentialité 100% dans le navigateur.",
+  "tools.noiseReducer.title": "Réducteur de Bruit d'Image (Supprimer le Bruit & le Grain en Ligne)",
+  "tools.noiseReducer.description": "Réduisez le bruit et supprimez le grain de vos photos en ligne gratuitement. Éliminez le bruit ISO élevé et les taches de couleur avec prévisualisation en direct et 100% de confidentialité."
 }

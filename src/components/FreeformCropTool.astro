@@ -1,0 +1,1556 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const circleCropUrl = getToolUrl('circle-image-cropper', locale);
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+const overlayUrl = getToolUrl('image-overlay-tool', locale);
+const mosaicUrl = getToolUrl('image-mosaic-generator', locale);
+const stitchUrl = getToolUrl('image-stitcher', locale);
+
+const i18nDict = {
+  copySuccess: t(locale, 'freeformCrop.action.copied'),
+  downloadName: t(locale, 'freeformCrop.download.filename'),
+};
+---
+
+<div class="crop-tool-wrapper" id="cropApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Initial Empty State (Visible by default) -->
+  <div class="crop-dropzone-card" id="cropDropzoneCard">
+    <div class="crop-dropzone-content">
+      <div class="crop-icon-circle">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+          <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+        </svg>
+      </div>
+
+      <h2 class="crop-drop-title">{t(locale, 'freeformCrop.dropzone.title')}</h2>
+      <p class="crop-drop-subtitle">{t(locale, 'freeformCrop.dropzone.subtitle')}</p>
+
+      <div class="crop-btn-row">
+        <label class="btn btn-primary crop-btn-primary" for="cropMainFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'freeformCrop.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="cropMainFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary crop-sample-btn" id="cropSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>{t(locale, 'freeformCrop.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="crop-formats-hint">{t(locale, 'freeformCrop.dropzone.formats')}</p>
+
+      <div class="crop-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'freeformCrop.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Crop Workspace (Hidden initially until image is loaded) -->
+  <div class="crop-workspace-container" id="cropWorkspaceContainer" style="display: none;">
+    <!-- Header Bar -->
+    <div class="crop-workspace-header">
+      <div class="crop-meta-badge">
+        <span class="crop-status-dot"></span>
+        <span id="cropFileName" class="crop-filename-label">image.png</span>
+        <span class="crop-meta-tag" id="cropOriginalDimsTag">0 × 0 px</span>
+        <span class="crop-meta-tag" id="cropOriginalSizeTag">0 KB</span>
+      </div>
+
+      <div class="crop-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="cropChangeImageBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'freeformCrop.action.changeImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Grid: Left is Viewport, Right is Controls -->
+    <div class="crop-main-grid">
+      <!-- Left Column: Canvas & Interactive Cropper Viewport -->
+      <div class="preview-column">
+        <div class="preview-card">
+          <!-- Viewport Header -->
+          <div class="viewport-header">
+            <div class="header-left">
+              <span class="viewport-label">{t(locale, 'freeformCrop.preview.title')}</span>
+            </div>
+            <div class="header-right">
+              <span class="viewport-tag" id="cropRatioBadge">{t(locale, 'freeformCrop.ratio.free')}</span>
+              <span class="viewport-tag highlight" id="cropDimsBadge">0 × 0 px</span>
+            </div>
+          </div>
+
+          <!-- Interactive Crop Viewport -->
+          <div class="crop-stage-container" id="cropStageContainer">
+            <div class="stage-scroller" id="stageScroller">
+              <div class="image-stage-wrap" id="imageStageWrap">
+                <!-- Base display canvas -->
+                <canvas id="displayCanvas" class="display-canvas"></canvas>
+
+                <!-- Scrim dark backdrop overlay -->
+                <div class="crop-scrim" id="cropScrim"></div>
+
+                <!-- Draggable & Resizable Bounding Box -->
+                <div class="crop-box" id="cropBox">
+                  <!-- Rule-of-Thirds Grid Lines -->
+                  <div class="grid-line grid-line-h1"></div>
+                  <div class="grid-line grid-line-h2"></div>
+                  <div class="grid-line grid-line-v1"></div>
+                  <div class="grid-line grid-line-v2"></div>
+
+                  <!-- 8 Interactive Resize Handles -->
+                  <div class="crop-handle handle-nw" data-handle="nw"></div>
+                  <div class="crop-handle handle-n" data-handle="n"></div>
+                  <div class="crop-handle handle-ne" data-handle="ne"></div>
+                  <div class="crop-handle handle-e" data-handle="e"></div>
+                  <div class="crop-handle handle-se" data-handle="se"></div>
+                  <div class="crop-handle handle-s" data-handle="s"></div>
+                  <div class="crop-handle handle-sw" data-handle="sw"></div>
+                  <div class="crop-handle handle-w" data-handle="w"></div>
+
+                  <!-- Center Move Grabber Area -->
+                  <div class="crop-move-overlay" id="cropMoveOverlay" data-handle="move"></div>
+
+                  <!-- Dimension Badge inside crop box -->
+                  <div class="crop-box-badge" id="cropBoxBadge">0 × 0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div class="preview-metrics-row">
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'freeformCrop.metrics.original')}</span>
+              <strong id="metricOrigDims">-- × -- px</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'freeformCrop.metrics.cropped')}</span>
+              <strong id="metricCropDims">-- × -- px</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'freeformCrop.metrics.ratio')}</span>
+              <strong id="metricRatio">{t(locale, 'freeformCrop.ratio.free')}</strong>
+            </div>
+          </div>
+
+          <!-- Action Buttons Group -->
+          <div class="action-buttons-group">
+            <div class="primary-actions-row">
+              <button type="button" class="btn btn-primary action-btn-main" id="cropDownloadBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>{t(locale, 'freeformCrop.action.download')}</span>
+              </button>
+
+              <button type="button" class="btn btn-secondary action-btn-copy" id="cropCopyBtn" title="Copy Image to Clipboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyBtnText">{t(locale, 'freeformCrop.action.copyImage')}</span>
+              </button>
+            </div>
+
+            <div class="secondary-actions-row">
+              <button type="button" class="btn-snippet" id="cropMaximizeBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+                <span>{t(locale, 'freeformCrop.action.maximize')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="cropResetBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <span>{t(locale, 'freeformCrop.action.reset')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="cropClearBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>{t(locale, 'freeformCrop.action.clear')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Settings and Controls -->
+      <div class="controls-column">
+        <div class="controls-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">{t(locale, 'freeformCrop.panel.title')}</h2>
+          </div>
+
+          <!-- Section 1: Aspect Ratio Presets -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'freeformCrop.section.ratios')}</label>
+            </div>
+
+            <div class="aspect-presets-grid" id="aspectPresetsGrid">
+              <button type="button" class="preset-chip active" data-ratio="free">
+                <span>{t(locale, 'freeformCrop.ratio.free')}</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="original">
+                <span>{t(locale, 'freeformCrop.ratio.original')}</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="1:1">
+                <span>1:1 Square</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="4:3">
+                <span>4:3 Standard</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="16:9">
+                <span>16:9 Cinema</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="9:16">
+                <span>9:16 Story</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="3:2">
+                <span>3:2 Photo</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="2:3">
+                <span>2:3 Portrait</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="5:4">
+                <span>5:4 Classic</span>
+              </button>
+              <button type="button" class="preset-chip" data-ratio="21:9">
+                <span>21:9 Ultrawide</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Section 2: Manual Pixel Dimensions -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'freeformCrop.section.dimensions')}</label>
+            </div>
+
+            <div class="dims-inputs-grid">
+              <div class="input-field">
+                <label for="inputCropWidth" class="field-sublabel">{t(locale, 'freeformCrop.dim.width')}</label>
+                <div class="input-with-unit">
+                  <input type="number" id="inputCropWidth" min="10" class="numeric-input" placeholder="W" />
+                  <span class="unit-tag">px</span>
+                </div>
+              </div>
+
+              <div class="input-field">
+                <label for="inputCropHeight" class="field-sublabel">{t(locale, 'freeformCrop.dim.height')}</label>
+                <div class="input-with-unit">
+                  <input type="number" id="inputCropHeight" min="10" class="numeric-input" placeholder="H" />
+                  <span class="unit-tag">px</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Orientation & Flip -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'freeformCrop.section.transform')}</label>
+            </div>
+
+            <div class="transform-buttons-grid">
+              <button type="button" class="btn-snippet" id="btnRotateLeft" title="Rotate 90° Left">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38l-5.67-5.67"></path>
+                </svg>
+                <span>{t(locale, 'freeformCrop.transform.rotateLeft')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="btnRotateRight" title="Rotate 90° Right">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+                <span>{t(locale, 'freeformCrop.transform.rotateRight')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="btnFlipH" title="Flip Horizontal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="2" x2="12" y2="22"></line>
+                  <polygon points="17 19 22 12 17 5 17 19"></polygon>
+                  <polygon points="7 19 2 12 7 5 7 19"></polygon>
+                </svg>
+                <span>{t(locale, 'freeformCrop.transform.flipH')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="btnFlipV" title="Flip Vertical">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <polygon points="19 17 12 22 5 17 19 17"></polygon>
+                  <polygon points="19 7 12 2 5 7 19 7"></polygon>
+                </svg>
+                <span>{t(locale, 'freeformCrop.transform.flipV')}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Section 4: Export Format & Quality -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'freeformCrop.section.export')}</label>
+            </div>
+
+            <div class="export-options-grid">
+              <div class="input-field">
+                <label for="exportFormatSelect" class="field-sublabel">{t(locale, 'freeformCrop.export.format')}</label>
+                <select id="exportFormatSelect" class="form-select">
+                  <option value="image/png">PNG (Lossless & Alpha)</option>
+                  <option value="image/webp" selected>WebP (Optimized)</option>
+                  <option value="image/jpeg">JPG / JPEG (Standard)</option>
+                </select>
+              </div>
+
+              <div class="input-field" id="qualityControlGroup">
+                <div class="quality-label-row">
+                  <label for="exportQualitySlider" class="field-sublabel">{t(locale, 'freeformCrop.export.quality')}</label>
+                  <span class="quality-val-badge" id="qualityValBadge">92%</span>
+                </div>
+                <input type="range" id="exportQualitySlider" min="10" max="100" value="92" class="range-slider" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Navigation to Related Tools (Bottom) -->
+  <div class="crop-cross-links-row">
+    <a href={circleCropUrl} class="btn btn-secondary crop-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9"></circle>
+      </svg>
+      <span>{t(locale, 'freeformCrop.cross.circle')}</span>
+    </a>
+
+    <a href={squareUrl} class="btn btn-secondary crop-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+      </svg>
+      <span>{t(locale, 'freeformCrop.cross.square')}</span>
+    </a>
+
+    <a href={mosaicUrl} class="btn btn-secondary crop-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+      </svg>
+      <span>{t(locale, 'freeformCrop.cross.mosaic')}</span>
+    </a>
+
+    <a href={overlayUrl} class="btn btn-secondary crop-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>{t(locale, 'freeformCrop.cross.overlay')}</span>
+    </a>
+
+    <a href={stitchUrl} class="btn btn-secondary crop-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="8" height="18" rx="1"></rect>
+        <rect x="13" y="3" width="8" height="18" rx="1"></rect>
+        <path d="M11 8h2M11 12h2M11 16h2"></path>
+      </svg>
+      <span>{t(locale, 'freeformCrop.cross.stitch')}</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  import {
+    createInitialCropBox,
+    updateCropBoxFromDrag,
+    getNumericAspectRatio,
+    generateCroppedCanvas,
+    exportCroppedImage,
+    copyCroppedImageToClipboard,
+    loadImageFile,
+    generateSampleDemoImage,
+    type AspectRatioPreset,
+    type HandleType,
+    type CropBox,
+    type Bounds,
+    type TransformState,
+    type LoadedImageInfo,
+    type ExportFormat,
+  } from '@/scripts/crop-engine';
+
+  function initCropApp() {
+    const app = document.getElementById('cropApp');
+    if (!app) return;
+
+    let i18n = {
+      copySuccess: 'Image Copied to Clipboard!',
+      downloadName: 'imgfeel-cropped',
+    };
+
+    try {
+      const dataAttr = app.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // State
+    let loadedImage: LoadedImageInfo | null = null;
+    let selectedRatioPreset: AspectRatioPreset = 'free';
+    let transform: TransformState = { rotation: 0, flipH: false, flipV: false, zoom: 1 };
+    let cropBox: CropBox = { x: 0, y: 0, width: 0, height: 0 };
+    let displayedBounds: Bounds = { x: 0, y: 0, width: 0, height: 0 };
+    let exportFormat: ExportFormat = 'image/png';
+    let exportQuality = 0.92;
+
+    // Interaction dragging state
+    let isDragging = false;
+    let activeHandle: HandleType = null;
+    let startPointerPos = { x: 0, y: 0 };
+    let startCropBox: CropBox = { x: 0, y: 0, width: 0, height: 0 };
+
+    // DOM Elements
+    const dropzoneCard = document.getElementById('cropDropzoneCard');
+    const workspaceContainer = document.getElementById('cropWorkspaceContainer');
+    const mainFileInput = document.getElementById('cropMainFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('cropSampleBtn');
+    const changeImageBtn = document.getElementById('cropChangeImageBtn');
+
+    const fileNameEl = document.getElementById('cropFileName');
+    const origDimsTag = document.getElementById('cropOriginalDimsTag');
+    const origSizeTag = document.getElementById('cropOriginalSizeTag');
+
+    const displayCanvas = document.getElementById('displayCanvas') as HTMLCanvasElement;
+    const cropBoxEl = document.getElementById('cropBox');
+    const cropBoxBadge = document.getElementById('cropBoxBadge');
+    const cropDimsBadge = document.getElementById('cropDimsBadge');
+    const cropRatioBadge = document.getElementById('cropRatioBadge');
+    const imageStageWrap = document.getElementById('imageStageWrap');
+
+    const metricOrigDims = document.getElementById('metricOrigDims');
+    const metricCropDims = document.getElementById('metricCropDims');
+    const metricRatio = document.getElementById('metricRatio');
+
+    const inputWidth = document.getElementById('inputCropWidth') as HTMLInputElement;
+    const inputHeight = document.getElementById('inputCropHeight') as HTMLInputElement;
+    const downloadBtn = document.getElementById('cropDownloadBtn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('cropCopyBtn') as HTMLButtonElement;
+    const copyBtnText = document.getElementById('copyBtnText');
+    const maximizeBtn = document.getElementById('cropMaximizeBtn');
+    const resetBtn = document.getElementById('cropResetBtn');
+    const clearBtn = document.getElementById('cropClearBtn');
+
+    const btnRotateLeft = document.getElementById('btnRotateLeft');
+    const btnRotateRight = document.getElementById('btnRotateRight');
+    const btnFlipH = document.getElementById('btnFlipH');
+    const btnFlipV = document.getElementById('btnFlipV');
+
+    const exportFormatSelect = document.getElementById('exportFormatSelect') as HTMLSelectElement;
+    const exportQualitySlider = document.getElementById('exportQualitySlider') as HTMLInputElement;
+    const qualityValBadge = document.getElementById('qualityValBadge');
+    const qualityControlGroup = document.getElementById('qualityControlGroup');
+    const aspectPresetsGrid = document.getElementById('aspectPresetsGrid');
+
+    function formatBytes(bytes: number): string {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function showWorkspace() {
+      if (dropzoneCard) dropzoneCard.style.display = 'none';
+      if (workspaceContainer) workspaceContainer.style.display = 'block';
+    }
+
+    function showDropzone() {
+      if (dropzoneCard) dropzoneCard.style.display = 'block';
+      if (workspaceContainer) workspaceContainer.style.display = 'none';
+      loadedImage = null;
+      if (mainFileInput) mainFileInput.value = '';
+    }
+
+    // Process loaded image info
+    function handleLoadedImage(info: LoadedImageInfo) {
+      loadedImage = info;
+      transform = { rotation: 0, flipH: false, flipV: false, zoom: 1 };
+      selectedRatioPreset = 'free';
+
+      if (fileNameEl) fileNameEl.textContent = info.name;
+      if (origDimsTag) origDimsTag.textContent = `${info.originalWidth} × ${info.originalHeight} px`;
+      if (origSizeTag) origSizeTag.textContent = formatBytes(info.fileSize);
+
+      if (metricOrigDims) metricOrigDims.textContent = `${info.originalWidth} × ${info.originalHeight} px`;
+
+      // Update active ratio preset button
+      if (aspectPresetsGrid) {
+        aspectPresetsGrid.querySelectorAll('.preset-chip').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-ratio') === 'free');
+        });
+      }
+
+      showWorkspace();
+      renderStage();
+      resetCropBoxToFit();
+    }
+
+    // Render image to display canvas based on stage dimensions & rotation
+    function renderStage() {
+      if (!loadedImage || !displayCanvas || !imageStageWrap) return;
+
+      const container = document.getElementById('cropStageContainer');
+      const maxW = container ? Math.max(280, container.clientWidth - 32) : 600;
+      const maxH = 500;
+
+      const isRotated = transform.rotation === 90 || transform.rotation === 270;
+      const effWidth = isRotated ? loadedImage.originalHeight : loadedImage.originalWidth;
+      const effHeight = isRotated ? loadedImage.originalWidth : loadedImage.originalHeight;
+
+      const scale = Math.min(maxW / effWidth, maxH / effHeight, 1);
+      const stageW = Math.round(effWidth * scale);
+      const stageH = Math.round(effHeight * scale);
+
+      displayCanvas.width = stageW;
+      displayCanvas.height = stageH;
+
+      imageStageWrap.style.width = `${stageW}px`;
+      imageStageWrap.style.height = `${stageH}px`;
+
+      displayedBounds = { x: 0, y: 0, width: stageW, height: stageH };
+
+      const ctx = displayCanvas.getContext('2d');
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, stageW, stageH);
+      ctx.save();
+
+      ctx.translate(stageW / 2, stageH / 2);
+      ctx.rotate((transform.rotation * Math.PI) / 180);
+      ctx.scale(transform.flipH ? -1 : 1, transform.flipV ? -1 : 1);
+
+      const drawW = isRotated ? stageH : stageW;
+      const drawH = isRotated ? stageW : stageH;
+      ctx.drawImage(loadedImage.img, -drawW / 2, -drawH / 2, drawW, drawH);
+
+      ctx.restore();
+    }
+
+    function resetCropBoxToFit() {
+      if (!loadedImage) return;
+      const targetRatio = getNumericAspectRatio(selectedRatioPreset, displayedBounds.width, displayedBounds.height);
+      cropBox = createInitialCropBox(displayedBounds, targetRatio, 0.85);
+      applyCropBoxToDOM();
+    }
+
+    function applyCropBoxToDOM() {
+      if (!cropBoxEl || !loadedImage) return;
+
+      cropBoxEl.style.transform = `translate3d(${cropBox.x}px, ${cropBox.y}px, 0)`;
+      cropBoxEl.style.width = `${cropBox.width}px`;
+      cropBoxEl.style.height = `${cropBox.height}px`;
+
+      const nativeCrop = getNativeCropDimensions();
+      const dimsStr = `${nativeCrop.width} × ${nativeCrop.height} px`;
+
+      if (cropBoxBadge) cropBoxBadge.textContent = `${nativeCrop.width} × ${nativeCrop.height}`;
+      if (cropDimsBadge) cropDimsBadge.textContent = dimsStr;
+      if (metricCropDims) metricCropDims.textContent = dimsStr;
+
+      if (inputWidth && document.activeElement !== inputWidth) {
+        inputWidth.value = String(nativeCrop.width);
+      }
+      if (inputHeight && document.activeElement !== inputHeight) {
+        inputHeight.value = String(nativeCrop.height);
+      }
+    }
+
+    function getNativeCropDimensions(): { width: number; height: number } {
+      if (!loadedImage || displayedBounds.width === 0) return { width: 0, height: 0 };
+      const isRotated = transform.rotation === 90 || transform.rotation === 270;
+      const effW = isRotated ? loadedImage.originalHeight : loadedImage.originalWidth;
+      const effH = isRotated ? loadedImage.originalWidth : loadedImage.originalHeight;
+
+      const scaleX = effW / displayedBounds.width;
+      const scaleY = effH / displayedBounds.height;
+
+      return {
+        width: Math.round(cropBox.width * scaleX),
+        height: Math.round(cropBox.height * scaleY),
+      };
+    }
+
+    // Dragging & Resizing Pointer handlers
+    function onPointerDown(e: PointerEvent) {
+      const target = e.target as HTMLElement;
+      const handle = target.getAttribute('data-handle') as HandleType;
+      if (!handle) return;
+
+      isDragging = true;
+      activeHandle = handle;
+      startPointerPos = { x: e.clientX, y: e.clientY };
+      startCropBox = { ...cropBox };
+
+      target.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!isDragging || !activeHandle) return;
+
+      const dx = e.clientX - startPointerPos.x;
+      const dy = e.clientY - startPointerPos.y;
+      const ratio = getNumericAspectRatio(selectedRatioPreset, displayedBounds.width, displayedBounds.height);
+
+      cropBox = updateCropBoxFromDrag(startCropBox, activeHandle, dx, dy, displayedBounds, ratio);
+      applyCropBoxToDOM();
+    }
+
+    function onPointerUp(e: PointerEvent) {
+      if (!isDragging) return;
+      isDragging = false;
+      activeHandle = null;
+      try {
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
+    }
+
+    // File loading
+    if (mainFileInput) {
+      mainFileInput.addEventListener('change', async () => {
+        const file = mainFileInput.files?.[0];
+        if (!file) return;
+        try {
+          const info = await loadImageFile(file);
+          handleLoadedImage(info);
+        } catch (err) {
+          console.error(err);
+          alert('Failed to load image. Please try another file.');
+        }
+      });
+    }
+
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        try {
+          const info = await generateSampleDemoImage();
+          handleLoadedImage(info);
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    if (changeImageBtn) {
+      changeImageBtn.addEventListener('click', () => {
+        showDropzone();
+      });
+    }
+
+    // Drop on dropzone
+    if (dropzoneCard) {
+      dropzoneCard.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('button, label, a, input')) return;
+        if (mainFileInput) mainFileInput.click();
+      });
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropzoneCard.addEventListener(evt, e => {
+          e.preventDefault();
+          dropzoneCard.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropzoneCard.addEventListener(evt, e => {
+          e.preventDefault();
+          dropzoneCard.classList.remove('drag-over');
+        });
+      });
+
+      dropzoneCard.addEventListener('drop', async (e: DragEvent) => {
+        const file = e.dataTransfer?.files?.[0];
+        if (!file) return;
+        try {
+          const info = await loadImageFile(file);
+          handleLoadedImage(info);
+        } catch (err) {
+          console.error(err);
+          alert('Failed to load image.');
+        }
+      });
+    }
+
+    // Global Paste Support
+    document.addEventListener('paste', async (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const file = items[i].getAsFile();
+          if (file) {
+            try {
+              const info = await loadImageFile(file);
+              handleLoadedImage(info);
+            } catch (err) {
+              console.error(err);
+            }
+          }
+          break;
+        }
+      }
+    });
+
+    // Pointer events on crop box and handles
+    if (cropBoxEl) {
+      cropBoxEl.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+    }
+
+    // Aspect Ratio Presets Click
+    if (aspectPresetsGrid) {
+      aspectPresetsGrid.addEventListener('click', e => {
+        const target = (e.target as HTMLElement).closest('.preset-chip') as HTMLButtonElement;
+        if (!target) return;
+
+        const ratio = target.getAttribute('data-ratio') as AspectRatioPreset;
+        if (!ratio) return;
+
+        selectedRatioPreset = ratio;
+        aspectPresetsGrid.querySelectorAll('.preset-chip').forEach(btn => btn.classList.remove('active'));
+        target.classList.add('active');
+
+        if (cropRatioBadge) cropRatioBadge.textContent = target.textContent?.trim() || ratio;
+        if (metricRatio) metricRatio.textContent = target.textContent?.trim() || ratio;
+
+        resetCropBoxToFit();
+      });
+    }
+
+    // Manual Dimensions Input
+    function handleManualDimensionChange() {
+      if (!loadedImage || displayedBounds.width === 0) return;
+      const isRotated = transform.rotation === 90 || transform.rotation === 270;
+      const effW = isRotated ? loadedImage.originalHeight : loadedImage.originalWidth;
+      const effH = isRotated ? loadedImage.originalWidth : loadedImage.originalHeight;
+
+      const scaleX = effW / displayedBounds.width;
+      const scaleY = effH / displayedBounds.height;
+
+      const targetW = Math.max(10, Math.min(effW, parseInt(inputWidth.value, 10) || cropBox.width));
+      const targetH = Math.max(10, Math.min(effH, parseInt(inputHeight.value, 10) || cropBox.height));
+
+      const boxW = Math.min(displayedBounds.width, targetW / scaleX);
+      const boxH = Math.min(displayedBounds.height, targetH / scaleY);
+
+      cropBox.width = boxW;
+      cropBox.height = boxH;
+      cropBox.x = Math.max(0, Math.min(displayedBounds.width - boxW, cropBox.x));
+      cropBox.y = Math.max(0, Math.min(displayedBounds.height - boxH, cropBox.y));
+
+      applyCropBoxToDOM();
+    }
+
+    if (inputWidth) inputWidth.addEventListener('input', handleManualDimensionChange);
+    if (inputHeight) inputHeight.addEventListener('input', handleManualDimensionChange);
+
+    // Transformations
+    if (btnRotateLeft) {
+      btnRotateLeft.addEventListener('click', () => {
+        transform.rotation = (transform.rotation - 90 + 360) % 360;
+        renderStage();
+        resetCropBoxToFit();
+      });
+    }
+
+    if (btnRotateRight) {
+      btnRotateRight.addEventListener('click', () => {
+        transform.rotation = (transform.rotation + 90) % 360;
+        renderStage();
+        resetCropBoxToFit();
+      });
+    }
+
+    if (btnFlipH) {
+      btnFlipH.addEventListener('click', () => {
+        transform.flipH = !transform.flipH;
+        renderStage();
+      });
+    }
+
+    if (btnFlipV) {
+      btnFlipV.addEventListener('click', () => {
+        transform.flipV = !transform.flipV;
+        renderStage();
+      });
+    }
+
+    // Action Buttons
+    if (maximizeBtn) {
+      maximizeBtn.addEventListener('click', () => {
+        selectedRatioPreset = 'free';
+        if (aspectPresetsGrid) {
+          aspectPresetsGrid.querySelectorAll('.preset-chip').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-ratio') === 'free');
+          });
+        }
+        cropBox = { x: 0, y: 0, width: displayedBounds.width, height: displayedBounds.height };
+        applyCropBoxToDOM();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        transform = { rotation: 0, flipH: false, flipV: false, zoom: 1 };
+        selectedRatioPreset = 'free';
+        if (aspectPresetsGrid) {
+          aspectPresetsGrid.querySelectorAll('.preset-chip').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-ratio') === 'free');
+          });
+        }
+        renderStage();
+        resetCropBoxToFit();
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        showDropzone();
+      });
+    }
+
+    // Export Format & Quality slider
+    if (exportFormatSelect) {
+      exportFormatSelect.addEventListener('change', () => {
+        exportFormat = exportFormatSelect.value as ExportFormat;
+        if (qualityControlGroup) {
+          qualityControlGroup.style.display = exportFormat === 'image/png' ? 'none' : 'block';
+        }
+      });
+    }
+
+    if (exportQualitySlider && qualityValBadge) {
+      exportQualitySlider.addEventListener('input', () => {
+        const val = parseInt(exportQualitySlider.value, 10);
+        exportQuality = val / 100;
+        qualityValBadge.textContent = `${val}%`;
+      });
+    }
+
+    // Download Cropped Result
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        if (!loadedImage) return;
+        const croppedCanvas = generateCroppedCanvas(loadedImage.img, cropBox, displayedBounds, transform);
+        const baseName = loadedImage.name.replace(/\.[^/.]+$/, '') || i18n.downloadName;
+        exportCroppedImage(croppedCanvas, exportFormat, exportQuality, baseName);
+      });
+    }
+
+    // Copy to Clipboard
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        if (!loadedImage) return;
+        const croppedCanvas = generateCroppedCanvas(loadedImage.img, cropBox, displayedBounds, transform);
+        const success = await copyCroppedImageToClipboard(croppedCanvas);
+        if (success && copyBtnText) {
+          const orig = copyBtnText.textContent;
+          copyBtnText.textContent = i18n.copySuccess;
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyBtnText.textContent = orig;
+            copyBtn.classList.remove('copied');
+          }, 2200);
+        }
+      });
+    }
+
+    // Window resize
+    window.addEventListener('resize', () => {
+      if (loadedImage && workspaceContainer && workspaceContainer.style.display !== 'none') {
+        renderStage();
+        resetCropBoxToFit();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCropApp);
+  } else {
+    initCropApp();
+  }
+</script>
+
+<style>
+  .crop-tool-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ----------------------------------------
+     Dropzone Initial Card
+  ---------------------------------------- */
+  .crop-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .crop-dropzone-card.drag-over {
+    border-color: var(--color-primary);
+    background: var(--color-surface-subtle);
+    transform: scale(1.005);
+  }
+
+  .crop-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .crop-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .crop-drop-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+  }
+
+  .crop-drop-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .crop-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .crop-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .crop-sample-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+  }
+
+  .crop-formats-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+    margin-bottom: var(--space-4);
+  }
+
+  .crop-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* ----------------------------------------
+     Workspace Layout
+  ---------------------------------------- */
+  .crop-workspace-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .crop-workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .crop-meta-badge {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .crop-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+  }
+
+  .crop-filename-label {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .crop-meta-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  .crop-main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--space-6);
+    align-items: start;
+    min-width: 0;
+  }
+
+  /* ----------------------------------------
+     Left Column: Preview & Stage
+  ---------------------------------------- */
+  .preview-column {
+    min-width: 0;
+  }
+
+  .preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .viewport-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+  }
+
+  .viewport-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .viewport-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .viewport-tag.highlight {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .crop-stage-container {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    background: var(--color-surface-subtle);
+    background-image: 
+      linear-gradient(45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--color-border-light) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--color-border-light) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: var(--space-4);
+  }
+
+  .stage-scroller {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .image-stage-wrap {
+    position: relative;
+    user-select: none;
+    touch-action: none;
+    box-shadow: var(--shadow-md);
+  }
+
+  .display-canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .crop-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+  }
+
+  /* Crop Bounding Box */
+  .crop-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+    cursor: move;
+    touch-action: none;
+    z-index: 10;
+  }
+
+  .crop-move-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    cursor: move;
+  }
+
+  /* Rule of Thirds Grid */
+  .grid-line {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+  }
+
+  .grid-line-h1 { top: 33.333%; left: 0; right: 0; height: 1px; }
+  .grid-line-h2 { top: 66.666%; left: 0; right: 0; height: 1px; }
+  .grid-line-v1 { left: 33.333%; top: 0; bottom: 0; width: 1px; }
+  .grid-line-v2 { left: 66.666%; top: 0; bottom: 0; width: 1px; }
+
+  /* Handles */
+  .crop-handle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #ffffff;
+    border: 2px solid var(--color-primary);
+    border-radius: 2px;
+    z-index: 20;
+    touch-action: none;
+  }
+
+  .handle-nw { top: -7px; left: -7px; cursor: nwse-resize; }
+  .handle-n  { top: -7px; left: calc(50% - 7px); cursor: ns-resize; }
+  .handle-ne { top: -7px; right: -7px; cursor: nesw-resize; }
+  .handle-e  { top: calc(50% - 7px); right: -7px; cursor: ew-resize; }
+  .handle-se { bottom: -7px; right: -7px; cursor: nwse-resize; }
+  .handle-s  { bottom: -7px; left: calc(50% - 7px); cursor: ns-resize; }
+  .handle-sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
+  .handle-w  { top: calc(50% - 7px); left: -7px; cursor: ew-resize; }
+
+  .crop-box-badge {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 30;
+  }
+
+  /* Metrics bar */
+  .preview-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-2);
+    border-right: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .metric-item:last-child {
+    border-right: none;
+  }
+
+  .metric-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 2px;
+  }
+
+  .metric-item strong {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  /* Action Buttons */
+  .action-buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-surface);
+  }
+
+  .primary-actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+  }
+
+  .action-btn-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .action-btn-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: 0.75rem 1rem;
+    min-width: 140px;
+  }
+
+  .action-btn-copy.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .secondary-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn-snippet {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-snippet:hover {
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* ----------------------------------------
+     Right Column: Settings & Cards
+  ---------------------------------------- */
+  .controls-column {
+    min-width: 0;
+  }
+
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .panel-header {
+    margin-bottom: var(--space-1);
+  }
+
+  .panel-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .control-section {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .section-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* Aspect Presets Grid */
+  .aspect-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+    gap: var(--space-2);
+  }
+
+  .preset-chip {
+    padding: 0.55rem 0.5rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition-fast);
+  }
+
+  .preset-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .preset-chip.active {
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  /* Inputs Grid */
+  .dims-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .field-sublabel {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .input-with-unit {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0 var(--space-2);
+  }
+
+  .numeric-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: var(--space-2) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: 600;
+    outline: none;
+  }
+
+  .unit-tag {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    padding-left: var(--space-1);
+  }
+
+  .transform-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+
+  .export-options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .form-select {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+  }
+
+  .quality-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .quality-val-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .range-slider {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  /* Cross Links */
+  .crop-cross-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .crop-cross-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .crop-main-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .primary-actions-row {
+      grid-template-columns: 1fr;
+    }
+
+    .action-btn-copy {
+      width: 100%;
+    }
+  }
+</style>

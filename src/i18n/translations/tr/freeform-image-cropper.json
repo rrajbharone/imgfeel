@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Serbest Resim Kırpma - Fotoğrafları Özgürce Kırpın (Sınırsız)",
+  "freeformCrop.meta.description": "Etkileşimli kırpma kutusu, 8 tutamaç, özel boyutlar, en boy oranı kilidi, döndürme ve yüksek çözünürlüklü dışa aktarma ile resimleri özgürce kırpın. %100 gizli.",
+  "freeformCrop.hero.title": "Serbest Resim Kırpma",
+  "freeformCrop.hero.subtitle": "Fotoğrafları piksel düzeyinde hassasiyetle döndürün, yansıtın ve özel boyutlarda veya standart oranlarda özgürce kırpın.",
+
+  "freeformCrop.preview.title": "Etkileşimli Kırpma Alanı",
+  "freeformCrop.panel.title": "Kırpma Ayarları & Araçlar",
+
+  "freeformCrop.empty.title": "Resim Yüklenmedi",
+  "freeformCrop.empty.subtitle": "Sağ panelden bir resim yükleyin veya serbest kırpmayı test etmek için örnek resmi kullanın.",
+  "freeformCrop.empty.loadDemo": "Örnek Resmi Yükle",
+
+  "freeformCrop.dropzone.title": "Resminizi buraya sürükleyip bırakın veya seçmek için tıklayın",
+  "freeformCrop.dropzone.subtitle": "Fotoğrafları özel boyutlara veya standart en boy oranlarına göre kırpın, döndürün ve çerçeveleyin",
+  "freeformCrop.dropzone.browse": "Resim Seç",
+  "freeformCrop.dropzone.sample": "Örnek Resmi Dene",
+  "freeformCrop.dropzone.formats": "JPG, PNG, WebP, AVIF, BMP desteklenir • Ctrl+V ile yapıştırın",
+  "freeformCrop.privacy.badge": "%100 Tarayıcı İçi Gizlilik — Sıfır Sunucu Yüklemesi",
+  "freeformCrop.action.changeImage": "Resmi Değiştir",
+
+  "freeformCrop.upload.dropText": "Resmi buraya bırakın veya tıklayın (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Dosya seçilmedi",
+
+  "freeformCrop.section.upload": "1. Kaynak Resim",
+  "freeformCrop.section.ratios": "2. En Boy Oranları",
+  "freeformCrop.section.dimensions": "3. Kırpma Boyutları (px)",
+  "freeformCrop.section.transform": "4. Döndürme & Yansıtma",
+  "freeformCrop.section.export": "5. Dışa Aktarma Formatı",
+
+  "freeformCrop.ratio.free": "Serbest",
+  "freeformCrop.ratio.original": "Orijinal",
+  "freeformCrop.dim.width": "Genişlik",
+  "freeformCrop.dim.height": "Yükseklik",
+
+  "freeformCrop.transform.rotateLeft": "-90° Döndür",
+  "freeformCrop.transform.rotateRight": "+90° Döndür",
+  "freeformCrop.transform.flipH": "Yatay Yansıt",
+  "freeformCrop.transform.flipV": "Dikey Yansıt",
+
+  "freeformCrop.export.format": "Resim Formatı",
+  "freeformCrop.export.quality": "Dışa Aktarma Kalitesi",
+
+  "freeformCrop.metrics.original": "Orijinal Boyut",
+  "freeformCrop.metrics.cropped": "Kırpılan Alan",
+  "freeformCrop.metrics.ratio": "En Boy Oranı",
+
+  "freeformCrop.action.download": "Kırpılan Resmi İndir",
+  "freeformCrop.action.copyImage": "Panoya Kopyala",
+  "freeformCrop.action.copied": "Resim Panoya Kopyalandı!",
+  "freeformCrop.action.maximize": "Tüm Resmi Seç",
+  "freeformCrop.action.clear": "Tümünü Temizle",
+  "freeformCrop.action.reset": "Sıfırla",
+  "freeformCrop.download.filename": "imgfeel-kirpma",
+
+  "freeformCrop.cross.circle": "Daire Kırpma",
+  "freeformCrop.cross.square": "1:1 Boyutlandırma",
+  "freeformCrop.cross.mosaic": "Mozaik Oluşturucu",
+  "freeformCrop.cross.overlay": "Resim Üst Üste Koyma",
+  "freeformCrop.cross.stitch": "Resim Birleştirme",
+
+  "freeformCrop.feat.freeTitle": "Sınırsız Serbest Kırpma",
+  "freeformCrop.feat.freeDesc": "Sabit oranlara bağlı kalmadan herhangi bir dikdörtgen alanı izole etmek için köşelerdeki 8 tutamacı sürükleyin.",
+  "freeformCrop.feat.gridTitle": "Üçler Kuralı Izgarası",
+  "freeformCrop.feat.gridDesc": "Dengeli ve profesyonel fotoğraf kompozisyonları oluşturmak için dahili kılavuz çizgileri.",
+  "freeformCrop.feat.transformTitle": "Döndürme ve Yansıtma Araçları",
+  "freeformCrop.feat.transformDesc": "Kırpmadan önce açıları düzeltmek için 90° adımlarla döndürün veya yatay/dikey yansıtın.",
+  "freeformCrop.feat.privacyTitle": "%100 Tarayıcı İçi Gizlilik",
+  "freeformCrop.feat.privacyDesc": "Fotoğraflarınız cihazınızda kalır. Tüm işlemler HTML5 Canvas ile yerel olarak işlenir.",
+
+  "freeformCrop.content.h1": "Serbest Resim Kırpma Nedir ve Neden Önemlidir?",
+  "freeformCrop.content.p1a": "Serbest resim kırpma, bir fotoğrafı 1:1 veya 16:9 gibi sabit en boy oranlarına bağlı kalmadan istenen özel boyutlarda kırpma işlemidir. Bu sayede dikkat dağıtıcı arka planları silebilir, özel banner'lar oluşturabilir veya ana objeyi tam istediğiniz gibi vurgulayabilirsiniz.",
+  "freeformCrop.content.p1b": "ImgFeel'in serbest kırpma aracı, 8 adet etkileşimli tutamaç, anlık piksel boyut göstergesi ve kayıpsız yüksek çözünürlüklü dışa aktarma özellikleriyle donatılmıştır.",
+
+  "freeformCrop.content.h2": "Sabit Oranlar vs. Serbest Kırpma",
+  "freeformCrop.content.p2a": "Sabit oranlar, Instagram veya YouTube gibi katı görsel standartları olan platformlar için idealdir.",
+  "freeformCrop.content.p2b": "Serbest kırpma ise özel web banner'ları, panoramik manzaralar veya e-ticaret ürün görselleri için vazgeçilmez bir esneklik sunar.",
+
+  "freeformCrop.content.h3": "Kompozisyon Teknikleri: Üçler Kuralını Kullanma",
+  "freeformCrop.content.p3a": "Kırpma alanı içindeki 3×3 ızgara çizgileri, fotoğrafın en çarpıcı öğelerini doğal odak noktalarına yerleştirmenize yardımcı olur.",
+  "freeformCrop.content.p3b": "Ufuk çizgisini veya ana konuyu kılavuz çizgilerine hizalayarak profesyonel kompozisyonlar elde edebilirsiniz.",
+
+  "freeformCrop.content.h4": "Piksel Keskinliği ve Kalite Korunumu",
+  "freeformCrop.content.p4a": "ImgFeel ile kırpma işlemi doğrudan orijinal piksel çözünürlüğü üzerinden hesaplanır, ara kalite kaybı yaşanmaz.",
+  "freeformCrop.content.p4b": "Kayıpsız PNG, modern WebP veya standart JPG formatlarında şeffaflık desteği ve kalite ayarı ile dışa aktarabilirsiniz.",
+
+  "freeformCrop.content.h5": "Yaygın Kullanım Alanları",
+  "freeformCrop.content.p5a": "Taranan belgelerdeki kenar boşluklarını temizlemek, ürün fotoğraflarını optimize etmek ve yüksek çözünürlüklü fotoğraflardan detay çıkarmak için idealdir.",
+  "freeformCrop.content.p5b": "Eğik çekilmiş fotoğrafları düzeltmek için döndürme ve yansıtma araçlarını serbest kırpma ile birlikte kullanabilirsiniz.",
+
+  "freeformCrop.content.h6": "4 Kolay Adımda Resimleri Serbest Kırpın",
+  "freeformCrop.content.step1Title": "Resminizi Yükleyin",
+  "freeformCrop.content.step1Desc": "PNG, JPG veya WebP resminizi yükleme alanına sürükleyin.",
+  "freeformCrop.content.step2Title": "Kırpma Kutusunu Ayarlayın",
+  "freeformCrop.content.step2Desc": "Köşe ve kenar tutamaçlarını sürükleyerek kırpma alanını belirleyin.",
+  "freeformCrop.content.step3Title": "Döndürün veya Oran Seçin",
+  "freeformCrop.content.step3Desc": "Gerekirse açıyı düzeltin veya hazır bir en boy oranı kilitleyin.",
+  "freeformCrop.content.step4Title": "İndirin veya Kopyalayın",
+  "freeformCrop.content.step4Desc": "Formatı seçip Kırpılan Resmi İndir veya Panoya Kopyala butonuna tıklayın.",
+
+  "freeformCrop.faq.heading": "Serbest Resim Kırpma Hakkında Sıkça Sorulan Sorular",
+  "freeformCrop.faq.q1": "Serbest kırpma ile sabit oranlı kırpma arasındaki fark nedir?",
+  "freeformCrop.faq.a1": "Serbest kırpma genişlik ve yüksekliği birbirinden bağımsız değiştirmenize imkan tanırken, sabit oranlı kırpma geometrik oranı kilitler.",
+  "freeformCrop.faq.q2": "Fotoğraflarım sunucuya yükleniyor mu?",
+  "freeformCrop.faq.a2": "Hayır. Tüm işlemler tarayıcınızda HTML5 Canvas kullanılarak yerel olarak gerçekleştirilir.",
+  "freeformCrop.faq.q3": "Kırpma işlemi fotoğrafın kalitesini düşürür mü?",
+  "freeformCrop.faq.a3": "Hayır. Pikseller doğrudan orijinal görselden tam netliğiyle kopyalanır.",
+  "freeformCrop.faq.q4": "Şeffaf PNG ve WebP resimleri kırpabilir miyim?",
+  "freeformCrop.faq.a4": "Evet, şeffaflık kanalı korunur.",
+  "freeformCrop.faq.q5": "Mobil cihazlarda nasıl kullanılır?",
+  "freeformCrop.faq.a5": "ImgFeel dokunmatik ekranları destekler; parmağınızla tutamaçları kolayca kaydırabilirsiniz.",
+  "freeformCrop.faq.q6": "Kırpmadan önce resmi döndürebilir miyim?",
+  "freeformCrop.faq.a6": "Evet, 90° döndürme ve aynalama araçları mevcuttur.",
+  "freeformCrop.faq.q7": "Bu araç ücretsiz ve sınırsız mı?",
+  "freeformCrop.faq.a7": "Evet, hiçbir ücret, kota veya filigran olmadan tamamen ücretsizdir."
+}

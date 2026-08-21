@@ -1,0 +1,74 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ImageNoiseReducer from '@/components/ImageNoiseReducer.astro';
+import ImageNoiseReducerContent from '@/components/ImageNoiseReducerContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+const locale = 'en';
+const toolUrl = getToolUrl('image-noise-reducer', locale);
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'noiseReducer.meta.title')}
+  description={t(locale, 'noiseReducer.meta.description')}
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Image Noise Reducer (Remove Photo Noise & Grain Online)",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: '/' },
+        { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
+        { label: t(locale, 'noiseReducer.hero.title') }
+      ]} />
+      
+      <div class="tool-header">
+        <h1 class="tool-title">{t(locale, 'noiseReducer.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'noiseReducer.hero.subtitle')}</p>
+      </div>
+
+      <ImageNoiseReducer locale={locale} />
+    </div>
+  </div>
+
+  <ImageNoiseReducerContent locale={locale} />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: var(--space-2);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .tool-subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+</style>

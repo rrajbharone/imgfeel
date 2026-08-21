@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Bild frei zuschneiden - Fotos online frei croppen (Ohne Limits)",
+  "freeformCrop.meta.description": "Bilder frei zuschneiden mit interaktivem Zuschnittsrahmen, 8 Ziehpunkten, individuellen Maßen, Seitenverhältnissen, Drehung und hochauflösendem Export. 100% privat.",
+  "freeformCrop.hero.title": "Bild frei zuschneiden",
+  "freeformCrop.hero.subtitle": "Bilder flexibel drehen, spiegeln und auf Wunschmaße oder Standardformate mit pixelgenauer Präzision zuschneiden.",
+
+  "freeformCrop.preview.title": "Interaktiver Zuschnittsbereich",
+  "freeformCrop.panel.title": "Einstellungen & Werkzeuge",
+
+  "freeformCrop.empty.title": "Kein Bild geladen",
+  "freeformCrop.empty.subtitle": "Laden Sie ein Bild hoch oder nutzen Sie das Beispielbild, um den Zuschnitt zu testen.",
+  "freeformCrop.empty.loadDemo": "Beispielbild laden",
+
+  "freeformCrop.dropzone.title": "Bild hier ablegen oder klicken zum Auswählen",
+  "freeformCrop.dropzone.subtitle": "Bilder flexibel drehen, spiegeln und auf Wunschmaße oder Standardformate zuschneiden",
+  "freeformCrop.dropzone.browse": "Bild auswählen",
+  "freeformCrop.dropzone.sample": "Beispielbild testen",
+  "freeformCrop.dropzone.formats": "Unterstützt JPG, PNG, WebP, AVIF, BMP • Einfügen mit Strg+V",
+  "freeformCrop.privacy.badge": "100% Datenschutz im Browser — Keine Server-Uploads",
+  "freeformCrop.action.changeImage": "Bild ändern",
+
+  "freeformCrop.upload.dropText": "Bild hier ablegen oder klicken (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Keine Datei",
+
+  "freeformCrop.section.upload": "1. Quellbild",
+  "freeformCrop.section.ratios": "2. Seitenverhältnisse",
+  "freeformCrop.section.dimensions": "3. Zuschnittmaße (px)",
+  "freeformCrop.section.transform": "4. Drehen & Spiegeln",
+  "freeformCrop.section.export": "5. Exportformat & Qualität",
+
+  "freeformCrop.ratio.free": "Frei",
+  "freeformCrop.ratio.original": "Original",
+  "freeformCrop.dim.width": "Breite",
+  "freeformCrop.dim.height": "Höhe",
+
+  "freeformCrop.transform.rotateLeft": "-90° drehen",
+  "freeformCrop.transform.rotateRight": "+90° drehen",
+  "freeformCrop.transform.flipH": "Horizontal spiegeln",
+  "freeformCrop.transform.flipV": "Vertikal spiegeln",
+
+  "freeformCrop.export.format": "Bildformat",
+  "freeformCrop.export.quality": "Exportqualität",
+
+  "freeformCrop.metrics.original": "Originalgröße",
+  "freeformCrop.metrics.cropped": "Zuschnittsbereich",
+  "freeformCrop.metrics.ratio": "Verhältnis",
+
+  "freeformCrop.action.download": "Zugeschnittenes Bild herunterladen",
+  "freeformCrop.action.copyImage": "In die Zwischenablage kopieren",
+  "freeformCrop.action.copied": "In die Zwischenablage kopiert!",
+  "freeformCrop.action.maximize": "Gesamtes Bild wählen",
+  "freeformCrop.action.clear": "Alles löschen",
+  "freeformCrop.action.reset": "Zurücksetzen",
+  "freeformCrop.download.filename": "imgfeel-zuschnitt",
+
+  "freeformCrop.cross.circle": "Rund zuschneiden",
+  "freeformCrop.cross.square": "Auf 1:1 skalieren",
+  "freeformCrop.cross.mosaic": "Foto-Mosaik Generator",
+  "freeformCrop.cross.overlay": "Bilder überlagern",
+  "freeformCrop.cross.stitch": "Bilder zusammenfügen",
+
+  "freeformCrop.feat.freeTitle": "Freier Zuschnitt ohne Einschränkungen",
+  "freeformCrop.feat.freeDesc": "Ziehen Sie an 8 Ziehpunkten, um beliebige Bildausschnitte ohne starre Vorgaben zu isolieren.",
+  "freeformCrop.feat.gridTitle": "Drittel-Regel Hilfslinien",
+  "freeformCrop.feat.gridDesc": "Optisches Raster zur perfekten Ausrichtung professioneller Bildkompositionen.",
+  "freeformCrop.feat.transformTitle": "Drehen & Spiegeln",
+  "freeformCrop.feat.transformDesc": "Vor dem Zuschnitt in 90°-Schritten drehen oder spiegeln, um Schieflagen zu korrigieren.",
+  "freeformCrop.feat.privacyTitle": "100% Datenschutz im Browser",
+  "freeformCrop.feat.privacyDesc": "Ihre Fotos verbleiben auf Ihrem Rechner. Alle Berechnungen erfolgen lokal mit HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "Was bedeutet freier Bildzuschnitt und warum ist er wichtig?",
+  "freeformCrop.content.p1a": "Beim freien Bildzuschnitt können Sie Fotos auf beliebige Maße anpassen, ohne an feste Formate wie 1:1 oder 16:9 gebunden zu sein. Dies ermöglicht die exakte Freistellung von Bilddetails und das Entfernen störender Ränder.",
+  "freeformCrop.content.p1b": "ImgFeel bietet ein intuitives Werkzeug mit 8 Ziehpunkten, Live-Pixelanzeige und verlustfreiem Export für Webdesign, Fotografie und Social Media.",
+
+  "freeformCrop.content.h2": "Feste Seitenverhältnisse vs. freier Zuschnitt",
+  "freeformCrop.content.p2a": "Feste Verhältnisse sind unverzichtbar für Plattformen mit strikten Layoutvorgaben wie YouTube-Thumbnails oder Instagram-Beiträge.",
+  "freeformCrop.content.p2b": "Der freie Zuschnitt eignet sich perfekt für individuelle Website-Banner, Panoramen oder das passgenaue Ausschneiden von Dokumenten und Produkten.",
+
+  "freeformCrop.content.h3": "Gestaltungstechnik: Die Drittel-Regel gezielt nutzen",
+  "freeformCrop.content.p3a": "Das integrierte 3×3 Raster teilt den Bildausschnitt, um wichtige Bildelemente gezielt an optischen Schnittpunkten auszurichten.",
+  "freeformCrop.content.p3b": "Platzieren Sie den Horizont oder das Hauptmotiv an den Führungslinien, um Fotos lebendiger und harmonischer wirken zu lassen.",
+
+  "freeformCrop.content.h4": "Erhalt von Schärfe, DPI und Farbqualität",
+  "freeformCrop.content.p4a": "ImgFeel liest die Pixel direkt aus dem Originalbild ohne Qualitätsverlust während des Zuschneidens.",
+  "freeformCrop.content.p4b": "Wählen Sie zwischen verlustfreiem PNG, komprimiertem WebP oder JPG mit Qualitätsregler und Transparenzunterstützung.",
+
+  "freeformCrop.content.h5": "Häufige Anwendungsbereiche für Bildzuschnitt",
+  "freeformCrop.content.p5a": "Ideal zum Säubern gescannter Belege, Zuschneiden von Shop-Artikeln und Herausschneiden scharfer Detailansichten aus großen Fotos.",
+  "freeformCrop.content.p5b": "Kombinieren Sie Drehen und Spiegeln, um schiefe Aufnahmen vor dem Zuschnitt einfach geradezurichten.",
+
+  "freeformCrop.content.h6": "In 4 Schritten Bilder frei zuschneiden",
+  "freeformCrop.content.step1Title": "Bild hochladen",
+  "freeformCrop.content.step1Desc": "Ziehen Sie ein PNG, JPG oder WebP Bild in das Upload-Feld.",
+  "freeformCrop.content.step2Title": "Rahmen anpassen",
+  "freeformCrop.content.step2Desc": "Verschieben Sie die 8 Ziehpunkte an den Ecken und Kanten des Rahmens.",
+  "freeformCrop.content.step3Title": "Drehen oder Format wählen",
+  "freeformCrop.content.step3Desc": "Passen Sie bei Bedarf die Ausrichtung an oder sperren Sie ein Seitenverhältnis.",
+  "freeformCrop.content.step4Title": "Herunterladen oder kopieren",
+  "freeformCrop.content.step4Desc": "Wählen Sie das Format und laden Sie das Ergebnis herunter oder kopieren Sie es direkt.",
+
+  "freeformCrop.faq.heading": "Häufig gestellte Fragen zum freien Bildzuschnitt",
+  "freeformCrop.faq.q1": "Was unterscheidet den freien vom festen Zuschnitt?",
+  "freeformCrop.faq.a1": "Beim freien Zuschnitt können Breite und Höhe unabhängig voneinander verändert werden, während beim festen Zuschnitt die Proportionen gesperrt bleiben.",
+  "freeformCrop.faq.q2": "Werden meine Bilder auf einen Server geladen?",
+  "freeformCrop.faq.a2": "Nein. Die Verarbeitung erfolgt vollständig lokal in Ihrem Browser via HTML5 Canvas.",
+  "freeformCrop.faq.q3": "Verliert mein Bild beim Zuschneiden an Qualität?",
+  "freeformCrop.faq.a3": "Nein. Die Pixel werden direkt in nativer Qualität aus dem Originalbild entnommen.",
+  "freeformCrop.faq.q4": "Werden transparente PNGs und WebPs unterstützt?",
+  "freeformCrop.faq.a4": "Ja, transparente Bereiche bleiben beim Export erhalten.",
+  "freeformCrop.faq.q5": "Funktioniert der Zuschnitt auf Smartphone und Tablet?",
+  "freeformCrop.faq.a5": "Ja, die Benutzeroberfläche ist vollständig für Touchscreens optimiert.",
+  "freeformCrop.faq.q6": "Kann ich das Bild vor dem Zuschnitt drehen?",
+  "freeformCrop.faq.a6": "Ja, 90°-Drehung und horizontales/vertikales Spiegeln sind integriert.",
+  "freeformCrop.faq.q7": "Ist das Tool kostenlos und ohne Einschränkungen nutzbar?",
+  "freeformCrop.faq.a7": "Ja, 100% kostenlos ohne Wasserzeichen oder Limits."
+}

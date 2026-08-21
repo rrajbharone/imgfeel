@@ -1,0 +1,1594 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const overlayUrl = getToolUrl('image-overlay-tool', locale);
+const stitchUrl = getToolUrl('image-stitcher', locale);
+const beautifyUrl = getToolUrl('screenshot-beautifier', locale);
+const blurUrl = getToolUrl('image-blur-tool', locale);
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+
+const i18nDict = {
+  copySuccess: t(locale, 'mosaic.action.copied'),
+  downloadName: t(locale, 'mosaic.download.filename'),
+  dropText: t(locale, 'mosaic.upload.dropText'),
+  loadedCount: t(locale, 'mosaic.upload.loadedCount'),
+  masterLoaded: t(locale, 'mosaic.upload.masterLoaded'),
+  emptyTitle: t(locale, 'mosaic.empty.title'),
+  emptySubtitle: t(locale, 'mosaic.empty.subtitle'),
+};
+---
+
+<div class="mosaic-tool-wrapper" id="mosaicApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Initial Empty State (Visible by default) -->
+  <div class="mosaic-dropzone-card" id="mosaicDropzoneCard">
+    <div class="mosaic-dropzone-content">
+      <div class="mosaic-icon-circle">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
+      </div>
+
+      <h2 class="mosaic-drop-title">{t(locale, 'mosaic.dropzone.title')}</h2>
+      <p class="mosaic-drop-subtitle">{t(locale, 'mosaic.dropzone.subtitle')}</p>
+
+      <div class="mosaic-btn-row">
+        <label class="btn btn-primary mosaic-btn-primary" for="mosaicMainFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'mosaic.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="mosaicMainFileInput" multiple accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary mosaic-sample-btn" id="mosaicSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>{t(locale, 'mosaic.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="mosaic-formats-hint">{t(locale, 'mosaic.dropzone.formats')}</p>
+
+      <div class="mosaic-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'mosaic.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace (Hidden initially until images are loaded) -->
+  <div class="mosaic-workspace-container" id="mosaicWorkspaceContainer" style="display: none;">
+    <!-- Mode Selector Tabs -->
+    <div class="mode-tabs-container">
+      <button type="button" class="mode-tab active" data-mode="grid" id="tabModeGrid">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-icon">
+          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
+        <span class="tab-text">{t(locale, 'mosaic.tab.grid')}</span>
+      </button>
+
+      <button type="button" class="mode-tab" data-mode="master" id="tabModeMaster">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-icon">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span class="tab-text">{t(locale, 'mosaic.tab.master')}</span>
+      </button>
+
+      <button type="button" class="mode-tab" data-mode="artistic" id="tabModeArtistic">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-icon">
+          <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+          <circle cx="12" cy="12" r="5"></circle>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        </svg>
+        <span class="tab-text">{t(locale, 'mosaic.tab.artistic')}</span>
+      </button>
+    </div>
+
+    <!-- Workspace Header Bar -->
+    <div class="mosaic-workspace-header">
+      <div class="mosaic-meta-badge">
+        <span class="mosaic-status-dot"></span>
+        <span class="mosaic-filename-label">{t(locale, 'mosaic.section.upload')}</span>
+        <span class="mosaic-meta-tag" id="mosaicCountTag">0 Photos</span>
+      </div>
+
+      <div class="mosaic-header-actions">
+        <label class="btn btn-secondary btn-sm" for="mosaicAddMoreInput">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>{t(locale, 'mosaic.action.changePhotos')}</span>
+        </label>
+        <input type="file" id="mosaicAddMoreInput" multiple accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+      </div>
+    </div>
+
+    <!-- Main Grid: Left is Viewport, Right is Controls -->
+    <div class="mosaic-main-grid">
+      <!-- Left Column: Canvas Preview Viewport -->
+      <div class="preview-column">
+        <div class="preview-card">
+          <!-- Viewport Header -->
+          <div class="viewport-header">
+            <div class="header-left">
+              <span class="viewport-label">{t(locale, 'mosaic.preview.title')}</span>
+            </div>
+            <div class="header-right">
+              <span class="viewport-tag" id="canvasDimsBadge">-- × -- px</span>
+              <span class="viewport-tag highlight" id="tileCountBadge">0 Tiles</span>
+            </div>
+          </div>
+
+          <!-- Canvas Viewport -->
+          <div class="canvas-viewport" id="canvasViewport">
+            <div class="canvas-container" id="canvasContainer">
+              <div class="canvas-inner-wrap" id="canvasInnerWrap">
+                <canvas id="mainMosaicCanvas" class="main-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div class="preview-metrics-row">
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'mosaic.metrics.dimensions')}</span>
+              <strong id="metricDims">1200 × 1200 px</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'mosaic.metrics.grid')}</span>
+              <strong id="metricGrid">3 Cols × 3 Rows</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'mosaic.metrics.mode')}</span>
+              <strong id="metricMode">{t(locale, 'mosaic.tab.grid')}</strong>
+            </div>
+          </div>
+
+          <!-- Action Buttons Group -->
+          <div class="action-buttons-group">
+            <div class="primary-actions-row">
+              <button type="button" class="btn btn-primary action-btn-main" id="mosaicDownloadBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>{t(locale, 'mosaic.action.download')}</span>
+              </button>
+
+              <button type="button" class="btn btn-secondary action-btn-copy" id="mosaicCopyBtn" title="Copy Image to Clipboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyBtnText">{t(locale, 'mosaic.action.copyImage')}</span>
+              </button>
+            </div>
+
+            <div class="secondary-actions-row">
+              <button type="button" class="btn-snippet" id="mosaicShuffleBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 3 21 3 21 8"></polyline>
+                  <line x1="4" y1="20" x2="21" y2="3"></line>
+                  <polyline points="21 16 21 21 16 21"></polyline>
+                  <line x1="15" y1="15" x2="21" y2="21"></line>
+                  <line x1="4" y1="4" x2="9" y2="9"></line>
+                </svg>
+                <span>{t(locale, 'mosaic.action.shuffle')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="mosaicResetBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <span>{t(locale, 'mosaic.action.reset')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="mosaicClearBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>{t(locale, 'mosaic.action.clear')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Settings and Controls -->
+      <div class="controls-column">
+        <div class="controls-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">{t(locale, 'mosaic.panel.title')}</h2>
+          </div>
+
+          <!-- Section 1: Source Images Strip -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'mosaic.section.upload')}</label>
+              <span class="badge-tag" id="tilePoolCount">0 / 100</span>
+            </div>
+
+            <!-- Master Target Image Uploader (Shown in Master Mode) -->
+            <div class="master-upload-wrapper" id="masterUploadWrapper" style="display: none;">
+              <label class="field-sublabel">{t(locale, 'mosaic.upload.masterLabel')}</label>
+              <div class="master-dropzone" id="masterDropZone">
+                <input type="file" id="masterFileInput" accept="image/*" class="sr-only" />
+                <div class="master-preview-thumb" id="masterThumb" style="display: none;">
+                  <img id="masterThumbImg" src="" alt="Master Image" />
+                </div>
+                <div class="master-drop-content" id="masterDropContent">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                  <span id="masterDropText">{t(locale, 'mosaic.upload.selectMaster')}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tile Thumbnails Strip -->
+            <div class="tiles-strip" id="tilesStrip"></div>
+          </div>
+
+          <!-- Section 2: Grid & Layout Settings -->
+          <div class="control-section" id="sectionGridLayout">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'mosaic.section.grid')}</label>
+            </div>
+
+            <div class="grid-controls-stack">
+              <!-- Grid Density Slider -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <label for="sliderCols" class="field-sublabel">{t(locale, 'mosaic.grid.columns')}</label>
+                  <span class="val-badge" id="valColsBadge">3</span>
+                </div>
+                <input type="range" id="sliderCols" min="2" max="16" value="3" class="range-slider" />
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-header">
+                  <label for="sliderRows" class="field-sublabel">{t(locale, 'mosaic.metrics.grid')}</label>
+                  <span class="val-badge" id="valRowsBadge">3</span>
+                </div>
+                <input type="range" id="sliderRows" min="2" max="16" value="3" class="range-slider" />
+              </div>
+
+              <!-- Aspect Ratio & Fit Mode -->
+              <div class="row-2-cols">
+                <div class="input-field">
+                  <label for="selectRatio" class="field-sublabel">{t(locale, 'mosaic.grid.ratio')}</label>
+                  <select id="selectRatio" class="form-select">
+                    <option value="1:1">1:1 Square</option>
+                    <option value="4:3">4:3 Standard</option>
+                    <option value="16:9">16:9 Cinema</option>
+                    <option value="9:16">9:16 Story</option>
+                    <option value="3:2">3:2 Photo</option>
+                    <option value="2:3">2:3 Portrait</option>
+                  </select>
+                </div>
+
+                <div class="input-field">
+                  <label for="selectFit" class="field-sublabel">{t(locale, 'mosaic.grid.fitMode')}</label>
+                  <select id="selectFit" class="form-select">
+                    <option value="cover">{t(locale, 'mosaic.fit.cover')}</option>
+                    <option value="contain">{t(locale, 'mosaic.fit.contain')}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Master Overlay Controls (Master Mode) -->
+          <div class="control-section" id="sectionMasterControls" style="display: none;">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'mosaic.section.masterSettings')}</label>
+            </div>
+
+            <div class="grid-controls-stack">
+              <div class="slider-field">
+                <div class="slider-header">
+                  <label for="sliderMasterOpacity" class="field-sublabel">{t(locale, 'mosaic.master.tint')}</label>
+                  <span class="val-badge" id="valMasterOpacityBadge">50%</span>
+                </div>
+                <input type="range" id="sliderMasterOpacity" min="0" max="100" value="50" class="range-slider" />
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-header">
+                  <label for="sliderTileResolution" class="field-sublabel">{t(locale, 'mosaic.master.density')}</label>
+                  <span class="val-badge" id="valTileResBadge">24 px</span>
+                </div>
+                <input type="range" id="sliderTileResolution" min="10" max="64" value="24" class="range-slider" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Spacing, Borders & Styling -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'mosaic.section.styling')}</label>
+            </div>
+
+            <div class="grid-controls-stack">
+              <div class="row-2-cols">
+                <div class="slider-field">
+                  <div class="slider-header">
+                    <label for="sliderSpacing" class="field-sublabel">{t(locale, 'mosaic.style.gap')}</label>
+                    <span class="val-badge" id="valSpacingBadge">8 px</span>
+                  </div>
+                  <input type="range" id="sliderSpacing" min="0" max="40" value="8" class="range-slider" />
+                </div>
+
+                <div class="slider-field">
+                  <div class="slider-header">
+                    <label for="sliderBorderRadius" class="field-sublabel">{t(locale, 'mosaic.style.radius')}</label>
+                    <span class="val-badge" id="valRadiusBadge">0 px</span>
+                  </div>
+                  <input type="range" id="sliderBorderRadius" min="0" max="30" value="0" class="range-slider" />
+                </div>
+              </div>
+
+              <!-- Background Color Chips -->
+              <div class="input-field">
+                <label class="field-sublabel">{t(locale, 'mosaic.style.bg')}</label>
+                <div class="color-swatches-row">
+                  <button type="button" class="color-swatch-chip active" data-color="#ffffff" style="background: #ffffff;" title="White"></button>
+                  <button type="button" class="color-swatch-chip" data-color="#000000" style="background: #000000;" title="Black"></button>
+                  <button type="button" class="color-swatch-chip" data-color="#1e293b" style="background: #1e293b;" title="Slate"></button>
+                  <button type="button" class="color-swatch-chip" data-color="#f1f5f9" style="background: #f1f5f9;" title="Light Gray"></button>
+                  <button type="button" class="color-swatch-chip" data-color="#f43f5e" style="background: #f43f5e;" title="Rose"></button>
+                  <button type="button" class="color-swatch-chip" data-color="#6366f1" style="background: #6366f1;" title="Indigo"></button>
+                  <button type="button" class="color-swatch-chip" data-color="transparent" style="background: repeating-conic-gradient(#cbd5e1 0% 25%, #ffffff 0% 50%) 50% / 10px 10px;" title="Transparent"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Export Settings -->
+          <div class="control-section">
+            <div class="section-title-row">
+              <label class="section-title">{t(locale, 'mosaic.section.export')}</label>
+            </div>
+
+            <div class="row-2-cols">
+              <div class="input-field">
+                <label for="exportFormatSelect" class="field-sublabel">{t(locale, 'mosaic.export.format')}</label>
+                <select id="exportFormatSelect" class="form-select">
+                  <option value="image/png">PNG (Lossless)</option>
+                  <option value="image/webp" selected>WebP (Optimized)</option>
+                  <option value="image/jpeg">JPG / JPEG (Standard)</option>
+                </select>
+              </div>
+
+              <div class="input-field">
+                <label for="exportResolutionSelect" class="field-sublabel">{t(locale, 'mosaic.export.quality')}</label>
+                <select id="exportResolutionSelect" class="form-select">
+                  <option value="1">1× Standard (1200 px)</option>
+                  <option value="1.5">1.5× High Res (1800 px)</option>
+                  <option value="2" selected>2× Ultra HD (2400 px)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Related Tools Navigation -->
+  <div class="mosaic-cross-links-row">
+    <a href={overlayUrl} class="btn btn-secondary mosaic-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>{t(locale, 'mosaic.cross.overlay')}</span>
+    </a>
+
+    <a href={stitchUrl} class="btn btn-secondary mosaic-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="8" height="18" rx="1"></rect>
+        <rect x="13" y="3" width="8" height="18" rx="1"></rect>
+        <path d="M11 8h2M11 12h2M11 16h2"></path>
+      </svg>
+      <span>{t(locale, 'mosaic.cross.stitch')}</span>
+    </a>
+
+    <a href={beautifyUrl} class="btn btn-secondary mosaic-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"></path>
+      </svg>
+      <span>{t(locale, 'mosaic.cross.beautify')}</span>
+    </a>
+
+    <a href={blurUrl} class="btn btn-secondary mosaic-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+      </svg>
+      <span>{t(locale, 'mosaic.cross.blur')}</span>
+    </a>
+
+    <a href={squareUrl} class="btn btn-secondary mosaic-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+      </svg>
+      <span>{t(locale, 'mosaic.cross.square')}</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  import {
+    renderGridMosaic,
+    renderMasterPhotoMosaic,
+    renderArtisticTileMosaic,
+    exportMosaicImage,
+    copyMosaicToClipboard,
+    generateSampleDemoImages,
+    loadImageFromFile,
+    type MosaicMode,
+    type LoadedImageItem,
+    type ExportFormat,
+    type ArtisticShape,
+  } from '@/scripts/mosaic-engine';
+
+  function initMosaicApp() {
+    const app = document.getElementById('mosaicApp');
+    if (!app) return;
+
+    let i18n = {
+      copySuccess: 'Mosaic Copied to Clipboard!',
+      downloadName: 'imgfeel-mosaic',
+    };
+
+    try {
+      const dataAttr = app.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // State
+    let mode: MosaicMode = 'grid';
+    let tileImages: LoadedImageItem[] = [];
+    let masterImage: LoadedImageItem | null = null;
+
+    let columns = 3;
+    let rows = 3;
+    let spacing = 8;
+    let borderRadius = 0;
+    let backgroundColor = '#ffffff';
+    let aspectRatio = '1:1';
+    let fitMode: 'cover' | 'contain' = 'cover';
+
+    let masterOpacity = 0.5;
+    let tileResolution = 24;
+    let artisticShape: ArtisticShape = 'square';
+
+    let exportFormat: ExportFormat = 'image/webp';
+    let exportQuality = 0.92;
+    let exportScale = 2;
+
+    // DOM Elements
+    const dropzoneCard = document.getElementById('mosaicDropzoneCard');
+    const workspaceContainer = document.getElementById('mosaicWorkspaceContainer');
+    const mainFileInput = document.getElementById('mosaicMainFileInput') as HTMLInputElement;
+    const addMoreInput = document.getElementById('mosaicAddMoreInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('mosaicSampleBtn');
+
+    const mainCanvas = document.getElementById('mainMosaicCanvas') as HTMLCanvasElement;
+    const canvasDimsBadge = document.getElementById('canvasDimsBadge');
+    const tileCountBadge = document.getElementById('tileCountBadge');
+    const mosaicCountTag = document.getElementById('mosaicCountTag');
+    const tilePoolCount = document.getElementById('tilePoolCount');
+    const metricDims = document.getElementById('metricDims');
+    const metricGrid = document.getElementById('metricGrid');
+    const metricMode = document.getElementById('metricMode');
+
+    const downloadBtn = document.getElementById('mosaicDownloadBtn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('mosaicCopyBtn') as HTMLButtonElement;
+    const copyBtnText = document.getElementById('copyBtnText');
+    const shuffleBtn = document.getElementById('mosaicShuffleBtn');
+    const resetBtn = document.getElementById('mosaicResetBtn');
+    const clearBtn = document.getElementById('mosaicClearBtn');
+
+    const tilesStrip = document.getElementById('tilesStrip');
+    const masterUploadWrapper = document.getElementById('masterUploadWrapper');
+    const masterDropZone = document.getElementById('masterDropZone');
+    const masterFileInput = document.getElementById('masterFileInput') as HTMLInputElement;
+    const masterThumb = document.getElementById('masterThumb');
+    const masterThumbImg = document.getElementById('masterThumbImg') as HTMLImageElement;
+    const masterDropContent = document.getElementById('masterDropContent');
+
+    const sectionGridLayout = document.getElementById('sectionGridLayout');
+    const sectionMasterControls = document.getElementById('sectionMasterControls');
+
+    const sliderCols = document.getElementById('sliderCols') as HTMLInputElement;
+    const sliderRows = document.getElementById('sliderRows') as HTMLInputElement;
+    const valColsBadge = document.getElementById('valColsBadge');
+    const valRowsBadge = document.getElementById('valRowsBadge');
+
+    const selectRatio = document.getElementById('selectRatio') as HTMLSelectElement;
+    const selectFit = document.getElementById('selectFit') as HTMLSelectElement;
+    const sliderSpacing = document.getElementById('sliderSpacing') as HTMLInputElement;
+    const valSpacingBadge = document.getElementById('valSpacingBadge');
+    const sliderBorderRadius = document.getElementById('sliderBorderRadius') as HTMLInputElement;
+    const valRadiusBadge = document.getElementById('valRadiusBadge');
+
+    const sliderMasterOpacity = document.getElementById('sliderMasterOpacity') as HTMLInputElement;
+    const valMasterOpacityBadge = document.getElementById('valMasterOpacityBadge');
+    const sliderTileResolution = document.getElementById('sliderTileResolution') as HTMLInputElement;
+    const valTileResBadge = document.getElementById('valTileResBadge');
+
+    const exportFormatSelect = document.getElementById('exportFormatSelect') as HTMLSelectElement;
+    const exportResolutionSelect = document.getElementById('exportResolutionSelect') as HTMLSelectElement;
+
+    function showWorkspace() {
+      if (dropzoneCard) dropzoneCard.style.display = 'none';
+      if (workspaceContainer) workspaceContainer.style.display = 'block';
+    }
+
+    function showDropzone() {
+      if (dropzoneCard) dropzoneCard.style.display = 'block';
+      if (workspaceContainer) workspaceContainer.style.display = 'none';
+      tileImages = [];
+      masterImage = null;
+      if (mainFileInput) mainFileInput.value = '';
+      if (addMoreInput) addMoreInput.value = '';
+      if (masterThumb) masterThumb.style.display = 'none';
+      if (masterDropContent) masterDropContent.style.display = 'flex';
+    }
+
+    function computeDimensions(): { width: number; height: number } {
+      const base = 1200;
+      switch (aspectRatio) {
+        case '4:3': return { width: 1200, height: 900 };
+        case '16:9': return { width: 1280, height: 720 };
+        case '9:16': return { width: 720, height: 1280 };
+        case '3:2': return { width: 1200, height: 800 };
+        case '2:3': return { width: 800, height: 1200 };
+        case '1:1':
+        default: return { width: base, height: base };
+      }
+    }
+
+    // Render Canvas
+    function render() {
+      if (!mainCanvas) return;
+      if (tileImages.length === 0 && !masterImage) {
+        showDropzone();
+        return;
+      }
+
+      showWorkspace();
+      const dims = computeDimensions();
+
+      if (mode === 'grid') {
+        renderGridMosaic(mainCanvas, tileImages, {
+          columns,
+          rows,
+          gap: spacing,
+          padding: spacing,
+          cornerRadius: borderRadius,
+          borderWidth: 0,
+          borderColor: 'transparent',
+          backgroundColor,
+          targetWidth: dims.width,
+          targetHeight: dims.height,
+          fitMode,
+        });
+      } else if (mode === 'master') {
+        const targetMaster = masterImage || tileImages[0];
+        if (targetMaster) {
+          renderMasterPhotoMosaic(mainCanvas, targetMaster, tileImages, {
+            tileCountX: Math.round(dims.width / tileResolution),
+            tileGap: spacing,
+            tintOpacity: masterOpacity,
+            backgroundColor,
+            tileShape: artisticShape,
+          });
+        }
+      } else if (mode === 'artistic') {
+        const targetSource = masterImage || tileImages[0];
+        if (targetSource) {
+          renderArtisticTileMosaic(mainCanvas, targetSource, {
+            tileSize: tileResolution,
+            tileGap: spacing,
+            tileShape: artisticShape,
+            cornerRadius: borderRadius,
+            backgroundColor,
+            colorBoost: 0.1,
+          });
+        }
+      }
+
+      const w = mainCanvas.width;
+      const h = mainCanvas.height;
+      const dimsStr = `${w} × ${h} px`;
+
+      if (canvasDimsBadge) canvasDimsBadge.textContent = dimsStr;
+      if (metricDims) metricDims.textContent = dimsStr;
+
+      const count = tileImages.length;
+      if (tileCountBadge) tileCountBadge.textContent = `${count} Tiles`;
+      if (mosaicCountTag) mosaicCountTag.textContent = `${count} Photos`;
+      if (tilePoolCount) tilePoolCount.textContent = `${count} / 100`;
+
+      if (metricGrid) {
+        metricGrid.textContent = `${columns} Cols × ${rows} Rows`;
+      }
+
+      updateTilesStrip();
+    }
+
+    // Update Thumbnails Strip
+    function updateTilesStrip() {
+      if (!tilesStrip) return;
+      tilesStrip.innerHTML = '';
+
+      tileImages.forEach((img, idx) => {
+        const thumbWrap = document.createElement('div');
+        thumbWrap.className = 'tile-thumb-wrap';
+
+        const thumbImg = document.createElement('img');
+        thumbImg.src = img.img.src;
+        thumbImg.alt = img.name;
+        thumbImg.className = 'tile-thumb-img';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'tile-remove-btn';
+        removeBtn.title = 'Remove Photo';
+        removeBtn.innerHTML = '×';
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          tileImages.splice(idx, 1);
+          render();
+        });
+
+        thumbWrap.appendChild(thumbImg);
+        thumbWrap.appendChild(removeBtn);
+        tilesStrip.appendChild(thumbWrap);
+      });
+    }
+
+    // Load files
+    async function loadTileFiles(files: FileList | File[]) {
+      const promises: Promise<LoadedImageItem>[] = [];
+      const count = Math.min(files.length, 100 - tileImages.length);
+
+      for (let i = 0; i < count; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) continue;
+        promises.push(loadImageFromFile(file));
+      }
+
+      try {
+        const loaded = await Promise.all(promises);
+        tileImages = [...tileImages, ...loaded];
+        render();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Event Listeners for file uploads
+    if (mainFileInput) {
+      mainFileInput.addEventListener('change', () => {
+        if (mainFileInput.files && mainFileInput.files.length > 0) {
+          loadTileFiles(mainFileInput.files);
+        }
+      });
+    }
+
+    if (addMoreInput) {
+      addMoreInput.addEventListener('change', () => {
+        if (addMoreInput.files && addMoreInput.files.length > 0) {
+          loadTileFiles(addMoreInput.files);
+        }
+      });
+    }
+
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        const sampleImages = await generateSampleDemoImages();
+        tileImages = sampleImages;
+        render();
+      });
+    }
+
+    // Dropzone drag and drop
+    if (dropzoneCard) {
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropzoneCard.addEventListener(evt, e => {
+          e.preventDefault();
+          dropzoneCard.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropzoneCard.addEventListener(evt, e => {
+          e.preventDefault();
+          dropzoneCard.classList.remove('drag-over');
+        });
+      });
+
+      dropzoneCard.addEventListener('drop', (e: DragEvent) => {
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          loadTileFiles(e.dataTransfer.files);
+        }
+      });
+    }
+
+    // Mode Selector Tabs
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    modeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const m = tab.getAttribute('data-mode') as MosaicMode;
+        if (!m) return;
+
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        mode = m;
+
+        if (metricMode) metricMode.textContent = tab.querySelector('.tab-text')?.textContent || m;
+
+        if (masterUploadWrapper) {
+          masterUploadWrapper.style.display = m === 'master' ? 'block' : 'none';
+        }
+        if (sectionMasterControls) {
+          sectionMasterControls.style.display = m === 'master' ? 'flex' : 'none';
+        }
+        if (sectionGridLayout) {
+          sectionGridLayout.style.display = m === 'master' ? 'none' : 'flex';
+        }
+
+        render();
+      });
+    });
+
+    // Grid Slider Controls
+    if (sliderCols) {
+      sliderCols.addEventListener('input', () => {
+        columns = parseInt(sliderCols.value, 10);
+        if (valColsBadge) valColsBadge.textContent = String(columns);
+        render();
+      });
+    }
+
+    if (sliderRows) {
+      sliderRows.addEventListener('input', () => {
+        rows = parseInt(sliderRows.value, 10);
+        if (valRowsBadge) valRowsBadge.textContent = String(rows);
+        render();
+      });
+    }
+
+    if (selectRatio) {
+      selectRatio.addEventListener('change', () => {
+        aspectRatio = selectRatio.value;
+        render();
+      });
+    }
+
+    if (selectFit) {
+      selectFit.addEventListener('change', () => {
+        fitMode = selectFit.value as any;
+        render();
+      });
+    }
+
+    if (sliderSpacing) {
+      sliderSpacing.addEventListener('input', () => {
+        spacing = parseInt(sliderSpacing.value, 10);
+        if (valSpacingBadge) valSpacingBadge.textContent = `${spacing} px`;
+        render();
+      });
+    }
+
+    if (sliderBorderRadius) {
+      sliderBorderRadius.addEventListener('input', () => {
+        borderRadius = parseInt(sliderBorderRadius.value, 10);
+        if (valRadiusBadge) valRadiusBadge.textContent = `${borderRadius} px`;
+        render();
+      });
+    }
+
+    // Color Swatches
+    const colorChips = document.querySelectorAll('.color-swatch-chip');
+    colorChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        colorChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        backgroundColor = chip.getAttribute('data-color') || '#ffffff';
+        render();
+      });
+    });
+
+    // Master image upload
+    if (masterDropZone && masterFileInput) {
+      masterDropZone.addEventListener('click', () => masterFileInput.click());
+      masterFileInput.addEventListener('change', async () => {
+        const file = masterFileInput.files?.[0];
+        if (!file) return;
+
+        try {
+          masterImage = await loadImageFromFile(file);
+          if (masterThumbImg) masterThumbImg.src = masterImage.img.src;
+          if (masterThumb) masterThumb.style.display = 'block';
+          if (masterDropContent) masterDropContent.style.display = 'none';
+          render();
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    if (sliderMasterOpacity) {
+      sliderMasterOpacity.addEventListener('input', () => {
+        masterOpacity = parseInt(sliderMasterOpacity.value, 10) / 100;
+        if (valMasterOpacityBadge) valMasterOpacityBadge.textContent = `${sliderMasterOpacity.value}%`;
+        render();
+      });
+    }
+
+    if (sliderTileResolution) {
+      sliderTileResolution.addEventListener('input', () => {
+        tileResolution = parseInt(sliderTileResolution.value, 10);
+        if (valTileResBadge) valTileResBadge.textContent = `${tileResolution} px`;
+        render();
+      });
+    }
+
+    // Shuffle
+    if (shuffleBtn) {
+      shuffleBtn.addEventListener('click', () => {
+        tileImages = [...tileImages].sort(() => Math.random() - 0.5);
+        render();
+      });
+    }
+
+    // Reset
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        columns = 3;
+        rows = 3;
+        spacing = 8;
+        borderRadius = 0;
+        backgroundColor = '#ffffff';
+        aspectRatio = '1:1';
+        fitMode = 'cover';
+
+        if (sliderCols) sliderCols.value = '3';
+        if (sliderRows) sliderRows.value = '3';
+        if (sliderSpacing) sliderSpacing.value = '8';
+        if (sliderBorderRadius) sliderBorderRadius.value = '0';
+        if (valColsBadge) valColsBadge.textContent = '3';
+        if (valRowsBadge) valRowsBadge.textContent = '3';
+        if (valSpacingBadge) valSpacingBadge.textContent = '8 px';
+        if (valRadiusBadge) valRadiusBadge.textContent = '0 px';
+
+        render();
+      });
+    }
+
+    // Clear All
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        showDropzone();
+      });
+    }
+
+    // Export formats
+    if (exportFormatSelect) {
+      exportFormatSelect.addEventListener('change', () => {
+        exportFormat = exportFormatSelect.value as ExportFormat;
+      });
+    }
+
+    if (exportResolutionSelect) {
+      exportResolutionSelect.addEventListener('change', () => {
+        exportScale = parseFloat(exportResolutionSelect.value) || 2;
+      });
+    }
+
+    // Download
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        if (!mainCanvas || tileImages.length === 0) return;
+        exportMosaicImage(mainCanvas, exportFormat, exportQuality, i18n.downloadName);
+      });
+    }
+
+    // Copy to Clipboard
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        if (!mainCanvas || tileImages.length === 0) return;
+        const success = await copyMosaicToClipboard(mainCanvas);
+        if (success && copyBtnText) {
+          const orig = copyBtnText.textContent;
+          copyBtnText.textContent = i18n.copySuccess;
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyBtnText.textContent = orig;
+            copyBtn.classList.remove('copied');
+          }, 2200);
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMosaicApp);
+  } else {
+    initMosaicApp();
+  }
+</script>
+
+<style>
+  .mosaic-tool-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ----------------------------------------
+     Dropzone Initial Card
+  ---------------------------------------- */
+  .mosaic-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mosaic-dropzone-card.drag-over {
+    border-color: var(--color-primary);
+    background: var(--color-surface-subtle);
+    transform: scale(1.005);
+  }
+
+  .mosaic-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .mosaic-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .mosaic-drop-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+  }
+
+  .mosaic-drop-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .mosaic-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .mosaic-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mosaic-sample-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+  }
+
+  .mosaic-formats-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-subtle);
+    margin-bottom: var(--space-4);
+  }
+
+  .mosaic-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* ----------------------------------------
+     Workspace Layout
+  ---------------------------------------- */
+  .mosaic-workspace-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  /* Mode Tabs */
+  .mode-tabs-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+    padding: var(--space-2);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+
+  .mode-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-2);
+    border-radius: var(--radius-lg);
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .mode-tab:hover {
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .mode-tab.active {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tab-icon {
+    flex-shrink: 0;
+  }
+
+  /* Workspace Header Bar */
+  .mosaic-workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .mosaic-meta-badge {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .mosaic-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+  }
+
+  .mosaic-filename-label {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .mosaic-meta-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Main Grid */
+  .mosaic-main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--space-6);
+    align-items: start;
+    min-width: 0;
+  }
+
+  /* Left Column */
+  .preview-column {
+    min-width: 0;
+  }
+
+  .preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .viewport-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+  }
+
+  .viewport-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .viewport-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .viewport-tag.highlight {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .canvas-viewport {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    background: var(--color-surface-subtle);
+    background-image: 
+      linear-gradient(45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--color-border-light) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--color-border-light) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+  }
+
+  .canvas-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .canvas-inner-wrap {
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .main-canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Metrics Bar */
+  .preview-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-2);
+    border-right: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .metric-item:last-child {
+    border-right: none;
+  }
+
+  .metric-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 2px;
+  }
+
+  .metric-item strong {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  /* Action Buttons */
+  .action-buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-surface);
+  }
+
+  .primary-actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+  }
+
+  .action-btn-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .action-btn-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: 0.75rem 1rem;
+    min-width: 140px;
+  }
+
+  .action-btn-copy.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .secondary-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn-snippet {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-snippet:hover {
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Right Column: Controls */
+  .controls-column {
+    min-width: 0;
+  }
+
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .panel-header {
+    margin-bottom: var(--space-1);
+  }
+
+  .panel-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .control-section {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .section-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .badge-tag {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .tiles-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 140px;
+    overflow-y: auto;
+    padding: 4px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .tile-thumb-wrap {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .tile-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tile-remove-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-full);
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    border: none;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .master-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .master-dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    text-align: center;
+    background: var(--color-surface);
+    cursor: pointer;
+  }
+
+  .master-drop-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .master-preview-thumb img {
+    max-height: 80px;
+    border-radius: var(--radius-sm);
+  }
+
+  .grid-controls-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .slider-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .field-sublabel {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .val-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .range-slider {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .row-2-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+  }
+
+  .color-swatches-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .color-swatch-chip {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .color-swatch-chip.active {
+    border-color: var(--color-primary);
+    transform: scale(1.15);
+  }
+
+  /* Cross Links */
+  .mosaic-cross-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .mosaic-cross-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .mosaic-main-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .mode-tabs-container {
+      grid-template-columns: 1fr;
+    }
+
+    .primary-actions-row {
+      grid-template-columns: 1fr;
+    }
+
+    .action-btn-copy {
+      width: 100%;
+    }
+  }
+</style>

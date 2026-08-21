@@ -48,8 +48,20 @@
   "tools.imageBlur.description": "Fotoğrafları bulanıklaştırın, estetik bokeh arka planları oluşturun ve hassas verileri Gauss bulanıklığı ile %100 gizlilikle sansürleyin.",
   "tools.imageStitcher.title": "Resim Birleştirme (Fotoğrafları Bir Araya Getirme)",
   "tools.imageStitcher.description": "Birden fazla fotoğrafı yatay, dikey veya ızgara şeklinde özel aralıklar, akıllı boyutlandırma ve %100 tarayıcı içi gizlilikle tek bir resimde birleştirin.",
+  "tools.screenshotBeautifier.title": "Ekran Görüntüsü Güzelleştirme (Mockup Oluşturucu)",
+  "tools.screenshotBeautifier.description": "Sıradan ekran alıntılarını gradyanlar, macOS pencere çerçeveleri, 3D gölgeler ve %100 tarayıcı içi gizlilikle profesyonel görsel sunumlara dönüştürün.",
+  "tools.imagePlaceholder.title": "Yer Tutucu Resim Oluşturucu (Özel Dummy Resimler)",
+  "tools.imagePlaceholder.description": "Web tasarımı, yazılım geliştirme ve prototipler için özel boyutlar, renkler, SVG dışa aktarma ve %100 tarayıcı içi gizlilikle kusursuz yer tutucu resimler üretin.",
+  "tools.imageOverlay.title": "Resim Üst Üste Koyma Aracı (Fotoğraf Üzerine Fotoğraf Ekleme)",
+  "tools.imageOverlay.description": "Etkileşimli konumlandırma, opaklık ayarı, harmanlama modları, döndürme ve %100 tarayıcı içi gizlilikle bir resmi diğerinin üzerine ekleyin.",
+  "tools.imageMosaic.title": "Foto Mozaik Oluşturucu (Online Resim Mozaik Yapma)",
+  "tools.imageMosaic.description": "Fotoğraflarınızı yüksek çözünürlüklü mozaiklere, simetrik ızgara kolajlarına ve geometrik desenlere %100 tarayıcı içi gizlilikle dönüştürün.",
+  "tools.freeformCrop.title": "Serbest Resim Kırpma (Fotoğraf Kırpma Online)",
+  "tools.freeformCrop.description": "Etkileşimli kırpma kutusu, 8 tutamaç, özel boyutlar, en boy oranı kilidi, döndürme ve %100 gizlilikle resimleri özgürce kırpın.",
   "tools.videoTrimmer.title": "Video Kırpıcı ve Kesici",
   "tools.videoTrimmer.description": "Etkileşimli zaman çizelgesi, ses yönetimi ve tarayıcı içi %100 gizlilikle video kliplerini online olarak kırpın ve kısaltın.",
   "tools.videoRotator.title": "Video Döndürücü",
-  "tools.videoRotator.description": "Canlı önizleme ve tarayıcı içi %100 gizlilikle video kliplerini (90°, 180°, 270°) online döndürün, çevirin ve aynalayın."
+  "tools.videoRotator.description": "Canlı önizleme ve tarayıcı içi %100 gizlilikle video kliplerini (90°, 180°, 270°) online döndürün, çevirin ve aynalayın.",
+  "tools.noiseReducer.title": "Resim Parazit Azaltma (Fotoğraf Kumlanması Temizleme)",
+  "tools.noiseReducer.description": "Görüntü parazitini azaltın ve fotoğraf kumlanmasını ücretsiz çevrimiçi kaldırın. Düşük ışık renk lekelerini, yüksek ISO parazitlerini canlı önizleme ve %100 gizlilikle temizleyin."
 }

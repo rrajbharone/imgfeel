@@ -48,8 +48,20 @@
   "tools.imageBlur.description": "Bilder weichzeichnen, Bokeh-Effekte erstellen und sensible Daten unkenntlich machen mit Gaußschem Weichzeichner und 100% Datenschutz.",
   "tools.imageStitcher.title": "Bilder zusammenfügen (Fotos verbinden & kombinieren)",
   "tools.imageStitcher.description": "Verbinden Sie mehrere Fotos zu einem einzigen Bild horizontal, vertikal oder als Raster mit anpassbarem Abstand und 100% Datenschutz im Browser.",
+  "tools.screenshotBeautifier.title": "Screenshot verschönern (Professionelle Mockups Erstellen)",
+  "tools.screenshotBeautifier.description": "Verwandeln Sie einfache Screenshots in ansprechende Visuals für Social Media und Präsentationen mit Verläufen, macOS-Rahmen und 100% Datenschutz im Browser.",
+  "tools.imagePlaceholder.title": "Platzhalter-Bilder-Generator (Dummy-Bilder Online Erstellen)",
+  "tools.imagePlaceholder.description": "Erstellen Sie millimetergenaue Platzhalter-Bilder und Wireframe-Mockups für Webdesign, Software-Entwicklung und Prototypen mit flexiblen Abmessungen, SVG-Export und 100% Datenschutz im Browser.",
+  "tools.imageOverlay.title": "Bilder überlagern Tool (Bild über Bild online einfügen)",
+  "tools.imageOverlay.description": "Legen Sie ein Bild über ein anderes mit interaktiver Positionierung, Deckkraft-Regler, Mischmodi, Drehung und 100% Datenschutz im Browser.",
+  "tools.imageMosaic.title": "Foto Mosaik Erstellen (Mosaik Bilder Generator Online)",
+  "tools.imageMosaic.description": "Verwandeln Sie Ihre Bilder in hochauflösende Fotomosaike, symmetrische Raster-Collagen und geometrische Kachelmuster mit 100% Datenschutz im Browser.",
+  "tools.freeformCrop.title": "Bild frei zuschneiden (Fotos online frei zuschneiden)",
+  "tools.freeformCrop.description": "Bilder frei zuschneiden mit interaktivem Zuschnittsrahmen, 8 Ziehpunkten, individuellen Maßen, Seitenverhältnissen, Drehung und 100% Datenschutz.",
   "tools.videoTrimmer.title": "Video-Trimmer & Video Schneider",
   "tools.videoTrimmer.description": "Kürzen und schneiden Sie Videoclips online mit interaktiver Zeitleiste, Tonspur-Steuerung und 100% Datenschutz im Browser.",
   "tools.videoRotator.title": "Video-Rotator & Video Dreher",
-  "tools.videoRotator.description": "Drehen, kippen und spiegeln Sie Videos (90°, 180°, 270°) online mit Live-Vorschau und 100% Datenschutz direkt im Browser."
+  "tools.videoRotator.description": "Drehen, kippen und spiegeln Sie Videos (90°, 180°, 270°) online mit Live-Vorschau und 100% Datenschutz direkt im Browser.",
+  "tools.noiseReducer.title": "Bildrauschen Reduzieren (Fotorauschen & Körnung Online Entfernen)",
+  "tools.noiseReducer.description": "Bildrauschen kostenlos online reduzieren und Fotokörnung entfernen. Farbrauschen bei schwachem Licht und ISO-Körnung mit Live-Vorschau und 100% Datenschutz bereinigen."
 }

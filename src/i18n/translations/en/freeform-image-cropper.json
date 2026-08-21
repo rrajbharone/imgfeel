@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Freeform Image Cropper - Crop Images Freely Online (No Crop Limits)",
+  "freeformCrop.meta.description": "Crop images freely with an interactive bounding box, 8 resize handles, custom dimensions, aspect ratio locks, rotate, flip, and high-resolution export. 100% private in your browser.",
+  "freeformCrop.hero.title": "Freeform Image Cropper",
+  "freeformCrop.hero.subtitle": "Freely crop, rotate, flip, and frame any image to custom unconstrained dimensions or standard aspect ratios with pixel-level precision.",
+
+  "freeformCrop.preview.title": "Interactive Crop Viewport",
+  "freeformCrop.panel.title": "Cropper Controls & Settings",
+
+  "freeformCrop.empty.title": "No Image Loaded",
+  "freeformCrop.empty.subtitle": "Upload an image from the right panel or load a sample demo image to test freeform cropping.",
+  "freeformCrop.empty.loadDemo": "Load Sample Demo Image",
+
+  "freeformCrop.dropzone.title": "Drag & drop your image here, or click to browse",
+  "freeformCrop.dropzone.subtitle": "Crop, rotate, flip, and frame photos to custom dimensions or standard aspect ratios",
+  "freeformCrop.dropzone.browse": "Select Image",
+  "freeformCrop.dropzone.sample": "Try Sample Image",
+  "freeformCrop.dropzone.formats": "Supports JPG, PNG, WebP, AVIF, BMP • Paste with Ctrl+V",
+  "freeformCrop.privacy.badge": "100% In-Browser Privacy — Zero Server Uploads",
+  "freeformCrop.action.changeImage": "Change Image",
+
+  "freeformCrop.upload.dropText": "Click or drag & drop an image here (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "No file loaded",
+
+  "freeformCrop.section.upload": "1. Source Image",
+  "freeformCrop.section.ratios": "2. Aspect Ratio Presets",
+  "freeformCrop.section.dimensions": "3. Crop Dimensions (px)",
+  "freeformCrop.section.transform": "4. Orientation & Flip",
+  "freeformCrop.section.export": "5. Export Format & Quality",
+
+  "freeformCrop.ratio.free": "Freeform",
+  "freeformCrop.ratio.original": "Original",
+  "freeformCrop.dim.width": "Width",
+  "freeformCrop.dim.height": "Height",
+
+  "freeformCrop.transform.rotateLeft": "Rotate -90°",
+  "freeformCrop.transform.rotateRight": "Rotate +90°",
+  "freeformCrop.transform.flipH": "Flip Horizontal",
+  "freeformCrop.transform.flipV": "Flip Vertical",
+
+  "freeformCrop.export.format": "Image Format",
+  "freeformCrop.export.quality": "Export Quality",
+
+  "freeformCrop.metrics.original": "Original Size",
+  "freeformCrop.metrics.cropped": "Cropped Area",
+  "freeformCrop.metrics.ratio": "Aspect Ratio",
+
+  "freeformCrop.action.download": "Download Cropped Image",
+  "freeformCrop.action.copyImage": "Copy to Clipboard",
+  "freeformCrop.action.copied": "Image Copied to Clipboard!",
+  "freeformCrop.action.maximize": "Select Full Image",
+  "freeformCrop.action.clear": "Clear All",
+  "freeformCrop.action.reset": "Reset Defaults",
+  "freeformCrop.download.filename": "imgfeel-cropped",
+
+  "freeformCrop.cross.circle": "Circle Cropper",
+  "freeformCrop.cross.square": "Square 1:1 Resizer",
+  "freeformCrop.cross.mosaic": "Mosaic Generator",
+  "freeformCrop.cross.overlay": "Image Overlay",
+  "freeformCrop.cross.stitch": "Image Stitcher",
+
+  "freeformCrop.feat.freeTitle": "Unconstrained Freeform Cropping",
+  "freeformCrop.feat.freeDesc": "Drag any corner or edge handle to isolate any rectangle without forced aspect ratios or artificial bounds.",
+  "freeformCrop.feat.gridTitle": "Rule of Thirds Guidelines",
+  "freeformCrop.feat.gridDesc": "Built-in optical alignment grid overlay to compose balanced, professional framing for photography and web graphics.",
+  "freeformCrop.feat.transformTitle": "Rotate & Flip Tools",
+  "freeformCrop.feat.transformDesc": "Rotate in 90-degree steps and mirror horizontally or vertically before cropping to fix camera angles.",
+  "freeformCrop.feat.privacyTitle": "100% Client-Side Privacy",
+  "freeformCrop.feat.privacyDesc": "Your pictures stay on your computer. Every crop operation is computed locally in memory with HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "What is Freeform Image Cropping and Why Does it Matter?",
+  "freeformCrop.content.p1a": "Freeform image cropping is the process of trimming and reframing an image to arbitrary, custom-defined dimensions without being locked into predefined aspect ratios such as 1:1 or 16:9. Unlike traditional rigid cropping tools that enforce fixed rectangular shapes, a freeform cropper gives creators absolute freedom to isolate exact subjects, eliminate distracting backgrounds, slice out custom website headers, or prepare unique print artwork.",
+  "freeformCrop.content.p1b": "Whether you are a digital marketer isolating a product photo, a photographer perfecting dynamic focal points, or a web developer trimming UI assets, freeform cropping provides granular control over composition, resolution, and framing. ImgFeel’s Freeform Image Cropper delivers a lightweight, browser-based solution equipped with eight interactive resize handles, live coordinate readouts, and instant high-DPI rendering.",
+
+  "freeformCrop.content.h2": "Fixed Aspect Ratios vs. Freeform Cropping",
+  "freeformCrop.content.p2a": "Choosing between fixed-ratio cropping and freeform cropping depends on your target platform and creative goal. Fixed aspect ratios are essential when publishing to social platforms with strict algorithmic display standards, such as Instagram feeds (1:1 square or 4:5 portrait) or YouTube video thumbnails (16:9 widescreen).",
+  "freeformCrop.content.p2b": "Conversely, freeform cropping is indispensable whenever visual storytelling or spatial efficiency takes precedence over rigid container templates. You can carve out panoramic landscapes, slender skyscraper banners, signature stamps, or custom product cutouts. The table below illustrates the most suitable use cases for each cropping geometry:",
+
+  "freeformCrop.content.h3": "Composition Techniques: Using the Rule of Thirds",
+  "freeformCrop.content.p3a": "ImgFeel's freeform cropper incorporates an active Rule of Thirds grid overlay directly inside the draggable bounding box. In classical photography and visual arts, dividing a canvas into a 3×3 grid with four intersecting power points helps artists position key elements where human eyes naturally gravitate.",
+  "freeformCrop.content.p3b": "When adjusting your crop box, try placing the horizon along the upper or lower horizontal guideline rather than dead center. Similarly, align your primary subject—such as a person's eyes or an architectural spire—along one of the vertical lines. This creates tension, visual dynamism, and narrative energy that elevates everyday snapshots into compelling compositions.",
+
+  "freeformCrop.content.h4": "Preserving Pixel Sharpness, DPI, and Color Quality",
+  "freeformCrop.content.p4a": "One common concern during image cropping is quality degradation. When you crop an image with ImgFeel, the engine maps the visual coordinate space directly to the source image's full native pixel buffer. No intermediate downsampling or lossy recompression occurs during the selection phase.",
+  "freeformCrop.content.p4b": "When exporting your cropped result, you can select lossless PNG format to preserve 100% pixel fidelity, modern WebP for lightweight compressed web performance, or standard JPEG with adjustable quality sliders. ImgFeel's engine also maintains full transparency channels for transparent PNG and WebP graphics.",
+
+  "freeformCrop.content.h5": "Popular Workflows for Custom Image Cropping",
+  "freeformCrop.content.p5a": "Freeform cropping solves dozens of daily digital media challenges. Graphic designers frequently use it to crop out scan borders and document artifacts, while ecommerce sellers rely on it to crop product photos tightly around items to maximize thumbnail visibility. Content creators use it to extract detail shots from panoramic vacation photos without losing high-resolution clarity.",
+  "freeformCrop.content.p5b": "Additionally, combining rotation and flipping tools with freeform cropping allows you to correct crooked horizons, straighten smartphone snaps taken at awkward angles, and mirror selfies before isolating the best crop frame.",
+
+  "freeformCrop.content.h6": "How to Crop Images Freely in 4 Easy Steps",
+  "freeformCrop.content.step1Title": "Upload Your Image",
+  "freeformCrop.content.step1Desc": "Drag and drop any PNG, JPG, WebP, or AVIF image onto the dropzone or click to select from your device.",
+  "freeformCrop.content.step2Title": "Adjust the Interactive Bounding Box",
+  "freeformCrop.content.step2Desc": "Drag any of the 8 resize handles on the corners and edges to resize the crop area, or drag inside the box to reposition it.",
+  "freeformCrop.content.step3Title": "Fine-Tune Angle and Aspect Ratio",
+  "freeformCrop.content.step3Desc": "Rotate 90 degrees, flip horizontally or vertically, lock a preset aspect ratio, or enter manual pixel dimensions.",
+  "freeformCrop.content.step4Title": "Download or Copy Your Cropped Image",
+  "freeformCrop.content.step4Desc": "Choose PNG, WebP, or JPG export format and click Download Cropped Image or Copy to Clipboard for immediate use.",
+
+  "freeformCrop.faq.heading": "Frequently Asked Questions About Freeform Image Cropping",
+  "freeformCrop.faq.q1": "What is the difference between freeform and fixed ratio cropping?",
+  "freeformCrop.faq.a1": "Freeform cropping allows you to adjust the width and height of the crop box independently to any custom shape. Fixed ratio cropping locks the proportional relationship between width and height (such as 1:1, 4:3, or 16:9).",
+  "freeformCrop.faq.q2": "Are my uploaded photos uploaded to a cloud server?",
+  "freeformCrop.faq.a2": "No. All cropping, rotating, flipping, and rendering happens 100% locally in your web browser using HTML5 Canvas. Your photos never leave your device.",
+  "freeformCrop.faq.q3": "Does cropping reduce the resolution or quality of my photo?",
+  "freeformCrop.faq.a3": "Cropping extracts pixels from your original high-resolution photo without altering pixel quality. The cropped image retains 100% native clarity of the selected area.",
+  "freeformCrop.faq.q4": "Can I crop transparent PNG and WebP images?",
+  "freeformCrop.faq.a4": "Yes. ImgFeel preserves alpha channel transparency when exporting to PNG or WebP formats.",
+  "freeformCrop.faq.q5": "How do I crop images on mobile phones or tablets?",
+  "freeformCrop.faq.a5": "ImgFeel is fully responsive and supports touch gestures. You can tap and drag handles on any smartphone or tablet touchscreen effortlessly.",
+  "freeformCrop.faq.q6": "Can I rotate or flip my image before cropping?",
+  "freeformCrop.faq.a6": "Yes. Use the Orientation & Flip controls to rotate 90 degrees clockwise/counter-clockwise or mirror horizontally and vertically.",
+  "freeformCrop.faq.q7": "Is this freeform cropper free to use with no limits?",
+  "freeformCrop.faq.a7": "Yes, ImgFeel's Freeform Image Cropper is 100% free with no file limits, no registration requirements, and no watermarks."
+}

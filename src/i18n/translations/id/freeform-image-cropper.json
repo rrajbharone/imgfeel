@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Pemotong Gambar Bebas - Potong Foto Bebas Online Gratis",
+  "freeformCrop.meta.description": "Potong gambar secara bebas dengan kotak interaktif, 8 titik kendali, ukuran kustom, rasio aspek, putar, balik, dan ekspor resolusi tinggi. 100% privat di peramban.",
+  "freeformCrop.hero.title": "Pemotong Gambar Bebas",
+  "freeformCrop.hero.subtitle": "Potong, putar, balik, dan bingkai foto apa saja secara bebas ke ukuran kustom atau rasio standar dengan presisi tingkat piksel.",
+
+  "freeformCrop.preview.title": "Area Pemotongan Interaktif",
+  "freeformCrop.panel.title": "Kontrol & Pengaturan",
+
+  "freeformCrop.empty.title": "Belum Ada Gambar",
+  "freeformCrop.empty.subtitle": "Unggah gambar dari panel kanan atau coba gambar sampel untuk menguji pemotongan bebas.",
+  "freeformCrop.empty.loadDemo": "Muat Gambar Sampel",
+
+  "freeformCrop.dropzone.title": "Seret & lepas gambar Anda ke sini, atau klik untuk memilih",
+  "freeformCrop.dropzone.subtitle": "Potong, putar, balik, dan bingkai foto ke dimensi kustom atau rasio aspek standar",
+  "freeformCrop.dropzone.browse": "Pilih Gambar",
+  "freeformCrop.dropzone.sample": "Coba Gambar Sampel",
+  "freeformCrop.dropzone.formats": "Mendukung JPG, PNG, WebP, AVIF, BMP • Tempel dengan Ctrl+V",
+  "freeformCrop.privacy.badge": "100% Privasi di Peramban — Tanpa Unggah ke Server",
+  "freeformCrop.action.changeImage": "Ganti Gambar",
+
+  "freeformCrop.upload.dropText": "Klik atau seret gambar ke sini (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Tidak ada berkas",
+
+  "freeformCrop.section.upload": "1. Gambar Sumber",
+  "freeformCrop.section.ratios": "2. Rasio Aspek",
+  "freeformCrop.section.dimensions": "3. Dimensi Pemotongan (px)",
+  "freeformCrop.section.transform": "4. Orientasi & Balik",
+  "freeformCrop.section.export": "5. Format & Kualitas Ekspor",
+
+  "freeformCrop.ratio.free": "Bebas",
+  "freeformCrop.ratio.original": "Asli",
+  "freeformCrop.dim.width": "Lebar",
+  "freeformCrop.dim.height": "Tinggi",
+
+  "freeformCrop.transform.rotateLeft": "Putar -90°",
+  "freeformCrop.transform.rotateRight": "Putar +90°",
+  "freeformCrop.transform.flipH": "Balik Horizontal",
+  "freeformCrop.transform.flipV": "Balik Vertikal",
+
+  "freeformCrop.export.format": "Format Gambar",
+  "freeformCrop.export.quality": "Kualitas Ekspor",
+
+  "freeformCrop.metrics.original": "Ukuran Asli",
+  "freeformCrop.metrics.cropped": "Area Terpotong",
+  "freeformCrop.metrics.ratio": "Rasio",
+
+  "freeformCrop.action.download": "Unduh Gambar Terpotong",
+  "freeformCrop.action.copyImage": "Salin ke Papan Klip",
+  "freeformCrop.action.copied": "Gambar Disalin ke Papan Klip!",
+  "freeformCrop.action.maximize": "Pilih Seluruh Gambar",
+  "freeformCrop.action.clear": "Hapus Semua",
+  "freeformCrop.action.reset": "Atur Ulang",
+  "freeformCrop.download.filename": "imgfeel-potong",
+
+  "freeformCrop.cross.circle": "Pemotong Lingkaran",
+  "freeformCrop.cross.square": "Ubah Ukuran ke 1:1",
+  "freeformCrop.cross.mosaic": "Pembuat Mosaik",
+  "freeformCrop.cross.overlay": "Menumpuk Gambar",
+  "freeformCrop.cross.stitch": "Gabungkan Gambar",
+
+  "freeformCrop.feat.freeTitle": "Pemotongan Bebas Tanpa Batas",
+  "freeformCrop.feat.freeDesc": "Tarik titik sudut atau sisi mana saja untuk memotong bentuk persegi panjang tanpa rasio kaku.",
+  "freeformCrop.feat.gridTitle": "Garis Pandu Rule of Thirds",
+  "freeformCrop.feat.gridDesc": "Kisi penyeimbang visual untuk menghasilkan komposisi foto yang profesional.",
+  "freeformCrop.feat.transformTitle": "Alat Putar & Balik",
+  "freeformCrop.feat.transformDesc": "Putar gambar 90° dan balik secara horizontal atau vertikal sebelum dipotong.",
+  "freeformCrop.feat.privacyTitle": "100% Privasi di Peramban",
+  "freeformCrop.feat.privacyDesc": "Foto Anda tetap aman di perangkat. Semua pemrosesan dijalankan secara lokal dengan HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "Apa itu Pemotongan Gambar Bebas dan Mengapa Penting?",
+  "freeformCrop.content.p1a": "Pemotongan gambar bebas adalah metode memotong dan membingkai ulang foto ke ukuran kustom tanpa terkunci pada rasio baku seperti 1:1 atau 16:9. Ini memberikan fleksibilitas penuh untuk memfokuskan objek utama atau membuang latar belakang yang tidak diinginkan.",
+  "freeformCrop.content.p1b": "Alat dari ImgFeel dilengkapi 8 titik kendali interaktif, informasi dimensi real-time, dan ekspor kualitas tinggi tanpa penurunan ketajaman.",
+
+  "freeformCrop.content.h2": "Rasio Aspek Tetap vs. Pemotongan Bebas",
+  "freeformCrop.content.p2a": "Rasio tetap sangat tepat untuk kebutuhan media sosial dengan format standar seperti feed Instagram atau thumbnail YouTube.",
+  "freeformCrop.content.p2b": "Sebaliknya, pemotongan bebas sangat ideal untuk spanduk situs web, panorama, atau pemotongan produk e-commerce sesuai kebutuhan.",
+
+  "freeformCrop.content.h3": "Teknik Komposisi: Memanfaatkan Rule of Thirds",
+  "freeformCrop.content.p3a": "Kisi pembagi 3×3 bawaan membantu Anda menempatkan objek menarik pada titik temu visual alami mata manusia.",
+  "freeformCrop.content.p3b": "Sejajarkan garis horizon atau subjek utama dengan garis kisi untuk menghasilkan foto yang lebih hidup dan proporsional.",
+
+  "freeformCrop.content.h4": "Menjaga Ketajaman Piksel dan Resolusi Asli",
+  "freeformCrop.content.p4a": "ImgFeel memotong langsung dari data piksel asli tanpa kompresi perantara.",
+  "freeformCrop.content.p4b": "Pilih format PNG tanpa kompresi, WebP modern, atau JPG standar dengan kontrol kualitas dan dukungan transparansi.",
+
+  "freeformCrop.content.h5": "Contoh Penggunaan Pemotongan Bebas",
+  "freeformCrop.content.p5a": "Sangat berguna untuk merapikan hasil pindaian dokumen, memotong foto barang dagangan, atau mengambil bagian detail dari foto berukuran besar.",
+  "freeformCrop.content.p5b": "Gunakan fitur putar dan balik untuk memperbaiki sudut foto yang miring sebelum menentukan potongan akhir.",
+
+  "freeformCrop.content.h6": "Cara Memotong Gambar Secara Bebas dalam 4 Langkah",
+  "freeformCrop.content.step1Title": "Unggah Gambar",
+  "freeformCrop.content.step1Desc": "Seret dan lepas foto PNG, JPG, atau WebP ke area unggah.",
+  "freeformCrop.content.step2Title": "Sesuaikan Kotak Potong",
+  "freeformCrop.content.step2Desc": "Tarik 8 titik kendali di sudut dan sisi untuk mengatur ukuran area.",
+  "freeformCrop.content.step3Title": "Atur Orientasi atau Rasio",
+  "freeformCrop.content.step3Desc": "Putar atau pilih rasio prasetel jika diperlukan.",
+  "freeformCrop.content.step4Title": "Unduh atau Salin Gambar",
+  "freeformCrop.content.step4Desc": "Pilih format ekspor dan klik Unduh Gambar atau Salin ke Papan Klip.",
+
+  "freeformCrop.faq.heading": "Pertanyaan Umum Seputar Pemotongan Gambar Bebas",
+  "freeformCrop.faq.q1": "Apa perbedaan antara pemotongan bebas dan rasio tetap?",
+  "freeformCrop.faq.a1": "Pemotongan bebas memungkinkan Anda mengubah lebar dan tinggi secara terpisah, sedangkan rasio tetap mengunci perbandingan proporsinya.",
+  "freeformCrop.faq.q2": "Apakah foto saya diunggah ke server internet?",
+  "freeformCrop.faq.a2": "Tidak. Semua proses berlangsung 100% lokal di browser Anda dengan HTML5 Canvas.",
+  "freeformCrop.faq.q3": "Apakah pemotongan mengurangi kualitas atau ketajaman foto?",
+  "freeformCrop.faq.a3": "Tidak. Piksel diambil langsung dari gambar asli dengan kejernihan maksimal.",
+  "freeformCrop.faq.q4": "Dapatkah saya memotong gambar transparan PNG dan WebP?",
+  "freeformCrop.faq.a4": "Ya, transparansi kanal alfa tetap dipertahankan.",
+  "freeformCrop.faq.q5": "Bagaimana cara memotong gambar di ponsel atau tablet?",
+  "freeformCrop.faq.a5": "ImgFeel mendukung layar sentuh secara penuh, Anda cukup menyeret titik kendali dengan jari.",
+  "freeformCrop.faq.q6": "Bisakah saya memutar foto sebelum memotong?",
+  "freeformCrop.faq.a6": "Ya, tersedia fitur putar 90° dan balik horizontal/vertikal.",
+  "freeformCrop.faq.q7": "Apakah alat pemotong ini gratis dan tanpa batas?",
+  "freeformCrop.faq.a7": "Ya, 100% gratis tanpa batasan berkas dan tanpa watermark."
+}

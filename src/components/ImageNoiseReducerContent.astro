@@ -1,0 +1,450 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": t(locale, 'noiseReducer.content.faq1Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'noiseReducer.content.faq1A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'noiseReducer.content.faq2Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'noiseReducer.content.faq2A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'noiseReducer.content.faq3Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'noiseReducer.content.faq3A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'noiseReducer.content.faq4Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'noiseReducer.content.faq4A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'noiseReducer.content.faq5Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'noiseReducer.content.faq5A')
+      }
+    }
+  ]
+};
+---
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Overview -->
+      <h2>{t(locale, 'noiseReducer.content.h1')}</h2>
+      <p>{t(locale, 'noiseReducer.content.p1a')}</p>
+      <p>{t(locale, 'noiseReducer.content.p1b')}</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3>{t(locale, 'noiseReducer.content.feat1Title')}</h3>
+          <p>{t(locale, 'noiseReducer.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'noiseReducer.content.feat2Title')}</h3>
+          <p>{t(locale, 'noiseReducer.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'noiseReducer.content.feat3Title')}</h3>
+          <p>{t(locale, 'noiseReducer.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'noiseReducer.content.feat4Title')}</h3>
+          <p>{t(locale, 'noiseReducer.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Types of Noise -->
+      <h2>{t(locale, 'noiseReducer.content.h2')}</h2>
+      <p>{t(locale, 'noiseReducer.content.p2a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h4>{t(locale, 'noiseReducer.content.type1Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.type1Desc')}</p>
+        </div>
+        <div class="type-card">
+          <h4>{t(locale, 'noiseReducer.content.type2Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.type2Desc')}</p>
+        </div>
+        <div class="type-card">
+          <h4>{t(locale, 'noiseReducer.content.type3Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.type3Desc')}</p>
+        </div>
+        <div class="type-card">
+          <h4>{t(locale, 'noiseReducer.content.type4Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.type4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Comparison Table -->
+      <h2>{t(locale, 'noiseReducer.content.h3')}</h2>
+      <p>{t(locale, 'noiseReducer.content.p3a')}</p>
+      <p>{t(locale, 'noiseReducer.content.p3b')}</p>
+
+      <div class="table-responsive">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Profile / Preset</th>
+              <th>Target Noise Type</th>
+              <th>Smoothing Radius</th>
+              <th>Color Suppression</th>
+              <th>Ideal Photography Scenario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Balanced Auto</strong></td>
+              <td>Moderate ISO & Sensor Static</td>
+              <td>Fine (1px)</td>
+              <td>60% Moderate</td>
+              <td>Everyday smartphone photos, daylight shadows, social uploads</td>
+            </tr>
+            <tr>
+              <td><strong>Low-Light Night</strong></td>
+              <td>Deep Chroma Speckles & High ISO (3200+)</td>
+              <td>Medium (2px)</td>
+              <td>90% Aggressive</td>
+              <td>Twilight cityscapes, indoor events, concert photography, night skies</td>
+            </tr>
+            <tr>
+              <td><strong>Subtle Portrait</strong></td>
+              <td>Gentle Skin Luminance Noise</td>
+              <td>Fine (1px)</td>
+              <td>40% Gentle</td>
+              <td>Headshots, modeling portraits, wedding albums (preserves pores)</td>
+            </tr>
+            <tr>
+              <td><strong>Film / Scanned Grain</strong></td>
+              <td>Salt & Pepper, Scanner Dust, Film Grain</td>
+              <td>Medium (2px)</td>
+              <td>50% Median Blend</td>
+              <td>Digitized family prints, historical archives, textured illustrations</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Bilateral Filter Deep-Dive -->
+      <h2>{t(locale, 'noiseReducer.content.h4')}</h2>
+      <p>{t(locale, 'noiseReducer.content.p4a')}</p>
+      <p>{t(locale, 'noiseReducer.content.p4b')}</p>
+
+      <!-- Section 5: Use Cases -->
+      <h2>{t(locale, 'noiseReducer.content.h5')}</h2>
+      <p>{t(locale, 'noiseReducer.content.p5a')}</p>
+
+      <div class="use-cases-grid">
+        <div class="use-case-card">
+          <h4>{t(locale, 'noiseReducer.content.use1Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.use1Desc')}</p>
+        </div>
+        <div class="use-case-card">
+          <h4>{t(locale, 'noiseReducer.content.use2Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.use2Desc')}</p>
+        </div>
+        <div class="use-case-card">
+          <h4>{t(locale, 'noiseReducer.content.use3Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.use3Desc')}</p>
+        </div>
+        <div class="use-case-card">
+          <h4>{t(locale, 'noiseReducer.content.use4Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.use4Desc')}</p>
+        </div>
+        <div class="use-case-card">
+          <h4>{t(locale, 'noiseReducer.content.use5Title')}</h4>
+          <p>{t(locale, 'noiseReducer.content.use5Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Step-by-Step Tutorial -->
+      <h2>{t(locale, 'noiseReducer.content.h6')}</h2>
+      <div class="steps-timeline">
+        <div class="step-card">
+          <div class="step-badge">1</div>
+          <div class="step-content">
+            <h4>{t(locale, 'noiseReducer.content.step1Title')}</h4>
+            <p>{t(locale, 'noiseReducer.content.step1Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">2</div>
+          <div class="step-content">
+            <h4>{t(locale, 'noiseReducer.content.step2Title')}</h4>
+            <p>{t(locale, 'noiseReducer.content.step2Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">3</div>
+          <div class="step-content">
+            <h4>{t(locale, 'noiseReducer.content.step3Title')}</h4>
+            <p>{t(locale, 'noiseReducer.content.step3Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">4</div>
+          <div class="step-content">
+            <h4>{t(locale, 'noiseReducer.content.step4Title')}</h4>
+            <p>{t(locale, 'noiseReducer.content.step4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: FAQ Accordion with Schema -->
+      <h2>{t(locale, 'noiseReducer.content.faqTitle')}</h2>
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary class="faq-question">{t(locale, 'noiseReducer.content.faq1Q')}</summary>
+          <p class="faq-answer">{t(locale, 'noiseReducer.content.faq1A')}</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">{t(locale, 'noiseReducer.content.faq2Q')}</summary>
+          <p class="faq-answer">{t(locale, 'noiseReducer.content.faq2A')}</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">{t(locale, 'noiseReducer.content.faq3Q')}</summary>
+          <p class="faq-answer">{t(locale, 'noiseReducer.content.faq3A')}</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">{t(locale, 'noiseReducer.content.faq4Q')}</summary>
+          <p class="faq-answer">{t(locale, 'noiseReducer.content.faq4A')}</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">{t(locale, 'noiseReducer.content.faq5Q')}</summary>
+          <p class="faq-answer">{t(locale, 'noiseReducer.content.faq5A')}</p>
+        </details>
+      </div>
+
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+  .content-body {
+    max-width: var(--container-narrow, 800px);
+    margin-inline: auto;
+    font-size: var(--text-base, 16px);
+    line-height: 1.7;
+    color: var(--text-color, #1e293b);
+  }
+  .content-body h2 {
+    font-size: var(--text-2xl, 24px);
+    font-weight: 800;
+    color: var(--text-color, #0f172a);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    line-height: 1.3;
+  }
+  .content-body h3 {
+    font-size: var(--text-lg, 18px);
+    font-weight: 700;
+    color: var(--text-color, #0f172a);
+    margin-bottom: var(--space-2);
+  }
+  .content-body h4 {
+    font-size: var(--text-base, 16px);
+    font-weight: 700;
+    color: var(--text-color, #0f172a);
+    margin-bottom: var(--space-2);
+  }
+  .content-body p {
+    margin-bottom: var(--space-4);
+    color: var(--text-muted, #475569);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+  @media (max-width: 640px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .feature-card {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: var(--radius-lg, 12px);
+    padding: var(--space-4);
+  }
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .types-grid, .use-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+  }
+  @media (max-width: 640px) {
+    .types-grid, .use-cases-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .type-card, .use-case-card {
+    background: var(--bg-surface, #f8fafc);
+    border-left: 3px solid var(--primary, #6366f1);
+    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    margin-block: var(--space-6);
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color, #e2e8f0);
+  }
+  .comparison-table th {
+    background: var(--bg-surface, #f1f5f9);
+    font-weight: 700;
+    color: var(--text-color, #0f172a);
+  }
+  .comparison-table tbody tr:nth-child(even) {
+    background: var(--bg-surface, #f8fafc);
+  }
+
+  .steps-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+  }
+  .step-card {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: var(--radius-lg, 12px);
+    padding: var(--space-4);
+    align-items: flex-start;
+  }
+  .step-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary, #6366f1);
+    color: #ffffff;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+  .step-content h4 {
+    margin-top: 2px;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .faq-item {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: var(--radius-md, 8px);
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+  }
+  .faq-question {
+    font-weight: 700;
+    color: var(--text-color, #0f172a);
+    font-size: 15px;
+    user-select: none;
+  }
+  .faq-answer {
+    margin-top: var(--space-2);
+    margin-bottom: 0;
+    font-size: 14px;
+    color: var(--text-muted, #475569);
+  }
+</style>

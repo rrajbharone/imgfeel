@@ -48,8 +48,20 @@
   "tools.imageBlur.description": "Buramkan foto, buat latar belakang bokeh, dan sensor informasi sensitif dengan Gaussian blur, kilau lembut, dan 100% privasi di browser.",
   "tools.imageStitcher.title": "Gabungkan Gambar (Sambung & Satukan Foto Online)",
   "tools.imageStitcher.description": "Satukan beberapa foto menjadi satu gambar secara horizontal, vertikal, atau kisi dengan jarak fleksibel dan 100% privasi di browser.",
+  "tools.screenshotBeautifier.title": "Mempercantik Tangkapan Layar (Buat Mockup Online)",
+  "tools.screenshotBeautifier.description": "Ubah tangkapan layar biasa menjadi visual profesional untuk media sosial dan presentasi dengan gradien modern, bingkai macOS, bayangan, dan 100% privasi.",
+  "tools.imagePlaceholder.title": "Generator Gambar Placeholder (Buat Gambar Dummy Online)",
+  "tools.imagePlaceholder.description": "Hasilkan gambar placeholder dan mockup wireframe untuk desain web, pengembangan aplikasi, dan prototipe dengan dimensi khusus, ekspor SVG, dan 100% privasi di browser.",
+  "tools.imageOverlay.title": "Alat Menumpuk Gambar (Tempel Gambar di Atas Gambar Online)",
+  "tools.imageOverlay.description": "Tumpuk satu gambar di atas gambar lain dengan pengaturan posisi interaktif, kontrol opasitas, mode perpaduan, rotasi, dan 100% privasi di browser.",
+  "tools.imageMosaic.title": "Pembuat Mosaik Foto (Generator Mosaik Gambar Online)",
+  "tools.imageMosaic.description": "Ubah gambar Anda menjadi mosaik foto resolusi tinggi, kolase kisi simetris, dan pola geometris dengan 100% privasi di browser.",
+  "tools.freeformCrop.title": "Pemotong Gambar Bebas (Potong Foto Online)",
+  "tools.freeformCrop.description": "Potong gambar secara bebas dengan kotak interaktif, 8 titik kendali, ukuran kustom, rasio aspek, putar, balik, dan 100% privasi di peramban.",
   "tools.videoTrimmer.title": "Pemotong Video Online",
   "tools.videoTrimmer.description": "Potong, pangkas, dan perpendek klip video online dengan timeline visual interaktif, kontrol audio, dan 100% privasi di browser.",
   "tools.videoRotator.title": "Pemutar Video Online",
-  "tools.videoRotator.description": "Putar, rotasikan, dan cerminkan klip video (90°, 180°, 270°) online dengan pratinjau langsung dan 100% privasi di peramban."
+  "tools.videoRotator.description": "Putar, rotasikan, dan cerminkan klip video (90°, 180°, 270°) online dengan pratinjau langsung dan 100% privasi di peramban.",
+  "tools.noiseReducer.title": "Pengurang Noise Gambar (Hapus Noise & Bintik Foto Online)",
+  "tools.noiseReducer.description": "Kurangi noise gambar dan hapus bintik foto online gratis. Bersihkan bintik warna cahaya redup dan noise sensor ISO tinggi dengan pratinjau langsung dan 100% privasi."
 }

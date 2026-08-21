@@ -1,0 +1,453 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q1'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a1')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q2'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a2')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q3'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a3')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q4'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a4')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q5'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a5')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q6'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a6')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'overlay.faq.q7'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'overlay.faq.a7')
+      }
+    }
+  ]
+};
+---
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1 -->
+      <h2>{t(locale, 'overlay.content.h1')}</h2>
+      <p>{t(locale, 'overlay.content.p1a')}</p>
+      <p>{t(locale, 'overlay.content.p1b')}</p>
+
+      <div class="feature-cards-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h3>{t(locale, 'overlay.content.feat1Title')}</h3>
+          <p>{t(locale, 'overlay.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <h3>{t(locale, 'overlay.content.feat2Title')}</h3>
+          <p>{t(locale, 'overlay.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 3a9 9 0 0 1 0 18v-18z" fill="currentColor"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'overlay.content.feat3Title')}</h3>
+          <p>{t(locale, 'overlay.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'overlay.content.feat4Title')}</h3>
+          <p>{t(locale, 'overlay.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Popular Use Cases -->
+      <h2>{t(locale, 'overlay.content.h2')}</h2>
+      <p>{t(locale, 'overlay.content.p2a')}</p>
+      <ul>
+        <li><strong>{t(locale, 'overlay.content.use1Title')}:</strong> {t(locale, 'overlay.content.use1Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.use2Title')}:</strong> {t(locale, 'overlay.content.use2Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.use3Title')}:</strong> {t(locale, 'overlay.content.use3Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.use4Title')}:</strong> {t(locale, 'overlay.content.use4Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.use5Title')}:</strong> {t(locale, 'overlay.content.use5Desc')}</li>
+      </ul>
+
+      <!-- Section 3: Blend Modes & Opacity -->
+      <h2>{t(locale, 'overlay.content.h3')}</h2>
+      <p>{t(locale, 'overlay.content.p3a')}</p>
+      <p>{t(locale, 'overlay.content.p3b')}</p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Blend Mode</th>
+              <th>Mathematical Behavior</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Normal (Source-Over)</strong></td>
+              <td>Standard alpha blending</td>
+              <td>Logos, watermark badges, sticker graphics, UI icons</td>
+            </tr>
+            <tr>
+              <td><strong>Multiply</strong></td>
+              <td>Multiplies pixel luminosity (darkens)</td>
+              <td>Removing pure white backgrounds from black logos & sketches</td>
+            </tr>
+            <tr>
+              <td><strong>Screen</strong></td>
+              <td>Inverts, multiplies, and inverts (lightens)</td>
+              <td>Removing black backgrounds from light rays, sparklers & glows</td>
+            </tr>
+            <tr>
+              <td><strong>Overlay</strong></td>
+              <td>Combines Multiply & Screen conditionally</td>
+              <td>Dramatic artistic textures, contrast enhancement, film grain</td>
+            </tr>
+            <tr>
+              <td><strong>Soft Light</strong></td>
+              <td>Subtle dodge/burn diffusion</td>
+              <td>Gentle sunlight leaks, vintage portrait tones, soft color tints</td>
+            </tr>
+            <tr>
+              <td><strong>Difference</strong></td>
+              <td>Subtracts darker color from lighter color</td>
+              <td>Inverted graphic art, high-tech neon effects, visual misalignment checks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Exact Alignment & Positioning -->
+      <h2>{t(locale, 'overlay.content.h4')}</h2>
+      <p>{t(locale, 'overlay.content.p4a')}</p>
+      <p>{t(locale, 'overlay.content.p4b')}</p>
+
+      <!-- Section 5: Preserving Image Quality & Lossless Export -->
+      <h2>{t(locale, 'overlay.content.h5')}</h2>
+      <p>{t(locale, 'overlay.content.p5a')}</p>
+      <p>{t(locale, 'overlay.content.p5b')}</p>
+
+      <!-- Section 6: Step-by-Step Tutorial -->
+      <h2>{t(locale, 'overlay.content.h6')}</h2>
+      <ol class="tutorial-steps-list">
+        <li><strong>{t(locale, 'overlay.content.step1Title')}:</strong> {t(locale, 'overlay.content.step1Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.step2Title')}:</strong> {t(locale, 'overlay.content.step2Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.step3Title')}:</strong> {t(locale, 'overlay.content.step3Desc')}</li>
+        <li><strong>{t(locale, 'overlay.content.step4Title')}:</strong> {t(locale, 'overlay.content.step4Desc')}</li>
+      </ol>
+
+      <!-- Section 7: FAQ -->
+      <div class="faq-container">
+        <h2>{t(locale, 'overlay.faq.heading')}</h2>
+        
+        <div class="faq-accordion">
+          <details class="faq-item" open>
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q1')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a1')}</p></div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q2')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a2')}</p></div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q3')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a3')}</p></div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q4')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a4')}</p></div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q5')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a5')}</p></div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q6')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a6')}</p></div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question"><h3>{t(locale, 'overlay.faq.q7')}</h3></summary>
+            <div class="faq-answer"><p>{t(locale, 'overlay.faq.a7')}</p></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</section>
+
+<style>
+  .content-section {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-10) 0;
+  }
+
+  @media (min-width: 640px) {
+    .content-section {
+      padding: var(--space-12) 0;
+    }
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    color: var(--color-text-secondary);
+    font-size: var(--text-base);
+    line-height: 1.75;
+    box-sizing: border-box;
+  }
+
+  .content-body h2 {
+    color: var(--color-text);
+    font-size: var(--text-xl);
+    font-weight: 800;
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  @media (min-width: 640px) {
+    .content-body h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-10);
+      margin-bottom: var(--space-4);
+    }
+  }
+
+  .content-body h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    margin-bottom: var(--space-4);
+  }
+
+  .content-body ul,
+  .content-body ol {
+    margin-bottom: var(--space-6);
+    padding-left: var(--space-5);
+  }
+
+  .content-body li {
+    margin-bottom: var(--space-2-5);
+  }
+
+  .content-body strong {
+    color: var(--color-text);
+  }
+
+  .feature-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    margin: var(--space-6) 0 var(--space-8) 0;
+  }
+
+  @media (min-width: 640px) {
+    .feature-cards-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .feature-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .feature-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-card p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    margin: var(--space-6) 0 var(--space-8) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* FAQ */
+  .faq-container {
+    margin-top: var(--space-12);
+  }
+
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    overflow: hidden;
+  }
+
+  .faq-question {
+    padding: var(--space-4);
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question h3 {
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-4) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .faq-answer p {
+    margin: 0;
+  }
+</style>

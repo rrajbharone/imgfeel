@@ -15,6 +15,10 @@ const { title, description, href, id = '', icon, badge } = Astro.props;
 
 // Determine icon type from icon prop or id
 const iconType = icon || (
+  id.includes('exact') ? 'sliders' :
+  id.includes('webp') ? 'zap' :
+  id.includes('freeform') || (id.includes('crop') && !id.includes('circle')) ? 'crop' :
+  id.includes('circle') ? 'circle' :
   id.includes('dimensions') ? 'dimensions' :
   id.includes('cm-mm') ? 'ruler' :
   id.includes('pan') ? 'idCard' :
@@ -22,7 +26,23 @@ const iconType = icon || (
   id.includes('ssc') ? 'fileCheck' :
   id.includes('youtube') ? 'youtube' :
   id.includes('base64') ? 'code' :
-  id.includes('data-uri') ? 'link' : 'resize'
+  id.includes('data-uri') ? 'link' :
+  id.includes('blur') ? 'blur' :
+  id.includes('stitch') ? 'stitch' :
+  id.includes('overlay') ? 'layers' :
+  id.includes('mosaic') ? 'mosaic' :
+  id.includes('noise') || id.includes('denoise') ? 'wand' :
+  id.includes('placeholder') ? 'placeholder' :
+  id.includes('beautif') ? 'sparkles' :
+  id.includes('inverter') ? 'invert' :
+  id.includes('grayscale') ? 'contrast' :
+  id.includes('square') ? 'square' :
+  id.includes('dpi') ? 'printer' :
+  id.includes('file-size') ? 'filesize' :
+  id.includes('resolution') ? 'resolution' :
+  id.includes('aspect-ratio') ? 'aspectRatio' :
+  id.includes('trimmer') ? 'scissors' :
+  id.includes('rotator') ? 'rotate' : 'resize'
 );
 ---
 
@@ -178,6 +198,64 @@ const iconType = icon || (
           <rect x="3" y="3" width="8" height="18" rx="1"></rect>
           <rect x="13" y="3" width="8" height="18" rx="1"></rect>
           <path d="M11 8h2M11 12h2M11 16h2"></path>
+        </svg>
+      )}
+      {iconType === 'sparkles' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"></path>
+          <path d="M19 16l1.2 2.8L23 20l-2.8 1.2L19 24l-1.2-2.8L15 20l2.8-1.2z"></path>
+        </svg>
+      )}
+      {iconType === 'placeholder' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"></rect>
+          <line x1="3" y1="3" x2="21" y2="21"></line>
+          <line x1="21" y1="3" x2="3" y2="21"></line>
+        </svg>
+      )}
+      {iconType === 'layers' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      )}
+      {iconType === 'mosaic' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
+      )}
+      {(iconType === 'sliders' || iconType === 'adjustments') && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      )}
+      {(iconType === 'zap' || iconType === 'compress') && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      )}
+      {iconType === 'crop' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+          <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+        </svg>
+      )}
+      {iconType === 'wand' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+          <circle cx="12" cy="12" r="3"></circle>
         </svg>
       )}
     </div>

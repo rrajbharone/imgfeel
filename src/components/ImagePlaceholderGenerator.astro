@@ -1,0 +1,1529 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+import { POPULAR_PRESETS, COLOR_SWATCHES } from '@/scripts/placeholder-generator';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+const dimCheckUrl = getToolUrl('image-dimensions-checker', locale);
+const ratioCheckUrl = getToolUrl('image-aspect-ratio-checker', locale);
+const beautifyUrl = getToolUrl('screenshot-beautifier', locale);
+
+const i18nDict = {
+  copySuccess: t(locale, 'placeholder.action.copied'),
+  copySvgSuccess: t(locale, 'placeholder.action.copiedSvg'),
+  copyDataUriSuccess: t(locale, 'placeholder.action.copiedUri'),
+  downloadName: t(locale, 'placeholder.download.filename'),
+};
+---
+
+<div class="placeholder-tool-wrapper" id="placeholderApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Initial / Dropzone State (Visible by default) -->
+  <div class="placeholder-initial-card" id="placeholderInitialCard">
+    <div class="placeholder-initial-content">
+      <div class="placeholder-icon-circle">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+      </div>
+
+      <h2 class="placeholder-init-title">{t(locale, 'placeholder.initial.title')}</h2>
+      <p class="placeholder-init-subtitle">{t(locale, 'placeholder.initial.subtitle')}</p>
+
+      <!-- Popular Quick Presets Grid -->
+      <div class="quick-presets-section">
+        <p class="quick-presets-label">{t(locale, 'placeholder.initial.presetsTitle')}</p>
+        <div class="quick-presets-grid" id="quickPresetsGrid">
+          {POPULAR_PRESETS.slice(0, 8).map(preset => (
+            <button type="button" class="quick-preset-btn" data-width={preset.width} data-height={preset.height} data-name={preset.label}>
+              <span class="preset-name">{preset.label}</span>
+              <span class="preset-dims">{preset.width} × {preset.height}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="placeholder-btn-row">
+        <button type="button" class="btn btn-primary placeholder-btn-primary" id="startCustomPlaceholderBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>{t(locale, 'placeholder.initial.customBtn')}</span>
+        </button>
+      </div>
+
+      <div class="placeholder-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'placeholder.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace (Hidden initially until user selects a preset or clicks custom) -->
+  <div class="placeholder-workspace-container" id="placeholderWorkspaceContainer" style="display: none;">
+    <!-- Workspace Header Bar -->
+    <div class="placeholder-workspace-header">
+      <div class="placeholder-meta-badge">
+        <span class="placeholder-status-dot"></span>
+        <span id="placeholderPresetNameTag" class="placeholder-filename-label">800 × 600 px</span>
+        <span class="placeholder-meta-tag" id="placeholderRatioTag">4:3 (Landscape)</span>
+      </div>
+
+      <div class="placeholder-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="placeholderChangePresetBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>{t(locale, 'placeholder.action.changePreset')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Grid: Preview on Left, Settings on Right -->
+    <div class="placeholder-main-grid">
+      <!-- Left Column: Live Preview & Quick Actions -->
+      <div class="preview-column">
+        <div class="preview-card">
+          <div class="viewport-header">
+            <div class="header-left">
+              <span class="viewport-label">{t(locale, 'placeholder.preview.title')}</span>
+            </div>
+            <div class="header-right">
+              <span class="viewport-tag" id="previewDimsBadge">800 × 600 px</span>
+            </div>
+          </div>
+
+          <div class="canvas-viewport" id="canvasViewport">
+            <div class="canvas-wrap" id="canvasWrap">
+              <canvas id="mainPlaceholderCanvas" class="main-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Metrics bar -->
+          <div class="preview-metrics-row">
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'placeholder.metrics.dimensions')}</span>
+              <strong id="metricDims">800 × 600 px</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'placeholder.metrics.ratio')}</span>
+              <strong id="metricRatio">4:3 (Landscape)</strong>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">{t(locale, 'placeholder.metrics.fileWeight')}</span>
+              <strong id="metricWeight">~4.2 KB</strong>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons-group">
+            <div class="primary-actions-row">
+              <button type="button" class="btn btn-primary action-btn-main" id="placeholderDownloadBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>{t(locale, 'placeholder.action.download')}</span>
+              </button>
+
+              <button type="button" class="btn btn-secondary action-btn-copy" id="placeholderCopyImageBtn" title="Copy PNG to Clipboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyImageBtnText">{t(locale, 'placeholder.action.copyImage')}</span>
+              </button>
+            </div>
+
+            <div class="secondary-actions-row">
+              <button type="button" class="btn-snippet" id="placeholderCopySvgBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <span id="copySvgBtnText">{t(locale, 'placeholder.action.copySvg')}</span>
+              </button>
+
+              <button type="button" class="btn-snippet" id="placeholderCopyDataUriBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                <span id="copyDataUriBtnText">{t(locale, 'placeholder.action.copyDataUri')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Settings & Controls Panel -->
+      <div class="controls-column">
+        <div class="controls-card">
+          <!-- Top Toolbar with Reset -->
+          <div class="controls-header">
+            <h2 class="panel-heading">{t(locale, 'placeholder.panel.title')}</h2>
+            <button type="button" class="reset-link-btn" id="placeholderResetBtn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>{t(locale, 'placeholder.action.reset')}</span>
+            </button>
+          </div>
+
+          <!-- Section 1: Dimensions -->
+          <div class="control-section">
+            <label class="section-title">{t(locale, 'placeholder.section.dimensions')}</label>
+            <div class="dims-input-grid">
+              <div class="dim-field">
+                <label for="inputWidth" class="field-sublabel">{t(locale, 'placeholder.dim.width')}</label>
+                <div class="input-with-unit">
+                  <input type="number" id="inputWidth" value="800" min="10" max="4000" class="num-input" />
+                  <span class="unit-tag">px</span>
+                </div>
+              </div>
+
+              <div class="lock-ratio-wrapper">
+                <button type="button" class="lock-btn" id="lockRatioBtn" title="Lock Aspect Ratio" aria-pressed="false">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="dim-field">
+                <label for="inputHeight" class="field-sublabel">{t(locale, 'placeholder.dim.height')}</label>
+                <div class="input-with-unit">
+                  <input type="number" id="inputHeight" value="600" min="10" max="4000" class="num-input" />
+                  <span class="unit-tag">px</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Popular Presets Dropdown -->
+            <div class="presets-dropdown-row">
+              <label for="presetSelect" class="field-sublabel">{t(locale, 'placeholder.presets.label')}</label>
+              <select id="presetSelect" class="form-select">
+                <option value="">{t(locale, 'placeholder.presets.selectPlaceholder')}</option>
+                {POPULAR_PRESETS.map(preset => (
+                  <option value={`${preset.width}x${preset.height}`}>
+                    {preset.name} ({preset.width} × {preset.height})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 2: Background Colors & Style -->
+          <div class="control-section">
+            <label class="section-title">{t(locale, 'placeholder.section.background')}</label>
+
+            <!-- Color Palette Swatches -->
+            <div class="color-palette-row">
+              {COLOR_SWATCHES.map((swatch, idx) => (
+                <button
+                  type="button"
+                  class={`palette-chip ${idx === 0 ? 'active' : ''}`}
+                  data-bg={swatch.bg}
+                  data-text={swatch.text}
+                  style={`background-color: ${swatch.bg}; border-color: ${swatch.text};`}
+                  title={swatch.name}
+                >
+                  <span class="palette-indicator" style={`background-color: ${swatch.text};`}></span>
+                </button>
+              ))}
+            </div>
+
+            <!-- Custom Hex Pickers -->
+            <div class="custom-colors-grid">
+              <div class="color-picker-item">
+                <label for="inputBgColor" class="field-sublabel">{t(locale, 'placeholder.section.background')}</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="pickerBgColor" value="#cccccc" class="color-circle-input" />
+                  <input type="text" id="inputBgColor" value="#cccccc" maxlength="9" class="hex-text-input" />
+                </div>
+              </div>
+
+              <div class="color-picker-item">
+                <label for="inputTextColor" class="field-sublabel">{t(locale, 'placeholder.text.color')}</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="pickerTextColor" value="#333333" class="color-circle-input" />
+                  <input type="text" id="inputTextColor" value="#333333" maxlength="9" class="hex-text-input" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Pattern / Style Selector -->
+            <div class="pattern-selector-group">
+              <label class="field-sublabel">{t(locale, 'placeholder.section.background')}</label>
+              <div class="pill-group" id="patternPillGroup">
+                <button type="button" class="pill-btn active" data-pattern="solid">{t(locale, 'placeholder.pattern.solid')}</button>
+                <button type="button" class="pill-btn" data-pattern="cross">{t(locale, 'placeholder.pattern.cross')}</button>
+                <button type="button" class="pill-btn" data-pattern="grid">{t(locale, 'placeholder.pattern.grid')}</button>
+                <button type="button" class="pill-btn" data-pattern="dots">Dots</button>
+                <button type="button" class="pill-btn" data-pattern="diagonal">{t(locale, 'placeholder.pattern.diagonal')}</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Text & Typography -->
+          <div class="control-section">
+            <label class="section-title">{t(locale, 'placeholder.section.text')}</label>
+
+            <div class="text-input-field">
+              <label for="inputCustomText" class="field-sublabel">{t(locale, 'placeholder.section.text')}</label>
+              <input
+                type="text"
+                id="inputCustomText"
+                placeholder={t(locale, 'placeholder.text.hint')}
+                class="form-input"
+              />
+            </div>
+
+            <div class="font-size-row">
+              <div class="slider-header">
+                <label for="sliderFontSize" class="field-sublabel">{t(locale, 'placeholder.text.fontSize')}</label>
+                <span class="val-badge" id="fontSizeBadge">Auto</span>
+              </div>
+              <input type="range" id="sliderFontSize" min="0" max="120" value="0" class="range-slider" />
+            </div>
+
+            <div class="font-family-row">
+              <label for="selectFontFamily" class="field-sublabel">{t(locale, 'placeholder.text.font')}</label>
+              <select id="selectFontFamily" class="form-select">
+                <option value="sans">Sans-Serif (Inter, system-ui)</option>
+                <option value="mono">Monospace (Code / Tech)</option>
+                <option value="serif">Serif (Editorial / Classic)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 4: Export Format & Output Settings -->
+          <div class="control-section">
+            <label class="section-title">{t(locale, 'placeholder.section.export')}</label>
+            <div class="export-grid">
+              <div class="format-field">
+                <label for="selectExportFormat" class="field-sublabel">{t(locale, 'placeholder.export.format')}</label>
+                <select id="selectExportFormat" class="form-select">
+                  <option value="png">PNG (Raster Image)</option>
+                  <option value="svg">SVG (Vector Graphic)</option>
+                  <option value="webp">WebP (Compressed)</option>
+                  <option value="jpeg">JPG / JPEG (Standard)</option>
+                </select>
+              </div>
+
+              <div class="quality-field" id="qualityFieldGroup" style="display: none;">
+                <div class="slider-header">
+                  <label for="sliderQuality" class="field-sublabel">{t(locale, 'placeholder.export.quality')}</label>
+                  <span class="val-badge" id="qualityBadge">92%</span>
+                </div>
+                <input type="range" id="sliderQuality" min="10" max="100" value="92" class="range-slider" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Related Tools Navigation -->
+  <div class="placeholder-cross-links-row">
+    <a href={exactUrl} class="btn btn-secondary placeholder-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="4 14 10 14 10 20"></polyline>
+        <polyline points="20 10 14 10 14 4"></polyline>
+        <line x1="14" y1="10" x2="21" y2="3"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      <span>{t(locale, 'placeholder.cross.exact')}</span>
+    </a>
+
+    <a href={squareUrl} class="btn btn-secondary placeholder-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+      </svg>
+      <span>{t(locale, 'placeholder.cross.square')}</span>
+    </a>
+
+    <a href={dimCheckUrl} class="btn btn-secondary placeholder-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <line x1="3" y1="9" x2="21" y2="9"></line>
+        <line x1="9" y1="21" x2="9" y2="9"></line>
+      </svg>
+      <span>{t(locale, 'placeholder.cross.dimensions')}</span>
+    </a>
+
+    <a href={ratioCheckUrl} class="btn btn-secondary placeholder-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span>{t(locale, 'placeholder.cross.ratio')}</span>
+    </a>
+
+    <a href={beautifyUrl} class="btn btn-secondary placeholder-cross-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"></path>
+      </svg>
+      <span>{t(locale, 'placeholder.cross.beautify')}</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  import {
+    renderPlaceholderToCanvas,
+    generatePlaceholderSVG,
+    exportPlaceholderImage,
+    copyPlaceholderToClipboard,
+    type PlaceholderOptions,
+    type PatternType,
+    type FontFamilyType,
+    type ExportFormat,
+  } from '@/scripts/placeholder-generator';
+
+  function initPlaceholderApp() {
+    const app = document.getElementById('placeholderApp');
+    if (!app) return;
+
+    let i18n = {
+      copySuccess: 'Image Copied to Clipboard!',
+      copySvgSuccess: 'SVG Code Copied!',
+      copyDataUriSuccess: 'Data URI Copied!',
+      downloadName: 'imgfeel-placeholder',
+    };
+
+    try {
+      const dataAttr = app.getAttribute('data-i18n');
+      if (dataAttr) i18n = JSON.parse(dataAttr);
+    } catch {}
+
+    // State
+    let options: PlaceholderOptions = {
+      width: 800,
+      height: 600,
+      bgColor: '#cccccc',
+      textColor: '#333333',
+      pattern: 'solid',
+      customText: '',
+      fontSize: 'auto',
+      fontFamily: 'sans',
+      fontWeight: 'bold',
+      textTransform: 'none',
+      format: 'image/png',
+      quality: 0.92,
+    };
+
+    let isRatioLocked = false;
+    let lockedRatio = options.width / options.height;
+
+    // DOM Elements
+    const initialCard = document.getElementById('placeholderInitialCard');
+    const workspaceContainer = document.getElementById('placeholderWorkspaceContainer');
+    const quickPresetsGrid = document.getElementById('quickPresetsGrid');
+    const startCustomBtn = document.getElementById('startCustomPlaceholderBtn');
+    const changePresetBtn = document.getElementById('placeholderChangePresetBtn');
+
+    const presetNameTag = document.getElementById('placeholderPresetNameTag');
+    const ratioTag = document.getElementById('placeholderRatioTag');
+
+    const canvas = document.getElementById('mainPlaceholderCanvas') as HTMLCanvasElement;
+    const inputWidth = document.getElementById('inputWidth') as HTMLInputElement;
+    const inputHeight = document.getElementById('inputHeight') as HTMLInputElement;
+    const lockRatioBtn = document.getElementById('lockRatioBtn') as HTMLButtonElement;
+    const presetSelect = document.getElementById('presetSelect') as HTMLSelectElement;
+
+    const pickerBgColor = document.getElementById('pickerBgColor') as HTMLInputElement;
+    const inputBgColor = document.getElementById('inputBgColor') as HTMLInputElement;
+    const pickerTextColor = document.getElementById('pickerTextColor') as HTMLInputElement;
+    const inputTextColor = document.getElementById('inputTextColor') as HTMLInputElement;
+    const patternPills = document.querySelectorAll('#patternPillGroup .pill-btn');
+    const colorChips = document.querySelectorAll('.palette-chip');
+
+    const inputCustomText = document.getElementById('inputCustomText') as HTMLInputElement;
+    const sliderFontSize = document.getElementById('sliderFontSize') as HTMLInputElement;
+    const fontSizeBadge = document.getElementById('fontSizeBadge');
+    const selectFontFamily = document.getElementById('selectFontFamily') as HTMLSelectElement;
+
+    const selectExportFormat = document.getElementById('selectExportFormat') as HTMLSelectElement;
+    const qualityFieldGroup = document.getElementById('qualityFieldGroup');
+    const sliderQuality = document.getElementById('sliderQuality') as HTMLInputElement;
+    const qualityBadge = document.getElementById('qualityBadge');
+
+    const previewDimsBadge = document.getElementById('previewDimsBadge');
+    const metricDims = document.getElementById('metricDims');
+    const metricRatio = document.getElementById('metricRatio');
+    const metricWeight = document.getElementById('metricWeight');
+
+    const downloadBtn = document.getElementById('placeholderDownloadBtn');
+    const copyImageBtn = document.getElementById('placeholderCopyImageBtn');
+    const copyImageBtnText = document.getElementById('copyImageBtnText');
+    const copySvgBtn = document.getElementById('placeholderCopySvgBtn');
+    const copySvgBtnText = document.getElementById('copySvgBtnText');
+    const copyDataUriBtn = document.getElementById('placeholderCopyDataUriBtn');
+    const copyDataUriBtnText = document.getElementById('copyDataUriBtnText');
+    const resetBtn = document.getElementById('placeholderResetBtn');
+
+    function showWorkspace() {
+      if (initialCard) initialCard.style.display = 'none';
+      if (workspaceContainer) workspaceContainer.style.display = 'block';
+    }
+
+    function showInitialCard() {
+      if (initialCard) initialCard.style.display = 'block';
+      if (workspaceContainer) workspaceContainer.style.display = 'none';
+    }
+
+    function gcd(a: number, b: number): number {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+
+    function getRatioText(w: number, h: number): string {
+      const divisor = gcd(w, h);
+      return `${Math.round(w / divisor)}:${Math.round(h / divisor)}`;
+    }
+
+    // Render Canvas & Update Metrics
+    function render() {
+      if (!canvas) return;
+      renderPlaceholderToCanvas(canvas, options);
+
+      const dimsText = `${options.width} × ${options.height} px`;
+      const ratioText = `${getRatioText(options.width, options.height)} (${options.width >= options.height ? 'Landscape' : 'Portrait'})`;
+      const estKb = ((options.width * options.height * 4) / 1024 / 20).toFixed(1);
+
+      if (previewDimsBadge) previewDimsBadge.textContent = dimsText;
+      if (presetNameTag) presetNameTag.textContent = dimsText;
+      if (ratioTag) ratioTag.textContent = ratioText;
+      if (metricDims) metricDims.textContent = dimsText;
+      if (metricRatio) metricRatio.textContent = ratioText;
+      if (metricWeight) metricWeight.textContent = `~${estKb} KB`;
+    }
+
+    // Quick presets on initial card
+    if (quickPresetsGrid) {
+      quickPresetsGrid.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('.quick-preset-btn') as HTMLButtonElement;
+        if (!btn) return;
+
+        const w = parseInt(btn.getAttribute('data-width') || '800', 10);
+        const h = parseInt(btn.getAttribute('data-height') || '600', 10);
+        options.width = w;
+        options.height = h;
+
+        if (inputWidth) inputWidth.value = String(w);
+        if (inputHeight) inputHeight.value = String(h);
+
+        showWorkspace();
+        render();
+      });
+    }
+
+    if (startCustomBtn) {
+      startCustomBtn.addEventListener('click', () => {
+        showWorkspace();
+        render();
+      });
+    }
+
+    if (changePresetBtn) {
+      changePresetBtn.addEventListener('click', () => {
+        showInitialCard();
+      });
+    }
+
+    // Dimension Inputs
+    if (inputWidth) {
+      inputWidth.addEventListener('input', () => {
+        let val = parseInt(inputWidth.value, 10);
+        if (isNaN(val) || val < 10) val = 10;
+        if (val > 4000) val = 4000;
+        options.width = val;
+
+        if (isRatioLocked && inputHeight) {
+          const newH = Math.max(10, Math.min(4000, Math.round(val / lockedRatio)));
+          options.height = newH;
+          inputHeight.value = String(newH);
+        }
+        render();
+      });
+    }
+
+    if (inputHeight) {
+      inputHeight.addEventListener('input', () => {
+        let val = parseInt(inputHeight.value, 10);
+        if (isNaN(val) || val < 10) val = 10;
+        if (val > 4000) val = 4000;
+        options.height = val;
+
+        if (isRatioLocked && inputWidth) {
+          const newW = Math.max(10, Math.min(4000, Math.round(val * lockedRatio)));
+          options.width = newW;
+          inputWidth.value = String(newW);
+        }
+        render();
+      });
+    }
+
+    // Lock Aspect Ratio
+    if (lockRatioBtn) {
+      lockRatioBtn.addEventListener('click', () => {
+        isRatioLocked = !isRatioLocked;
+        lockRatioBtn.classList.toggle('active', isRatioLocked);
+        lockRatioBtn.setAttribute('aria-pressed', String(isRatioLocked));
+        if (isRatioLocked) {
+          lockedRatio = options.width / options.height;
+        }
+      });
+    }
+
+    // Presets dropdown
+    if (presetSelect) {
+      presetSelect.addEventListener('change', () => {
+        const val = presetSelect.value;
+        if (!val) return;
+        const [w, h] = val.split('x').map(n => parseInt(n, 10));
+        if (w && h) {
+          options.width = w;
+          options.height = h;
+          if (inputWidth) inputWidth.value = String(w);
+          if (inputHeight) inputHeight.value = String(h);
+          lockedRatio = w / h;
+          render();
+        }
+      });
+    }
+
+    // Palette Chips
+    colorChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        colorChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const bg = chip.getAttribute('data-bg');
+        const text = chip.getAttribute('data-text');
+        if (bg && text) {
+          options.bgColor = bg;
+          options.textColor = text;
+
+          if (pickerBgColor) pickerBgColor.value = bg;
+          if (inputBgColor) inputBgColor.value = bg;
+          if (pickerTextColor) pickerTextColor.value = text;
+          if (inputTextColor) inputTextColor.value = text;
+
+          render();
+        }
+      });
+    });
+
+    // Custom Hex Pickers
+    if (pickerBgColor && inputBgColor) {
+      pickerBgColor.addEventListener('input', () => {
+        options.bgColor = pickerBgColor.value;
+        inputBgColor.value = pickerBgColor.value;
+        colorChips.forEach(c => c.classList.remove('active'));
+        render();
+      });
+
+      inputBgColor.addEventListener('input', () => {
+        const val = inputBgColor.value.trim();
+        if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+          options.bgColor = val;
+          pickerBgColor.value = val;
+          colorChips.forEach(c => c.classList.remove('active'));
+          render();
+        }
+      });
+    }
+
+    if (pickerTextColor && inputTextColor) {
+      pickerTextColor.addEventListener('input', () => {
+        options.textColor = pickerTextColor.value;
+        inputTextColor.value = pickerTextColor.value;
+        colorChips.forEach(c => c.classList.remove('active'));
+        render();
+      });
+
+      inputTextColor.addEventListener('input', () => {
+        const val = inputTextColor.value.trim();
+        if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+          options.textColor = val;
+          pickerTextColor.value = val;
+          colorChips.forEach(c => c.classList.remove('active'));
+          render();
+        }
+      });
+    }
+
+    // Patterns
+    patternPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        patternPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        options.pattern = (pill.getAttribute('data-pattern') as PatternType) || 'solid';
+        render();
+      });
+    });
+
+    // Text settings
+    if (inputCustomText) {
+      inputCustomText.addEventListener('input', () => {
+        options.customText = inputCustomText.value.trim();
+        render();
+      });
+    }
+
+    if (sliderFontSize && fontSizeBadge) {
+      sliderFontSize.addEventListener('input', () => {
+        const val = parseInt(sliderFontSize.value, 10);
+        options.fontSize = val === 0 ? 'auto' : val;
+        fontSizeBadge.textContent = val === 0 ? 'Auto' : `${val} px`;
+        render();
+      });
+    }
+
+    if (selectFontFamily) {
+      selectFontFamily.addEventListener('change', () => {
+        options.fontFamily = selectFontFamily.value as any;
+        render();
+      });
+    }
+
+    // Export format
+    if (selectExportFormat) {
+      selectExportFormat.addEventListener('change', () => {
+        const fmt = selectExportFormat.value;
+        if (fmt === 'svg') {
+          options.format = 'image/svg+xml';
+        } else if (fmt === 'webp') {
+          options.format = 'image/webp';
+        } else if (fmt === 'jpeg') {
+          options.format = 'image/jpeg';
+        } else {
+          options.format = 'image/png';
+        }
+        if (qualityFieldGroup) {
+          qualityFieldGroup.style.display = (fmt === 'webp' || fmt === 'jpeg') ? 'block' : 'none';
+        }
+        render();
+      });
+    }
+
+    if (sliderQuality && qualityBadge) {
+      sliderQuality.addEventListener('input', () => {
+        const val = parseInt(sliderQuality.value, 10);
+        options.quality = val / 100;
+        qualityBadge.textContent = `${val}%`;
+      });
+    }
+
+    // Action: Download
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', async () => {
+        try {
+          const res = await exportPlaceholderImage(options);
+          const ext = options.format === 'image/svg+xml' ? 'svg' : options.format === 'image/webp' ? 'webp' : options.format === 'image/jpeg' ? 'jpg' : 'png';
+          const link = document.createElement('a');
+          link.href = res.dataUrl;
+          link.download = `${i18n.downloadName}-${options.width}x${options.height}.${ext}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Action: Copy PNG
+    if (copyImageBtn) {
+      copyImageBtn.addEventListener('click', async () => {
+        try {
+          await copyPlaceholderToClipboard(options);
+          if (copyImageBtnText) {
+            const orig = copyImageBtnText.textContent;
+            copyImageBtnText.textContent = i18n.copySuccess;
+            copyImageBtn.classList.add('copied');
+            setTimeout(() => {
+              copyImageBtnText.textContent = orig;
+              copyImageBtn.classList.remove('copied');
+            }, 2200);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Action: Copy SVG
+    if (copySvgBtn) {
+      copySvgBtn.addEventListener('click', async () => {
+        const svgCode = generatePlaceholderSVG(options);
+        try {
+          await navigator.clipboard.writeText(svgCode);
+          if (copySvgBtnText) {
+            const orig = copySvgBtnText.textContent;
+            copySvgBtnText.textContent = i18n.copySvgSuccess;
+            copySvgBtn.classList.add('copied');
+            setTimeout(() => {
+              copySvgBtnText.textContent = orig;
+              copySvgBtn.classList.remove('copied');
+            }, 2200);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Action: Copy Data URI
+    if (copyDataUriBtn) {
+      copyDataUriBtn.addEventListener('click', async () => {
+        try {
+          const res = await exportPlaceholderImage(options);
+          await navigator.clipboard.writeText(res.dataUrl);
+          if (copyDataUriBtnText) {
+            const orig = copyDataUriBtnText.textContent;
+            copyDataUriBtnText.textContent = i18n.copyDataUriSuccess;
+            copyDataUriBtn.classList.add('copied');
+            setTimeout(() => {
+              copyDataUriBtnText.textContent = orig;
+              copyDataUriBtn.classList.remove('copied');
+            }, 2200);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Action: Reset
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        options = {
+          width: 800,
+          height: 600,
+          bgColor: '#cccccc',
+          textColor: '#333333',
+          pattern: 'solid',
+          customText: '',
+          fontSize: 'auto',
+          fontFamily: 'sans',
+          fontWeight: 'bold',
+          textTransform: 'none',
+          format: 'image/png',
+          quality: 0.92,
+        };
+
+        if (inputWidth) inputWidth.value = '800';
+        if (inputHeight) inputHeight.value = '600';
+        if (inputCustomText) inputCustomText.value = '';
+        if (sliderFontSize && fontSizeBadge) {
+          sliderFontSize.value = '0';
+          fontSizeBadge.textContent = 'Auto';
+        }
+        if (pickerBgColor) pickerBgColor.value = '#cccccc';
+        if (inputBgColor) inputBgColor.value = '#cccccc';
+        if (pickerTextColor) pickerTextColor.value = '#333333';
+        if (inputTextColor) inputTextColor.value = '#333333';
+
+        colorChips.forEach((c, idx) => c.classList.toggle('active', idx === 0));
+        patternPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-pattern') === 'solid'));
+
+        render();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPlaceholderApp);
+  } else {
+    initPlaceholderApp();
+  }
+</script>
+
+<style>
+  .placeholder-tool-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ----------------------------------------
+     Initial Welcome / Preset Card
+  ---------------------------------------- */
+  .placeholder-initial-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .placeholder-initial-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .placeholder-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .placeholder-init-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+  }
+
+  .placeholder-init-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .quick-presets-section {
+    width: 100%;
+    margin-bottom: var(--space-6);
+  }
+
+  .quick-presets-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+  }
+
+  .quick-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-2);
+  }
+
+  .quick-preset-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-2);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .quick-preset-btn:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .preset-name {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 2px;
+  }
+
+  .preset-dims {
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+
+  .placeholder-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .placeholder-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .placeholder-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* ----------------------------------------
+     Workspace Layout
+  ---------------------------------------- */
+  .placeholder-workspace-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .placeholder-workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .placeholder-meta-badge {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .placeholder-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #10b981;
+  }
+
+  .placeholder-filename-label {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .placeholder-meta-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Main Grid */
+  .placeholder-main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--space-6);
+    align-items: start;
+    min-width: 0;
+  }
+
+  /* Left: Preview */
+  .preview-column {
+    min-width: 0;
+  }
+
+  .preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .viewport-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+  }
+
+  .viewport-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .viewport-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .canvas-viewport {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    background: var(--color-surface-subtle);
+    background-image: 
+      linear-gradient(45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--color-border-light) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--color-border-light) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--color-border-light) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+  }
+
+  .canvas-wrap {
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .main-canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Metrics bar */
+  .preview-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-2);
+    border-right: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .metric-item:last-child {
+    border-right: none;
+  }
+
+  .metric-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 2px;
+  }
+
+  .metric-item strong {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  /* Actions */
+  .action-buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-surface);
+  }
+
+  .primary-actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+  }
+
+  .action-btn-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .action-btn-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: 0.75rem 1rem;
+    min-width: 140px;
+  }
+
+  .action-btn-copy.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .secondary-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn-snippet {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-snippet:hover {
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .btn-snippet.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  /* Right Column: Controls */
+  .controls-column {
+    min-width: 0;
+  }
+
+  .controls-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .controls-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .panel-heading {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .reset-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .reset-link-btn:hover {
+    color: var(--color-primary);
+  }
+
+  .control-section {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .section-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 2px;
+  }
+
+  .field-sublabel {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .dims-input-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-2);
+    align-items: flex-end;
+  }
+
+  .dim-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .input-with-unit {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0 var(--space-2);
+  }
+
+  .num-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: var(--space-2) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: 600;
+    outline: none;
+  }
+
+  .unit-tag {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    padding-left: 2px;
+  }
+
+  .lock-ratio-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 4px;
+  }
+
+  .lock-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lock-btn.active {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .form-select, .form-input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+  }
+
+  .color-palette-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .palette-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-full);
+    border: 2px solid;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast);
+  }
+
+  .palette-chip.active {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+
+  .palette-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+  }
+
+  .custom-colors-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .color-picker-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .color-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2px var(--space-2);
+  }
+
+  .color-circle-input {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    padding: 0;
+    background: transparent;
+  }
+
+  .hex-text-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: monospace;
+    font-size: var(--font-size-xs);
+    color: var(--color-text);
+    outline: none;
+  }
+
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pill-btn {
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .pill-btn.active {
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary);
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+
+  .val-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .range-slider {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  /* Cross links */
+  .placeholder-cross-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .placeholder-cross-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .placeholder-main-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .primary-actions-row {
+      grid-template-columns: 1fr;
+    }
+
+    .action-btn-copy {
+      width: 100%;
+    }
+  }
+</style>

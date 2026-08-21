@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Recortador de Imágenes Libre - Recortar Fotos Gratis Online",
+  "freeformCrop.meta.description": "Recorta imágenes libremente con cuadro interactivo, 8 tiradores de ajuste, dimensiones personalizadas, bloqueo de aspecto, rotación y exportación de alta calidad. 100% privado.",
+  "freeformCrop.hero.title": "Recortador de Imágenes Libre",
+  "freeformCrop.hero.subtitle": "Recorta, gira, voltea y encuadra libremente cualquier foto con dimensiones personalizadas o relaciones de aspecto estándar con máxima precisión.",
+
+  "freeformCrop.preview.title": "Área Interactiva de Recorte",
+  "freeformCrop.panel.title": "Controles y Ajustes de Recorte",
+
+  "freeformCrop.empty.title": "Ninguna Imagen Cargada",
+  "freeformCrop.empty.subtitle": "Sube una imagen desde el panel derecho o carga una foto de muestra para probar el recorte libre.",
+  "freeformCrop.empty.loadDemo": "Cargar Imagen de Muestra",
+
+  "freeformCrop.dropzone.title": "Arrastra y suelta tu imagen aquí o haz clic para explorar",
+  "freeformCrop.dropzone.subtitle": "Recorta, gira, voltea y encuadra fotos con dimensiones personalizadas o proporciones estándar",
+  "freeformCrop.dropzone.browse": "Seleccionar Imagen",
+  "freeformCrop.dropzone.sample": "Probar con Imagen de Muestra",
+  "freeformCrop.dropzone.formats": "Soporta JPG, PNG, WebP, AVIF, BMP • Pega con Ctrl+V",
+  "freeformCrop.privacy.badge": "100% Privacidad en el Navegador — Sin Subidas a Servidores",
+  "freeformCrop.action.changeImage": "Cambiar Imagen",
+
+  "freeformCrop.upload.dropText": "Haz clic o arrastra una imagen aquí (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Sin archivo",
+
+  "freeformCrop.section.upload": "1. Imagen de Origen",
+  "freeformCrop.section.ratios": "2. Proporciones de Aspecto",
+  "freeformCrop.section.dimensions": "3. Dimensiones de Recorte (px)",
+  "freeformCrop.section.transform": "4. Orientación y Volteo",
+  "freeformCrop.section.export": "5. Formato y Calidad de Exportación",
+
+  "freeformCrop.ratio.free": "Libre",
+  "freeformCrop.ratio.original": "Original",
+  "freeformCrop.dim.width": "Ancho",
+  "freeformCrop.dim.height": "Alto",
+
+  "freeformCrop.transform.rotateLeft": "Girar -90°",
+  "freeformCrop.transform.rotateRight": "Girar +90°",
+  "freeformCrop.transform.flipH": "Volteo Horizontal",
+  "freeformCrop.transform.flipV": "Volteo Vertical",
+
+  "freeformCrop.export.format": "Formato de Imagen",
+  "freeformCrop.export.quality": "Calidad de Exportación",
+
+  "freeformCrop.metrics.original": "Tamaño Original",
+  "freeformCrop.metrics.cropped": "Área Recortada",
+  "freeformCrop.metrics.ratio": "Proporción",
+
+  "freeformCrop.action.download": "Descargar Imagen Recortada",
+  "freeformCrop.action.copyImage": "Copiar al Portapapeles",
+  "freeformCrop.action.copied": "¡Imagen Copiada al Portapapeles!",
+  "freeformCrop.action.maximize": "Seleccionar Imagen Completa",
+  "freeformCrop.action.clear": "Limpiar Todo",
+  "freeformCrop.action.reset": "Restablecer Valores",
+  "freeformCrop.download.filename": "imgfeel-recorte",
+
+  "freeformCrop.cross.circle": "Recorte Circular",
+  "freeformCrop.cross.square": "Redimensionar a 1:1",
+  "freeformCrop.cross.mosaic": "Generador de Mosaicos",
+  "freeformCrop.cross.overlay": "Superponer Imágenes",
+  "freeformCrop.cross.stitch": "Unir Imágenes",
+
+  "freeformCrop.feat.freeTitle": "Recorte Libre sin Restricciones",
+  "freeformCrop.feat.freeDesc": "Arrastra cualquier esquina o borde para aislar cualquier rectángulo sin proporciones forzadas.",
+  "freeformCrop.feat.gridTitle": "Guía de Regla de los Tercios",
+  "freeformCrop.feat.gridDesc": "Cuadrícula de alineación óptica para componer encuadres equilibrados y profesionales.",
+  "freeformCrop.feat.transformTitle": "Herramientas de Giro y Volteo",
+  "freeformCrop.feat.transformDesc": "Gira en pasos de 90° y voltea horizontal o verticalmente antes de recortar para corregir el ángulo.",
+  "freeformCrop.feat.privacyTitle": "100% Privacidad en el Navegador",
+  "freeformCrop.feat.privacyDesc": "Tus fotos permanecen en tu ordenador. Cada recorte se procesa localmente con HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "¿Qué es el Recorte Libre de Imágenes y por qué es Importante?",
+  "freeformCrop.content.p1a": "El recorte libre de imágenes es el proceso de recortar y reencuadrar una foto a cualquier dimensión personalizada sin estar limitado a proporciones fijas como 1:1 o 16:9. A diferencia de las herramientas rígidas convencionales, el recorte libre ofrece libertad absoluta para aislar sujetos exactos, eliminar fondos distractores o crear banners web únicos.",
+  "freeformCrop.content.p1b": "Ya seas diseñador gráfico, fotógrafo o creador de contenido, el recorte libre te brinda control total sobre la composición y resolución. El recortador de ImgFeel ofrece una experiencia ligera con 8 tiradores interactivos y exportación de alta calidad sin pérdidas.",
+
+  "freeformCrop.content.h2": "Proporciones Fijas vs. Recorte Libre",
+  "freeformCrop.content.p2a": "Elegir entre proporciones fijas o recorte libre depende de tu objetivo creativo y la plataforma de destino. Las proporciones fijas son esenciales para redes sociales como Instagram o YouTube.",
+  "freeformCrop.content.p2b": "Por el contrario, el recorte libre es indispensable cuando la narrativa visual o el ajuste espacial es prioritario. Puedes crear panorámicas, banners delgados o recortes precisos de productos.",
+
+  "freeformCrop.content.h3": "Técnicas de Composición: Usando la Regla de los Tercios",
+  "freeformCrop.content.p3a": "El recortador de ImgFeel incluye una cuadrícula de regla de los tercios dentro del área de recorte para ayudarte a situar los puntos de interés donde la mirada humana se enfoca naturalmente.",
+  "freeformCrop.content.p3b": "Prueba a alinear el horizonte o el sujeto principal a lo largo de las líneas de la cuadrícula para conseguir encuadres dinámicos y profesionales.",
+
+  "freeformCrop.content.h4": "Preservación de la Calidad, DPI y Nitidez",
+  "freeformCrop.content.p4a": "Al recortar con ImgFeel, el motor mapea las coordenadas visuales directamente sobre la resolución nativa de la imagen, sin pérdida intermedia de calidad.",
+  "freeformCrop.content.p4b": "Puedes exportar en PNG sin pérdidas, WebP optimizado o JPG estándar con selector de calidad ajustable y soporte de transparencia.",
+
+  "freeformCrop.content.h5": "Flujos de Trabajo Habituales para Recorte de Fotos",
+  "freeformCrop.content.p5a": "El recorte libre es ideal para eliminar bordes de escaneos, recortar fotos de comercio electrónico y extraer detalles nítidos de fotos de gran tamaño.",
+  "freeformCrop.content.p5b": "Combina las herramientas de giro y volteo para enderezar fotos torcidas antes de recortar el área perfecta.",
+
+  "freeformCrop.content.h6": "Cómo Recortar Imágenes Libremente en 4 Pasos",
+  "freeformCrop.content.step1Title": "Sube tu Imagen",
+  "freeformCrop.content.step1Desc": "Arrastra y suelta cualquier foto PNG, JPG o WebP en el recuadro o selecciónala desde tu dispositivo.",
+  "freeformCrop.content.step2Title": "Ajusta el Cuadro Interactivo",
+  "freeformCrop.content.step2Desc": "Arrastra cualquiera de los 8 tiradores de las esquinas o bordes para ajustar el tamaño del recorte.",
+  "freeformCrop.content.step3Title": "Ajusta Ángulo y Proporción",
+  "freeformCrop.content.step3Desc": "Gira, voltea o bloquea una proporción predefinida según tus necesidades.",
+  "freeformCrop.content.step4Title": "Descarga o Copia la Imagen",
+  "freeformCrop.content.step4Desc": "Elige el formato de exportación y haz clic en Descargar Imagen o Copiar al Portapapeles.",
+
+  "freeformCrop.faq.heading": "Preguntas Frecuentes sobre el Recorte Libre de Imágenes",
+  "freeformCrop.faq.q1": "¿Cuál es la diferencia entre recorte libre y proporción fija?",
+  "freeformCrop.faq.a1": "El recorte libre te permite cambiar el ancho y alto de forma independiente, mientras que la proporción fija bloquea la relación geométrica.",
+  "freeformCrop.faq.q2": "¿Mis fotos se suben a algún servidor en la nube?",
+  "freeformCrop.faq.a2": "No. Todo el procesamiento se realiza 100% de forma local en tu navegador con HTML5 Canvas. Tus fotos nunca salen de tu dispositivo.",
+  "freeformCrop.faq.q3": "¿El recorte reduce la resolución o calidad de mi foto?",
+  "freeformCrop.faq.a3": "No. El recorte extrae los píxeles directamente del archivo original manteniendo su nitidez nativa.",
+  "freeformCrop.faq.q4": "¿Puedo recortar imágenes transparentes PNG y WebP?",
+  "freeformCrop.faq.a4": "Sí. ImgFeel conserva la transparencia del canal alfa en formatos compatibles.",
+  "freeformCrop.faq.q5": "¿Cómo recorto imágenes en teléfonos móviles o tabletas?",
+  "freeformCrop.faq.a5": "ImgFeel es totalmente táctil y responsivo. Puedes arrastrar los tiradores directamente con tus dedos en cualquier pantalla táctil.",
+  "freeformCrop.faq.q6": "¿Puedo girar o voltear mi foto antes de recortar?",
+  "freeformCrop.faq.a6": "Sí, puedes girar en 90° o voltear en horizontal y vertical en cualquier momento.",
+  "freeformCrop.faq.q7": "¿Este recortador de fotos es gratuito y sin límites?",
+  "freeformCrop.faq.a7": "Sí, es 100% gratuito, sin límites de archivos ni marcas de agua."
+}

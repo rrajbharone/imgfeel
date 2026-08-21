@@ -1,0 +1,116 @@
+{
+  "freeformCrop.meta.title": "Cortador de Fotos Livre - Cortar Imagens Online Grátis",
+  "freeformCrop.meta.description": "Corte imagens livremente com caixa interativa, 8 alças de ajuste, dimensões personalizadas, proporções fixas, rotação e exportação de alta resolução. 100% privado.",
+  "freeformCrop.hero.title": "Cortador de Fotos Livre",
+  "freeformCrop.hero.subtitle": "Corte, gire, espelhe e enquadre livremente qualquer imagem com dimensões personalizadas ou proporções padrão com máxima precisão.",
+
+  "freeformCrop.preview.title": "Área Interativa de Corte",
+  "freeformCrop.panel.title": "Controles e Ajustes de Corte",
+
+  "freeformCrop.empty.title": "Nenhuma Imagem Carregada",
+  "freeformCrop.empty.subtitle": "Envie uma imagem do painel direito ou carregue uma imagem de teste para experimentar o corte livre.",
+  "freeformCrop.empty.loadDemo": "Carregar Imagem de Teste",
+
+  "freeformCrop.dropzone.title": "Arraste e solte sua foto aqui ou clique para selecionar",
+  "freeformCrop.dropzone.subtitle": "Corte, gire, espelhe e enquadre fotos com dimensões personalizadas ou proporções padrão",
+  "freeformCrop.dropzone.browse": "Selecionar Imagem",
+  "freeformCrop.dropzone.sample": "Experimentar Amostra",
+  "freeformCrop.dropzone.formats": "Suporta JPG, PNG, WebP, AVIF, BMP • Cole com Ctrl+V",
+  "freeformCrop.privacy.badge": "100% de Privacidade no Navegador — Sem Envio para Servidores",
+  "freeformCrop.action.changeImage": "Alterar Imagem",
+
+  "freeformCrop.upload.dropText": "Clique ou arraste uma imagem aqui (PNG, JPG, WebP, AVIF)",
+  "freeformCrop.upload.noFile": "Nenhum arquivo",
+
+  "freeformCrop.section.upload": "1. Imagem de Origem",
+  "freeformCrop.section.ratios": "2. Proporções de Aspecto",
+  "freeformCrop.section.dimensions": "3. Dimensões de Corte (px)",
+  "freeformCrop.section.transform": "4. Orientação e Espelhamento",
+  "freeformCrop.section.export": "5. Formato e Qualidade de Exportação",
+
+  "freeformCrop.ratio.free": "Livre",
+  "freeformCrop.ratio.original": "Original",
+  "freeformCrop.dim.width": "Largura",
+  "freeformCrop.dim.height": "Altura",
+
+  "freeformCrop.transform.rotateLeft": "Girar -90°",
+  "freeformCrop.transform.rotateRight": "Girar +90°",
+  "freeformCrop.transform.flipH": "Espelhar Horizontal",
+  "freeformCrop.transform.flipV": "Espelhar Vertical",
+
+  "freeformCrop.export.format": "Formato de Imagem",
+  "freeformCrop.export.quality": "Qualidade de Exportação",
+
+  "freeformCrop.metrics.original": "Tamanho Original",
+  "freeformCrop.metrics.cropped": "Área Cortada",
+  "freeformCrop.metrics.ratio": "Proporção",
+
+  "freeformCrop.action.download": "Baixar Imagem Cortada",
+  "freeformCrop.action.copyImage": "Copiar para Área de Transferência",
+  "freeformCrop.action.copied": "Imagem Copiada para Área de Transferência!",
+  "freeformCrop.action.maximize": "Selecionar Imagem Completa",
+  "freeformCrop.action.clear": "Limpar Tudo",
+  "freeformCrop.action.reset": "Redefinir Padrões",
+  "freeformCrop.download.filename": "imgfeel-corte",
+
+  "freeformCrop.cross.circle": "Cortador Circular",
+  "freeformCrop.cross.square": "Redimensionar para 1:1",
+  "freeformCrop.cross.mosaic": "Gerador de Mosaico",
+  "freeformCrop.cross.overlay": "Sobrepor Imagens",
+  "freeformCrop.cross.stitch": "Juntar Imagens",
+
+  "freeformCrop.feat.freeTitle": "Corte Livre sem Limitações",
+  "freeformCrop.feat.freeDesc": "Arraste qualquer alça de canto ou borda para recortar retângulos personalizados sem proporções impostas.",
+  "freeformCrop.feat.gridTitle": "Grade da Regra dos Terços",
+  "freeformCrop.feat.gridDesc": "Linhas de alinhamento visual para compor enquadramentos profissionais e equilibrados.",
+  "freeformCrop.feat.transformTitle": "Ferramentas de Rotação e Espelhamento",
+  "freeformCrop.feat.transformDesc": "Gire em passos de 90° e espelhe horizontalmente ou verticalmente antes de cortar.",
+  "freeformCrop.feat.privacyTitle": "100% de Privacidade no Navegador",
+  "freeformCrop.feat.privacyDesc": "Suas fotos nunca saem do seu computador. Todo o processamento é feito localmente com HTML5 Canvas.",
+
+  "freeformCrop.content.h1": "O que é o Corte Livre de Imagens e por que é Importante?",
+  "freeformCrop.content.p1a": "O corte livre de imagens é a técnica de ajustar e reenquadrar uma fotografia para dimensões personalizadas sem se prender a proporções rígidas como 1:1 ou 16:9. Isso concede liberdade criativa total para isolar objetos, remover fundos indesejados ou criar formatos sob medida.",
+  "freeformCrop.content.p1b": "Com o cortador de fotos do ImgFeel, você tem acesso a 8 alças interativas, visualização em tempo real e exportação em alta qualidade sem compressão destrutiva.",
+
+  "freeformCrop.content.h2": "Proporções Fixas vs. Corte Livre",
+  "freeformCrop.content.p2a": "Proporções fixas são indicadas quando o destino exige um padrão exato, como feeds de redes sociais ou miniaturas de vídeo.",
+  "freeformCrop.content.p2b": "Já o corte livre é perfeito para banners personalizados, panoramas ou quando você deseja manter o foco no assunto principal sem cortes indesejados.",
+
+  "freeformCrop.content.h3": "Técnicas de Composição: A Regra dos Terços",
+  "freeformCrop.content.p3a": "A grade da regra dos terços integrada no ImgFeel divide a área de corte em 9 partes para guiar o posicionamento dos pontos visuais de maior impacto.",
+  "freeformCrop.content.p3b": "Alinhe o horizonte ou o tema principal ao longo das linhas da grade para criar imagens mais envolventes.",
+
+  "freeformCrop.content.h4": "Preservação da Nitidez e Qualidade de Imagem",
+  "freeformCrop.content.p4a": "Ao cortar no ImgFeel, as coordenadas são mapeadas diretamente para a resolução nativa original da imagem, sem perda intermediária de pixels.",
+  "freeformCrop.content.p4b": "Exporte em PNG sem perdas, WebP moderno ou JPG clássico com controle de qualidade e suporte a transparência.",
+
+  "freeformCrop.content.h5": "Usos Frequentes para Corte Personalizado",
+  "freeformCrop.content.p5a": "O corte livre é amplamente utilizado em e-commerce para fotos de produtos, em design gráfico para montagens e em fotografia para corrigir enquadramentos.",
+  "freeformCrop.content.p5b": "Utilize também a rotação e espelhamento para acertar fotos inclinadas ou espelhar selfies antes de salvar.",
+
+  "freeformCrop.content.h6": "Como Cortar Imagens Livremente em 4 Passos Simples",
+  "freeformCrop.content.step1Title": "Envie sua Foto",
+  "freeformCrop.content.step1Desc": "Arraste sua imagem PNG, JPG ou WebP para o espaço indicado ou clique para selecionar.",
+  "freeformCrop.content.step2Title": "Ajuste o Enquadramento",
+  "freeformCrop.content.step2Desc": "Arraste as alças dos cantos ou bordas para redimensionar e posicione a caixa onde desejar.",
+  "freeformCrop.content.step3Title": "Gire ou Ajuste a Proporção",
+  "freeformCrop.content.step3Desc": "Se desejar, gire em 90°, espelhe ou escolha uma proporção pré-definida.",
+  "freeformCrop.content.step4Title": "Baixe ou Copie a Imagem",
+  "freeformCrop.content.step4Desc": "Selecione o formato desejado e clique em Baixar Imagem ou Copiar para a Área de Transferência.",
+
+  "freeformCrop.faq.heading": "Perguntas Frequentes sobre Corte Livre de Imagens",
+  "freeformCrop.faq.q1": "Qual a diferença entre corte livre e corte proporcional?",
+  "freeformCrop.faq.a1": "O corte livre permite alterar largura e altura de forma independente, enquanto o corte proporcional mantém uma relação fixa.",
+  "freeformCrop.faq.q2": "Minhas fotos são enviadas para servidores externos?",
+  "freeformCrop.faq.a2": "Não. Todo o processo ocorre localmente no seu navegador utilizando HTML5 Canvas.",
+  "freeformCrop.faq.q3": "O corte reduz a qualidade original da imagem?",
+  "freeformCrop.faq.a3": "Não. Os pixels são extraídos diretamente do arquivo original com 100% de nitidez nativa.",
+  "freeformCrop.faq.q4": "Posso cortar imagens com fundo transparente (PNG/WebP)?",
+  "freeformCrop.faq.a4": "Sim, a transparência do canal alfa é preservada.",
+  "freeformCrop.faq.q5": "Como cortar fotos no celular ou tablet?",
+  "freeformCrop.faq.a5": "O ImgFeel é 100% responsivo e suporta toques na tela para arrastar as alças facilmente.",
+  "freeformCrop.faq.q6": "Posso girar a foto antes de realizar o corte?",
+  "freeformCrop.faq.a6": "Sim, use os botões de rotação de 90° e espelhamento.",
+  "freeformCrop.faq.q7": "A ferramenta é gratuita e sem limitações?",
+  "freeformCrop.faq.a7": "Sim, é 100% gratuita, sem limites de uso e sem marcas d'água."
+}
