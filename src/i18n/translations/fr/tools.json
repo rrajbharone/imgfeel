@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Réducteur de Bruit d'Image (Supprimer le Bruit & le Grain en Ligne)",
   "tools.noiseReducer.description": "Réduisez le bruit et supprimez le grain de vos photos en ligne gratuitement. Éliminez le bruit ISO élevé et les taches de couleur avec prévisualisation en direct et 100% de confidentialité.",
   "tools.productWhiteBg.title": "Fond Blanc pour Photo de Produit",
-  "tools.productWhiteBg.description": "Convertissez le fond de photos produits en blanc pur (#FFFFFF) avec ombres de studio, correction des bords et 100% de confidentialité."
+  "tools.productWhiteBg.description": "Convertissez le fond de photos produits en blanc pur (#FFFFFF) avec ombres de studio, correction des bords et 100% de confidentialité.",
+  "tools.youtubeThumbnailResizer.title": "Redimensionner Miniature YouTube",
+  "tools.youtubeThumbnailResizer.description": "Adaptez et recadrez vos images au format officiel 1280x720 16:9 des miniatures YouTube avec fond flou en moins de 2 Mo.",
+  "tools.facebookCoverResizer.title": "Redimensionner Couverture Facebook",
+  "tools.facebookCoverResizer.description": "Adaptez et recadrez vos images au format officiel de couverture Facebook (820x312 / 1640x720) avec zone sécurisée mobile et bureau."
 }

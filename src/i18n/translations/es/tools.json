@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Reductor de Ruido de Imagen (Eliminar Ruido y Grano Online)",
   "tools.noiseReducer.description": "Reduce el ruido de imagen y elimina el grano de fotos online gratis. Limpia manchas de color, ruido de sensor con ISO alto y artefactos con vista previa en vivo y 100% privacidad.",
   "tools.productWhiteBg.title": "Fondo Blanco para Imagen de Producto",
-  "tools.productWhiteBg.description": "Convierte fotos de productos a fondo blanco puro (#FFFFFF) con sombras de estudio, eliminación de halos y 100% de privacidad."
+  "tools.productWhiteBg.description": "Convierte fotos de productos a fondo blanco puro (#FFFFFF) con sombras de estudio, eliminación de halos y 100% de privacidad.",
+  "tools.youtubeThumbnailResizer.title": "Redimensionar Miniatura de YouTube",
+  "tools.youtubeThumbnailResizer.description": "Ajusta y recorta imágenes al tamaño oficial 1280x720 16:9 de miniaturas de YouTube con fondo difuminado en menos de 2MB.",
+  "tools.facebookCoverResizer.title": "Redimensionar Portada de Facebook",
+  "tools.facebookCoverResizer.description": "Ajusta y recorta fotos al tamaño oficial de portada de Facebook (820x312 / 1640x720) con zona segura para móvil y escritorio."
 }

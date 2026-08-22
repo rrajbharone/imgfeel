@@ -9,342 +9,372 @@ interface Props {
 
 const { locale } = Astro.props;
 
+const bannerUrl = getToolUrl('youtube-banner-resizer', locale);
 const squareUrl = getToolUrl('resize-image-to-1-1', locale);
 const circleUrl = getToolUrl('circle-image-cropper', locale);
 const blurUrl = getToolUrl('image-blur-tool', locale);
 const noiseReducerUrl = getToolUrl('image-noise-reducer', locale);
-const exactUrl = getToolUrl('exact-dimension-resizer', locale);
 ---
 
-<div class="wa-app-container" id="waApp" data-locale={locale} data-i18n={JSON.stringify({
-  copiedSuccess: t(locale, 'waresizer.action.copied'),
+<div class="yt-app-container" id="ytApp" data-locale={locale} data-i18n={JSON.stringify({
+  copiedSuccess: t(locale, 'ytthumb.action.copied'),
+  sizeOk: t(locale, 'ytthumb.size.ok'),
+  sizeWarning: t(locale, 'ytthumb.size.warning'),
 })}>
   <!-- State 1: Upload Dropzone Card -->
-  <div class="wa-dropzone-card" id="waDropzone">
+  <div class="yt-dropzone-card" id="ytDropzone">
     <div class="dropzone-inner">
       <div class="dropzone-icon-ring">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
         </svg>
       </div>
 
-      <h2 class="dropzone-headline">{t(locale, 'waresizer.dropzone.title')}</h2>
-      <p class="dropzone-subheadline">{t(locale, 'waresizer.dropzone.subtitle')}</p>
+      <h2 class="dropzone-headline">{t(locale, 'ytthumb.dropzone.title')}</h2>
+      <p class="dropzone-subheadline">{t(locale, 'ytthumb.dropzone.subtitle')}</p>
 
       <div class="dropzone-action-group">
-        <label for="waFileInput" class="btn btn-primary dropzone-browse-btn">
+        <label for="ytFileInput" class="btn btn-primary dropzone-browse-btn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-          <span>{t(locale, 'waresizer.dropzone.browse')}</span>
+          <span>{t(locale, 'ytthumb.dropzone.browse')}</span>
         </label>
-        <input type="file" id="waFileInput" accept="image/jpeg,image/png,image/webp,image/avif,image/bmp" class="visually-hidden" />
+        <input type="file" id="ytFileInput" accept="image/jpeg,image/png,image/webp,image/avif,image/bmp" class="visually-hidden" />
 
-        <button type="button" class="btn btn-secondary sample-demo-btn" id="waSampleBtn">
+        <button type="button" class="btn btn-secondary sample-demo-btn" id="ytSampleBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
           </svg>
-          <span>{t(locale, 'waresizer.dropzone.sample')}</span>
+          <span>{t(locale, 'ytthumb.dropzone.sample')}</span>
         </button>
       </div>
 
       <div class="dropzone-badges-row">
         <span class="badge-pill">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-          JPG, PNG, WebP, AVIF, BMP • Ctrl+V
+          16:9 • 1280×720 HD • Under 2MB
         </span>
         <span class="badge-pill badge-pill-green">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          {t(locale, 'waresizer.privacy.badge')}
+          {t(locale, 'ytthumb.privacy.badge')}
         </span>
       </div>
     </div>
   </div>
 
   <!-- Loading State Card -->
-  <div class="wa-loading-card" id="waLoadingCard" style="display: none;">
+  <div class="yt-loading-card" id="ytLoadingCard" style="display: none;">
     <div class="loading-spinner"></div>
-    <p class="loading-text">{t(locale, 'waresizer.status.processing')}</p>
+    <p class="loading-text">{t(locale, 'ytthumb.status.processing')}</p>
   </div>
 
   <!-- State 2: Active Workspace -->
-  <div class="wa-workspace-card" id="waWorkspace" style="display: none;">
+  <div class="yt-workspace-card" id="ytWorkspace" style="display: none;">
     <!-- Workspace Top Header Bar -->
     <div class="workspace-header-bar">
       <div class="image-meta-info">
-        <span class="file-name-tag" id="waFileName">photo.jpg</span>
-        <span class="file-dim-pill" id="waOriginalDimsTag">-- × -- px</span>
-        <span class="file-size-pill" id="waOriginalSizeTag">-- KB</span>
+        <span class="file-name-tag" id="ytFileName">thumbnail.jpg</span>
+        <span class="file-dim-pill" id="ytOriginalDimsTag">-- × -- px</span>
+        <span class="file-size-pill" id="ytOriginalSizeTag">-- KB</span>
       </div>
 
       <div class="workspace-header-actions">
-        <button type="button" class="btn btn-secondary btn-sm change-image-btn" id="waChangeImageBtn">
+        <button type="button" class="btn btn-secondary btn-sm change-image-btn" id="ytChangeImageBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-          <span>{t(locale, 'waresizer.action.changeImage')}</span>
+          <span>{t(locale, 'ytthumb.action.changeImage')}</span>
         </button>
       </div>
     </div>
 
     <!-- 2-Column Responsive Layout -->
-    <div class="wa-main-grid">
+    <div class="yt-main-grid">
       <!-- Left Column: Interactive Canvas & Previews -->
-      <div class="wa-preview-column">
-        <!-- Interactive Square Canvas with Safe Zone -->
-        <div class="canvas-viewport-box" id="waCanvasViewport">
-          <canvas id="waMainCanvas" class="wa-master-canvas"></canvas>
-          <!-- Circular Safe Zone Overlay -->
-          <div class="circular-safe-overlay" aria-hidden="true"></div>
-          <span class="safe-zone-badge">{t(locale, 'waresizer.circleTip')}</span>
+      <div class="yt-preview-column">
+        <!-- Interactive 16:9 Canvas Box with Safe Zone -->
+        <div class="canvas-viewport-box" id="ytCanvasViewport">
+          <canvas id="ytMainCanvas" class="yt-master-canvas"></canvas>
+          
+          <!-- YouTube Bottom-Right Timestamp Badge Safe Zone Overlay -->
+          <div class="yt-timestamp-overlay" id="ytTimestampOverlay">
+            <span class="timestamp-box">14:20</span>
+          </div>
+
+          <span class="safe-zone-hint-badge" id="ytSafeZoneHint">
+            {t(locale, 'ytthumb.safeZoneTip')}
+          </span>
         </div>
 
-        <!-- Live WhatsApp Mockup Previews Strip -->
+        <!-- Safe Zone Toggle Checkbox Row -->
+        <div class="safezone-toggle-bar">
+          <label class="toggle-checkbox-label">
+            <input type="checkbox" id="ytSafeZoneCheckbox" checked class="yt-checkbox" />
+            <span>{t(locale, 'ytthumb.safeZoneToggle')}</span>
+          </label>
+        </div>
+
+        <!-- Live YouTube Mockup Previews Strip -->
         <div class="live-previews-panel">
-          <div class="preview-item circle-avatar-box">
-            <span class="preview-title-tag">{t(locale, 'waresizer.preview.circle')}</span>
-            <div class="circle-avatar-frame">
-              <canvas id="waCircleCanvas" width="140" height="140"></canvas>
+          <!-- Desktop Video Card Mockup -->
+          <div class="preview-item desktop-card-mockup">
+            <span class="preview-title-tag">{t(locale, 'ytthumb.preview.desktop')}</span>
+            <div class="yt-video-card-mockup">
+              <div class="yt-card-thumb-frame">
+                <canvas id="ytDesktopThumbCanvas" width="240" height="135"></canvas>
+                <span class="yt-thumb-badge">{t(locale, 'ytthumb.mockup.duration')}</span>
+              </div>
+              <div class="yt-card-meta">
+                <div class="yt-channel-avatar"></div>
+                <div class="yt-card-text">
+                  <strong class="yt-video-title">{t(locale, 'ytthumb.mockup.title')}</strong>
+                  <span class="yt-channel-name">{t(locale, 'ytthumb.mockup.channel')}</span>
+                  <span class="yt-video-views">{t(locale, 'ytthumb.mockup.views')}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="preview-item chat-mockup-box">
-            <span class="preview-title-tag">{t(locale, 'waresizer.preview.chatMockup')}</span>
-            <div class="chat-header-mockup">
-              <div class="mockup-avatar">
-                <canvas id="waChatMockupCanvas" width="44" height="44"></canvas>
+          <!-- Mobile App Feed Mockup -->
+          <div class="preview-item mobile-feed-mockup">
+            <span class="preview-title-tag">{t(locale, 'ytthumb.preview.mobile')}</span>
+            <div class="yt-mobile-feed-card">
+              <div class="yt-mobile-thumb-frame">
+                <canvas id="ytMobileThumbCanvas" width="200" height="112"></canvas>
+                <span class="yt-thumb-badge">{t(locale, 'ytthumb.mockup.duration')}</span>
               </div>
-              <div class="mockup-info">
-                <strong class="mockup-name">{t(locale, 'waresizer.mockup.title')}</strong>
-                <span class="mockup-status">{t(locale, 'waresizer.mockup.lastSeen')}</span>
-              </div>
-              <div class="mockup-icons">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <div class="yt-mobile-meta">
+                <strong class="yt-mobile-title">{t(locale, 'ytthumb.mockup.title')}</strong>
+                <span class="yt-mobile-sub">{t(locale, 'ytthumb.mockup.channel')} • {t(locale, 'ytthumb.mockup.views')}</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Primary Action Buttons Row -->
-        <div class="wa-action-buttons-grid">
-          <button type="button" class="btn btn-primary wa-download-btn" id="waDownloadBtn">
+        <div class="yt-action-buttons-grid">
+          <button type="button" class="btn btn-primary yt-download-btn" id="ytDownloadBtn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>{t(locale, 'waresizer.action.download')}</span>
+            <span>{t(locale, 'ytthumb.action.download')}</span>
           </button>
 
-          <button type="button" class="btn btn-secondary wa-copy-btn" id="waCopyBtn">
+          <button type="button" class="btn btn-secondary yt-copy-btn" id="ytCopyBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            <span id="waCopyBtnText">{t(locale, 'waresizer.action.copyImage')}</span>
+            <span id="ytCopyBtnText">{t(locale, 'ytthumb.action.copyImage')}</span>
           </button>
 
-          <button type="button" class="btn btn-secondary wa-reset-btn" id="waResetBtn" title={t(locale, 'waresizer.action.reset')}>
+          <button type="button" class="btn btn-secondary yt-reset-btn" id="ytResetBtn" title={t(locale, 'ytthumb.action.reset')}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
               <path d="M3 3v5h5"></path>
             </svg>
-            <span>{t(locale, 'waresizer.action.reset')}</span>
+            <span>{t(locale, 'ytthumb.action.reset')}</span>
           </button>
         </div>
       </div>
 
       <!-- Right Column: Settings & Controls Panel -->
-      <div class="wa-controls-panel">
+      <div class="yt-controls-panel">
         <!-- Section 1: Quick Presets -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.section.presets')}</label>
+          <label class="control-label">{t(locale, 'ytthumb.section.presets')}</label>
           <div class="preset-chips-grid">
             <button type="button" class="preset-chip-btn active" data-preset="fullBlur">
-              <strong>{t(locale, 'waresizer.preset.fullBlur')}</strong>
-              <span>{t(locale, 'waresizer.preset.fullBlurDesc')}</span>
+              <strong>{t(locale, 'ytthumb.preset.fullBlur')}</strong>
+              <span>{t(locale, 'ytthumb.preset.fullBlurDesc')}</span>
             </button>
 
-            <button type="button" class="preset-chip-btn" data-preset="squareFill">
-              <strong>{t(locale, 'waresizer.preset.squareFill')}</strong>
-              <span>{t(locale, 'waresizer.preset.squareFillDesc')}</span>
+            <button type="button" class="preset-chip-btn" data-preset="sixteenNineCrop">
+              <strong>{t(locale, 'ytthumb.preset.sixteenNineCrop')}</strong>
+              <span>{t(locale, 'ytthumb.preset.sixteenNineCropDesc')}</span>
             </button>
 
             <button type="button" class="preset-chip-btn" data-preset="cleanWhite">
-              <strong>{t(locale, 'waresizer.preset.cleanWhite')}</strong>
-              <span>{t(locale, 'waresizer.preset.cleanWhiteDesc')}</span>
+              <strong>{t(locale, 'ytthumb.preset.cleanWhite')}</strong>
+              <span>{t(locale, 'ytthumb.preset.cleanWhiteDesc')}</span>
             </button>
 
             <button type="button" class="preset-chip-btn" data-preset="darkStudio">
-              <strong>{t(locale, 'waresizer.preset.darkStudio')}</strong>
-              <span>{t(locale, 'waresizer.preset.darkStudioDesc')}</span>
+              <strong>{t(locale, 'ytthumb.preset.darkStudio')}</strong>
+              <span>{t(locale, 'ytthumb.preset.darkStudioDesc')}</span>
             </button>
 
-            <button type="button" class="preset-chip-btn" data-preset="whatsappGreen">
-              <strong>{t(locale, 'waresizer.preset.whatsappGreen')}</strong>
-              <span>{t(locale, 'waresizer.preset.whatsappGreenDesc')}</span>
+            <button type="button" class="preset-chip-btn" data-preset="youtubeRed">
+              <strong>{t(locale, 'ytthumb.preset.youtubeRed')}</strong>
+              <span>{t(locale, 'ytthumb.preset.youtubeRedDesc')}</span>
             </button>
           </div>
         </div>
 
         <!-- Section 2: Mode Switcher -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.section.framing')}</label>
+          <label class="control-label">{t(locale, 'ytthumb.section.framing')}</label>
           <div class="segmented-mode-bar">
             <button type="button" class="seg-btn active" data-mode="fit">
-              {t(locale, 'waresizer.mode.fit')}
+              {t(locale, 'ytthumb.mode.fit')}
             </button>
             <button type="button" class="seg-btn" data-mode="fill">
-              {t(locale, 'waresizer.mode.fill')}
+              {t(locale, 'ytthumb.mode.fill')}
             </button>
           </div>
         </div>
 
         <!-- Section 3: Background Style (Fit Mode) -->
-        <div class="control-group" id="waBgSection">
-          <label class="control-label">{t(locale, 'waresizer.section.bg')}</label>
+        <div class="control-group" id="ytBgSection">
+          <label class="control-label">{t(locale, 'ytthumb.section.bg')}</label>
           <div class="segmented-mode-bar">
             <button type="button" class="seg-bg-btn active" data-bg="blur">
-              {t(locale, 'waresizer.bg.blur')}
+              {t(locale, 'ytthumb.bg.blur')}
             </button>
             <button type="button" class="seg-bg-btn" data-bg="solid">
-              {t(locale, 'waresizer.bg.solid')}
+              {t(locale, 'ytthumb.bg.solid')}
             </button>
           </div>
 
           <!-- Blur controls -->
-          <div id="waBlurControlsBox" class="sub-controls-box">
+          <div id="ytBlurControlsBox" class="sub-controls-box">
             <div class="slider-header-row">
-              <label for="waBlurSlider" class="sub-label">{t(locale, 'waresizer.label.blurStrength')}</label>
-              <span class="val-pill" id="waBlurValPill">25 px</span>
+              <label for="ytBlurSlider" class="sub-label">{t(locale, 'ytthumb.label.blurStrength')}</label>
+              <span class="val-pill" id="ytBlurValPill">25 px</span>
             </div>
-            <input type="range" id="waBlurSlider" min="5" max="50" value="25" step="1" class="wa-range" />
+            <input type="range" id="ytBlurSlider" min="5" max="50" value="25" step="1" class="yt-range" />
 
             <div class="slider-header-row" style="margin-top: 6px;">
-              <label for="waBgDimSlider" class="sub-label">{t(locale, 'waresizer.label.bgDim')}</label>
-              <span class="val-pill" id="waBgDimValPill">15%</span>
+              <label for="ytBgDimSlider" class="sub-label">{t(locale, 'ytthumb.label.bgDim')}</label>
+              <span class="val-pill" id="ytBgDimValPill">15%</span>
             </div>
-            <input type="range" id="waBgDimSlider" min="0" max="50" value="15" step="1" class="wa-range" />
+            <input type="range" id="ytBgDimSlider" min="0" max="50" value="15" step="1" class="yt-range" />
           </div>
 
           <!-- Solid color swatches -->
-          <div id="waColorControlsBox" class="sub-controls-box" style="display: none;">
-            <label class="sub-label">{t(locale, 'waresizer.bg.color')}</label>
+          <div id="ytColorControlsBox" class="sub-controls-box" style="display: none;">
+            <label class="sub-label">{t(locale, 'ytthumb.bg.color')}</label>
             <div class="color-swatches-grid">
-              <button type="button" class="color-swatch-btn active" data-color="#ffffff" style="background:#ffffff" title="Pure White"></button>
-              <button type="button" class="color-swatch-btn" data-color="#0f172a" style="background:#0f172a" title="Midnight Slate"></button>
-              <button type="button" class="color-swatch-btn" data-color="#075E54" style="background:#075E54" title="WhatsApp Dark Green"></button>
-              <button type="button" class="color-swatch-btn" data-color="#25D366" style="background:#25D366" title="WhatsApp Light Green"></button>
-              <button type="button" class="color-swatch-btn" data-color="#128C7E" style="background:#128C7E" title="WhatsApp Teal"></button>
-              <input type="color" id="waCustomColorPicker" value="#ffffff" class="custom-color-input" title="Custom color picker" />
+              <button type="button" class="color-swatch-btn" data-color="#ffffff" style="background:#ffffff" title="Pure White"></button>
+              <button type="button" class="color-swatch-btn active" data-color="#0f172a" style="background:#0f172a" title="Midnight Slate"></button>
+              <button type="button" class="color-swatch-btn" data-color="#FF0000" style="background:#FF0000" title="YouTube Red"></button>
+              <button type="button" class="color-swatch-btn" data-color="#1e1b4b" style="background:#1e1b4b" title="Royal Navy"></button>
+              <button type="button" class="color-swatch-btn" data-color="#000000" style="background:#000000" title="Deep Black"></button>
+              <input type="color" id="ytCustomColorPicker" value="#0f172a" class="custom-color-input" title="Custom color picker" />
             </div>
           </div>
         </div>
 
         <!-- Section 4: Zoom & Quick Transforms -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.section.adjust')}</label>
+          <label class="control-label">{t(locale, 'ytthumb.section.adjust')}</label>
           
           <div class="slider-header-row">
-            <label for="waZoomSlider" class="sub-label">{t(locale, 'waresizer.label.zoom')}</label>
-            <span class="val-pill" id="waZoomValPill">1.00×</span>
+            <label for="ytZoomSlider" class="sub-label">{t(locale, 'ytthumb.label.zoom')}</label>
+            <span class="val-pill" id="ytZoomValPill">1.00×</span>
           </div>
-          <input type="range" id="waZoomSlider" min="0.5" max="3.0" step="0.05" value="1.0" class="wa-range" />
+          <input type="range" id="ytZoomSlider" min="0.5" max="3.0" step="0.05" value="1.0" class="yt-range" />
 
           <div class="transform-buttons-row">
-            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="waRotateBtn" title="Rotate 90° Clockwise">
+            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="ytRotateBtn" title="Rotate 90° Clockwise">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-              <span>{t(locale, 'waresizer.action.rotate')}</span>
+              <span>{t(locale, 'ytthumb.action.rotate')}</span>
             </button>
 
-            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="waFlipBtn" title="Flip Horizontal">
+            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="ytFlipBtn" title="Flip Horizontal">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
-              <span>{t(locale, 'waresizer.action.flip')}</span>
+              <span>{t(locale, 'ytthumb.action.flip')}</span>
             </button>
 
-            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="waCenterBtn" title="Reset Subject Center">
+            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="ytCenterBtn" title="Reset Subject Center">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-              <span>{t(locale, 'waresizer.action.center')}</span>
+              <span>{t(locale, 'ytthumb.action.center')}</span>
             </button>
           </div>
         </div>
 
         <!-- Section 5: Resolution Preset Selector -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.section.resolution')}</label>
+          <label class="control-label">{t(locale, 'ytthumb.section.resolution')}</label>
           <div class="resolution-pills-grid">
-            <button type="button" class="res-pill-btn" data-size="500">
-              <strong>500 × 500</strong>
-              <span>{t(locale, 'waresizer.preset.500')}</span>
+            <button type="button" class="res-pill-btn active" data-w="1280" data-h="720">
+              <strong>1280 × 720 px</strong>
+              <span>{t(locale, 'ytthumb.preset.1280')}</span>
             </button>
-            <button type="button" class="res-pill-btn active" data-size="800">
-              <strong>800 × 800</strong>
-              <span>{t(locale, 'waresizer.preset.800')}</span>
+            <button type="button" class="res-pill-btn" data-w="1920" data-h="1080">
+              <strong>1920 × 1080 px</strong>
+              <span>{t(locale, 'ytthumb.preset.1920')}</span>
             </button>
-            <button type="button" class="res-pill-btn" data-size="1080">
-              <strong>1080 × 1080</strong>
-              <span>{t(locale, 'waresizer.preset.1080')}</span>
-            </button>
-            <button type="button" class="res-pill-btn" data-size="0">
-              <strong>MAX (Original)</strong>
-              <span>{t(locale, 'waresizer.preset.orig')}</span>
+            <button type="button" class="res-pill-btn" data-w="640" data-h="360">
+              <strong>640 × 360 px</strong>
+              <span>{t(locale, 'ytthumb.preset.640')}</span>
             </button>
           </div>
         </div>
 
-        <!-- Section 6: Export Format & Quality -->
+        <!-- Section 6: Export Format & 2MB Safeguard -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.section.export')}</label>
+          <label class="control-label">{t(locale, 'ytthumb.section.export')}</label>
           <div class="select-field">
-            <label for="waExportFormatSelect" class="sub-label">{t(locale, 'waresizer.export.format')}</label>
-            <select id="waExportFormatSelect" class="wa-select">
-              <option value="image/jpeg" selected>JPG / JPEG (Recommended for WhatsApp DP)</option>
+            <label for="ytExportFormatSelect" class="sub-label">{t(locale, 'ytthumb.export.format')}</label>
+            <select id="ytExportFormatSelect" class="yt-select">
+              <option value="image/jpeg" selected>JPG / JPEG (Recommended for YouTube)</option>
               <option value="image/webp">WebP (Lightweight & High Quality)</option>
-              <option value="image/png">PNG (Lossless Quality)</option>
+              <option value="image/png">PNG (Lossless Sharpness)</option>
             </select>
           </div>
 
-          <div class="quality-field" id="waQualityFieldBox">
+          <div class="quality-field" id="ytQualityFieldBox">
             <div class="slider-header-row">
-              <label for="waExportQualitySlider" class="sub-label">{t(locale, 'waresizer.export.quality')}</label>
-              <span class="val-pill" id="waQualityValPill">92%</span>
+              <label for="ytExportQualitySlider" class="sub-label">{t(locale, 'ytthumb.export.quality')}</label>
+              <span class="val-pill" id="ytQualityValPill">92%</span>
             </div>
-            <input type="range" id="waExportQualitySlider" min="10" max="100" value="92" step="1" class="wa-range" />
+            <input type="range" id="ytExportQualitySlider" min="10" max="100" value="92" step="1" class="yt-range" />
+          </div>
+
+          <!-- Real-Time Estimated Size Badge -->
+          <div class="size-estimate-box">
+            <span class="estimate-label">{t(locale, 'ytthumb.size.estimate')}:</span>
+            <span class="estimate-pill" id="ytSizeEstimatePill">~180 KB</span>
+            <span class="size-status-pill ok" id="ytSizeStatusPill">{t(locale, 'ytthumb.size.ok')}</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Related Cross Navigation Links -->
-    <div class="wa-cross-links-row">
+    <div class="yt-cross-links-row">
+      <a href={bannerUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+        <span>{t(locale, 'ytthumb.cross.banner')}</span>
+      </a>
+
       <a href={squareUrl} class="btn btn-secondary cross-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
-        <span>{t(locale, 'waresizer.cross.square')}</span>
+        <span>{t(locale, 'ytthumb.cross.square')}</span>
       </a>
 
       <a href={circleUrl} class="btn btn-secondary cross-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle></svg>
-        <span>{t(locale, 'waresizer.cross.circle')}</span>
+        <span>{t(locale, 'ytthumb.cross.circle')}</span>
       </a>
 
       <a href={blurUrl} class="btn btn-secondary cross-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle></svg>
-        <span>{t(locale, 'waresizer.cross.blur')}</span>
+        <span>{t(locale, 'ytthumb.cross.blur')}</span>
       </a>
 
       <a href={noiseReducerUrl} class="btn btn-secondary cross-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        <span>{t(locale, 'waresizer.cross.noiseReducer')}</span>
-      </a>
-
-      <a href={exactUrl} class="btn btn-secondary cross-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line></svg>
-        <span>{t(locale, 'waresizer.cross.exact')}</span>
+        <span>{t(locale, 'ytthumb.cross.noiseReducer')}</span>
       </a>
     </div>
   </div>
@@ -352,27 +382,27 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
 
 <script>
   import {
-    loadWhatsAppImageFromFile,
-    renderWhatsAppCanvas,
-    renderCircularPreview,
-    generateSampleAvatar,
-    exportWhatsAppImage,
-    copyWhatsAppCanvasToClipboard,
-    DEFAULT_WA_OPTIONS,
-    WA_PRESETS,
-    type WhatsAppResizerOptions,
+    loadYouTubeThumbnailFromFile,
+    renderYouTubeThumbnailCanvas,
+    renderThumbnailPreview,
+    generateSampleYouTubeThumbnail,
+    exportYouTubeThumbnail,
+    copyYouTubeThumbnailToClipboard,
+    DEFAULT_YT_THUMBNAIL_OPTIONS,
+    YT_THUMBNAIL_PRESETS,
+    type YouTubeThumbnailOptions,
     type LoadedImageInfo,
-  } from '@/scripts/whatsapp-resizer';
+  } from '@/scripts/youtube-thumbnail-resizer';
 
-  function initWhatsAppResizer() {
-    const appEl = document.getElementById('waApp');
+  function initYouTubeThumbnailResizer() {
+    const appEl = document.getElementById('ytApp');
     if (!appEl) return;
 
     const i18n = appEl.dataset.i18n ? JSON.parse(appEl.dataset.i18n) : {};
 
     // State
     let loadedImageObj: LoadedImageInfo | null = null;
-    let waOptions: WhatsAppResizerOptions = { ...DEFAULT_WA_OPTIONS };
+    let ytOptions: YouTubeThumbnailOptions = { ...DEFAULT_YT_THUMBNAIL_OPTIONS };
     let exportFormat: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg';
     let exportQuality: number = 0.92;
 
@@ -384,61 +414,74 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     let initOffsetY = 0;
 
     // DOM Elements
-    const dropzone = document.getElementById('waDropzone') as HTMLElement;
-    const fileInput = document.getElementById('waFileInput') as HTMLInputElement;
-    const sampleBtn = document.getElementById('waSampleBtn') as HTMLButtonElement;
-    const loadingCard = document.getElementById('waLoadingCard') as HTMLElement;
-    const workspace = document.getElementById('waWorkspace') as HTMLElement;
+    const dropzone = document.getElementById('ytDropzone') as HTMLElement;
+    const fileInput = document.getElementById('ytFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('ytSampleBtn') as HTMLButtonElement;
+    const loadingCard = document.getElementById('ytLoadingCard') as HTMLElement;
+    const workspace = document.getElementById('ytWorkspace') as HTMLElement;
 
-    const fileNameEl = document.getElementById('waFileName') as HTMLElement;
-    const origDimsTag = document.getElementById('waOriginalDimsTag') as HTMLElement;
-    const origSizeTag = document.getElementById('waOriginalSizeTag') as HTMLElement;
-    const changeImageBtn = document.getElementById('waChangeImageBtn') as HTMLButtonElement;
+    const fileNameEl = document.getElementById('ytFileName') as HTMLElement;
+    const origDimsTag = document.getElementById('ytOriginalDimsTag') as HTMLElement;
+    const origSizeTag = document.getElementById('ytOriginalSizeTag') as HTMLElement;
+    const changeImageBtn = document.getElementById('ytChangeImageBtn') as HTMLButtonElement;
 
-    const canvasViewport = document.getElementById('waCanvasViewport') as HTMLElement;
-    const mainCanvas = document.getElementById('waMainCanvas') as HTMLCanvasElement;
-    const circleCanvas = document.getElementById('waCircleCanvas') as HTMLCanvasElement;
-    const chatMockupCanvas = document.getElementById('waChatMockupCanvas') as HTMLCanvasElement;
+    const canvasViewport = document.getElementById('ytCanvasViewport') as HTMLElement;
+    const mainCanvas = document.getElementById('ytMainCanvas') as HTMLCanvasElement;
+    const timestampOverlay = document.getElementById('ytTimestampOverlay') as HTMLElement;
+    const safeZoneHint = document.getElementById('ytSafeZoneHint') as HTMLElement;
+    const safeZoneCheckbox = document.getElementById('ytSafeZoneCheckbox') as HTMLInputElement;
+
+    const desktopThumbCanvas = document.getElementById('ytDesktopThumbCanvas') as HTMLCanvasElement;
+    const mobileThumbCanvas = document.getElementById('ytMobileThumbCanvas') as HTMLCanvasElement;
 
     const presetBtns = document.querySelectorAll('.preset-chip-btn') as NodeListOf<HTMLButtonElement>;
     const modeBtns = document.querySelectorAll('.seg-btn') as NodeListOf<HTMLButtonElement>;
-    const bgSection = document.getElementById('waBgSection') as HTMLElement;
+    const bgSection = document.getElementById('ytBgSection') as HTMLElement;
     const segBgBtns = document.querySelectorAll('.seg-bg-btn') as NodeListOf<HTMLButtonElement>;
 
-    const blurControlsBox = document.getElementById('waBlurControlsBox') as HTMLElement;
-    const colorControlsBox = document.getElementById('waColorControlsBox') as HTMLElement;
+    const blurControlsBox = document.getElementById('ytBlurControlsBox') as HTMLElement;
+    const colorControlsBox = document.getElementById('ytColorControlsBox') as HTMLElement;
 
-    const blurSlider = document.getElementById('waBlurSlider') as HTMLInputElement;
-    const blurValPill = document.getElementById('waBlurValPill') as HTMLElement;
-    const bgDimSlider = document.getElementById('waBgDimSlider') as HTMLInputElement;
-    const bgDimValPill = document.getElementById('waBgDimValPill') as HTMLElement;
+    const blurSlider = document.getElementById('ytBlurSlider') as HTMLInputElement;
+    const blurValPill = document.getElementById('ytBlurValPill') as HTMLElement;
+    const bgDimSlider = document.getElementById('ytBgDimSlider') as HTMLInputElement;
+    const bgDimValPill = document.getElementById('ytBgDimValPill') as HTMLElement;
 
     const colorSwatches = document.querySelectorAll('.color-swatch-btn') as NodeListOf<HTMLButtonElement>;
-    const customColorPicker = document.getElementById('waCustomColorPicker') as HTMLInputElement;
+    const customColorPicker = document.getElementById('ytCustomColorPicker') as HTMLInputElement;
 
-    const zoomSlider = document.getElementById('waZoomSlider') as HTMLInputElement;
-    const zoomValPill = document.getElementById('waZoomValPill') as HTMLElement;
+    const zoomSlider = document.getElementById('ytZoomSlider') as HTMLInputElement;
+    const zoomValPill = document.getElementById('ytZoomValPill') as HTMLElement;
 
-    const rotateBtn = document.getElementById('waRotateBtn') as HTMLButtonElement;
-    const flipBtn = document.getElementById('waFlipBtn') as HTMLButtonElement;
-    const centerBtn = document.getElementById('waCenterBtn') as HTMLButtonElement;
+    const rotateBtn = document.getElementById('ytRotateBtn') as HTMLButtonElement;
+    const flipBtn = document.getElementById('ytFlipBtn') as HTMLButtonElement;
+    const centerBtn = document.getElementById('ytCenterBtn') as HTMLButtonElement;
 
     const resPillBtns = document.querySelectorAll('.res-pill-btn') as NodeListOf<HTMLButtonElement>;
 
-    const exportFormatSelect = document.getElementById('waExportFormatSelect') as HTMLSelectElement;
-    const qualityFieldBox = document.getElementById('waQualityFieldBox') as HTMLElement;
-    const exportQualitySlider = document.getElementById('waExportQualitySlider') as HTMLInputElement;
-    const qualityValPill = document.getElementById('waQualityValPill') as HTMLElement;
+    const exportFormatSelect = document.getElementById('ytExportFormatSelect') as HTMLSelectElement;
+    const qualityFieldBox = document.getElementById('ytQualityFieldBox') as HTMLElement;
+    const exportQualitySlider = document.getElementById('ytExportQualitySlider') as HTMLInputElement;
+    const qualityValPill = document.getElementById('ytQualityValPill') as HTMLElement;
 
-    const downloadBtn = document.getElementById('waDownloadBtn') as HTMLButtonElement;
-    const copyBtn = document.getElementById('waCopyBtn') as HTMLButtonElement;
-    const copyBtnText = document.getElementById('waCopyBtnText') as HTMLElement;
-    const resetBtn = document.getElementById('waResetBtn') as HTMLButtonElement;
+    const sizeEstimatePill = document.getElementById('ytSizeEstimatePill') as HTMLElement;
+    const sizeStatusPill = document.getElementById('ytSizeStatusPill') as HTMLElement;
+
+    const downloadBtn = document.getElementById('ytDownloadBtn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('ytCopyBtn') as HTMLButtonElement;
+    const copyBtnText = document.getElementById('ytCopyBtnText') as HTMLElement;
+    const resetBtn = document.getElementById('ytResetBtn') as HTMLButtonElement;
 
     function render() {
       if (!loadedImageObj || !mainCanvas) return;
 
-      const rendered = renderWhatsAppCanvas(loadedImageObj.img, waOptions, 800);
+      const rendered = renderYouTubeThumbnailCanvas(
+        loadedImageObj.img,
+        ytOptions,
+        ytOptions.targetWidth,
+        ytOptions.targetHeight
+      );
+
       mainCanvas.width = rendered.width;
       mainCanvas.height = rendered.height;
 
@@ -447,11 +490,40 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
         ctx.drawImage(rendered, 0, 0);
       }
 
-      if (circleCanvas) {
-        renderCircularPreview(rendered, circleCanvas, 140);
+      if (desktopThumbCanvas) {
+        renderThumbnailPreview(rendered, desktopThumbCanvas, 240, 135);
       }
-      if (chatMockupCanvas) {
-        renderCircularPreview(rendered, chatMockupCanvas, 44);
+      if (mobileThumbCanvas) {
+        renderThumbnailPreview(rendered, mobileThumbCanvas, 200, 112);
+      }
+
+      updateEstimatedSize(rendered);
+    }
+
+    function updateEstimatedSize(canvas: HTMLCanvasElement) {
+      if (!sizeEstimatePill || !sizeStatusPill) return;
+
+      try {
+        const dataUrl = canvas.toDataURL(exportFormat, exportFormat === 'image/png' ? undefined : exportQuality);
+        const approxBytes = Math.round((dataUrl.length - dataUrl.indexOf(',') - 1) * 0.75);
+        const approxKB = Math.round(approxBytes / 1024);
+
+        if (approxKB > 1024) {
+          sizeEstimatePill.textContent = `${(approxKB / 1024).toFixed(2)} MB`;
+        } else {
+          sizeEstimatePill.textContent = `${approxKB} KB`;
+        }
+
+        const isOver2MB = approxBytes > 2 * 1024 * 1024;
+        if (isOver2MB) {
+          sizeStatusPill.className = 'size-status-pill warning';
+          sizeStatusPill.textContent = i18n.sizeWarning || '⚠ Over 2MB limit';
+        } else {
+          sizeStatusPill.className = 'size-status-pill ok';
+          sizeStatusPill.textContent = i18n.sizeOk || '✓ Under YouTube 2MB Limit';
+        }
+      } catch (e) {
+        // ignore
       }
     }
 
@@ -467,8 +539,8 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       loadingCard.style.display = 'flex';
 
       try {
-        loadedImageObj = await loadWhatsAppImageFromFile(file);
-        waOptions = { ...DEFAULT_WA_OPTIONS };
+        loadedImageObj = await loadYouTubeThumbnailFromFile(file);
+        ytOptions = { ...DEFAULT_YT_THUMBNAIL_OPTIONS };
 
         if (fileNameEl) fileNameEl.textContent = loadedImageObj.name;
         if (origDimsTag) origDimsTag.textContent = `${loadedImageObj.originalWidth} × ${loadedImageObj.originalHeight} px`;
@@ -494,23 +566,30 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     }
 
     function syncControlsToState() {
-      modeBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-mode') === waOptions.mode));
-      if (bgSection) bgSection.style.display = waOptions.mode === 'fit' ? 'flex' : 'none';
+      modeBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-mode') === ytOptions.mode));
+      if (bgSection) bgSection.style.display = ytOptions.mode === 'fit' ? 'flex' : 'none';
 
-      segBgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === waOptions.bgType));
-      if (blurControlsBox) blurControlsBox.style.display = waOptions.bgType === 'blur' ? 'block' : 'none';
-      if (colorControlsBox) colorControlsBox.style.display = waOptions.bgType === 'solid' ? 'block' : 'none';
+      segBgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === ytOptions.bgType));
+      if (blurControlsBox) blurControlsBox.style.display = ytOptions.bgType === 'blur' ? 'block' : 'none';
+      if (colorControlsBox) colorControlsBox.style.display = ytOptions.bgType === 'solid' ? 'block' : 'none';
 
-      if (blurSlider) blurSlider.value = String(waOptions.blurStrength);
-      if (blurValPill) blurValPill.textContent = `${waOptions.blurStrength} px`;
+      if (blurSlider) blurSlider.value = String(ytOptions.blurStrength);
+      if (blurValPill) blurValPill.textContent = `${ytOptions.blurStrength} px`;
 
-      if (bgDimSlider) bgDimSlider.value = String(waOptions.bgDim);
-      if (bgDimValPill) bgDimValPill.textContent = `${waOptions.bgDim}%`;
+      if (bgDimSlider) bgDimSlider.value = String(ytOptions.bgDim);
+      if (bgDimValPill) bgDimValPill.textContent = `${ytOptions.bgDim}%`;
 
-      if (zoomSlider) zoomSlider.value = String(waOptions.zoom);
-      if (zoomValPill) zoomValPill.textContent = `${waOptions.zoom.toFixed(2)}×`;
+      if (zoomSlider) zoomSlider.value = String(ytOptions.zoom);
+      if (zoomValPill) zoomValPill.textContent = `${ytOptions.zoom.toFixed(2)}×`;
 
-      resPillBtns.forEach((b) => b.classList.toggle('active', parseInt(b.getAttribute('data-size') || '800', 10) === waOptions.outputSize));
+      resPillBtns.forEach((b) => {
+        const w = parseInt(b.getAttribute('data-w') || '1280', 10);
+        b.classList.toggle('active', w === ytOptions.targetWidth);
+      });
+
+      if (safeZoneCheckbox) safeZoneCheckbox.checked = ytOptions.showSafeZone;
+      if (timestampOverlay) timestampOverlay.style.display = ytOptions.showSafeZone ? 'block' : 'none';
+      if (safeZoneHint) safeZoneHint.style.display = ytOptions.showSafeZone ? 'block' : 'none';
     }
 
     if (changeImageBtn) changeImageBtn.addEventListener('click', resetToDropzone);
@@ -521,8 +600,8 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       isDraggingCanvas = true;
       dragStartX = clientX;
       dragStartY = clientY;
-      initOffsetX = waOptions.offsetX;
-      initOffsetY = waOptions.offsetY;
+      initOffsetX = ytOptions.offsetX;
+      initOffsetY = ytOptions.offsetY;
     }
 
     function handleDragMove(clientX: number, clientY: number) {
@@ -531,8 +610,8 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       const deltaX = (clientX - dragStartX) / (rect.width / 2);
       const deltaY = (clientY - dragStartY) / (rect.height / 2);
 
-      waOptions.offsetX = Math.max(-1.5, Math.min(1.5, initOffsetX + deltaX));
-      waOptions.offsetY = Math.max(-1.5, Math.min(1.5, initOffsetY + deltaY));
+      ytOptions.offsetX = Math.max(-1.5, Math.min(1.5, initOffsetX + deltaX));
+      ytOptions.offsetY = Math.max(-1.5, Math.min(1.5, initOffsetY + deltaY));
       triggerUpdate();
     }
 
@@ -573,11 +652,20 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       canvasViewport.addEventListener('wheel', (e) => {
         e.preventDefault();
         const zoomDelta = e.deltaY < 0 ? 0.05 : -0.05;
-        waOptions.zoom = Math.max(0.5, Math.min(3.0, waOptions.zoom + zoomDelta));
-        if (zoomSlider) zoomSlider.value = String(waOptions.zoom);
-        if (zoomValPill) zoomValPill.textContent = `${waOptions.zoom.toFixed(2)}×`;
+        ytOptions.zoom = Math.max(0.5, Math.min(3.0, ytOptions.zoom + zoomDelta));
+        if (zoomSlider) zoomSlider.value = String(ytOptions.zoom);
+        if (zoomValPill) zoomValPill.textContent = `${ytOptions.zoom.toFixed(2)}×`;
         triggerUpdate();
       }, { passive: false });
+    }
+
+    // Safe Zone Checkbox
+    if (safeZoneCheckbox) {
+      safeZoneCheckbox.addEventListener('change', () => {
+        ytOptions.showSafeZone = safeZoneCheckbox.checked;
+        if (timestampOverlay) timestampOverlay.style.display = ytOptions.showSafeZone ? 'block' : 'none';
+        if (safeZoneHint) safeZoneHint.style.display = ytOptions.showSafeZone ? 'block' : 'none';
+      });
     }
 
     // Presets
@@ -587,9 +675,9 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
         btn.classList.add('active');
 
         const presetKey = btn.getAttribute('data-preset') || 'fullBlur';
-        const config = WA_PRESETS[presetKey];
+        const config = YT_THUMBNAIL_PRESETS[presetKey];
         if (config) {
-          waOptions = { ...waOptions, ...config };
+          ytOptions = { ...ytOptions, ...config };
           syncControlsToState();
           triggerUpdate();
         }
@@ -601,8 +689,8 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       btn.addEventListener('click', () => {
         modeBtns.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        waOptions.mode = (btn.getAttribute('data-mode') as any) || 'fit';
-        if (bgSection) bgSection.style.display = waOptions.mode === 'fit' ? 'flex' : 'none';
+        ytOptions.mode = (btn.getAttribute('data-mode') as any) || 'fit';
+        if (bgSection) bgSection.style.display = ytOptions.mode === 'fit' ? 'flex' : 'none';
         triggerUpdate();
       });
     });
@@ -612,9 +700,9 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       btn.addEventListener('click', () => {
         segBgBtns.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        waOptions.bgType = (btn.getAttribute('data-bg') as any) || 'blur';
-        if (blurControlsBox) blurControlsBox.style.display = waOptions.bgType === 'blur' ? 'block' : 'none';
-        if (colorControlsBox) colorControlsBox.style.display = waOptions.bgType === 'solid' ? 'block' : 'none';
+        ytOptions.bgType = (btn.getAttribute('data-bg') as any) || 'blur';
+        if (blurControlsBox) blurControlsBox.style.display = ytOptions.bgType === 'blur' ? 'block' : 'none';
+        if (colorControlsBox) colorControlsBox.style.display = ytOptions.bgType === 'solid' ? 'block' : 'none';
         triggerUpdate();
       });
     });
@@ -622,24 +710,24 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     // Sliders
     if (blurSlider) {
       blurSlider.addEventListener('input', () => {
-        waOptions.blurStrength = parseInt(blurSlider.value, 10);
-        if (blurValPill) blurValPill.textContent = `${waOptions.blurStrength} px`;
+        ytOptions.blurStrength = parseInt(blurSlider.value, 10);
+        if (blurValPill) blurValPill.textContent = `${ytOptions.blurStrength} px`;
         triggerUpdate();
       });
     }
 
     if (bgDimSlider) {
       bgDimSlider.addEventListener('input', () => {
-        waOptions.bgDim = parseInt(bgDimSlider.value, 10);
-        if (bgDimValPill) bgDimValPill.textContent = `${waOptions.bgDim}%`;
+        ytOptions.bgDim = parseInt(bgDimSlider.value, 10);
+        if (bgDimValPill) bgDimValPill.textContent = `${ytOptions.bgDim}%`;
         triggerUpdate();
       });
     }
 
     if (zoomSlider) {
       zoomSlider.addEventListener('input', () => {
-        waOptions.zoom = parseFloat(zoomSlider.value);
-        if (zoomValPill) zoomValPill.textContent = `${waOptions.zoom.toFixed(2)}×`;
+        ytOptions.zoom = parseFloat(zoomSlider.value);
+        if (zoomValPill) zoomValPill.textContent = `${ytOptions.zoom.toFixed(2)}×`;
         triggerUpdate();
       });
     }
@@ -649,15 +737,15 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       btn.addEventListener('click', () => {
         colorSwatches.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        waOptions.bgColor = btn.getAttribute('data-color') || '#ffffff';
-        if (customColorPicker) customColorPicker.value = waOptions.bgColor;
+        ytOptions.bgColor = btn.getAttribute('data-color') || '#0f172a';
+        if (customColorPicker) customColorPicker.value = ytOptions.bgColor;
         triggerUpdate();
       });
     });
 
     if (customColorPicker) {
       customColorPicker.addEventListener('input', () => {
-        waOptions.bgColor = customColorPicker.value;
+        ytOptions.bgColor = customColorPicker.value;
         colorSwatches.forEach((b) => b.classList.remove('active'));
         triggerUpdate();
       });
@@ -666,23 +754,23 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     // Transform Actions
     if (rotateBtn) {
       rotateBtn.addEventListener('click', () => {
-        waOptions.rotation = (waOptions.rotation + 90) % 360;
+        ytOptions.rotation = (ytOptions.rotation + 90) % 360;
         triggerUpdate();
       });
     }
 
     if (flipBtn) {
       flipBtn.addEventListener('click', () => {
-        waOptions.flipH = !waOptions.flipH;
+        ytOptions.flipH = !ytOptions.flipH;
         triggerUpdate();
       });
     }
 
     if (centerBtn) {
       centerBtn.addEventListener('click', () => {
-        waOptions.offsetX = 0;
-        waOptions.offsetY = 0;
-        waOptions.zoom = 1.0;
+        ytOptions.offsetX = 0;
+        ytOptions.offsetY = 0;
+        ytOptions.zoom = 1.0;
         if (zoomSlider) zoomSlider.value = '1.0';
         if (zoomValPill) zoomValPill.textContent = '1.00×';
         triggerUpdate();
@@ -694,7 +782,9 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       btn.addEventListener('click', () => {
         resPillBtns.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        waOptions.outputSize = parseInt(btn.getAttribute('data-size') || '800', 10);
+        ytOptions.targetWidth = parseInt(btn.getAttribute('data-w') || '1280', 10);
+        ytOptions.targetHeight = parseInt(btn.getAttribute('data-h') || '720', 10);
+        triggerUpdate();
       });
     });
 
@@ -705,6 +795,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
         if (qualityFieldBox) {
           qualityFieldBox.style.display = exportFormat === 'image/png' ? 'none' : 'block';
         }
+        triggerUpdate();
       });
     }
 
@@ -713,13 +804,14 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
         const q = parseInt(exportQualitySlider.value, 10);
         exportQuality = q / 100;
         if (qualityValPill) qualityValPill.textContent = `${q}%`;
+        triggerUpdate();
       });
     }
 
     // Reset Button
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        waOptions = { ...DEFAULT_WA_OPTIONS };
+        ytOptions = { ...DEFAULT_YT_THUMBNAIL_OPTIONS };
         presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'fullBlur'));
         syncControlsToState();
         triggerUpdate();
@@ -732,8 +824,13 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
         if (!loadedImageObj) return;
 
         const baseName = loadedImageObj.name.replace(/\.[^/.]+$/, '');
-        const fullCanvas = renderWhatsAppCanvas(loadedImageObj.img, waOptions);
-        exportWhatsAppImage(fullCanvas, exportFormat, exportQuality, `${baseName}-whatsapp-dp`);
+        const fullCanvas = renderYouTubeThumbnailCanvas(
+          loadedImageObj.img,
+          ytOptions,
+          ytOptions.targetWidth,
+          ytOptions.targetHeight
+        );
+        exportYouTubeThumbnail(fullCanvas, exportFormat, exportQuality, `${baseName}-youtube-thumbnail`);
       });
     }
 
@@ -742,8 +839,13 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       copyBtn.addEventListener('click', async () => {
         if (!loadedImageObj) return;
         try {
-          const fullCanvas = renderWhatsAppCanvas(loadedImageObj.img, waOptions);
-          const success = await copyWhatsAppCanvasToClipboard(fullCanvas);
+          const fullCanvas = renderYouTubeThumbnailCanvas(
+            loadedImageObj.img,
+            ytOptions,
+            ytOptions.targetWidth,
+            ytOptions.targetHeight
+          );
+          const success = await copyYouTubeThumbnailToClipboard(fullCanvas);
           if (success) {
             if (copyBtnText) copyBtnText.textContent = i18n.copiedSuccess || 'Copied!';
             copyBtn.classList.add('btn-success');
@@ -755,7 +857,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
             alert('Clipboard copy is not supported in this browser.');
           }
         } catch (err) {
-          alert('Could not copy image to clipboard.');
+          alert('Could not copy thumbnail to clipboard.');
         }
       });
     }
@@ -772,8 +874,8 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
       sampleBtn.addEventListener('click', async () => {
         showLoading(true);
         try {
-          loadedImageObj = await generateSampleAvatar();
-          waOptions = { ...DEFAULT_WA_OPTIONS };
+          loadedImageObj = await generateSampleYouTubeThumbnail();
+          ytOptions = { ...DEFAULT_YT_THUMBNAIL_OPTIONS };
 
           if (fileNameEl) fileNameEl.textContent = loadedImageObj.name;
           if (origDimsTag) origDimsTag.textContent = `${loadedImageObj.originalWidth} × ${loadedImageObj.originalHeight} px`;
@@ -836,9 +938,9 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initWhatsAppResizer);
+    document.addEventListener('DOMContentLoaded', initYouTubeThumbnailResizer);
   } else {
-    initWhatsAppResizer();
+    initYouTubeThumbnailResizer();
   }
 </script>
 
@@ -847,7 +949,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     box-sizing: border-box;
   }
 
-  .wa-app-container {
+  .yt-app-container {
     width: 100%;
     max-width: 100%;
     margin-inline: auto;
@@ -868,7 +970,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   /* Dropzone Card */
-  .wa-dropzone-card {
+  .yt-dropzone-card {
     background: var(--color-surface);
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-2xl);
@@ -882,18 +984,18 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   @media (min-width: 640px) {
-    .wa-dropzone-card {
+    .yt-dropzone-card {
       padding: var(--space-12) var(--space-8);
     }
   }
 
-  .wa-dropzone-card.dragover {
-    border-color: var(--color-accent);
-    background: var(--color-accent-light);
+  .yt-dropzone-card.dragover {
+    border-color: #FF0000;
+    background: rgba(255, 0, 0, 0.04);
   }
 
   .dropzone-inner {
-    max-width: 480px;
+    max-width: 520px;
     width: 100%;
     margin-inline: auto;
     display: flex;
@@ -907,27 +1009,40 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     width: 72px;
     height: 72px;
     border-radius: var(--radius-full);
-    background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border);
+    background: rgba(255, 0, 0, 0.08);
+    border: 1px solid rgba(255, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #25D366;
+    color: #FF0000;
     flex-shrink: 0;
   }
 
   .dropzone-headline {
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     font-weight: 800;
     color: var(--color-text);
     margin: 0;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 640px) {
+    .dropzone-headline {
+      font-size: var(--text-xl);
+    }
   }
 
   .dropzone-subheadline {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.5;
+  }
+
+  @media (min-width: 640px) {
+    .dropzone-subheadline {
+      font-size: var(--text-sm);
+    }
   }
 
   .dropzone-action-group {
@@ -946,10 +1061,18 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     padding: var(--space-3) var(--space-6);
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     cursor: pointer;
+    background-color: #FF0000;
+    border-color: #FF0000;
     border-radius: var(--radius-lg);
     min-height: 46px;
+    max-width: 100%;
+  }
+
+  .dropzone-browse-btn:hover {
+    background-color: #DC2626;
   }
 
   .sample-demo-btn {
@@ -958,10 +1081,12 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     padding: var(--space-3) var(--space-5);
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     cursor: pointer;
     border-radius: var(--radius-lg);
     min-height: 46px;
+    max-width: 100%;
   }
 
   .dropzone-badges-row {
@@ -977,6 +1102,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   .badge-pill {
     display: inline-flex;
     align-items: center;
+    text-align: center;
     gap: 6px;
     font-size: 11.5px;
     font-weight: 600;
@@ -985,16 +1111,18 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     border: 1px solid var(--color-border);
     padding: 5px 12px;
     border-radius: var(--radius-full);
+    max-width: 100%;
+    word-break: break-word;
   }
 
   .badge-pill-green {
-    color: var(--color-accent);
-    border-color: var(--color-accent-border);
-    background: var(--color-accent-light);
+    color: #059669;
+    border-color: rgba(5, 150, 105, 0.2);
+    background: rgba(5, 150, 105, 0.06);
   }
 
   /* Loading State */
-  .wa-loading-card {
+  .yt-loading-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -1012,7 +1140,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     width: 36px;
     height: 36px;
     border: 3px solid var(--color-border);
-    border-top-color: var(--color-accent);
+    border-top-color: #FF0000;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -1029,7 +1157,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   /* Workspace */
-  .wa-workspace-card {
+  .yt-workspace-card {
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
@@ -1090,7 +1218,22 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     white-space: nowrap;
   }
 
-  .wa-main-grid {
+  .workspace-header-actions {
+    flex-shrink: 0;
+  }
+
+  .change-image-btn {
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 16px;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .yt-main-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-5);
@@ -1100,15 +1243,15 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     box-sizing: border-box;
   }
 
-  @media (min-width: 900px) {
-    .wa-main-grid {
-      grid-template-columns: 1.15fr 1fr;
+  @media (min-width: 992px) {
+    .yt-main-grid {
+      grid-template-columns: 1.25fr 1fr;
       gap: var(--space-6);
     }
   }
 
   /* Left Column: Preview Column */
-  .wa-preview-column {
+  .yt-preview-column {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -1124,12 +1267,12 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   @media (min-width: 640px) {
-    .wa-preview-column {
+    .yt-preview-column {
       padding: var(--space-6);
     }
   }
 
-  /* Interactive Canvas Box */
+  /* Interactive 16:9 Canvas Box */
   .canvas-viewport-box {
     width: 100%;
     max-width: 100%;
@@ -1141,7 +1284,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     cursor: grab;
     user-select: none;
     touch-action: none;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 9;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1152,7 +1295,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     cursor: grabbing;
   }
 
-  .wa-master-canvas {
+  .yt-master-canvas {
     width: 100%;
     height: 100%;
     max-width: 100%;
@@ -1161,17 +1304,29 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     object-fit: contain;
   }
 
-  /* Circular Overlay Frame */
-  .circle-crop-overlay-frame {
+  /* YouTube Timestamp Overlay */
+  .yt-timestamp-overlay {
     position: absolute;
-    inset: 0;
+    bottom: 10px;
+    right: 10px;
     pointer-events: none;
-    border-radius: 50%;
-    border: 2px dashed rgba(37, 211, 102, 0.9);
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35);
+    z-index: 10;
   }
 
-  .crop-hint-badge {
+  .timestamp-box {
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    font-family: Roboto, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .safe-zone-hint-badge {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -1187,6 +1342,33 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    z-index: 12;
+  }
+
+  .safezone-toggle-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 2px;
+    width: 100%;
+  }
+
+  .toggle-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .yt-checkbox {
+    accent-color: #FF0000;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
   }
 
   /* Live Mockup Previews Strip */
@@ -1200,9 +1382,9 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     box-sizing: border-box;
   }
 
-  @media (min-width: 600px) {
+  @media (min-width: 640px) {
     .live-previews-panel {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1.15fr 1fr;
     }
   }
 
@@ -1213,7 +1395,6 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: var(--space-3);
     width: 100%;
     max-width: 100%;
@@ -1229,78 +1410,150 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     letter-spacing: 0.04em;
   }
 
-  .circle-preview-frame {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #25D366;
-    background: #ffffff;
-  }
-
-  .circle-preview-frame canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  /* Chat Header Mockup */
-  .whatsapp-chat-header-mockup {
-    width: 100%;
-    background: #075E54;
-    color: #ffffff;
-    border-radius: var(--radius-md);
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .mockup-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: #ffffff;
-  }
-
-  .mockup-avatar canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .mockup-info {
+  /* Desktop Card Mockup */
+  .yt-video-card-mockup {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    gap: 2px;
+    gap: 8px;
+    background: #0f0f0f;
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
-  .mockup-name {
-    font-size: 12.5px;
+  .yt-card-thumb-frame {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .yt-card-thumb-frame canvas {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .yt-thumb-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+
+  .yt-card-meta {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .yt-channel-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #FF0000;
+    flex-shrink: 0;
+  }
+
+  .yt-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .yt-video-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .yt-channel-name, .yt-video-views {
+    font-size: 10px;
+    color: #aaaaaa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Mobile Feed Mockup */
+  .yt-mobile-feed-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #0f0f0f;
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .yt-mobile-thumb-frame {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .yt-mobile-thumb-frame canvas {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .yt-mobile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .yt-mobile-title {
+    font-size: 11px;
     font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .mockup-status {
-    font-size: 10.5px;
-    color: #A2F3CE;
-  }
-
-  .mockup-icons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    opacity: 0.9;
+  .yt-mobile-sub {
+    font-size: 9.5px;
+    color: #aaaaaa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Action Buttons */
-  .wa-action-buttons-grid {
+  .yt-action-buttons-grid {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -1309,26 +1562,32 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   @media (min-width: 640px) {
-    .wa-action-buttons-grid {
+    .yt-action-buttons-grid {
       display: grid;
       grid-template-columns: 2fr 1.2fr auto;
     }
   }
 
-  .wa-download-btn {
+  .yt-download-btn {
     font-weight: 700;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    background-color: #FF0000;
+    border-color: #FF0000;
+    border-radius: var(--radius-lg);
     width: 100%;
     min-height: 48px;
     padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-lg);
     font-size: 14px;
   }
 
-  .wa-copy-btn, .wa-reset-btn {
+  .yt-download-btn:hover {
+    background-color: #DC2626;
+  }
+
+  .yt-copy-btn, .yt-reset-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1347,7 +1606,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   /* Controls Panel (Right Column) - Clean, Roomy, Professional */
-  .wa-controls-panel {
+  .yt-controls-panel {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -1363,7 +1622,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   @media (min-width: 640px) {
-    .wa-controls-panel {
+    .yt-controls-panel {
       padding: var(--space-6);
       gap: var(--space-6);
     }
@@ -1411,10 +1670,10 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     border-radius: var(--radius-sm);
   }
 
-  .wa-range {
+  .yt-range {
     width: 100%;
     max-width: 100%;
-    accent-color: var(--color-accent);
+    accent-color: #FF0000;
     cursor: pointer;
     margin: 4px 0;
   }
@@ -1429,7 +1688,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     box-sizing: border-box;
   }
 
-  @media (min-width: 480px) {
+  @media (min-width: 520px) {
     .preset-chips-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
@@ -1453,13 +1712,13 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   .preset-chip-btn:hover {
-    border-color: var(--color-accent);
-    background: var(--color-accent-light);
+    border-color: #FF0000;
+    background: rgba(255, 0, 0, 0.02);
   }
 
   .preset-chip-btn.active {
-    background: var(--color-accent-light);
-    border: 1.5px solid var(--color-accent);
+    background: rgba(255, 0, 0, 0.06);
+    border: 1.5px solid #FF0000;
   }
 
   .preset-chip-btn strong {
@@ -1552,8 +1811,8 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   .color-swatch-btn.active {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px var(--color-accent);
+    border-color: #FF0000;
+    box-shadow: 0 0 0 2px #FF0000;
   }
 
   .custom-color-input {
@@ -1566,6 +1825,38 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     flex-shrink: 0;
   }
 
+  /* Transform Buttons Row */
+  .transform-buttons-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 420px) {
+    .transform-buttons-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .transform-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 10px;
+    border-radius: var(--radius-md);
+    width: 100%;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* Resolution Pills - Spacious 16px 18px Padding and 14px Gap */
   .resolution-pills-grid {
     display: grid;
@@ -1576,7 +1867,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     box-sizing: border-box;
   }
 
-  @media (min-width: 480px) {
+  @media (min-width: 520px) {
     .resolution-pills-grid {
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
@@ -1600,13 +1891,13 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   .res-pill-btn:hover {
-    border-color: var(--color-accent);
-    background: var(--color-accent-light);
+    border-color: #FF0000;
+    background: rgba(255, 0, 0, 0.02);
   }
 
   .res-pill-btn.active {
-    background: var(--color-accent-light);
-    border: 1.5px solid var(--color-accent);
+    background: rgba(255, 0, 0, 0.06);
+    border: 1.5px solid #FF0000;
   }
 
   .res-pill-btn strong {
@@ -1623,7 +1914,7 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
   }
 
   /* Format Selector */
-  .wa-select {
+  .yt-select {
     width: 100%;
     max-width: 100%;
     padding: 10px 14px;
@@ -1644,8 +1935,53 @@ const exactUrl = getToolUrl('exact-dimension-resizer', locale);
     width: 100%;
   }
 
+  /* Size Estimate Box */
+  .size-estimate-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 2px;
+  }
+
+  .estimate-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+
+  .estimate-pill {
+    font-size: 12px;
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .size-status-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    margin-left: auto;
+  }
+
+  .size-status-pill.ok {
+    color: #059669;
+    background: rgba(5, 150, 105, 0.1);
+  }
+
+  .size-status-pill.warning {
+    color: #DC2626;
+    background: rgba(220, 38, 38, 0.1);
+  }
+
   /* Cross Navigation */
-  .wa-cross-links-row {
+  .yt-cross-links-row {
     display: flex;
     align-items: center;
     gap: var(--space-2-5);

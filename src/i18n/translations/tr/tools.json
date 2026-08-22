@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Resim Parazit Azaltma (Fotoğraf Kumlanması Temizleme)",
   "tools.noiseReducer.description": "Görüntü parazitini azaltın ve fotoğraf kumlanmasını ücretsiz çevrimiçi kaldırın. Düşük ışık renk lekelerini, yüksek ISO parazitlerini canlı önizleme ve %100 gizlilikle temizleyin.",
   "tools.productWhiteBg.title": "Ürün Resmi Beyaz Arka Plan",
-  "tools.productWhiteBg.description": "Ürün fotoğraflarının arka planını saf beyaza (#FFFFFF) dönüştürün; stüdyo gölgeleri, kenar düzeltme ve %100 tarayıcı gizliliği."
+  "tools.productWhiteBg.description": "Ürün fotoğraflarının arka planını saf beyaza (#FFFFFF) dönüştürün; stüdyo gölgeleri, kenar düzeltme ve %100 tarayıcı gizliliği.",
+  "tools.youtubeThumbnailResizer.title": "YouTube Küçük Resim Boyutlandırma",
+  "tools.youtubeThumbnailResizer.description": "Görselleri resmi 1280x720 16:9 YouTube thumbnail boyutuna bulanık arka planla 2MB altında ayarlayın.",
+  "tools.facebookCoverResizer.title": "Facebook Kapak Fotoğrafı Boyutlandırma",
+  "tools.facebookCoverResizer.description": "Görselleri resmi Facebook kapak fotoğrafı boyutuna (820x312 / 1640x720) mobil ve masaüstü güvenli alanıyla ayarlayın."
 }

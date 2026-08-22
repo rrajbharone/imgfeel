@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Pengurang Noise Gambar (Hapus Noise & Bintik Foto Online)",
   "tools.noiseReducer.description": "Kurangi noise gambar dan hapus bintik foto online gratis. Bersihkan bintik warna cahaya redup dan noise sensor ISO tinggi dengan pratinjau langsung dan 100% privasi.",
   "tools.productWhiteBg.title": "Latar Belakang Putih Gambar Produk",
-  "tools.productWhiteBg.description": "Ubah background foto produk jadi putih murni (#FFFFFF) dengan bayangan studio, penghalusan tepi, dan privasi 100% di browser."
+  "tools.productWhiteBg.description": "Ubah background foto produk jadi putih murni (#FFFFFF) dengan bayangan studio, penghalusan tepi, dan privasi 100% di browser.",
+  "tools.youtubeThumbnailResizer.title": "Ubah Ukuran Thumbnail YouTube",
+  "tools.youtubeThumbnailResizer.description": "Ubah ukuran dan potong gambar ke format resmi 1280x720 16:9 thumbnail YouTube dengan latar blur di bawah 2MB.",
+  "tools.facebookCoverResizer.title": "Ubah Ukuran Sampul Facebook",
+  "tools.facebookCoverResizer.description": "Ubah ukuran dan potong gambar ke format resmi sampul Facebook (820x312 / 1640x720) dengan zona aman ponsel dan komputer."
 }

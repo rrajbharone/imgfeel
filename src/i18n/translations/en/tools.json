@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Image Noise Reducer (Remove Photo Noise & Grain Online)",
   "tools.noiseReducer.description": "Reduce image noise and remove photo grain online for free. Clean low-light color speckles, high-ISO sensor noise, and compression artifacts with live preview and 100% privacy.",
   "tools.productWhiteBg.title": "Product Image White Background Tool",
-  "tools.productWhiteBg.description": "Convert product photos to pure white background (#FFFFFF) with studio contact shadows, edge defringing, and 100% in-browser privacy."
+  "tools.productWhiteBg.description": "Convert product photos to pure white background (#FFFFFF) with studio contact shadows, edge defringing, and 100% in-browser privacy.",
+  "tools.youtubeThumbnailResizer.title": "YouTube Thumbnail Resizer",
+  "tools.youtubeThumbnailResizer.description": "Resize and crop images to official 1280x720 16:9 YouTube thumbnail size with blurred background under 2MB.",
+  "tools.facebookCoverResizer.title": "Facebook Cover Photo Resizer",
+  "tools.facebookCoverResizer.description": "Resize and crop images to official Facebook cover size (820x312 / 1640x720) with mobile & desktop safe zone."
 }

@@ -1,0 +1,581 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": t(locale, 'ytthumb.content.faq1Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'ytthumb.content.faq1A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'ytthumb.content.faq2Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'ytthumb.content.faq2A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'ytthumb.content.faq3Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'ytthumb.content.faq3A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'ytthumb.content.faq4Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'ytthumb.content.faq4A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'ytthumb.content.faq5Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'ytthumb.content.faq5A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'ytthumb.content.faq6Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'ytthumb.content.faq6A')
+      }
+    }
+  ]
+};
+---
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Overview & Importance -->
+      <h2>{t(locale, 'ytthumb.content.h1')}</h2>
+      <p>{t(locale, 'ytthumb.content.p1a')}</p>
+      <p>{t(locale, 'ytthumb.content.p1b')}</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'ytthumb.content.feat1Title')}</h3>
+          <p>{t(locale, 'ytthumb.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>{t(locale, 'ytthumb.content.feat2Title')}</h3>
+          <p>{t(locale, 'ytthumb.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </div>
+          <h3>{t(locale, 'ytthumb.content.feat3Title')}</h3>
+          <p>{t(locale, 'ytthumb.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'ytthumb.content.feat4Title')}</h3>
+          <p>{t(locale, 'ytthumb.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Technical Specifications & Dimensions -->
+      <h2>{t(locale, 'ytthumb.content.h2')}</h2>
+      <p>{t(locale, 'ytthumb.content.p2a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.spec1Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.spec1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.spec2Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.spec2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.spec3Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.spec3Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.spec4Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.spec4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Fit vs Crop Strategies -->
+      <h2>{t(locale, 'ytthumb.content.h3')}</h2>
+      <p>{t(locale, 'ytthumb.content.p3a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.mode1Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.mode1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.mode2Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.mode2Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Pro Design & CTR Psychology Tips -->
+      <h2>{t(locale, 'ytthumb.content.h4')}</h2>
+      <p>{t(locale, 'ytthumb.content.p4a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.tip1Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.tip1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.tip2Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.tip2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.tip3Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.tip3Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.tip4Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.tip4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Formats Comparison -->
+      <h2>{t(locale, 'ytthumb.content.h5')}</h2>
+      <p>{t(locale, 'ytthumb.content.p5a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.fmt1Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.fmt1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.fmt2Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.fmt2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h4>{t(locale, 'ytthumb.content.fmt3Title')}</h4>
+          <p>{t(locale, 'ytthumb.content.fmt3Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Step-by-Step Guide -->
+      <h2>{t(locale, 'ytthumb.content.h6')}</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>{t(locale, 'ytthumb.content.step1Title')}</h4>
+            <p>{t(locale, 'ytthumb.content.step1Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>{t(locale, 'ytthumb.content.step2Title')}</h4>
+            <p>{t(locale, 'ytthumb.content.step2Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>{t(locale, 'ytthumb.content.step3Title')}</h4>
+            <p>{t(locale, 'ytthumb.content.step3Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>{t(locale, 'ytthumb.content.step4Title')}</h4>
+            <p>{t(locale, 'ytthumb.content.step4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: FAQ Accordion -->
+      <h2>{t(locale, 'ytthumb.content.faqTitle')}</h2>
+      <div class="faq-accordion">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'ytthumb.content.faq1Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'ytthumb.content.faq1A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'ytthumb.content.faq2Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'ytthumb.content.faq2A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'ytthumb.content.faq3Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'ytthumb.content.faq3A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'ytthumb.content.faq4Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'ytthumb.content.faq4A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'ytthumb.content.faq5Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'ytthumb.content.faq5A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'ytthumb.content.faq6Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'ytthumb.content.faq6A')}</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Structured Data FAQ Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  .content-section {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    box-sizing: border-box;
+  }
+  .content-body {
+    width: 100%;
+    max-width: 900px;
+    margin-inline: auto;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+  }
+  .feature-card, .type-card, .step-card, .faq-item {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+  }
+  .content-section {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .content-body {
+    max-width: 900px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .content-body h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .content-body p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Features Grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .feature-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 0, 0, 0.08);
+    color: #FF0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-1);
+  }
+
+  .feature-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-card p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Types Grid */
+  .types-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3-5);
+  }
+
+  @media (min-width: 640px) {
+    .types-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .type-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+  }
+
+  .type-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .type-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Steps Grid */
+  .steps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .step-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: #FF0000;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: var(--text-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .step-content h4 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .step-content p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* FAQ Accordion */
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent-border);
+    background: var(--color-surface);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    transition: transform 0.2s ease;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

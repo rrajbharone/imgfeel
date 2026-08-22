@@ -36,6 +36,8 @@ import enNoiseReducer from './translations/en/image-noise-reducer.json';
 import enProductWhiteBg from './translations/en/product-image-white-background.json';
 import enVidTrim from './translations/en/video-trimmer.json';
 import enVidRotate from './translations/en/video-rotator.json';
+import enYtThumbnail from './translations/en/youtube-thumbnail-resizer.json';
+import enFbCover from './translations/en/facebook-cover-resizer.json';
 
 import esCommon from './translations/es/common.json';
 import esHome from './translations/es/home.json';
@@ -71,6 +73,8 @@ import esNoiseReducer from './translations/es/image-noise-reducer.json';
 import esProductWhiteBg from './translations/es/product-image-white-background.json';
 import esVidTrim from './translations/es/video-trimmer.json';
 import esVidRotate from './translations/es/video-rotator.json';
+import esYtThumbnail from './translations/es/youtube-thumbnail-resizer.json';
+import esFbCover from './translations/es/facebook-cover-resizer.json';
 
 import ptCommon from './translations/pt/common.json';
 import ptHome from './translations/pt/home.json';
@@ -106,6 +110,8 @@ import ptNoiseReducer from './translations/pt/image-noise-reducer.json';
 import ptProductWhiteBg from './translations/pt/product-image-white-background.json';
 import ptVidTrim from './translations/pt/video-trimmer.json';
 import ptVidRotate from './translations/pt/video-rotator.json';
+import ptYtThumbnail from './translations/pt/youtube-thumbnail-resizer.json';
+import ptFbCover from './translations/pt/facebook-cover-resizer.json';
 
 import frCommon from './translations/fr/common.json';
 import frHome from './translations/fr/home.json';
@@ -141,6 +147,8 @@ import frNoiseReducer from './translations/fr/image-noise-reducer.json';
 import frProductWhiteBg from './translations/fr/product-image-white-background.json';
 import frVidTrim from './translations/fr/video-trimmer.json';
 import frVidRotate from './translations/fr/video-rotator.json';
+import frYtThumbnail from './translations/fr/youtube-thumbnail-resizer.json';
+import frFbCover from './translations/fr/facebook-cover-resizer.json';
 
 import deCommon from './translations/de/common.json';
 import deHome from './translations/de/home.json';
@@ -176,6 +184,8 @@ import deNoiseReducer from './translations/de/image-noise-reducer.json';
 import deProductWhiteBg from './translations/de/product-image-white-background.json';
 import deVidTrim from './translations/de/video-trimmer.json';
 import deVidRotate from './translations/de/video-rotator.json';
+import deYtThumbnail from './translations/de/youtube-thumbnail-resizer.json';
+import deFbCover from './translations/de/facebook-cover-resizer.json';
 
 import idCommon from './translations/id/common.json';
 import idHome from './translations/id/home.json';
@@ -211,6 +221,8 @@ import idNoiseReducer from './translations/id/image-noise-reducer.json';
 import idProductWhiteBg from './translations/id/product-image-white-background.json';
 import idVidTrim from './translations/id/video-trimmer.json';
 import idVidRotate from './translations/id/video-rotator.json';
+import idYtThumbnail from './translations/id/youtube-thumbnail-resizer.json';
+import idFbCover from './translations/id/facebook-cover-resizer.json';
 
 import trCommon from './translations/tr/common.json';
 import trHome from './translations/tr/home.json';
@@ -246,6 +258,8 @@ import trNoiseReducer from './translations/tr/image-noise-reducer.json';
 import trProductWhiteBg from './translations/tr/product-image-white-background.json';
 import trVidTrim from './translations/tr/video-trimmer.json';
 import trVidRotate from './translations/tr/video-rotator.json';
+import trYtThumbnail from './translations/tr/youtube-thumbnail-resizer.json';
+import trFbCover from './translations/tr/facebook-cover-resizer.json';
 
 import itCommon from './translations/it/common.json';
 import itHome from './translations/it/home.json';
@@ -281,19 +295,21 @@ import itNoiseReducer from './translations/it/image-noise-reducer.json';
 import itProductWhiteBg from './translations/it/product-image-white-background.json';
 import itVidTrim from './translations/it/video-trimmer.json';
 import itVidRotate from './translations/it/video-rotator.json';
+import itYtThumbnail from './translations/it/youtube-thumbnail-resizer.json';
+import itFbCover from './translations/it/facebook-cover-resizer.json';
 
 type TranslationMap = Record<string, string>;
 
 /** All translations indexed by locale, with all namespaces merged into a flat map */
 const translations: Record<Locale, TranslationMap> = {
-  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enProductWhiteBg, ...enVidTrim, ...enVidRotate },
-  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esProductWhiteBg, ...esVidTrim, ...esVidRotate },
-  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptProductWhiteBg, ...ptVidTrim, ...ptVidRotate },
-  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frProductWhiteBg, ...frVidTrim, ...frVidRotate },
-  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deProductWhiteBg, ...deVidTrim, ...deVidRotate },
-  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idProductWhiteBg, ...idVidTrim, ...idVidRotate },
-  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trProductWhiteBg, ...trVidTrim, ...trVidRotate },
-  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itProductWhiteBg, ...itVidTrim, ...itVidRotate },
+  en: { ...enCommon, ...enHome, ...enTools, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enProductWhiteBg, ...enVidTrim, ...enVidRotate, ...enYtThumbnail, ...enFbCover },
+  es: { ...esCommon, ...esHome, ...esTools, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esProductWhiteBg, ...esVidTrim, ...esVidRotate, ...esYtThumbnail, ...esFbCover },
+  pt: { ...ptCommon, ...ptHome, ...ptTools, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptProductWhiteBg, ...ptVidTrim, ...ptVidRotate, ...ptYtThumbnail, ...ptFbCover },
+  fr: { ...frCommon, ...frHome, ...frTools, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frProductWhiteBg, ...frVidTrim, ...frVidRotate, ...frYtThumbnail, ...frFbCover },
+  de: { ...deCommon, ...deHome, ...deTools, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deProductWhiteBg, ...deVidTrim, ...deVidRotate, ...deYtThumbnail, ...deFbCover },
+  id: { ...idCommon, ...idHome, ...idTools, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idProductWhiteBg, ...idVidTrim, ...idVidRotate, ...idYtThumbnail, ...idFbCover },
+  tr: { ...trCommon, ...trHome, ...trTools, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trProductWhiteBg, ...trVidTrim, ...trVidRotate, ...trYtThumbnail, ...trFbCover },
+  it: { ...itCommon, ...itHome, ...itTools, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itProductWhiteBg, ...itVidTrim, ...itVidRotate, ...itYtThumbnail, ...itFbCover },
 };
 
 /**

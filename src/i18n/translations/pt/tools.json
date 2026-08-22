@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Redutor de Ruído de Imagem (Remover Ruído e Granulação Online)",
   "tools.noiseReducer.description": "Reduza o ruído de imagem e remova a granulação de fotos online gratuitamente. Limpe manchas de cor, ruído de ISO alto com pré-visualização ao vivo e 100% de privacidade.",
   "tools.productWhiteBg.title": "Fundo Blanco para Imagem de Produto",
-  "tools.productWhiteBg.description": "Converta fotos de produtos para fundo branco puro (#FFFFFF) com sombras de estúdio, remoção de halos e 100% de privacidade."
+  "tools.productWhiteBg.description": "Converta fotos de produtos para fundo branco puro (#FFFFFF) com sombras de estúdio, remoção de halos e 100% de privacidade.",
+  "tools.youtubeThumbnailResizer.title": "Redimensionar Miniatura do YouTube",
+  "tools.youtubeThumbnailResizer.description": "Ajuste e corte imagens para o formato oficial 1280x720 16:9 de miniaturas do YouTube com fundo desfocado sob 2MB.",
+  "tools.facebookCoverResizer.title": "Redimensionar Capa do Facebook",
+  "tools.facebookCoverResizer.description": "Ajuste e corte fotos para o tamanho oficial da capa do Facebook (820x312 / 1640x720) com área segura para celular e computador."
 }

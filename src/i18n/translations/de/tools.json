@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Bildrauschen Reduzieren (Fotorauschen & Körnung Online Entfernen)",
   "tools.noiseReducer.description": "Bildrauschen kostenlos online reduzieren und Fotokörnung entfernen. Farbrauschen bei schwachem Licht und ISO-Körnung mit Live-Vorschau und 100% Datenschutz bereinigen.",
   "tools.productWhiteBg.title": "Produktbild Weißer Hintergrund",
-  "tools.productWhiteBg.description": "Produktbild-Hintergrund in reines Weiß (#FFFFFF) umwandeln mit realistischen Bodenschatten, Kantenglättung und 100% Privatsphäre."
+  "tools.productWhiteBg.description": "Produktbild-Hintergrund in reines Weiß (#FFFFFF) umwandeln mit realistischen Bodenschatten, Kantenglättung und 100% Privatsphäre.",
+  "tools.youtubeThumbnailResizer.title": "YouTube Thumbnail Größe Anpassen",
+  "tools.youtubeThumbnailResizer.description": "Bilder auf das offizielle 1280x720 16:9 YouTube-Vorschaubild-Format skalieren mit Unschärfe-Rand unter 2 MB.",
+  "tools.facebookCoverResizer.title": "Facebook Titelbild Größe Anpassen",
+  "tools.facebookCoverResizer.description": "Bilder auf die offizielle Facebook-Titelbild-Größe (820x312 / 1640x720) anpassen mit Schutzzone für Smartphone und Desktop."
 }

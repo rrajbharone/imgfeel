@@ -65,5 +65,9 @@
   "tools.noiseReducer.title": "Riduzione Rumore Immagine (Rimuovi Rumore & Grana Online)",
   "tools.noiseReducer.description": "Riduci il rumore dell'immagine e rimuovi la grana fotografica online gratis. Elimina le macchie di colore con scarsa luminosità, il rumore ISO elevato e 100% privacy.",
   "tools.productWhiteBg.title": "Sfondo Bianco Immagine Prodotto",
-  "tools.productWhiteBg.description": "Converti lo sfondo delle foto prodotto in bianco puro (#FFFFFF) con ombre di contatto realistiche, rifinitura bordi e 100% di privacy."
+  "tools.productWhiteBg.description": "Converti lo sfondo delle foto prodotto in bianco puro (#FFFFFF) con ombre di contatto realistiche, rifinitura bordi e 100% di privacy.",
+  "tools.youtubeThumbnailResizer.title": "Ridimensiona Miniatura YouTube",
+  "tools.youtubeThumbnailResizer.description": "Adatta e ritaglia immagini nel formato ufficiale 1280x720 16:9 delle miniature di YouTube con sfondo sfocato sotto i 2MB.",
+  "tools.facebookCoverResizer.title": "Ridimensiona Copertina Facebook",
+  "tools.facebookCoverResizer.description": "Adatta e ritaglia immagini nel formato ufficiale di copertina Facebook (820x312 / 1640x720) con area sicura per mobile e desktop."
 }

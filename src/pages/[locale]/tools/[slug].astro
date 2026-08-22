@@ -15,6 +15,10 @@ import SscResizer from '@/components/SscResizer.astro';
 import SscContent from '@/components/SscContent.astro';
 import YouTubeResizer from '@/components/YouTubeResizer.astro';
 import YouTubeContent from '@/components/YouTubeContent.astro';
+import YouTubeThumbnailResizer from '@/components/YouTubeThumbnailResizer.astro';
+import YouTubeThumbnailResizerContent from '@/components/YouTubeThumbnailResizerContent.astro';
+import FacebookCoverResizer from '@/components/FacebookCoverResizer.astro';
+import FacebookCoverResizerContent from '@/components/FacebookCoverResizerContent.astro';
 import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
@@ -58,9 +62,9 @@ import ImageMosaicContent from '@/components/ImageMosaicContent.astro';
 import FreeformCropTool from '@/components/FreeformCropTool.astro';
 import FreeformCropContent from '@/components/FreeformCropContent.astro';
 import ImageNoiseReducer from '@/components/ImageNoiseReducer.astro';
+import ImageNoiseReducerContent from '@/components/ImageNoiseReducerContent.astro';
 import ProductWhiteBackground from '@/components/ProductWhiteBackground.astro';
 import ProductWhiteBackgroundContent from '@/components/ProductWhiteBackgroundContent.astro';
-import ImageNoiseReducerContent from '@/components/ImageNoiseReducerContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -85,270 +89,46 @@ const { toolId } = Astro.props as { toolId: string };
 
 const toolUrl = getToolUrl(toolId, locale);
 
-const isExact = toolId === 'exact-dimension-resizer';
-const isWebp = toolId === 'webp-compressor';
-const isCmMm = toolId === 'cm-mm-resizer';
-const isPan = toolId === 'pan-card-resizer';
-const isWa = toolId === 'whatsapp-dp-resizer';
-const isSsc = toolId === 'ssc-photo-signature-resizer';
-const isYt = toolId === 'youtube-banner-resizer';
-const isB64 = toolId === 'image-to-base64-converter';
-const isDataUri = toolId === 'image-to-data-uri-converter';
-const isDimCheck = toolId === 'image-dimensions-checker';
-const isFileSize = toolId === 'image-file-size-checker';
-const isResCheck = toolId === 'image-resolution-checker';
-const isRatioCheck = toolId === 'image-aspect-ratio-checker';
-const isDpiCheck = toolId === 'image-dpi-checker';
-const isFmtCheck = toolId === 'image-format-checker';
-const isSquareResizer = toolId === 'resize-image-to-1-1';
-const isCircleCropper = toolId === 'circle-image-cropper';
-const isGrayscale = toolId === 'image-grayscale-converter';
-const isInverter = toolId === 'image-inverter';
-const isBlur = toolId === 'image-blur-tool';
-const isStitch = toolId === 'image-stitcher';
-const isBeautify = toolId === 'screenshot-beautifier';
-const isPlaceholder = toolId === 'image-placeholder-generator';
-const isOverlay = toolId === 'image-overlay-tool';
-const isMosaic = toolId === 'image-mosaic-generator';
-const isFreeformCrop = toolId === 'freeform-image-cropper';
-const isNoiseReducer = toolId === 'image-noise-reducer';
-const isProductWhiteBg = toolId === 'product-image-white-background';
-const isVidTrim = toolId === 'video-trimmer';
-const isVidRotate = toolId === 'video-rotator';
+const toolPrefixMap: Record<string, string> = {
+  'exact-dimension-resizer': 'exactresizer',
+  'webp-compressor': 'webpcomp',
+  'cm-mm-resizer': 'cmresizer',
+  'pan-card-resizer': 'panresizer',
+  'whatsapp-dp-resizer': 'waresizer',
+  'ssc-photo-signature-resizer': 'sscresizer',
+  'youtube-banner-resizer': 'ytresizer',
+  'facebook-cover-resizer': 'fbcover',
+  'youtube-thumbnail-resizer': 'ytthumb',
+  'image-to-base64-converter': 'b64',
+  'image-to-data-uri-converter': 'datauri',
+  'image-dimensions-checker': 'dimcheck',
+  'image-file-size-checker': 'sizecheck',
+  'image-resolution-checker': 'rescheck',
+  'image-aspect-ratio-checker': 'ratiocheck',
+  'image-dpi-checker': 'dpicheck',
+  'image-format-checker': 'fmtcheck',
+  'resize-image-to-1-1': 'squareresizer',
+  'circle-image-cropper': 'circlecrop',
+  'image-grayscale-converter': 'grayconv',
+  'image-inverter': 'inverter',
+  'image-blur-tool': 'blur',
+  'image-stitcher': 'stitch',
+  'screenshot-beautifier': 'beautify',
+  'image-placeholder-generator': 'placeholder',
+  'image-overlay-tool': 'overlay',
+  'image-mosaic-generator': 'mosaic',
+  'freeform-image-cropper': 'freeformCrop',
+  'image-noise-reducer': 'noiseReducer',
+  'product-image-white-background': 'productWhiteBg',
+  'video-trimmer': 'vidtrim',
+  'video-rotator': 'vidrot',
+};
 
-const metaTitle = isExact
-  ? t(locale, 'exactresizer.meta.title')
-  : isWebp
-    ? t(locale, 'webpcomp.meta.title')
-    : isCmMm
-      ? t(locale, 'cmresizer.meta.title')
-      : isPan
-        ? t(locale, 'panresizer.meta.title')
-        : isWa
-          ? t(locale, 'waresizer.meta.title')
-          : isSsc
-            ? t(locale, 'sscresizer.meta.title')
-            : isYt
-              ? t(locale, 'ytresizer.meta.title')
-              : isB64
-                ? t(locale, 'b64.meta.title')
-                : isDataUri
-                  ? t(locale, 'datauri.meta.title')
-                  : isDimCheck
-                    ? t(locale, 'dimcheck.meta.title')
-                    : isFileSize
-                      ? t(locale, 'sizecheck.meta.title')
-                      : isResCheck
-                        ? t(locale, 'rescheck.meta.title')
-                        : isRatioCheck
-                          ? t(locale, 'ratiocheck.meta.title')
-                          : isDpiCheck
-                            ? t(locale, 'dpicheck.meta.title')
-                            : isFmtCheck
-                              ? t(locale, 'fmtcheck.meta.title')
-                              : isSquareResizer
-                                ? t(locale, 'squareresizer.meta.title')
-                                : isCircleCropper
-                                  ? t(locale, 'circlecrop.meta.title')
-                                  : isGrayscale
-                                    ? t(locale, 'grayconv.meta.title')
-                                    : isInverter
-                                      ? t(locale, 'inverter.meta.title')
-                                      : isBlur
-                                        ? t(locale, 'blur.meta.title')
-                                        : isStitch
-                                          ? t(locale, 'stitch.meta.title')
-                                          : isBeautify
-                                            ? t(locale, 'beautify.meta.title')
-                                            : isPlaceholder
-                                              ? t(locale, 'placeholder.meta.title')
-                                              : isOverlay
-                                                ? t(locale, 'overlay.meta.title')
-                                                : isMosaic
-                                                  ? t(locale, 'mosaic.meta.title')
-                                                   : isFreeformCrop
-                                                     ? t(locale, 'freeformCrop.meta.title')
-                                                     : isNoiseReducer
-                                                       ? t(locale, 'noiseReducer.meta.title')
-                                                       : isVidTrim
-                                                         ? t(locale, 'vidtrim.meta.title')
-                                                         : t(locale, 'vidrot.meta.title');
-
-const metaDesc = isExact
-  ? t(locale, 'exactresizer.meta.description')
-  : isWebp
-    ? t(locale, 'webpcomp.meta.description')
-    : isCmMm
-      ? t(locale, 'cmresizer.meta.description')
-      : isPan
-        ? t(locale, 'panresizer.meta.description')
-        : isWa
-          ? t(locale, 'waresizer.meta.description')
-          : isSsc
-            ? t(locale, 'sscresizer.meta.description')
-            : isYt
-              ? t(locale, 'ytresizer.meta.description')
-              : isB64
-                ? t(locale, 'b64.meta.description')
-                : isDataUri
-                  ? t(locale, 'datauri.meta.description')
-                  : isDimCheck
-                    ? t(locale, 'dimcheck.meta.description')
-                    : isFileSize
-                      ? t(locale, 'sizecheck.meta.description')
-                      : isResCheck
-                        ? t(locale, 'rescheck.meta.description')
-                        : isRatioCheck
-                          ? t(locale, 'ratiocheck.meta.description')
-                          : isDpiCheck
-                            ? t(locale, 'dpicheck.meta.description')
-                            : isFmtCheck
-                              ? t(locale, 'fmtcheck.meta.description')
-                              : isSquareResizer
-                                ? t(locale, 'squareresizer.meta.description')
-                                : isCircleCropper
-                                  ? t(locale, 'circlecrop.meta.description')
-                                  : isGrayscale
-                                    ? t(locale, 'grayconv.meta.description')
-                                    : isInverter
-                                      ? t(locale, 'inverter.meta.description')
-                                      : isBlur
-                                        ? t(locale, 'blur.meta.description')
-                                        : isStitch
-                                          ? t(locale, 'stitch.meta.description')
-                                          : isBeautify
-                                            ? t(locale, 'beautify.meta.description')
-                                            : isPlaceholder
-                                              ? t(locale, 'placeholder.meta.description')
-                                              : isOverlay
-                                                ? t(locale, 'overlay.meta.description')
-                                                : isMosaic
-                                                  ? t(locale, 'mosaic.meta.description')
-                                                  : isFreeformCrop
-                                                    ? t(locale, 'freeformCrop.meta.description')
-                                                    : isNoiseReducer
-                                                      ? t(locale, 'noiseReducer.meta.description')
-                                                      : isVidTrim
-                                                        ? t(locale, 'vidtrim.meta.description')
-                                                        : t(locale, 'vidrot.meta.description');
-
-const heroTitle = isExact
-  ? t(locale, 'exactresizer.hero.title')
-  : isWebp
-    ? t(locale, 'webpcomp.hero.title')
-    : isCmMm
-      ? t(locale, 'cmresizer.hero.title')
-      : isPan
-        ? t(locale, 'panresizer.hero.title')
-        : isWa
-          ? t(locale, 'waresizer.hero.title')
-          : isSsc
-            ? t(locale, 'sscresizer.hero.title')
-            : isYt
-              ? t(locale, 'ytresizer.hero.title')
-              : isB64
-                ? t(locale, 'b64.hero.title')
-                : isDataUri
-                  ? t(locale, 'datauri.hero.title')
-                  : isDimCheck
-                    ? t(locale, 'dimcheck.hero.title')
-                    : isFileSize
-                      ? t(locale, 'sizecheck.hero.title')
-                      : isResCheck
-                        ? t(locale, 'rescheck.hero.title')
-                        : isRatioCheck
-                          ? t(locale, 'ratiocheck.hero.title')
-                          : isDpiCheck
-                            ? t(locale, 'dpicheck.hero.title')
-                            : isFmtCheck
-                              ? t(locale, 'fmtcheck.hero.title')
-                              : isSquareResizer
-                                ? t(locale, 'squareresizer.hero.title')
-                                : isCircleCropper
-                                  ? t(locale, 'circlecrop.hero.title')
-                                  : isGrayscale
-                                    ? t(locale, 'grayconv.hero.title')
-                                    : isInverter
-                                      ? t(locale, 'inverter.hero.title')
-                                      : isBlur
-                                        ? t(locale, 'blur.hero.title')
-                                        : isStitch
-                                          ? t(locale, 'stitch.hero.title')
-                                          : isBeautify
-                                            ? t(locale, 'beautify.hero.title')
-                                            : isPlaceholder
-                                              ? t(locale, 'placeholder.hero.title')
-                                              : isOverlay
-                                                ? t(locale, 'overlay.hero.title')
-                                                : isMosaic
-                                                  ? t(locale, 'mosaic.hero.title')
-                                                  : isFreeformCrop
-                                                    ? t(locale, 'freeformCrop.hero.title')
-                                                    : isNoiseReducer
-                                                      ? t(locale, 'noiseReducer.hero.title')
-                                                      : isProductWhiteBg
-                                                        ? t(locale, 'productWhiteBg.hero.title')
-                                                      : isVidTrim
-                                                        ? t(locale, 'vidtrim.hero.title')
-                                                        : t(locale, 'vidrot.hero.title');
-
-const heroSubtitle = isExact
-  ? t(locale, 'exactresizer.hero.subtitle')
-  : isWebp
-    ? t(locale, 'webpcomp.hero.subtitle')
-    : isCmMm
-      ? t(locale, 'cmresizer.hero.subtitle')
-      : isPan
-        ? t(locale, 'panresizer.hero.subtitle')
-        : isWa
-          ? t(locale, 'waresizer.hero.subtitle')
-          : isSsc
-            ? t(locale, 'sscresizer.hero.subtitle')
-            : isYt
-              ? t(locale, 'ytresizer.hero.subtitle')
-              : isB64
-                ? t(locale, 'b64.hero.subtitle')
-                : isDataUri
-                  ? t(locale, 'datauri.hero.subtitle')
-                  : isDimCheck
-                    ? t(locale, 'dimcheck.hero.subtitle')
-                    : isFileSize
-                      ? t(locale, 'sizecheck.hero.subtitle')
-                      : isResCheck
-                        ? t(locale, 'rescheck.hero.subtitle')
-                        : isRatioCheck
-                          ? t(locale, 'ratiocheck.hero.subtitle')
-                          : isDpiCheck
-                            ? t(locale, 'dpicheck.hero.subtitle')
-                            : isFmtCheck
-                              ? t(locale, 'fmtcheck.hero.subtitle')
-                              : isSquareResizer
-                                ? t(locale, 'squareresizer.hero.subtitle')
-                                : isCircleCropper
-                                  ? t(locale, 'circlecrop.hero.subtitle')
-                                  : isGrayscale
-                                    ? t(locale, 'grayconv.hero.subtitle')
-                                    : isInverter
-                                      ? t(locale, 'inverter.hero.subtitle')
-                                      : isBlur
-                                        ? t(locale, 'blur.hero.subtitle')
-                                        : isStitch
-                                          ? t(locale, 'stitch.hero.subtitle')
-                                          : isBeautify
-                                            ? t(locale, 'beautify.hero.subtitle')
-                                            : isPlaceholder
-                                              ? t(locale, 'placeholder.hero.subtitle')
-                                              : isOverlay
-                                                ? t(locale, 'overlay.hero.subtitle')
-                                                : isMosaic
-                                                  ? t(locale, 'mosaic.hero.subtitle')
-                                                  : isFreeformCrop
-                                                    ? t(locale, 'freeformCrop.hero.subtitle')
-                                                    : isNoiseReducer
-                                                      ? t(locale, 'noiseReducer.hero.subtitle')
-                                                      : isVidTrim
-                                                        ? t(locale, 'vidtrim.hero.subtitle')
-                                                        : t(locale, 'vidrot.hero.subtitle');
+const prefix = toolPrefixMap[toolId] || 'exactresizer';
+const metaTitle = t(locale, `${prefix}.meta.title`);
+const metaDesc = t(locale, `${prefix}.meta.description`);
+const heroTitle = t(locale, `${prefix}.hero.title`);
+const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
 ---
 
 <MainLayout
@@ -377,75 +157,79 @@ const heroSubtitle = isExact
         { label: t(locale, 'breadcrumb.tools'), href: getLocalizedPath('/tools/', locale) },
         { label: heroTitle }
       ]} />
-
+      
       <div class="tool-header">
         <h1 class="tool-title">{heroTitle}</h1>
         <p class="tool-subtitle">{heroSubtitle}</p>
       </div>
 
-      {isExact && <ExactResizer locale={locale} />}
-      {isWebp && <WebpCompressor locale={locale} />}
-      {isCmMm && <CmMmResizer locale={locale} />}
-      {isPan && <PanResizer locale={locale} />}
-      {isWa && <WhatsAppResizer locale={locale} />}
-      {isSsc && <SscResizer locale={locale} />}
-      {isYt && <YouTubeResizer locale={locale} />}
-      {isB64 && <Base64Converter locale={locale} />}
-      {isDataUri && <DataUriConverter locale={locale} />}
-      {isDimCheck && <DimensionsChecker locale={locale} />}
-      {isFileSize && <FileSizeChecker locale={locale} />}
-      {isResCheck && <ResolutionChecker locale={locale} />}
-      {isRatioCheck && <AspectRatioChecker locale={locale} />}
-      {isDpiCheck && <DpiChecker locale={locale} />}
-      {isFmtCheck && <FormatChecker locale={locale} />}
-      {isSquareResizer && <SquareResizer locale={locale} />}
-      {isCircleCropper && <CircleCropper locale={locale} />}
-      {isGrayscale && <GrayscaleConverter locale={locale} />}
-      {isInverter && <ImageInverter locale={locale} />}
-      {isBlur && <ImageBlur locale={locale} />}
-      {isStitch && <ImageStitcher locale={locale} />}
-      {isBeautify && <ScreenshotBeautifier locale={locale} />}
-      {isPlaceholder && <ImagePlaceholderGenerator locale={locale} />}
-      {isOverlay && <ImageOverlayTool locale={locale} />}
-      {isMosaic && <ImageMosaicTool locale={locale} />}
-      {isFreeformCrop && <FreeformCropTool locale={locale} />}
-      {isNoiseReducer && <ImageNoiseReducer locale={locale} />}
-      {isProductWhiteBg && <ProductWhiteBackground locale={locale} />}
-      {isVidTrim && <VideoTrimmer locale={locale} />}
-      {isVidRotate && <VideoRotator locale={locale} />}
+      {toolId === 'exact-dimension-resizer' && <ExactResizer locale={locale} />}
+      {toolId === 'webp-compressor' && <WebpCompressor locale={locale} />}
+      {toolId === 'cm-mm-resizer' && <CmMmResizer locale={locale} />}
+      {toolId === 'pan-card-resizer' && <PanResizer locale={locale} />}
+      {toolId === 'whatsapp-dp-resizer' && <WhatsAppResizer locale={locale} />}
+      {toolId === 'ssc-photo-signature-resizer' && <SscResizer locale={locale} />}
+      {toolId === 'youtube-banner-resizer' && <YouTubeResizer locale={locale} />}
+      {toolId === 'facebook-cover-resizer' && <FacebookCoverResizer locale={locale} />}
+      {toolId === 'youtube-thumbnail-resizer' && <YouTubeThumbnailResizer locale={locale} />}
+      {toolId === 'image-to-base64-converter' && <Base64Converter locale={locale} />}
+      {toolId === 'image-to-data-uri-converter' && <DataUriConverter locale={locale} />}
+      {toolId === 'image-dimensions-checker' && <DimensionsChecker locale={locale} />}
+      {toolId === 'image-file-size-checker' && <FileSizeChecker locale={locale} />}
+      {toolId === 'image-resolution-checker' && <ResolutionChecker locale={locale} />}
+      {toolId === 'image-aspect-ratio-checker' && <AspectRatioChecker locale={locale} />}
+      {toolId === 'image-dpi-checker' && <DpiChecker locale={locale} />}
+      {toolId === 'image-format-checker' && <FormatChecker locale={locale} />}
+      {toolId === 'resize-image-to-1-1' && <SquareResizer locale={locale} />}
+      {toolId === 'circle-image-cropper' && <CircleCropper locale={locale} />}
+      {toolId === 'image-grayscale-converter' && <GrayscaleConverter locale={locale} />}
+      {toolId === 'image-inverter' && <ImageInverter locale={locale} />}
+      {toolId === 'image-blur-tool' && <ImageBlur locale={locale} />}
+      {toolId === 'image-stitcher' && <ImageStitcher locale={locale} />}
+      {toolId === 'screenshot-beautifier' && <ScreenshotBeautifier locale={locale} />}
+      {toolId === 'image-placeholder-generator' && <ImagePlaceholderGenerator locale={locale} />}
+      {toolId === 'image-overlay-tool' && <ImageOverlayTool locale={locale} />}
+      {toolId === 'image-mosaic-generator' && <ImageMosaicTool locale={locale} />}
+      {toolId === 'freeform-image-cropper' && <FreeformCropTool locale={locale} />}
+      {toolId === 'image-noise-reducer' && <ImageNoiseReducer locale={locale} />}
+      {toolId === 'product-image-white-background' && <ProductWhiteBackground locale={locale} />}
+      {toolId === 'video-trimmer' && <VideoTrimmer locale={locale} />}
+      {toolId === 'video-rotator' && <VideoRotator locale={locale} />}
     </div>
   </div>
 
-  {isExact && <ExactResizerContent locale={locale} />}
-  {isWebp && <WebpCompressorContent locale={locale} />}
-  {isCmMm && <CmMmContent locale={locale} />}
-  {isPan && <PanContent locale={locale} />}
-  {isWa && <WhatsAppContent locale={locale} />}
-  {isSsc && <SscContent locale={locale} />}
-  {isYt && <YouTubeContent locale={locale} />}
-  {isB64 && <Base64Content locale={locale} />}
-  {isDataUri && <DataUriContent locale={locale} />}
-  {isDimCheck && <DimensionsCheckerContent locale={locale} />}
-  {isFileSize && <FileSizeCheckerContent locale={locale} />}
-  {isResCheck && <ResolutionCheckerContent locale={locale} />}
-  {isRatioCheck && <AspectRatioCheckerContent locale={locale} />}
-  {isDpiCheck && <DpiCheckerContent locale={locale} />}
-  {isFmtCheck && <FormatCheckerContent locale={locale} />}
-  {isSquareResizer && <SquareResizerContent locale={locale} />}
-  {isCircleCropper && <CircleCropperContent locale={locale} />}
-  {isGrayscale && <GrayscaleConverterContent locale={locale} />}
-  {isInverter && <ImageInverterContent locale={locale} />}
-  {isBlur && <ImageBlurContent locale={locale} />}
-  {isStitch && <ImageStitcherContent locale={locale} />}
-  {isBeautify && <ScreenshotBeautifierContent locale={locale} />}
-  {isPlaceholder && <ImagePlaceholderContent locale={locale} />}
-  {isOverlay && <ImageOverlayContent locale={locale} />}
-  {isMosaic && <ImageMosaicContent locale={locale} />}
-  {isFreeformCrop && <FreeformCropContent locale={locale} />}
-  {isNoiseReducer && <ImageNoiseReducerContent locale={locale} />}
-  {isProductWhiteBg && <ProductWhiteBackgroundContent locale={locale} />}
-  {isVidTrim && <VideoTrimmerContent locale={locale} />}
-  {isVidRotate && <VideoRotatorContent locale={locale} />}
+  {toolId === 'exact-dimension-resizer' && <ExactResizerContent locale={locale} />}
+  {toolId === 'webp-compressor' && <WebpCompressorContent locale={locale} />}
+  {toolId === 'cm-mm-resizer' && <CmMmContent locale={locale} />}
+  {toolId === 'pan-card-resizer' && <PanContent locale={locale} />}
+  {toolId === 'whatsapp-dp-resizer' && <WhatsAppContent locale={locale} />}
+  {toolId === 'ssc-photo-signature-resizer' && <SscContent locale={locale} />}
+  {toolId === 'youtube-banner-resizer' && <YouTubeContent locale={locale} />}
+  {toolId === 'facebook-cover-resizer' && <FacebookCoverResizerContent locale={locale} />}
+  {toolId === 'youtube-thumbnail-resizer' && <YouTubeThumbnailResizerContent locale={locale} />}
+  {toolId === 'image-to-base64-converter' && <Base64Content locale={locale} />}
+  {toolId === 'image-to-data-uri-converter' && <DataUriContent locale={locale} />}
+  {toolId === 'image-dimensions-checker' && <DimensionsCheckerContent locale={locale} />}
+  {toolId === 'image-file-size-checker' && <FileSizeCheckerContent locale={locale} />}
+  {toolId === 'image-resolution-checker' && <ResolutionCheckerContent locale={locale} />}
+  {toolId === 'image-aspect-ratio-checker' && <AspectRatioCheckerContent locale={locale} />}
+  {toolId === 'image-dpi-checker' && <DpiCheckerContent locale={locale} />}
+  {toolId === 'image-format-checker' && <FormatCheckerContent locale={locale} />}
+  {toolId === 'resize-image-to-1-1' && <SquareResizerContent locale={locale} />}
+  {toolId === 'circle-image-cropper' && <CircleCropperContent locale={locale} />}
+  {toolId === 'image-grayscale-converter' && <GrayscaleConverterContent locale={locale} />}
+  {toolId === 'image-inverter' && <ImageInverterContent locale={locale} />}
+  {toolId === 'image-blur-tool' && <ImageBlurContent locale={locale} />}
+  {toolId === 'image-stitcher' && <ImageStitcherContent locale={locale} />}
+  {toolId === 'screenshot-beautifier' && <ScreenshotBeautifierContent locale={locale} />}
+  {toolId === 'image-placeholder-generator' && <ImagePlaceholderContent locale={locale} />}
+  {toolId === 'image-overlay-tool' && <ImageOverlayContent locale={locale} />}
+  {toolId === 'image-mosaic-generator' && <ImageMosaicContent locale={locale} />}
+  {toolId === 'freeform-image-cropper' && <FreeformCropContent locale={locale} />}
+  {toolId === 'image-noise-reducer' && <ImageNoiseReducerContent locale={locale} />}
+  {toolId === 'product-image-white-background' && <ProductWhiteBackgroundContent locale={locale} />}
+  {toolId === 'video-trimmer' && <VideoTrimmerContent locale={locale} />}
+  {toolId === 'video-rotator' && <VideoRotatorContent locale={locale} />}
 </MainLayout>
 
 <style>
@@ -453,36 +237,17 @@ const heroSubtitle = isExact
     text-align: center;
     max-width: var(--container-narrow);
     margin-inline: auto;
-    margin-top: var(--space-4);
-    margin-bottom: var(--space-6);
-  }
-  @media (min-width: 640px) {
-    .tool-header {
-      margin-top: var(--space-6);
-      margin-bottom: var(--space-8);
-    }
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-8);
   }
   .tool-title {
-    font-size: var(--text-2xl);
+    font-size: var(--text-3xl);
     font-weight: 800;
     color: var(--color-text);
     margin-bottom: var(--space-2);
-    letter-spacing: -0.02em;
-    line-height: 1.25;
-  }
-  @media (min-width: 640px) {
-    .tool-title {
-      font-size: var(--text-3xl);
-    }
   }
   .tool-subtitle {
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     color: var(--color-text-secondary);
-    line-height: 1.5;
-  }
-  @media (min-width: 640px) {
-    .tool-subtitle {
-      font-size: var(--text-base);
-    }
   }
 </style>
