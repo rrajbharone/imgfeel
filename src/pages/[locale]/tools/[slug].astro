@@ -58,6 +58,8 @@ import ImageMosaicContent from '@/components/ImageMosaicContent.astro';
 import FreeformCropTool from '@/components/FreeformCropTool.astro';
 import FreeformCropContent from '@/components/FreeformCropContent.astro';
 import ImageNoiseReducer from '@/components/ImageNoiseReducer.astro';
+import ProductWhiteBackground from '@/components/ProductWhiteBackground.astro';
+import ProductWhiteBackgroundContent from '@/components/ProductWhiteBackgroundContent.astro';
 import ImageNoiseReducerContent from '@/components/ImageNoiseReducerContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
@@ -110,6 +112,7 @@ const isOverlay = toolId === 'image-overlay-tool';
 const isMosaic = toolId === 'image-mosaic-generator';
 const isFreeformCrop = toolId === 'freeform-image-cropper';
 const isNoiseReducer = toolId === 'image-noise-reducer';
+const isProductWhiteBg = toolId === 'product-image-white-background';
 const isVidTrim = toolId === 'video-trimmer';
 const isVidRotate = toolId === 'video-rotator';
 
@@ -283,6 +286,8 @@ const heroTitle = isExact
                                                     ? t(locale, 'freeformCrop.hero.title')
                                                     : isNoiseReducer
                                                       ? t(locale, 'noiseReducer.hero.title')
+                                                      : isProductWhiteBg
+                                                        ? t(locale, 'productWhiteBg.hero.title')
                                                       : isVidTrim
                                                         ? t(locale, 'vidtrim.hero.title')
                                                         : t(locale, 'vidrot.hero.title');
@@ -405,6 +410,7 @@ const heroSubtitle = isExact
       {isMosaic && <ImageMosaicTool locale={locale} />}
       {isFreeformCrop && <FreeformCropTool locale={locale} />}
       {isNoiseReducer && <ImageNoiseReducer locale={locale} />}
+      {isProductWhiteBg && <ProductWhiteBackground locale={locale} />}
       {isVidTrim && <VideoTrimmer locale={locale} />}
       {isVidRotate && <VideoRotator locale={locale} />}
     </div>
@@ -437,6 +443,7 @@ const heroSubtitle = isExact
   {isMosaic && <ImageMosaicContent locale={locale} />}
   {isFreeformCrop && <FreeformCropContent locale={locale} />}
   {isNoiseReducer && <ImageNoiseReducerContent locale={locale} />}
+  {isProductWhiteBg && <ProductWhiteBackgroundContent locale={locale} />}
   {isVidTrim && <VideoTrimmerContent locale={locale} />}
   {isVidRotate && <VideoRotatorContent locale={locale} />}
 </MainLayout>

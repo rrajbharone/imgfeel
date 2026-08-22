@@ -63,5 +63,7 @@
   "tools.videoRotator.title": "Video-Rotator & Video Dreher",
   "tools.videoRotator.description": "Drehen, kippen und spiegeln Sie Videos (90°, 180°, 270°) online mit Live-Vorschau und 100% Datenschutz direkt im Browser.",
   "tools.noiseReducer.title": "Bildrauschen Reduzieren (Fotorauschen & Körnung Online Entfernen)",
-  "tools.noiseReducer.description": "Bildrauschen kostenlos online reduzieren und Fotokörnung entfernen. Farbrauschen bei schwachem Licht und ISO-Körnung mit Live-Vorschau und 100% Datenschutz bereinigen."
+  "tools.noiseReducer.description": "Bildrauschen kostenlos online reduzieren und Fotokörnung entfernen. Farbrauschen bei schwachem Licht und ISO-Körnung mit Live-Vorschau und 100% Datenschutz bereinigen.",
+  "tools.productWhiteBg.title": "Produktbild Weißer Hintergrund",
+  "tools.productWhiteBg.description": "Produktbild-Hintergrund in reines Weiß (#FFFFFF) umwandeln mit realistischen Bodenschatten, Kantenglättung und 100% Privatsphäre."
 }

@@ -63,5 +63,7 @@
   "tools.videoRotator.title": "Ruotatore Video Online",
   "tools.videoRotator.description": "Ruota, gira e capovolgi video (90°, 180°, 270°) online con anteprima interattiva e totale privacy nel browser.",
   "tools.noiseReducer.title": "Riduzione Rumore Immagine (Rimuovi Rumore & Grana Online)",
-  "tools.noiseReducer.description": "Riduci il rumore dell'immagine e rimuovi la grana fotografica online gratis. Elimina le macchie di colore con scarsa luminosità, il rumore ISO elevato e 100% privacy."
+  "tools.noiseReducer.description": "Riduci il rumore dell'immagine e rimuovi la grana fotografica online gratis. Elimina le macchie di colore con scarsa luminosità, il rumore ISO elevato e 100% privacy.",
+  "tools.productWhiteBg.title": "Sfondo Bianco Immagine Prodotto",
+  "tools.productWhiteBg.description": "Converti lo sfondo delle foto prodotto in bianco puro (#FFFFFF) con ombre di contatto realistiche, rifinitura bordi e 100% di privacy."
 }

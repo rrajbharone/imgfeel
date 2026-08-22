@@ -63,5 +63,7 @@
   "tools.videoRotator.title": "Rotacionador de Vídeo",
   "tools.videoRotator.description": "Gire, rotacione e inverta vídeos (90°, 180°, 270°) online com pré-visualização ao vivo e 100% de privacidade no navegador.",
   "tools.noiseReducer.title": "Redutor de Ruído de Imagem (Remover Ruído e Granulação Online)",
-  "tools.noiseReducer.description": "Reduza o ruído de imagem e remova a granulação de fotos online gratuitamente. Limpe manchas de cor, ruído de ISO alto com pré-visualização ao vivo e 100% de privacidade."
+  "tools.noiseReducer.description": "Reduza o ruído de imagem e remova a granulação de fotos online gratuitamente. Limpe manchas de cor, ruído de ISO alto com pré-visualização ao vivo e 100% de privacidade.",
+  "tools.productWhiteBg.title": "Fundo Blanco para Imagem de Produto",
+  "tools.productWhiteBg.description": "Converta fotos de produtos para fundo branco puro (#FFFFFF) com sombras de estúdio, remoção de halos e 100% de privacidade."
 }

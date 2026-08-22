@@ -1,0 +1,89 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ProductWhiteBackground from '@/components/ProductWhiteBackground.astro';
+import ProductWhiteBackgroundContent from '@/components/ProductWhiteBackgroundContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+const locale = 'en';
+const toolUrl = getToolUrl('product-image-white-background', locale);
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'productWhiteBg.meta.title')}
+  description={t(locale, 'productWhiteBg.meta.description')}
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Product Image White Background Tool",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: '/' },
+        { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
+        { label: t(locale, 'productWhiteBg.hero.title') }
+      ]} />
+      
+      <div class="tool-header">
+        <h1 class="tool-title">{t(locale, 'productWhiteBg.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'productWhiteBg.hero.subtitle')}</p>
+      </div>
+
+      <ProductWhiteBackground locale={locale} />
+    </div>
+  </div>
+
+  <ProductWhiteBackgroundContent locale={locale} />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .tool-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .tool-title {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  .tool-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .tool-subtitle {
+      font-size: var(--text-base);
+    }
+  }
+</style>

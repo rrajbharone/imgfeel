@@ -63,5 +63,7 @@
   "tools.videoRotator.title": "Outil de Rotation Vidéo",
   "tools.videoRotator.description": "Pivotez, tournez et inversez vos vidéos (90°, 180°, 270°) en ligne avec prévisualisation en direct et confidentialité 100% dans le navigateur.",
   "tools.noiseReducer.title": "Réducteur de Bruit d'Image (Supprimer le Bruit & le Grain en Ligne)",
-  "tools.noiseReducer.description": "Réduisez le bruit et supprimez le grain de vos photos en ligne gratuitement. Éliminez le bruit ISO élevé et les taches de couleur avec prévisualisation en direct et 100% de confidentialité."
+  "tools.noiseReducer.description": "Réduisez le bruit et supprimez le grain de vos photos en ligne gratuitement. Éliminez le bruit ISO élevé et les taches de couleur avec prévisualisation en direct et 100% de confidentialité.",
+  "tools.productWhiteBg.title": "Fond Blanc pour Photo de Produit",
+  "tools.productWhiteBg.description": "Convertissez le fond de photos produits en blanc pur (#FFFFFF) avec ombres de studio, correction des bords et 100% de confidentialité."
 }

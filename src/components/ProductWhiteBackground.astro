@@ -9,45 +9,46 @@ interface Props {
 
 const { locale } = Astro.props;
 
-const blurUrl = getToolUrl('image-blur-tool', locale);
-const beautifyUrl = getToolUrl('screenshot-beautifier', locale);
+const noiseReducerUrl = getToolUrl('image-noise-reducer', locale);
 const exactUrl = getToolUrl('exact-dimension-resizer', locale);
-const grayscaleUrl = getToolUrl('image-grayscale-converter', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
 const cropUrl = getToolUrl('freeform-image-cropper', locale);
+const blurUrl = getToolUrl('image-blur-tool', locale);
 ---
 
-<div class="denoise-app-container" id="denoiseApp" data-locale={locale} data-i18n={JSON.stringify({
-  copiedSuccess: t(locale, 'noiseReducer.action.copied'),
+<div class="product-app-container" id="productApp" data-locale={locale} data-i18n={JSON.stringify({
+  copiedSuccess: t(locale, 'productWhiteBg.action.copied'),
 })}>
   <!-- State 1: Upload-First Initial Dropzone Card -->
-  <div class="denoise-dropzone-card" id="denoiseDropzone">
+  <div class="product-dropzone-card" id="productDropzone">
     <div class="dropzone-inner">
       <div class="dropzone-icon-ring">
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
       </div>
 
-      <h2 class="dropzone-headline">{t(locale, 'noiseReducer.dropzone.title')}</h2>
-      <p class="dropzone-subheadline">{t(locale, 'noiseReducer.dropzone.subtitle')}</p>
+      <h2 class="dropzone-headline">{t(locale, 'productWhiteBg.dropzone.title')}</h2>
+      <p class="dropzone-subheadline">{t(locale, 'productWhiteBg.dropzone.subtitle')}</p>
 
       <div class="dropzone-action-group">
-        <label for="denoiseFileInput" class="btn btn-primary dropzone-browse-btn">
+        <label for="productFileInput" class="btn btn-primary dropzone-browse-btn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-          <span>{t(locale, 'noiseReducer.dropzone.browse')}</span>
+          <span>{t(locale, 'productWhiteBg.dropzone.browse')}</span>
         </label>
-        <input type="file" id="denoiseFileInput" accept="image/jpeg,image/png,image/webp,image/avif,image/bmp" class="visually-hidden" />
+        <input type="file" id="productFileInput" accept="image/jpeg,image/png,image/webp,image/avif,image/bmp" class="visually-hidden" />
 
-        <button type="button" class="btn btn-secondary sample-demo-btn" id="denoiseSampleBtn">
+        <button type="button" class="btn btn-secondary sample-demo-btn" id="productSampleBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
           </svg>
-          <span>{t(locale, 'noiseReducer.dropzone.sample')}</span>
+          <span>{t(locale, 'productWhiteBg.dropzone.sample')}</span>
         </button>
       </div>
 
@@ -58,44 +59,44 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
         </span>
         <span class="badge-pill badge-pill-green">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          {t(locale, 'noiseReducer.privacy.badge')}
+          {t(locale, 'productWhiteBg.privacy.badge')}
         </span>
       </div>
     </div>
   </div>
 
   <!-- Loading State Card -->
-  <div class="denoise-loading-card" id="denoiseLoadingCard" style="display: none;">
+  <div class="product-loading-card" id="productLoadingCard" style="display: none;">
     <div class="loading-spinner"></div>
-    <p class="loading-text">{t(locale, 'noiseReducer.status.processing')}</p>
+    <p class="loading-text">{t(locale, 'productWhiteBg.status.processing')}</p>
   </div>
 
   <!-- State 2: Active Workspace (Hidden until image upload) -->
-  <div class="denoise-workspace-card" id="denoiseWorkspace" style="display: none;">
+  <div class="product-workspace-card" id="productWorkspace" style="display: none;">
     <!-- Workspace Top Header Bar -->
     <div class="workspace-header-bar">
       <div class="image-meta-info">
-        <span class="file-name-tag" id="denoiseFileName">image.jpg</span>
-        <span class="file-dim-pill" id="denoiseOriginalDimsTag">-- × -- px</span>
-        <span class="file-size-pill" id="denoiseOriginalSizeTag">-- KB</span>
+        <span class="file-name-tag" id="productFileName">product.jpg</span>
+        <span class="file-dim-pill" id="productOriginalDimsTag">-- × -- px</span>
+        <span class="file-size-pill" id="productOriginalSizeTag">-- KB</span>
       </div>
 
       <div class="workspace-header-actions">
-        <button type="button" class="btn btn-secondary btn-sm change-image-btn" id="denoiseChangeImageBtn">
+        <button type="button" class="btn btn-secondary btn-sm change-image-btn" id="productChangeImageBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-          <span>{t(locale, 'noiseReducer.action.changeImage')}</span>
+          <span>{t(locale, 'productWhiteBg.action.changeImage')}</span>
         </button>
       </div>
     </div>
 
     <!-- 2-Column Responsive Layout -->
-    <div class="denoise-main-grid">
+    <div class="product-main-grid">
       <!-- Left Column: Interactive Comparison Preview -->
-      <div class="denoise-preview-card">
+      <div class="product-preview-card">
         <!-- View Mode Navigation Tabs -->
         <div class="preview-mode-tabs">
           <button type="button" class="preview-tab active" data-view="split" id="viewModeSplitBtn">
@@ -103,28 +104,28 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
               <line x1="12" y1="3" x2="12" y2="21"></line>
               <rect x="3" y="3" width="18" height="18" rx="2"></rect>
             </svg>
-            <span>{t(locale, 'noiseReducer.view.split')}</span>
+            <span>{t(locale, 'productWhiteBg.view.split')}</span>
           </button>
           <button type="button" class="preview-tab" data-view="side" id="viewModeSideBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="2" y="3" width="9" height="18" rx="2"></rect>
               <rect x="13" y="3" width="9" height="18" rx="2"></rect>
             </svg>
-            <span>{t(locale, 'noiseReducer.view.side')}</span>
+            <span>{t(locale, 'productWhiteBg.view.side')}</span>
           </button>
           <button type="button" class="preview-tab" data-view="result" id="viewModeResultBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="9"></circle>
             </svg>
-            <span>{t(locale, 'noiseReducer.view.denoised')}</span>
+            <span>{t(locale, 'productWhiteBg.view.result')}</span>
           </button>
         </div>
 
-        <!-- Split Slider Container (Same architecture as GrayscaleConverter and ImageBlur) -->
+        <!-- Split Slider Container -->
         <div class="split-viewport-wrapper" id="splitViewportWrapper">
           <div class="split-comparison-box" id="splitComparisonBox">
-            <canvas id="noiseCanvasUnder" class="split-canvas"></canvas>
-            <canvas id="noiseCanvasOver" class="split-canvas over-canvas"></canvas>
+            <canvas id="productCanvasUnder" class="split-canvas"></canvas>
+            <canvas id="productCanvasOver" class="split-canvas over-canvas"></canvas>
             
             <div class="split-divider-line" id="splitDividerLine" style="left: 50%;">
               <div class="split-drag-handle" title="Drag to compare">
@@ -137,184 +138,231 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
               </div>
             </div>
 
-            <span class="split-tag tag-left">{t(locale, 'noiseReducer.split.original')}</span>
-            <span class="split-tag tag-right">{t(locale, 'noiseReducer.split.denoised')}</span>
+            <span class="split-tag tag-left">{t(locale, 'productWhiteBg.split.original')}</span>
+            <span class="split-tag tag-right">{t(locale, 'productWhiteBg.split.whiteBg')}</span>
           </div>
-          <p class="split-hint-text">{t(locale, 'noiseReducer.split.hint')}</p>
+          <p class="split-hint-text">{t(locale, 'productWhiteBg.split.hint')}</p>
         </div>
 
         <!-- Side-by-Side Container (Hidden by default) -->
         <div class="side-viewport-wrapper" id="sideViewportWrapper" style="display: none;">
           <div class="side-box">
-            <span class="side-badge">{t(locale, 'noiseReducer.split.original')}</span>
-            <img id="sideOriginalImg" src="" alt="Original" class="side-img" />
+            <span class="side-badge">{t(locale, 'productWhiteBg.split.original')}</span>
+            <img id="sideOriginalImg" src="" alt="Original Product" class="side-img" />
           </div>
           <div class="side-box">
-            <span class="side-badge">{t(locale, 'noiseReducer.split.denoised')}</span>
-            <img id="sideDenoisedImg" src="" alt="Denoised" class="side-img" />
+            <span class="side-badge">{t(locale, 'productWhiteBg.split.whiteBg')}</span>
+            <img id="sideWhiteBgImg" src="" alt="Product on White Background" class="side-img" />
           </div>
         </div>
 
-        <!-- Denoised Result Only Viewport (Hidden by default) -->
+        <!-- Result Only Viewport (Hidden by default) -->
         <div class="single-viewport-wrapper" id="singleViewportWrapper" style="display: none;">
           <div class="single-box">
-            <span class="single-badge">{t(locale, 'noiseReducer.split.denoised')}</span>
-            <img id="singleDenoisedImg" src="" alt="Denoised preview" class="single-img" />
+            <span class="single-badge">{t(locale, 'productWhiteBg.split.whiteBg')}</span>
+            <img id="singleWhiteBgImg" src="" alt="Product on White Background preview" class="single-img" />
           </div>
         </div>
 
         <!-- Live Metrics Bar -->
         <div class="preview-metrics-strip">
           <div class="metric-item">
-            <span class="metric-lbl">{t(locale, 'noiseReducer.metrics.original')}:</span>
+            <span class="metric-lbl">{t(locale, 'productWhiteBg.metrics.original')}:</span>
             <strong id="liveMetricOrigDims">-- × -- px</strong>
           </div>
           <div class="metric-item">
-            <span class="metric-lbl">{t(locale, 'noiseReducer.metrics.profile')}:</span>
-            <span class="profile-chip" id="liveMetricProfile">Balanced Auto</span>
+            <span class="metric-lbl">{t(locale, 'productWhiteBg.metrics.profile')}:</span>
+            <span class="profile-chip" id="liveMetricProfile">Amazon Main Image</span>
           </div>
           <div class="metric-item">
-            <span class="metric-lbl">{t(locale, 'noiseReducer.privacy.badge')}:</span>
-            <strong class="privacy-green">100% In-Browser</strong>
+            <span class="metric-lbl">RGB:</span>
+            <strong class="privacy-green">255, 255, 255</strong>
           </div>
         </div>
 
         <!-- Primary Action Buttons Row -->
-        <div class="denoise-action-buttons-grid">
-          <button type="button" class="btn btn-primary denoise-download-btn" id="denoiseDownloadBtn">
+        <div class="product-action-buttons-grid">
+          <button type="button" class="btn btn-primary product-download-btn" id="productDownloadBtn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>{t(locale, 'noiseReducer.action.download')}</span>
+            <span>{t(locale, 'productWhiteBg.action.download')}</span>
           </button>
 
-          <button type="button" class="btn btn-secondary denoise-copy-btn" id="denoiseCopyBtn">
+          <button type="button" class="btn btn-secondary product-copy-btn" id="productCopyBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            <span id="denoiseCopyBtnText">{t(locale, 'noiseReducer.action.copyImage')}</span>
+            <span id="productCopyBtnText">{t(locale, 'productWhiteBg.action.copyImage')}</span>
           </button>
 
-          <button type="button" class="btn btn-secondary denoise-reset-btn" id="denoiseResetBtn" title={t(locale, 'noiseReducer.action.reset')}>
+          <button type="button" class="btn btn-secondary product-reset-btn" id="productResetBtn" title={t(locale, 'productWhiteBg.action.reset')}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
               <path d="M3 3v5h5"></path>
             </svg>
-            <span>{t(locale, 'noiseReducer.action.reset')}</span>
+            <span>{t(locale, 'productWhiteBg.action.reset')}</span>
           </button>
         </div>
       </div>
 
-      <!-- Right Column: Denoise Controls Panel -->
-      <div class="denoise-controls-panel">
+      <!-- Right Column: Product Controls Panel -->
+      <div class="product-controls-panel">
         <!-- Section 1: Presets -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'noiseReducer.section.presets')}</label>
+          <label class="control-label">{t(locale, 'productWhiteBg.section.presets')}</label>
           <div class="preset-chips-grid">
-            <button type="button" class="tone-preset-btn active" data-preset="balanced">
-              <strong>{t(locale, 'noiseReducer.preset.balanced')}</strong>
-              <span>{t(locale, 'noiseReducer.preset.balancedDesc')}</span>
+            <button type="button" class="tone-preset-btn active" data-preset="amazon">
+              <strong>{t(locale, 'productWhiteBg.preset.amazon')}</strong>
+              <span>{t(locale, 'productWhiteBg.preset.amazonDesc')}</span>
             </button>
 
-            <button type="button" class="tone-preset-btn" data-preset="lowlight">
-              <strong>{t(locale, 'noiseReducer.preset.lowlight')}</strong>
-              <span>{t(locale, 'noiseReducer.preset.lowlightDesc')}</span>
+            <button type="button" class="tone-preset-btn" data-preset="shopify">
+              <strong>{t(locale, 'productWhiteBg.preset.shopify')}</strong>
+              <span>{t(locale, 'productWhiteBg.preset.shopifyDesc')}</span>
             </button>
 
-            <button type="button" class="tone-preset-btn" data-preset="portrait">
-              <strong>{t(locale, 'noiseReducer.preset.portrait')}</strong>
-              <span>{t(locale, 'noiseReducer.preset.portraitDesc')}</span>
+            <button type="button" class="tone-preset-btn" data-preset="warmStudio">
+              <strong>{t(locale, 'productWhiteBg.preset.warmStudio')}</strong>
+              <span>{t(locale, 'productWhiteBg.preset.warmStudioDesc')}</span>
             </button>
 
-            <button type="button" class="tone-preset-btn" data-preset="grain">
-              <strong>{t(locale, 'noiseReducer.preset.grain')}</strong>
-              <span>{t(locale, 'noiseReducer.preset.grainDesc')}</span>
+            <button type="button" class="tone-preset-btn" data-preset="cutoutOnly">
+              <strong>{t(locale, 'productWhiteBg.preset.cutoutOnly')}</strong>
+              <span>{t(locale, 'productWhiteBg.preset.cutoutOnlyDesc')}</span>
             </button>
           </div>
         </div>
 
-        <!-- Section 2: Fine-Tuning Sliders -->
+        <!-- Section 2: Backdrop Canvas Style -->
         <div class="control-group">
+          <label class="control-label">{t(locale, 'productWhiteBg.section.backdrop')}</label>
+          <div class="chip-selector-grid">
+            <button type="button" class="chip-opt-btn active" data-bg="pure-white">
+              <span class="color-dot dot-white"></span>
+              <span>{t(locale, 'productWhiteBg.backdrop.pureWhite')}</span>
+            </button>
+            <button type="button" class="chip-opt-btn" data-bg="studio-warm">
+              <span class="color-dot dot-warm"></span>
+              <span>{t(locale, 'productWhiteBg.backdrop.warmWhite')}</span>
+            </button>
+            <button type="button" class="chip-opt-btn" data-bg="studio-cool">
+              <span class="color-dot dot-cool"></span>
+              <span>{t(locale, 'productWhiteBg.backdrop.coolWhite')}</span>
+            </button>
+            <button type="button" class="chip-opt-btn" data-bg="transparent">
+              <span class="color-dot dot-trans"></span>
+              <span>{t(locale, 'productWhiteBg.backdrop.transparent')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 3: Grounding & Contact Shadow -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'productWhiteBg.section.shadow')}</label>
+          <div class="chip-selector-grid">
+            <button type="button" class="chip-opt-btn active" data-shadow="soft-floor">
+              <span>{t(locale, 'productWhiteBg.shadow.softFloor')}</span>
+            </button>
+            <button type="button" class="chip-opt-btn" data-shadow="drop">
+              <span>{t(locale, 'productWhiteBg.shadow.drop')}</span>
+            </button>
+            <button type="button" class="chip-opt-btn" data-shadow="reflection">
+              <span>{t(locale, 'productWhiteBg.shadow.reflection')}</span>
+            </button>
+            <button type="button" class="chip-opt-btn" data-shadow="none">
+              <span>{t(locale, 'productWhiteBg.shadow.none')}</span>
+            </button>
+          </div>
+
+          <div class="slider-header-row" style="margin-top: 6px;">
+            <label for="shadowOpacitySlider" class="sub-label">{t(locale, 'productWhiteBg.shadow.opacity')}</label>
+            <span class="val-pill" id="shadowOpacityValPill">35%</span>
+          </div>
+          <input type="range" id="shadowOpacitySlider" min="0" max="100" value="35" step="1" class="product-range" />
+        </div>
+
+        <!-- Section 4: Edge Matting & Defringe -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'productWhiteBg.section.edge')}</label>
+          
           <div class="slider-header-row">
-            <label for="strengthSlider" class="control-label">{t(locale, 'noiseReducer.control.strength')}</label>
-            <span class="val-pill" id="strengthValPill">45%</span>
+            <label for="toleranceSlider" class="sub-label">{t(locale, 'productWhiteBg.control.tolerance')}</label>
+            <span class="val-pill" id="toleranceValPill">28%</span>
           </div>
-          <input type="range" id="strengthSlider" min="0" max="100" value="45" step="1" class="denoise-range" />
-          <p class="slider-help">{t(locale, 'noiseReducer.control.strengthHelp')}</p>
+          <input type="range" id="toleranceSlider" min="5" max="90" value="28" step="1" class="product-range" />
+          <p class="slider-help">{t(locale, 'productWhiteBg.control.toleranceHelp')}</p>
+
+          <div class="slider-header-row" style="margin-top: 6px;">
+            <label for="featherSlider" class="sub-label">{t(locale, 'productWhiteBg.control.feather')}</label>
+            <span class="val-pill" id="featherValPill">2 px</span>
+          </div>
+          <input type="range" id="featherSlider" min="0" max="6" value="2" step="1" class="product-range" />
+
+          <div class="slider-header-row" style="margin-top: 6px;">
+            <label for="despillSlider" class="sub-label">{t(locale, 'productWhiteBg.control.despill')}</label>
+            <span class="val-pill" id="despillValPill">60%</span>
+          </div>
+          <input type="range" id="despillSlider" min="0" max="100" value="60" step="1" class="product-range" />
+          <p class="slider-help">{t(locale, 'productWhiteBg.control.despillHelp')}</p>
         </div>
 
+        <!-- Section 5: Framing, Padding & Aspect Ratio -->
         <div class="control-group">
+          <label class="control-label">{t(locale, 'productWhiteBg.section.framing')}</label>
+          
           <div class="slider-header-row">
-            <label for="colorNoiseSlider" class="control-label">{t(locale, 'noiseReducer.control.colorNoise')}</label>
-            <span class="val-pill" id="colorNoiseValPill">60%</span>
+            <label for="paddingSlider" class="sub-label">{t(locale, 'productWhiteBg.control.padding')}</label>
+            <span class="val-pill" id="paddingValPill">10%</span>
           </div>
-          <input type="range" id="colorNoiseSlider" min="0" max="100" value="60" step="1" class="denoise-range" />
-          <p class="slider-help">{t(locale, 'noiseReducer.control.colorNoiseHelp')}</p>
-        </div>
+          <input type="range" id="paddingSlider" min="0" max="30" value="10" step="1" class="product-range" />
+          <p class="slider-help">{t(locale, 'productWhiteBg.control.paddingHelp')}</p>
 
-        <div class="control-group">
-          <div class="slider-header-row">
-            <label for="sharpnessSlider" class="control-label">{t(locale, 'noiseReducer.control.sharpness')}</label>
-            <span class="val-pill" id="sharpnessValPill">30%</span>
-          </div>
-          <input type="range" id="sharpnessSlider" min="0" max="100" value="30" step="1" class="denoise-range" />
-          <p class="slider-help">{t(locale, 'noiseReducer.control.sharpnessHelp')}</p>
-        </div>
-
-        <!-- Radius Selector Box -->
-        <div class="control-group">
-          <label class="control-label">{t(locale, 'noiseReducer.control.radius')}</label>
-          <div class="radius-chips-row">
-            <button type="button" class="radius-chip active" data-radius="1">{t(locale, 'noiseReducer.radius.fine')}</button>
-            <button type="button" class="radius-chip" data-radius="2">{t(locale, 'noiseReducer.radius.medium')}</button>
-            <button type="button" class="radius-chip" data-radius="3">{t(locale, 'noiseReducer.radius.heavy')}</button>
+          <div class="select-field" style="margin-top: 6px;">
+            <label for="aspectRatioSelect" class="sub-label">{t(locale, 'productWhiteBg.control.aspectRatio')}</label>
+            <select id="aspectRatioSelect" class="product-select">
+              <option value="1:1" selected>{t(locale, 'productWhiteBg.aspect.square')}</option>
+              <option value="original">{t(locale, 'productWhiteBg.aspect.original')}</option>
+              <option value="4:3">{t(locale, 'productWhiteBg.aspect.fourThree')}</option>
+              <option value="3:4">{t(locale, 'productWhiteBg.aspect.threeFour')}</option>
+            </select>
           </div>
         </div>
 
-        <!-- Section 3: Export Format & Quality -->
+        <!-- Section 6: Export Format & Quality -->
         <div class="control-group">
-          <label class="control-label">{t(locale, 'noiseReducer.section.export')}</label>
+          <label class="control-label">{t(locale, 'productWhiteBg.section.export')}</label>
           <div class="select-field">
-            <label for="exportFormatSelect" class="sub-label">{t(locale, 'noiseReducer.export.format')}</label>
-            <select id="exportFormatSelect" class="denoise-select">
-              <option value="original" selected>Same as Original</option>
-              <option value="image/png">PNG (Lossless & Sharp)</option>
-              <option value="image/webp">WebP (Optimized & Modern)</option>
-              <option value="image/jpeg">JPG / JPEG (Standard Photo)</option>
+            <label for="exportFormatSelect" class="sub-label">{t(locale, 'productWhiteBg.export.format')}</label>
+            <select id="exportFormatSelect" class="product-select">
+              <option value="image/jpeg" selected>JPG / JPEG (Standard E-Commerce White Background)</option>
+              <option value="image/webp">WebP (Optimized & High Speed)</option>
+              <option value="image/png">PNG (Lossless & Transparent Support)</option>
             </select>
           </div>
 
-          <div class="quality-field" id="qualityFieldBox" style="display: none;">
+          <div class="quality-field" id="qualityFieldBox">
             <div class="slider-header-row">
-              <label for="exportQualitySlider" class="sub-label">{t(locale, 'noiseReducer.export.quality')}</label>
+              <label for="exportQualitySlider" class="sub-label">{t(locale, 'productWhiteBg.export.quality')}</label>
               <span class="val-pill" id="qualityValPill">92%</span>
             </div>
-            <input type="range" id="exportQualitySlider" min="10" max="100" value="92" step="1" class="denoise-range" />
+            <input type="range" id="exportQualitySlider" min="10" max="100" value="92" step="1" class="product-range" />
           </div>
         </div>
       </div>
     </div>
 
     <!-- Related Cross Navigation Links -->
-    <div class="denoise-cross-links-row">
-      <a href={blurUrl} class="btn btn-secondary cross-btn">
+    <div class="product-cross-links-row">
+      <a href={noiseReducerUrl} class="btn btn-secondary cross-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
-          <circle cx="12" cy="12" r="5" stroke-dasharray="1 2"></circle>
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+          <circle cx="12" cy="12" r="3"></circle>
         </svg>
-        <span>{t(locale, 'noiseReducer.cross.blur')}</span>
-      </a>
-
-      <a href={beautifyUrl} class="btn btn-secondary cross-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-          <path d="M3 9h18"></path>
-          <circle cx="7" cy="6" r="1"></circle>
-        </svg>
-        <span>{t(locale, 'noiseReducer.cross.beautify')}</span>
+        <span>{t(locale, 'productWhiteBg.cross.noiseReducer')}</span>
       </a>
 
       <a href={exactUrl} class="btn btn-secondary cross-btn">
@@ -326,15 +374,14 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
           <line x1="20" y1="21" x2="20" y2="16"></line>
           <line x1="20" y1="12" x2="20" y2="3"></line>
         </svg>
-        <span>{t(locale, 'noiseReducer.cross.exact')}</span>
+        <span>{t(locale, 'productWhiteBg.cross.exact')}</span>
       </a>
 
-      <a href={grayscaleUrl} class="btn btn-secondary cross-btn">
+      <a href={webpUrl} class="btn btn-secondary cross-btn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path>
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
         </svg>
-        <span>{t(locale, 'noiseReducer.cross.grayscale')}</span>
+        <span>{t(locale, 'productWhiteBg.cross.compressor')}</span>
       </a>
 
       <a href={cropUrl} class="btn btn-secondary cross-btn">
@@ -342,7 +389,15 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
           <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
           <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
         </svg>
-        <span>{t(locale, 'noiseReducer.cross.cropper')}</span>
+        <span>{t(locale, 'productWhiteBg.cross.cropper')}</span>
+      </a>
+
+      <a href={blurUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+          <circle cx="12" cy="12" r="5" stroke-dasharray="1 2"></circle>
+        </svg>
+        <span>{t(locale, 'productWhiteBg.cross.blur')}</span>
       </a>
     </div>
   </div>
@@ -350,49 +405,45 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
 
 <script>
   import {
-    loadImageFromFile,
-    applyDenoiseToImageData,
-    generateSampleNoisyImage,
-    generateFullResolutionCanvas,
-    exportDenoisedImage,
-    copyDenoisedImageToClipboard,
-    PRESET_CONFIGS,
-    type DenoiseOptions,
-    type DenoisePreset,
-    type LoadedImageInfo,
-  } from '@/scripts/denoise-engine';
+    loadProductImageFromFile,
+    renderComposedProductCanvas,
+    generateSampleProductImage,
+    exportProductImage,
+    copyProductCanvasToClipboard,
+    DEFAULT_PRODUCT_OPTIONS,
+    PRODUCT_PRESETS,
+    type ProductWhiteBgOptions,
+    type LoadedProductImageInfo,
+  } from '@/scripts/product-white-bg';
 
-  const appEl = document.getElementById('denoiseApp');
+  const appEl = document.getElementById('productApp');
   const i18n = appEl?.dataset.i18n ? JSON.parse(appEl.dataset.i18n) : {};
 
   // State
   let currentFile: File | null = null;
-  let loadedImageObj: LoadedImageInfo | null = null;
+  let loadedImageObj: LoadedProductImageInfo | null = null;
   let originalWidth = 0;
   let originalHeight = 0;
   let splitPosPercent = 50;
   let isDraggingSplit = false;
 
-  let activePreset: DenoisePreset = 'balanced';
-  let denoiseOptions: DenoiseOptions = { ...PRESET_CONFIGS.balanced };
-  let exportFormat: string = 'original';
+  let productOptions: ProductWhiteBgOptions = { ...DEFAULT_PRODUCT_OPTIONS };
+  let exportFormat: string = 'image/jpeg';
   let exportQuality: number = 0.92;
 
   let renderDebounceTimer: number | null = null;
-  let fullExportBlob: Blob | null = null;
-  let fullExportDataUrl: string = '';
 
   // DOM Elements
-  const dropzone = document.getElementById('denoiseDropzone') as HTMLElement;
-  const fileInput = document.getElementById('denoiseFileInput') as HTMLInputElement;
-  const sampleBtn = document.getElementById('denoiseSampleBtn') as HTMLButtonElement;
-  const loadingCard = document.getElementById('denoiseLoadingCard') as HTMLElement;
-  const workspace = document.getElementById('denoiseWorkspace') as HTMLElement;
+  const dropzone = document.getElementById('productDropzone') as HTMLElement;
+  const fileInput = document.getElementById('productFileInput') as HTMLInputElement;
+  const sampleBtn = document.getElementById('productSampleBtn') as HTMLButtonElement;
+  const loadingCard = document.getElementById('productLoadingCard') as HTMLElement;
+  const workspace = document.getElementById('productWorkspace') as HTMLElement;
 
-  const fileNameEl = document.getElementById('denoiseFileName') as HTMLElement;
-  const origDimsTag = document.getElementById('denoiseOriginalDimsTag') as HTMLElement;
-  const origSizeTag = document.getElementById('denoiseOriginalSizeTag') as HTMLElement;
-  const changeImageBtn = document.getElementById('denoiseChangeImageBtn') as HTMLButtonElement;
+  const fileNameEl = document.getElementById('productFileName') as HTMLElement;
+  const origDimsTag = document.getElementById('productOriginalDimsTag') as HTMLElement;
+  const origSizeTag = document.getElementById('productOriginalSizeTag') as HTMLElement;
+  const changeImageBtn = document.getElementById('productChangeImageBtn') as HTMLButtonElement;
 
   const viewTabs = document.querySelectorAll('.preview-tab') as NodeListOf<HTMLButtonElement>;
   const splitWrapper = document.getElementById('splitViewportWrapper') as HTMLElement;
@@ -400,49 +451,54 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   const singleWrapper = document.getElementById('singleViewportWrapper') as HTMLElement;
 
   const splitBox = document.getElementById('splitComparisonBox') as HTMLElement;
-  const canvasUnder = document.getElementById('noiseCanvasUnder') as HTMLCanvasElement;
-  const canvasOver = document.getElementById('noiseCanvasOver') as HTMLCanvasElement;
+  const canvasUnder = document.getElementById('productCanvasUnder') as HTMLCanvasElement;
+  const canvasOver = document.getElementById('productCanvasOver') as HTMLCanvasElement;
   const splitDivider = document.getElementById('splitDividerLine') as HTMLElement;
 
   const sideOrigImg = document.getElementById('sideOriginalImg') as HTMLImageElement;
-  const sideDenoisedImg = document.getElementById('sideDenoisedImg') as HTMLImageElement;
-  const singleDenoisedImg = document.getElementById('singleDenoisedImg') as HTMLImageElement;
+  const sideWhiteBgImg = document.getElementById('sideWhiteBgImg') as HTMLImageElement;
+  const singleWhiteBgImg = document.getElementById('singleWhiteBgImg') as HTMLImageElement;
 
   const liveMetricOrigDims = document.getElementById('liveMetricOrigDims') as HTMLElement;
   const liveMetricProfile = document.getElementById('liveMetricProfile') as HTMLElement;
 
   const presetBtns = document.querySelectorAll('.tone-preset-btn') as NodeListOf<HTMLButtonElement>;
-  const strengthSlider = document.getElementById('strengthSlider') as HTMLInputElement;
-  const strengthValPill = document.getElementById('strengthValPill') as HTMLElement;
-  const colorNoiseSlider = document.getElementById('colorNoiseSlider') as HTMLInputElement;
-  const colorNoiseValPill = document.getElementById('colorNoiseValPill') as HTMLElement;
-  const sharpnessSlider = document.getElementById('sharpnessSlider') as HTMLInputElement;
-  const sharpnessValPill = document.getElementById('sharpnessValPill') as HTMLElement;
-  const radiusChips = document.querySelectorAll('.radius-chip') as NodeListOf<HTMLButtonElement>;
+  const bgBtns = document.querySelectorAll('.chip-opt-btn[data-bg]') as NodeListOf<HTMLButtonElement>;
+  const shadowBtns = document.querySelectorAll('.chip-opt-btn[data-shadow]') as NodeListOf<HTMLButtonElement>;
+
+  const shadowOpacitySlider = document.getElementById('shadowOpacitySlider') as HTMLInputElement;
+  const shadowOpacityValPill = document.getElementById('shadowOpacityValPill') as HTMLElement;
+
+  const toleranceSlider = document.getElementById('toleranceSlider') as HTMLInputElement;
+  const toleranceValPill = document.getElementById('toleranceValPill') as HTMLElement;
+  const featherSlider = document.getElementById('featherSlider') as HTMLInputElement;
+  const featherValPill = document.getElementById('featherValPill') as HTMLElement;
+  const despillSlider = document.getElementById('despillSlider') as HTMLInputElement;
+  const despillValPill = document.getElementById('despillValPill') as HTMLElement;
+
+  const paddingSlider = document.getElementById('paddingSlider') as HTMLInputElement;
+  const paddingValPill = document.getElementById('paddingValPill') as HTMLElement;
+  const aspectRatioSelect = document.getElementById('aspectRatioSelect') as HTMLSelectElement;
 
   const exportFormatSelect = document.getElementById('exportFormatSelect') as HTMLSelectElement;
   const qualityFieldBox = document.getElementById('qualityFieldBox') as HTMLElement;
   const exportQualitySlider = document.getElementById('exportQualitySlider') as HTMLInputElement;
   const qualityValPill = document.getElementById('qualityValPill') as HTMLElement;
 
-  const downloadBtn = document.getElementById('denoiseDownloadBtn') as HTMLButtonElement;
-  const copyBtn = document.getElementById('denoiseCopyBtn') as HTMLButtonElement;
-  const copyBtnText = document.getElementById('denoiseCopyBtnText') as HTMLElement;
-  const resetBtn = document.getElementById('denoiseResetBtn') as HTMLButtonElement;
+  const downloadBtn = document.getElementById('productDownloadBtn') as HTMLButtonElement;
+  const copyBtn = document.getElementById('productCopyBtn') as HTMLButtonElement;
+  const copyBtnText = document.getElementById('productCopyBtnText') as HTMLElement;
+  const resetBtn = document.getElementById('productResetBtn') as HTMLButtonElement;
 
-  function renderSplitCanvases() {
+  function renderCanvases() {
     if (!loadedImageObj || !canvasUnder || !canvasOver) return;
 
-    const maxW = 900;
-    const maxH = 560;
-    let targetW = originalWidth;
-    let targetH = originalHeight;
+    const maxDim = 850;
+    // 1. Render composed white background canvas
+    const composed = renderComposedProductCanvas(loadedImageObj.img, productOptions, maxDim);
 
-    if (targetW > maxW || targetH > maxH) {
-      const ratio = Math.min(maxW / targetW, maxH / targetH);
-      targetW = Math.round(targetW * ratio);
-      targetH = Math.round(targetH * ratio);
-    }
+    const targetW = composed.width;
+    const targetH = composed.height;
 
     canvasUnder.width = targetW;
     canvasUnder.height = targetH;
@@ -453,60 +509,29 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     const ctxOver = canvasOver.getContext('2d');
     if (!ctxUnder || !ctxOver) return;
 
-    // Original on under canvas
-    ctxUnder.drawImage(loadedImageObj.img, 0, 0, targetW, targetH);
+    // Original scaled in center for under canvas
+    ctxUnder.fillStyle = '#f8fafc';
+    ctxUnder.fillRect(0, 0, targetW, targetH);
+    const origScale = Math.min(targetW / loadedImageObj.originalWidth, targetH / loadedImageObj.originalHeight);
+    const oW = loadedImageObj.originalWidth * origScale;
+    const oH = loadedImageObj.originalHeight * origScale;
+    ctxUnder.drawImage(loadedImageObj.img, (targetW - oW) / 2, (targetH - oH) / 2, oW, oH);
 
-    // Denoised on over canvas
-    ctxOver.drawImage(loadedImageObj.img, 0, 0, targetW, targetH);
-    const imgData = ctxOver.getImageData(0, 0, targetW, targetH);
-    const denoisedData = applyDenoiseToImageData(imgData, denoiseOptions);
-    ctxOver.putImageData(denoisedData, 0, 0);
+    // Over canvas gets the composed result
+    ctxOver.drawImage(composed, 0, 0);
 
     if (canvasOver) {
       canvasOver.style.clipPath = `inset(0 0 0 ${splitPosPercent}%)`;
     }
 
-    // Immediately update preview images for Side-by-Side and Denoised Only
-    const previewDataUrl = canvasOver.toDataURL('image/png');
-    if (sideDenoisedImg) sideDenoisedImg.src = previewDataUrl;
-    if (singleDenoisedImg) singleDenoisedImg.src = previewDataUrl;
-  }
-
-  async function processFullExport() {
-    if (!loadedImageObj) return;
-
-    try {
-      // 1. Generate full-resolution denoised canvas
-      const fullCanvas = generateFullResolutionCanvas(loadedImageObj.img, denoiseOptions);
-
-      // 2. Format
-      let targetMime: 'image/png' | 'image/webp' | 'image/jpeg' = 'image/png';
-      if (exportFormat === 'original') {
-        if (loadedImageObj.fileType === 'image/jpeg' || loadedImageObj.fileType === 'image/jpg') targetMime = 'image/jpeg';
-        else if (loadedImageObj.fileType === 'image/webp') targetMime = 'image/webp';
-        else targetMime = 'image/png';
-      } else {
-        targetMime = exportFormat as any;
-      }
-
-      fullExportDataUrl = fullCanvas.toDataURL(targetMime, exportQuality);
-
-      if (fullCanvas.toBlob) {
-        fullCanvas.toBlob((blob) => {
-          if (blob) {
-            fullExportBlob = blob;
-          }
-        }, targetMime, exportQuality);
-      }
-    } catch (err) {
-      console.error('Denoise export error:', err);
-    }
+    // Immediately update preview images for Side-by-Side and Result Only
+    const previewDataUrl = composed.toDataURL('image/png');
+    if (sideWhiteBgImg) sideWhiteBgImg.src = previewDataUrl;
+    if (singleWhiteBgImg) singleWhiteBgImg.src = previewDataUrl;
   }
 
   function triggerUpdate() {
-    renderSplitCanvases();
-    if (renderDebounceTimer) clearTimeout(renderDebounceTimer);
-    renderDebounceTimer = window.setTimeout(processFullExport, 80);
+    renderCanvases();
   }
 
   async function loadFile(file: File) {
@@ -518,36 +543,47 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
 
     try {
       currentFile = file;
-      loadedImageObj = await loadImageFromFile(file);
+      loadedImageObj = await loadProductImageFromFile(file);
       originalWidth = loadedImageObj.originalWidth;
       originalHeight = loadedImageObj.originalHeight;
 
-      // Reset options to balanced preset
-      activePreset = 'balanced';
-      denoiseOptions = { ...PRESET_CONFIGS.balanced };
+      // Reset options
+      productOptions = { ...DEFAULT_PRODUCT_OPTIONS };
       splitPosPercent = 50;
 
-      presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'balanced'));
-      if (strengthSlider) strengthSlider.value = String(denoiseOptions.strength);
-      if (strengthValPill) strengthValPill.textContent = `${denoiseOptions.strength}%`;
-      if (colorNoiseSlider) colorNoiseSlider.value = String(denoiseOptions.colorNoise);
-      if (colorNoiseValPill) colorNoiseValPill.textContent = `${denoiseOptions.colorNoise}%`;
-      if (sharpnessSlider) sharpnessSlider.value = String(denoiseOptions.sharpness);
-      if (sharpnessValPill) sharpnessValPill.textContent = `${denoiseOptions.sharpness}%`;
-      radiusChips.forEach((rc) => rc.classList.toggle('active', Number(rc.dataset.radius) === denoiseOptions.radius));
+      // Update UI controls
+      presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'amazon'));
+      bgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === productOptions.bgType));
+      shadowBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-shadow') === productOptions.shadowType));
+
+      if (shadowOpacitySlider) shadowOpacitySlider.value = String(productOptions.shadowOpacity);
+      if (shadowOpacityValPill) shadowOpacityValPill.textContent = `${productOptions.shadowOpacity}%`;
+
+      if (toleranceSlider) toleranceSlider.value = String(productOptions.tolerance);
+      if (toleranceValPill) toleranceValPill.textContent = `${productOptions.tolerance}%`;
+
+      if (featherSlider) featherSlider.value = String(productOptions.feather);
+      if (featherValPill) featherValPill.textContent = `${productOptions.feather} px`;
+
+      if (despillSlider) despillSlider.value = String(productOptions.despill);
+      if (despillValPill) despillValPill.textContent = `${productOptions.despill}%`;
+
+      if (paddingSlider) paddingSlider.value = String(productOptions.paddingPercent);
+      if (paddingValPill) paddingValPill.textContent = `${productOptions.paddingPercent}%`;
+
+      if (aspectRatioSelect) aspectRatioSelect.value = productOptions.aspectRatio;
 
       // Header meta tags
       if (fileNameEl) fileNameEl.textContent = file.name;
       if (origDimsTag) origDimsTag.textContent = `${originalWidth} × ${originalHeight} px`;
       if (origSizeTag) origSizeTag.textContent = `${(file.size / 1024).toFixed(1)} KB`;
       if (liveMetricOrigDims) liveMetricOrigDims.textContent = `${originalWidth} × ${originalHeight} px`;
-      if (liveMetricProfile) liveMetricProfile.textContent = 'Balanced Auto';
+      if (liveMetricProfile) liveMetricProfile.textContent = 'Amazon Main Image';
 
       if (splitDivider) splitDivider.style.left = '50%';
       if (sideOrigImg) sideOrigImg.src = loadedImageObj.img.src;
 
-      renderSplitCanvases();
-      await processFullExport();
+      renderCanvases();
 
       loadingCard.style.display = 'none';
       workspace.style.display = 'block';
@@ -581,7 +617,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     });
   });
 
-  // Split dragging logic (Matching other tools)
+  // Split dragging logic
   function handleSplitMove(clientX: number) {
     if (!splitBox) return;
     const rect = splitBox.getBoundingClientRect();
@@ -607,7 +643,6 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
       isDraggingSplit = false;
     });
 
-    // Touch events for mobile
     splitBox.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         isDraggingSplit = true;
@@ -631,18 +666,30 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
       presetBtns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
 
-      const presetKey = (btn.getAttribute('data-preset') as DenoisePreset) || 'balanced';
-      activePreset = presetKey;
-      const config = PRESET_CONFIGS[presetKey];
+      const presetKey = btn.getAttribute('data-preset') || 'amazon';
+      const config = PRODUCT_PRESETS[presetKey];
       if (config) {
-        denoiseOptions = { ...config };
-        if (strengthSlider) strengthSlider.value = String(config.strength);
-        if (strengthValPill) strengthValPill.textContent = `${config.strength}%`;
-        if (colorNoiseSlider) colorNoiseSlider.value = String(config.colorNoise);
-        if (colorNoiseValPill) colorNoiseValPill.textContent = `${config.colorNoise}%`;
-        if (sharpnessSlider) sharpnessSlider.value = String(config.sharpness);
-        if (sharpnessValPill) sharpnessValPill.textContent = `${config.sharpness}%`;
-        radiusChips.forEach((rc) => rc.classList.toggle('active', Number(rc.dataset.radius) === config.radius));
+        productOptions = { ...productOptions, ...config };
+
+        bgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === productOptions.bgType));
+        shadowBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-shadow') === productOptions.shadowType));
+
+        if (shadowOpacitySlider) shadowOpacitySlider.value = String(productOptions.shadowOpacity);
+        if (shadowOpacityValPill) shadowOpacityValPill.textContent = `${productOptions.shadowOpacity}%`;
+
+        if (toleranceSlider) toleranceSlider.value = String(productOptions.tolerance);
+        if (toleranceValPill) toleranceValPill.textContent = `${productOptions.tolerance}%`;
+
+        if (featherSlider) featherSlider.value = String(productOptions.feather);
+        if (featherValPill) featherValPill.textContent = `${productOptions.feather} px`;
+
+        if (despillSlider) despillSlider.value = String(productOptions.despill);
+        if (despillValPill) despillValPill.textContent = `${productOptions.despill}%`;
+
+        if (paddingSlider) paddingSlider.value = String(productOptions.paddingPercent);
+        if (paddingValPill) paddingValPill.textContent = `${productOptions.paddingPercent}%`;
+
+        if (aspectRatioSelect) aspectRatioSelect.value = productOptions.aspectRatio;
 
         if (liveMetricProfile) liveMetricProfile.textContent = btn.querySelector('strong')?.textContent || presetKey;
       }
@@ -650,48 +697,81 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     });
   });
 
-  // Range Sliders
-  if (strengthSlider) {
-    strengthSlider.addEventListener('input', () => {
-      denoiseOptions.strength = parseInt(strengthSlider.value, 10);
-      if (strengthValPill) strengthValPill.textContent = `${denoiseOptions.strength}%`;
-      triggerUpdate();
-    });
-  }
-
-  if (colorNoiseSlider) {
-    colorNoiseSlider.addEventListener('input', () => {
-      denoiseOptions.colorNoise = parseInt(colorNoiseSlider.value, 10);
-      if (colorNoiseValPill) colorNoiseValPill.textContent = `${denoiseOptions.colorNoise}%`;
-      triggerUpdate();
-    });
-  }
-
-  if (sharpnessSlider) {
-    sharpnessSlider.addEventListener('input', () => {
-      denoiseOptions.sharpness = parseInt(sharpnessSlider.value, 10);
-      if (sharpnessValPill) sharpnessValPill.textContent = `${denoiseOptions.sharpness}%`;
-      triggerUpdate();
-    });
-  }
-
-  radiusChips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      radiusChips.forEach((c) => c.classList.remove('active'));
-      chip.classList.add('active');
-      denoiseOptions.radius = Number(chip.dataset.radius) || 1;
+  // Backdrop Selector
+  bgBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      bgBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      productOptions.bgType = (btn.getAttribute('data-bg') as any) || 'pure-white';
       triggerUpdate();
     });
   });
+
+  // Shadow Selector
+  shadowBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      shadowBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      productOptions.shadowType = (btn.getAttribute('data-shadow') as any) || 'soft-floor';
+      triggerUpdate();
+    });
+  });
+
+  // Sliders
+  if (shadowOpacitySlider) {
+    shadowOpacitySlider.addEventListener('input', () => {
+      productOptions.shadowOpacity = parseInt(shadowOpacitySlider.value, 10);
+      if (shadowOpacityValPill) shadowOpacityValPill.textContent = `${productOptions.shadowOpacity}%`;
+      triggerUpdate();
+    });
+  }
+
+  if (toleranceSlider) {
+    toleranceSlider.addEventListener('input', () => {
+      productOptions.tolerance = parseInt(toleranceSlider.value, 10);
+      if (toleranceValPill) toleranceValPill.textContent = `${productOptions.tolerance}%`;
+      triggerUpdate();
+    });
+  }
+
+  if (featherSlider) {
+    featherSlider.addEventListener('input', () => {
+      productOptions.feather = parseInt(featherSlider.value, 10);
+      if (featherValPill) featherValPill.textContent = `${productOptions.feather} px`;
+      triggerUpdate();
+    });
+  }
+
+  if (despillSlider) {
+    despillSlider.addEventListener('input', () => {
+      productOptions.despill = parseInt(despillSlider.value, 10);
+      if (despillValPill) despillValPill.textContent = `${productOptions.despill}%`;
+      triggerUpdate();
+    });
+  }
+
+  if (paddingSlider) {
+    paddingSlider.addEventListener('input', () => {
+      productOptions.paddingPercent = parseInt(paddingSlider.value, 10);
+      if (paddingValPill) paddingValPill.textContent = `${productOptions.paddingPercent}%`;
+      triggerUpdate();
+    });
+  }
+
+  if (aspectRatioSelect) {
+    aspectRatioSelect.addEventListener('change', () => {
+      productOptions.aspectRatio = (aspectRatioSelect.value as any) || '1:1';
+      triggerUpdate();
+    });
+  }
 
   // Export Settings
   if (exportFormatSelect) {
     exportFormatSelect.addEventListener('change', () => {
       exportFormat = exportFormatSelect.value;
       if (qualityFieldBox) {
-        qualityFieldBox.style.display = exportFormat === 'image/jpeg' || exportFormat === 'image/webp' ? 'block' : 'none';
+        qualityFieldBox.style.display = exportFormat === 'image/png' ? 'none' : 'block';
       }
-      triggerUpdate();
     });
   }
 
@@ -700,24 +780,29 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
       const q = parseInt(exportQualitySlider.value, 10);
       exportQuality = q / 100;
       if (qualityValPill) qualityValPill.textContent = `${q}%`;
-      triggerUpdate();
     });
   }
 
   // Reset Button
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      activePreset = 'balanced';
-      denoiseOptions = { ...PRESET_CONFIGS.balanced };
-      presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'balanced'));
-      if (strengthSlider) strengthSlider.value = String(denoiseOptions.strength);
-      if (strengthValPill) strengthValPill.textContent = `${denoiseOptions.strength}%`;
-      if (colorNoiseSlider) colorNoiseSlider.value = String(denoiseOptions.colorNoise);
-      if (colorNoiseValPill) colorNoiseValPill.textContent = `${denoiseOptions.colorNoise}%`;
-      if (sharpnessSlider) sharpnessSlider.value = String(denoiseOptions.sharpness);
-      if (sharpnessValPill) sharpnessValPill.textContent = `${denoiseOptions.sharpness}%`;
-      radiusChips.forEach((rc) => rc.classList.toggle('active', Number(rc.dataset.radius) === denoiseOptions.radius));
-      if (liveMetricProfile) liveMetricProfile.textContent = 'Balanced Auto';
+      productOptions = { ...DEFAULT_PRODUCT_OPTIONS };
+      presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'amazon'));
+      bgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === productOptions.bgType));
+      shadowBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-shadow') === productOptions.shadowType));
+
+      if (shadowOpacitySlider) shadowOpacitySlider.value = String(productOptions.shadowOpacity);
+      if (shadowOpacityValPill) shadowOpacityValPill.textContent = `${productOptions.shadowOpacity}%`;
+      if (toleranceSlider) toleranceSlider.value = String(productOptions.tolerance);
+      if (toleranceValPill) toleranceValPill.textContent = `${productOptions.tolerance}%`;
+      if (featherSlider) featherSlider.value = String(productOptions.feather);
+      if (featherValPill) featherValPill.textContent = `${productOptions.feather} px`;
+      if (despillSlider) despillSlider.value = String(productOptions.despill);
+      if (despillValPill) despillValPill.textContent = `${productOptions.despill}%`;
+      if (paddingSlider) paddingSlider.value = String(productOptions.paddingPercent);
+      if (paddingValPill) paddingValPill.textContent = `${productOptions.paddingPercent}%`;
+      if (aspectRatioSelect) aspectRatioSelect.value = productOptions.aspectRatio;
+      if (liveMetricProfile) liveMetricProfile.textContent = 'Amazon Main Image';
       triggerUpdate();
     });
   }
@@ -728,40 +813,8 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
       if (!loadedImageObj) return;
 
       const baseName = loadedImageObj.name.replace(/\.[^/.]+$/, '');
-      let ext = 'png';
-      let mime: 'image/png' | 'image/webp' | 'image/jpeg' = 'image/png';
-
-      if (exportFormat === 'image/jpeg') {
-        ext = 'jpg';
-        mime = 'image/jpeg';
-      } else if (exportFormat === 'image/webp') {
-        ext = 'webp';
-        mime = 'image/webp';
-      } else if (exportFormat === 'original') {
-        if (loadedImageObj.fileType === 'image/jpeg' || loadedImageObj.fileType === 'image/jpg') {
-          ext = 'jpg';
-          mime = 'image/jpeg';
-        } else if (loadedImageObj.fileType === 'image/webp') {
-          ext = 'webp';
-          mime = 'image/webp';
-        } else {
-          ext = 'png';
-          mime = 'image/png';
-        }
-      }
-
-      if (fullExportBlob) {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(fullExportBlob);
-        link.download = `${baseName}-denoised.${ext}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(link.href), 2000);
-      } else {
-        const fullCanvas = generateFullResolutionCanvas(loadedImageObj.img, denoiseOptions);
-        exportDenoisedImage(fullCanvas, mime, exportQuality, `${baseName}-denoised`);
-      }
+      const fullCanvas = renderComposedProductCanvas(loadedImageObj.img, productOptions);
+      exportProductImage(fullCanvas, exportFormat as any, exportQuality, `${baseName}-white-bg`);
     });
   }
 
@@ -770,8 +823,8 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     copyBtn.addEventListener('click', async () => {
       if (!loadedImageObj) return;
       try {
-        const fullCanvas = generateFullResolutionCanvas(loadedImageObj.img, denoiseOptions);
-        const success = await copyDenoisedImageToClipboard(fullCanvas);
+        const fullCanvas = renderComposedProductCanvas(loadedImageObj.img, productOptions);
+        const success = await copyProductCanvasToClipboard(fullCanvas);
         if (success) {
           if (copyBtnText) copyBtnText.textContent = i18n.copiedSuccess || 'Copied!';
           copyBtn.classList.add('btn-success');
@@ -800,36 +853,40 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     sampleBtn.addEventListener('click', async () => {
       showLoading(true);
       try {
-        const sampleFile = await generateSampleNoisyImage();
-        // convert LoadedImageInfo to File-like load
+        const sampleFile = await generateSampleProductImage();
         loadedImageObj = sampleFile;
         originalWidth = sampleFile.originalWidth;
         originalHeight = sampleFile.originalHeight;
 
-        activePreset = 'balanced';
-        denoiseOptions = { ...PRESET_CONFIGS.balanced };
+        productOptions = { ...DEFAULT_PRODUCT_OPTIONS };
         splitPosPercent = 50;
 
-        presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'balanced'));
-        if (strengthSlider) strengthSlider.value = String(denoiseOptions.strength);
-        if (strengthValPill) strengthValPill.textContent = `${denoiseOptions.strength}%`;
-        if (colorNoiseSlider) colorNoiseSlider.value = String(denoiseOptions.colorNoise);
-        if (colorNoiseValPill) colorNoiseValPill.textContent = `${denoiseOptions.colorNoise}%`;
-        if (sharpnessSlider) sharpnessSlider.value = String(denoiseOptions.sharpness);
-        if (sharpnessValPill) sharpnessValPill.textContent = `${denoiseOptions.sharpness}%`;
-        radiusChips.forEach((rc) => rc.classList.toggle('active', Number(rc.dataset.radius) === denoiseOptions.radius));
+        presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'amazon'));
+        bgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === productOptions.bgType));
+        shadowBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-shadow') === productOptions.shadowType));
+
+        if (shadowOpacitySlider) shadowOpacitySlider.value = String(productOptions.shadowOpacity);
+        if (shadowOpacityValPill) shadowOpacityValPill.textContent = `${productOptions.shadowOpacity}%`;
+        if (toleranceSlider) toleranceSlider.value = String(productOptions.tolerance);
+        if (toleranceValPill) toleranceValPill.textContent = `${productOptions.tolerance}%`;
+        if (featherSlider) featherSlider.value = String(productOptions.feather);
+        if (featherValPill) featherValPill.textContent = `${productOptions.feather} px`;
+        if (despillSlider) despillSlider.value = String(productOptions.despill);
+        if (despillValPill) despillValPill.textContent = `${productOptions.despill}%`;
+        if (paddingSlider) paddingSlider.value = String(productOptions.paddingPercent);
+        if (paddingValPill) paddingValPill.textContent = `${productOptions.paddingPercent}%`;
+        if (aspectRatioSelect) aspectRatioSelect.value = productOptions.aspectRatio;
 
         if (fileNameEl) fileNameEl.textContent = sampleFile.name;
         if (origDimsTag) origDimsTag.textContent = `${originalWidth} × ${originalHeight} px`;
         if (origSizeTag) origSizeTag.textContent = `${(sampleFile.fileSize / 1024).toFixed(1)} KB`;
         if (liveMetricOrigDims) liveMetricOrigDims.textContent = `${originalWidth} × ${originalHeight} px`;
-        if (liveMetricProfile) liveMetricProfile.textContent = 'Balanced Auto';
+        if (liveMetricProfile) liveMetricProfile.textContent = 'Amazon Main Image';
 
         if (splitDivider) splitDivider.style.left = '50%';
         if (sideOrigImg) sideOrigImg.src = sampleFile.img.src;
 
-        renderSplitCanvases();
-        await processFullExport();
+        renderCanvases();
 
         loadingCard.style.display = 'none';
         dropzone.style.display = 'none';
@@ -885,7 +942,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
 </script>
 
 <style>
-  .denoise-app-container {
+  .product-app-container {
     width: 100%;
     margin-inline: auto;
   }
@@ -903,7 +960,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   /* Dropzone Card */
-  .denoise-dropzone-card {
+  .product-dropzone-card {
     background: var(--color-surface);
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-2xl);
@@ -914,18 +971,18 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   @media (min-width: 640px) {
-    .denoise-dropzone-card {
+    .product-dropzone-card {
       padding: var(--space-12) var(--space-8);
     }
   }
 
-  .denoise-dropzone-card.dragover {
+  .product-dropzone-card.dragover {
     border-color: var(--color-accent);
     background: var(--color-accent-light);
   }
 
   .dropzone-inner {
-    max-width: 460px;
+    max-width: 480px;
     margin-inline: auto;
     display: flex;
     flex-direction: column;
@@ -1015,7 +1072,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   /* Loading State */
-  .denoise-loading-card {
+  .product-loading-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -1048,7 +1105,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   /* Workspace Layout */
-  .denoise-workspace-card {
+  .product-workspace-card {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -1093,7 +1150,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     border-radius: var(--radius-sm);
   }
 
-  .denoise-main-grid {
+  .product-main-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-5);
@@ -1101,13 +1158,13 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   @media (min-width: 900px) {
-    .denoise-main-grid {
+    .product-main-grid {
       grid-template-columns: 1.35fr 1fr;
     }
   }
 
   /* Left Column: Preview Card */
-  .denoise-preview-card {
+  .product-preview-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -1214,7 +1271,6 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     align-items: center;
     justify-content: center;
     color: #0f172a;
-    gap: 0px;
   }
 
   .split-tag {
@@ -1351,19 +1407,19 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   /* Action Buttons Grid */
-  .denoise-action-buttons-grid {
+  .product-action-buttons-grid {
     display: grid;
     grid-template-columns: 2fr 1fr auto;
     gap: var(--space-3);
   }
 
   @media (max-width: 600px) {
-    .denoise-action-buttons-grid {
+    .product-action-buttons-grid {
       grid-template-columns: 1fr;
     }
   }
 
-  .denoise-download-btn {
+  .product-download-btn {
     font-weight: 700;
     display: inline-flex;
     align-items: center;
@@ -1371,7 +1427,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     gap: 8px;
   }
 
-  .denoise-copy-btn, .denoise-reset-btn {
+  .product-copy-btn, .product-reset-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1384,7 +1440,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   /* Controls Panel (Right Column) */
-  .denoise-controls-panel {
+  .product-controls-panel {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -1397,7 +1453,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   @media (min-width: 640px) {
-    .denoise-controls-panel {
+    .product-controls-panel {
       padding: var(--space-5);
     }
   }
@@ -1439,7 +1495,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     border-radius: var(--radius-sm);
   }
 
-  .denoise-range {
+  .product-range {
     width: 100%;
     accent-color: var(--color-accent);
     cursor: pointer;
@@ -1499,37 +1555,54 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
     color: var(--color-text-secondary);
   }
 
-  /* Radius Selector */
-  .radius-chips-row {
+  /* Chip Selector Grid */
+  .chip-selector-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 6px;
   }
 
-  .radius-chip {
-    padding: 6px 8px;
+  .chip-opt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 10px;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
     background: var(--color-surface-subtle);
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 600;
-    color: var(--color-text-secondary);
+    color: var(--color-text);
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
-  .radius-chip:hover {
+  .chip-opt-btn:hover {
     border-color: var(--color-accent);
   }
 
-  .radius-chip.active {
-    background: var(--color-accent);
+  .chip-opt-btn.active {
+    background: var(--color-accent-light);
     border-color: var(--color-accent);
-    color: #ffffff;
+    color: var(--color-accent);
+    font-weight: 700;
   }
+
+  .color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .dot-white { background: #FFFFFF; }
+  .dot-warm { background: #F9FAFB; }
+  .dot-cool { background: #F3F4F6; }
+  .dot-trans { background: repeating-conic-gradient(#cbd5e1 0% 25%, #ffffff 0% 50%) 50% / 4px 4px; }
 
   /* Export Format */
-  .denoise-select {
+  .product-select {
     width: 100%;
     padding: 8px 12px;
     font-size: var(--text-xs);
@@ -1547,7 +1620,7 @@ const cropUrl = getToolUrl('freeform-image-cropper', locale);
   }
 
   /* Cross Navigation */
-  .denoise-cross-links-row {
+  .product-cross-links-row {
     display: flex;
     align-items: center;
     gap: var(--space-2);

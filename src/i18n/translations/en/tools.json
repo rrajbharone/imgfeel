@@ -63,5 +63,7 @@
   "tools.videoRotator.title": "Video Rotator",
   "tools.videoRotator.description": "Rotate, turn, and mirror flip video clips (90°, 180°, 270°) online with live preview and 100% in-browser privacy.",
   "tools.noiseReducer.title": "Image Noise Reducer (Remove Photo Noise & Grain Online)",
-  "tools.noiseReducer.description": "Reduce image noise and remove photo grain online for free. Clean low-light color speckles, high-ISO sensor noise, and compression artifacts with live preview and 100% privacy."
+  "tools.noiseReducer.description": "Reduce image noise and remove photo grain online for free. Clean low-light color speckles, high-ISO sensor noise, and compression artifacts with live preview and 100% privacy.",
+  "tools.productWhiteBg.title": "Product Image White Background Tool",
+  "tools.productWhiteBg.description": "Convert product photos to pure white background (#FFFFFF) with studio contact shadows, edge defringing, and 100% in-browser privacy."
 }

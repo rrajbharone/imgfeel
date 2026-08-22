@@ -292,6 +292,16 @@ export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
     tr: 'resim-parazit-azaltma',
     it: 'riduzione-rumore-immagine',
   },
+  'product-image-white-background': {
+    en: 'product-image-white-background',
+    es: 'fondo-blanco-imagen-producto',
+    pt: 'fundo-branco-imagem-produto',
+    fr: 'fond-blanc-image-produit',
+    de: 'produktbild-weisser-hintergrund',
+    id: 'latar-belakang-putih-gambar-produk',
+    tr: 'urun-resmi-beyaz-arka-plan',
+    it: 'sfondo-bianco-immagine-prodotto',
+  },
 };
 
 export interface ToolDefinition {
@@ -604,6 +614,16 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.videoRotator.title',
     descKey: 'tools.videoRotator.description',
     keywords: ['video rotator', 'rotate video', 'rotate mp4', 'turn video', 'rotate 90 degrees', 'rotate 180 degrees', 'flip video', 'mirror video', 'portrait to landscape video', 'fix sideways video', 'rotate video online'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
+    id: 'product-image-white-background',
+    icon: 'package',
+    category: 'edit',
+    titleKey: 'tools.productWhiteBg.title',
+    descKey: 'tools.productWhiteBg.description',
+    keywords: ['product image white background', 'white background product photos', 'make product image background white', 'product photo background remover', 'ecommerce product images', 'white background product photography', 'amazon white background product photo', 'shopify product image background'],
     badge: 'NEW',
     isActive: true,
   },

@@ -1,322 +1,1294 @@
 ---
-import { t } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+
+const squareUrl = getToolUrl('resize-image-to-1-1', locale);
+const circleUrl = getToolUrl('circle-image-cropper', locale);
+const blurUrl = getToolUrl('image-blur-tool', locale);
+const noiseReducerUrl = getToolUrl('image-noise-reducer', locale);
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
 ---
 
-<div id="wa-resizer-container" class="wa-resizer-card">
-  <!-- Hidden File Input -->
-  <input type="file" id="wa-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" />
-
-  <!-- Upload Dropzone -->
-  <div id="wa-dropzone" class="wa-dropzone">
-    <div class="dropzone-icon">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="17 8 12 3 7 8"></polyline>
-        <line x1="12" y1="3" x2="12" y2="15"></line>
-      </svg>
-    </div>
-    <h3 class="dropzone-title">{t(locale, 'waresizer.dropzone.title')}</h3>
-    <p class="dropzone-subtitle">{t(locale, 'waresizer.dropzone.subtitle')}</p>
-  </div>
-
-  <!-- Main Editor Area (Hidden until image upload) -->
-  <div id="wa-editor-area" class="wa-editor-area" hidden>
-    <!-- Circle Guidance Tip -->
-    <div class="wa-tip-box">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-      </svg>
-      <span>{t(locale, 'waresizer.circleTip')}</span>
-    </div>
-
-    <div class="editor-grid">
-      <!-- Left Column: Interactive Canvas & Previews -->
-      <div class="canvas-column">
-        <div class="canvas-wrapper">
-          <canvas id="wa-main-canvas" width="800" height="800" class="wa-canvas"></canvas>
-          <!-- Circular Safe Area Overlay -->
-          <div class="circle-overlay" aria-hidden="true"></div>
-          <span class="drag-badge">{t(locale, 'waresizer.circleTip')}</span>
-        </div>
-
-        <!-- Live Circular Preview Card -->
-        <div class="preview-card">
-          <div class="preview-item">
-            <div class="circle-preview-frame">
-              <canvas id="wa-circle-canvas" width="160" height="160"></canvas>
-            </div>
-            <span class="preview-label">{t(locale, 'waresizer.preview.circle')}</span>
-          </div>
-        </div>
+<div class="wa-app-container" id="waApp" data-locale={locale} data-i18n={JSON.stringify({
+  copiedSuccess: t(locale, 'waresizer.action.copied'),
+})}>
+  <!-- State 1: Upload Dropzone Card -->
+  <div class="wa-dropzone-card" id="waDropzone">
+    <div class="dropzone-inner">
+      <div class="dropzone-icon-ring">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
       </div>
 
-      <!-- Right Column: Controls -->
-      <div class="controls-column">
-        <!-- Mode Switcher -->
-        <div class="control-group">
-          <label class="control-label">{t(locale, 'home.howItWorks.step2.title')}</label>
-          <div class="mode-tabs">
-            <button type="button" class="wa-mode-btn active" data-mode="fit">
-              {t(locale, 'waresizer.mode.fit')}
-            </button>
-            <button type="button" class="wa-mode-btn" data-mode="fill">
-              {t(locale, 'waresizer.mode.fill')}
-            </button>
-          </div>
+      <h2 class="dropzone-headline">{t(locale, 'waresizer.dropzone.title')}</h2>
+      <p class="dropzone-subheadline">{t(locale, 'waresizer.dropzone.subtitle')}</p>
+
+      <div class="dropzone-action-group">
+        <label for="waFileInput" class="btn btn-primary dropzone-browse-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'waresizer.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="waFileInput" accept="image/jpeg,image/png,image/webp,image/avif,image/bmp" class="visually-hidden" />
+
+        <button type="button" class="btn btn-secondary sample-demo-btn" id="waSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span>{t(locale, 'waresizer.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <div class="dropzone-badges-row">
+        <span class="badge-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          JPG, PNG, WebP, AVIF, BMP • Ctrl+V
+        </span>
+        <span class="badge-pill badge-pill-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          {t(locale, 'waresizer.privacy.badge')}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State Card -->
+  <div class="wa-loading-card" id="waLoadingCard" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">{t(locale, 'waresizer.status.processing')}</p>
+  </div>
+
+  <!-- State 2: Active Workspace -->
+  <div class="wa-workspace-card" id="waWorkspace" style="display: none;">
+    <!-- Workspace Top Header Bar -->
+    <div class="workspace-header-bar">
+      <div class="image-meta-info">
+        <span class="file-name-tag" id="waFileName">photo.jpg</span>
+        <span class="file-dim-pill" id="waOriginalDimsTag">-- × -- px</span>
+        <span class="file-size-pill" id="waOriginalSizeTag">-- KB</span>
+      </div>
+
+      <div class="workspace-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm change-image-btn" id="waChangeImageBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'waresizer.action.changeImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Responsive Layout -->
+    <div class="wa-main-grid">
+      <!-- Left Column: Interactive Canvas & Previews -->
+      <div class="wa-preview-column">
+        <!-- Interactive Square Canvas with Safe Zone -->
+        <div class="canvas-viewport-box" id="waCanvasViewport">
+          <canvas id="waMainCanvas" class="wa-master-canvas"></canvas>
+          <!-- Circular Safe Zone Overlay -->
+          <div class="circular-safe-overlay" aria-hidden="true"></div>
+          <span class="safe-zone-badge">{t(locale, 'waresizer.circleTip')}</span>
         </div>
 
-        <!-- Background Options (Conditional: Shown in Fit mode) -->
-        <div id="wa-bg-controls" class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.bg.label')}</label>
-          <div class="bg-tabs">
-            <button type="button" class="wa-bg-btn active" data-bg="blur">
-              {t(locale, 'waresizer.bg.blur')}
-            </button>
-            <button type="button" class="wa-bg-btn" data-bg="solid">
-              {t(locale, 'waresizer.bg.solid')}
-            </button>
-          </div>
-
-          <!-- Blur Strength Slider (Conditional: Shown when bg is blur) -->
-          <div id="wa-blur-group" class="sub-control">
-            <div class="slider-header">
-              <label for="wa-blur-input" class="sub-label">{t(locale, 'waresizer.label.blurStrength')}</label>
+        <!-- Live WhatsApp Mockup Previews Strip -->
+        <div class="live-previews-panel">
+          <div class="preview-item circle-avatar-box">
+            <span class="preview-title-tag">{t(locale, 'waresizer.preview.circle')}</span>
+            <div class="circle-avatar-frame">
+              <canvas id="waCircleCanvas" width="140" height="140"></canvas>
             </div>
-            <input type="range" id="wa-blur-input" min="5" max="40" value="20" class="wa-range" />
           </div>
 
-          <!-- Color Picker (Conditional: Shown when bg is solid) -->
-          <div id="wa-color-group" class="sub-control" hidden>
-            <label class="sub-label">{t(locale, 'waresizer.bg.color')}</label>
-            <div class="color-picker-row">
-              <button type="button" class="wa-color-pill" data-color="#ffffff" style="background:#ffffff" title="White"></button>
-              <button type="button" class="wa-color-pill" data-color="#000000" style="background:#000000" title="Black"></button>
-              <button type="button" class="wa-color-pill" data-color="#25D366" style="background:#25D366" title="WhatsApp Green"></button>
-              <button type="button" class="wa-color-pill" data-color="#075E54" style="background:#075E54" title="Dark Teal"></button>
-              <input type="color" id="wa-custom-color" value="#ffffff" class="wa-color-picker" title="Custom color" />
+          <div class="preview-item chat-mockup-box">
+            <span class="preview-title-tag">{t(locale, 'waresizer.preview.chatMockup')}</span>
+            <div class="chat-header-mockup">
+              <div class="mockup-avatar">
+                <canvas id="waChatMockupCanvas" width="44" height="44"></canvas>
+              </div>
+              <div class="mockup-info">
+                <strong class="mockup-name">{t(locale, 'waresizer.mockup.title')}</strong>
+                <span class="mockup-status">{t(locale, 'waresizer.mockup.lastSeen')}</span>
+              </div>
+              <div class="mockup-icons">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Zoom / Scale Control -->
-        <div class="control-group">
-          <div class="slider-header">
-            <label for="wa-zoom-input" class="control-label">{t(locale, 'waresizer.label.zoom')}</label>
-          </div>
-          <input type="range" id="wa-zoom-input" min="0.8" max="3.0" step="0.05" value="1.0" class="wa-range" />
-        </div>
-
-        <!-- Preset Resolution Selector -->
-        <div class="control-group">
-          <label class="control-label">{t(locale, 'waresizer.label.resolution')}</label>
-          <div class="preset-buttons">
-            <button type="button" class="wa-preset-btn" data-size="500">{t(locale, 'waresizer.preset.500')}</button>
-            <button type="button" class="wa-preset-btn active" data-size="800">{t(locale, 'waresizer.preset.800')}</button>
-            <button type="button" class="wa-preset-btn" data-size="1000">{t(locale, 'waresizer.preset.1000')}</button>
-          </div>
-        </div>
-
-        <!-- Output Format -->
-        <div class="control-group">
-          <label for="wa-format-select" class="control-label">{t(locale, 'resizer.label.outputFormat')}</label>
-          <select id="wa-format-select" class="wa-select">
-            <option value="image/jpeg">JPG (Recommended)</option>
-            <option value="image/png">PNG</option>
-            <option value="image/webp">WebP</option>
-          </select>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="actions-row">
-          <button type="button" id="wa-download-btn" class="btn btn-primary btn-lg">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Primary Action Buttons Row -->
+        <div class="wa-action-buttons-grid">
+          <button type="button" class="btn btn-primary wa-download-btn" id="waDownloadBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
             <span>{t(locale, 'waresizer.action.download')}</span>
           </button>
-          <button type="button" id="wa-change-img-btn" class="btn btn-secondary">
-            {t(locale, 'waresizer.action.newImage')}
+
+          <button type="button" class="btn btn-secondary wa-copy-btn" id="waCopyBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="waCopyBtnText">{t(locale, 'waresizer.action.copyImage')}</span>
+          </button>
+
+          <button type="button" class="btn btn-secondary wa-reset-btn" id="waResetBtn" title={t(locale, 'waresizer.action.reset')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>{t(locale, 'waresizer.action.reset')}</span>
           </button>
         </div>
       </div>
+
+      <!-- Right Column: Settings & Controls Panel -->
+      <div class="wa-controls-panel">
+        <!-- Section 1: Quick Presets -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'waresizer.section.presets')}</label>
+          <div class="preset-chips-grid">
+            <button type="button" class="preset-chip-btn active" data-preset="fullBlur">
+              <strong>{t(locale, 'waresizer.preset.fullBlur')}</strong>
+              <span>{t(locale, 'waresizer.preset.fullBlurDesc')}</span>
+            </button>
+
+            <button type="button" class="preset-chip-btn" data-preset="squareFill">
+              <strong>{t(locale, 'waresizer.preset.squareFill')}</strong>
+              <span>{t(locale, 'waresizer.preset.squareFillDesc')}</span>
+            </button>
+
+            <button type="button" class="preset-chip-btn" data-preset="cleanWhite">
+              <strong>{t(locale, 'waresizer.preset.cleanWhite')}</strong>
+              <span>{t(locale, 'waresizer.preset.cleanWhiteDesc')}</span>
+            </button>
+
+            <button type="button" class="preset-chip-btn" data-preset="darkStudio">
+              <strong>{t(locale, 'waresizer.preset.darkStudio')}</strong>
+              <span>{t(locale, 'waresizer.preset.darkStudioDesc')}</span>
+            </button>
+
+            <button type="button" class="preset-chip-btn" data-preset="whatsappGreen">
+              <strong>{t(locale, 'waresizer.preset.whatsappGreen')}</strong>
+              <span>{t(locale, 'waresizer.preset.whatsappGreenDesc')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 2: Mode Switcher -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'waresizer.section.framing')}</label>
+          <div class="segmented-mode-bar">
+            <button type="button" class="seg-btn active" data-mode="fit">
+              {t(locale, 'waresizer.mode.fit')}
+            </button>
+            <button type="button" class="seg-btn" data-mode="fill">
+              {t(locale, 'waresizer.mode.fill')}
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 3: Background Style (Fit Mode) -->
+        <div class="control-group" id="waBgSection">
+          <label class="control-label">{t(locale, 'waresizer.section.bg')}</label>
+          <div class="segmented-mode-bar">
+            <button type="button" class="seg-bg-btn active" data-bg="blur">
+              {t(locale, 'waresizer.bg.blur')}
+            </button>
+            <button type="button" class="seg-bg-btn" data-bg="solid">
+              {t(locale, 'waresizer.bg.solid')}
+            </button>
+          </div>
+
+          <!-- Blur controls -->
+          <div id="waBlurControlsBox" class="sub-controls-box">
+            <div class="slider-header-row">
+              <label for="waBlurSlider" class="sub-label">{t(locale, 'waresizer.label.blurStrength')}</label>
+              <span class="val-pill" id="waBlurValPill">25 px</span>
+            </div>
+            <input type="range" id="waBlurSlider" min="5" max="50" value="25" step="1" class="wa-range" />
+
+            <div class="slider-header-row" style="margin-top: 6px;">
+              <label for="waBgDimSlider" class="sub-label">{t(locale, 'waresizer.label.bgDim')}</label>
+              <span class="val-pill" id="waBgDimValPill">15%</span>
+            </div>
+            <input type="range" id="waBgDimSlider" min="0" max="50" value="15" step="1" class="wa-range" />
+          </div>
+
+          <!-- Solid color swatches -->
+          <div id="waColorControlsBox" class="sub-controls-box" style="display: none;">
+            <label class="sub-label">{t(locale, 'waresizer.bg.color')}</label>
+            <div class="color-swatches-grid">
+              <button type="button" class="color-swatch-btn active" data-color="#ffffff" style="background:#ffffff" title="Pure White"></button>
+              <button type="button" class="color-swatch-btn" data-color="#0f172a" style="background:#0f172a" title="Midnight Slate"></button>
+              <button type="button" class="color-swatch-btn" data-color="#075E54" style="background:#075E54" title="WhatsApp Dark Green"></button>
+              <button type="button" class="color-swatch-btn" data-color="#25D366" style="background:#25D366" title="WhatsApp Light Green"></button>
+              <button type="button" class="color-swatch-btn" data-color="#128C7E" style="background:#128C7E" title="WhatsApp Teal"></button>
+              <input type="color" id="waCustomColorPicker" value="#ffffff" class="custom-color-input" title="Custom color picker" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Zoom & Quick Transforms -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'waresizer.section.adjust')}</label>
+          
+          <div class="slider-header-row">
+            <label for="waZoomSlider" class="sub-label">{t(locale, 'waresizer.label.zoom')}</label>
+            <span class="val-pill" id="waZoomValPill">1.00×</span>
+          </div>
+          <input type="range" id="waZoomSlider" min="0.5" max="3.0" step="0.05" value="1.0" class="wa-range" />
+
+          <div class="transform-buttons-row">
+            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="waRotateBtn" title="Rotate 90° Clockwise">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+              <span>{t(locale, 'waresizer.action.rotate')}</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="waFlipBtn" title="Flip Horizontal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+              <span>{t(locale, 'waresizer.action.flip')}</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary btn-sm transform-btn" id="waCenterBtn" title="Reset Subject Center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              <span>{t(locale, 'waresizer.action.center')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 5: Resolution Preset Selector -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'waresizer.section.resolution')}</label>
+          <div class="resolution-pills-grid">
+            <button type="button" class="res-pill-btn" data-size="500">
+              <strong>500 × 500</strong>
+              <span>{t(locale, 'waresizer.preset.500')}</span>
+            </button>
+            <button type="button" class="res-pill-btn active" data-size="800">
+              <strong>800 × 800</strong>
+              <span>{t(locale, 'waresizer.preset.800')}</span>
+            </button>
+            <button type="button" class="res-pill-btn" data-size="1080">
+              <strong>1080 × 1080</strong>
+              <span>{t(locale, 'waresizer.preset.1080')}</span>
+            </button>
+            <button type="button" class="res-pill-btn" data-size="0">
+              <strong>MAX (Original)</strong>
+              <span>{t(locale, 'waresizer.preset.orig')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 6: Export Format & Quality -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'waresizer.section.export')}</label>
+          <div class="select-field">
+            <label for="waExportFormatSelect" class="sub-label">{t(locale, 'waresizer.export.format')}</label>
+            <select id="waExportFormatSelect" class="wa-select">
+              <option value="image/jpeg" selected>JPG / JPEG (Recommended for WhatsApp DP)</option>
+              <option value="image/webp">WebP (Lightweight & High Quality)</option>
+              <option value="image/png">PNG (Lossless Quality)</option>
+            </select>
+          </div>
+
+          <div class="quality-field" id="waQualityFieldBox">
+            <div class="slider-header-row">
+              <label for="waExportQualitySlider" class="sub-label">{t(locale, 'waresizer.export.quality')}</label>
+              <span class="val-pill" id="waQualityValPill">92%</span>
+            </div>
+            <input type="range" id="waExportQualitySlider" min="10" max="100" value="92" step="1" class="wa-range" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Cross Navigation Links -->
+    <div class="wa-cross-links-row">
+      <a href={squareUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
+        <span>{t(locale, 'waresizer.cross.square')}</span>
+      </a>
+
+      <a href={circleUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle></svg>
+        <span>{t(locale, 'waresizer.cross.circle')}</span>
+      </a>
+
+      <a href={blurUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle></svg>
+        <span>{t(locale, 'waresizer.cross.blur')}</span>
+      </a>
+
+      <a href={noiseReducerUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span>{t(locale, 'waresizer.cross.noiseReducer')}</span>
+      </a>
+
+      <a href={exactUrl} class="btn btn-secondary cross-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line></svg>
+        <span>{t(locale, 'waresizer.cross.exact')}</span>
+      </a>
     </div>
   </div>
 </div>
 
 <script>
-  import '@/scripts/whatsapp-resizer';
+  import {
+    loadWhatsAppImageFromFile,
+    renderWhatsAppCanvas,
+    renderCircularPreview,
+    generateSampleAvatar,
+    exportWhatsAppImage,
+    copyWhatsAppCanvasToClipboard,
+    DEFAULT_WA_OPTIONS,
+    WA_PRESETS,
+    type WhatsAppResizerOptions,
+    type LoadedImageInfo,
+  } from '@/scripts/whatsapp-resizer';
+
+  function initWhatsAppResizer() {
+    const appEl = document.getElementById('waApp');
+    if (!appEl) return;
+
+    const i18n = appEl.dataset.i18n ? JSON.parse(appEl.dataset.i18n) : {};
+
+    // State
+    let loadedImageObj: LoadedImageInfo | null = null;
+    let waOptions: WhatsAppResizerOptions = { ...DEFAULT_WA_OPTIONS };
+    let exportFormat: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg';
+    let exportQuality: number = 0.92;
+
+    // Dragging State
+    let isDraggingCanvas = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initOffsetX = 0;
+    let initOffsetY = 0;
+
+    // DOM Elements
+    const dropzone = document.getElementById('waDropzone') as HTMLElement;
+    const fileInput = document.getElementById('waFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('waSampleBtn') as HTMLButtonElement;
+    const loadingCard = document.getElementById('waLoadingCard') as HTMLElement;
+    const workspace = document.getElementById('waWorkspace') as HTMLElement;
+
+    const fileNameEl = document.getElementById('waFileName') as HTMLElement;
+    const origDimsTag = document.getElementById('waOriginalDimsTag') as HTMLElement;
+    const origSizeTag = document.getElementById('waOriginalSizeTag') as HTMLElement;
+    const changeImageBtn = document.getElementById('waChangeImageBtn') as HTMLButtonElement;
+
+    const canvasViewport = document.getElementById('waCanvasViewport') as HTMLElement;
+    const mainCanvas = document.getElementById('waMainCanvas') as HTMLCanvasElement;
+    const circleCanvas = document.getElementById('waCircleCanvas') as HTMLCanvasElement;
+    const chatMockupCanvas = document.getElementById('waChatMockupCanvas') as HTMLCanvasElement;
+
+    const presetBtns = document.querySelectorAll('.preset-chip-btn') as NodeListOf<HTMLButtonElement>;
+    const modeBtns = document.querySelectorAll('.seg-btn') as NodeListOf<HTMLButtonElement>;
+    const bgSection = document.getElementById('waBgSection') as HTMLElement;
+    const segBgBtns = document.querySelectorAll('.seg-bg-btn') as NodeListOf<HTMLButtonElement>;
+
+    const blurControlsBox = document.getElementById('waBlurControlsBox') as HTMLElement;
+    const colorControlsBox = document.getElementById('waColorControlsBox') as HTMLElement;
+
+    const blurSlider = document.getElementById('waBlurSlider') as HTMLInputElement;
+    const blurValPill = document.getElementById('waBlurValPill') as HTMLElement;
+    const bgDimSlider = document.getElementById('waBgDimSlider') as HTMLInputElement;
+    const bgDimValPill = document.getElementById('waBgDimValPill') as HTMLElement;
+
+    const colorSwatches = document.querySelectorAll('.color-swatch-btn') as NodeListOf<HTMLButtonElement>;
+    const customColorPicker = document.getElementById('waCustomColorPicker') as HTMLInputElement;
+
+    const zoomSlider = document.getElementById('waZoomSlider') as HTMLInputElement;
+    const zoomValPill = document.getElementById('waZoomValPill') as HTMLElement;
+
+    const rotateBtn = document.getElementById('waRotateBtn') as HTMLButtonElement;
+    const flipBtn = document.getElementById('waFlipBtn') as HTMLButtonElement;
+    const centerBtn = document.getElementById('waCenterBtn') as HTMLButtonElement;
+
+    const resPillBtns = document.querySelectorAll('.res-pill-btn') as NodeListOf<HTMLButtonElement>;
+
+    const exportFormatSelect = document.getElementById('waExportFormatSelect') as HTMLSelectElement;
+    const qualityFieldBox = document.getElementById('waQualityFieldBox') as HTMLElement;
+    const exportQualitySlider = document.getElementById('waExportQualitySlider') as HTMLInputElement;
+    const qualityValPill = document.getElementById('waQualityValPill') as HTMLElement;
+
+    const downloadBtn = document.getElementById('waDownloadBtn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('waCopyBtn') as HTMLButtonElement;
+    const copyBtnText = document.getElementById('waCopyBtnText') as HTMLElement;
+    const resetBtn = document.getElementById('waResetBtn') as HTMLButtonElement;
+
+    function render() {
+      if (!loadedImageObj || !mainCanvas) return;
+
+      const rendered = renderWhatsAppCanvas(loadedImageObj.img, waOptions, 800);
+      mainCanvas.width = rendered.width;
+      mainCanvas.height = rendered.height;
+
+      const ctx = mainCanvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(rendered, 0, 0);
+      }
+
+      if (circleCanvas) {
+        renderCircularPreview(rendered, circleCanvas, 140);
+      }
+      if (chatMockupCanvas) {
+        renderCircularPreview(rendered, chatMockupCanvas, 44);
+      }
+    }
+
+    function triggerUpdate() {
+      render();
+    }
+
+    async function loadFile(file: File) {
+      if (!dropzone || !loadingCard || !workspace) return;
+
+      dropzone.style.display = 'none';
+      workspace.style.display = 'none';
+      loadingCard.style.display = 'flex';
+
+      try {
+        loadedImageObj = await loadWhatsAppImageFromFile(file);
+        waOptions = { ...DEFAULT_WA_OPTIONS };
+
+        if (fileNameEl) fileNameEl.textContent = loadedImageObj.name;
+        if (origDimsTag) origDimsTag.textContent = `${loadedImageObj.originalWidth} × ${loadedImageObj.originalHeight} px`;
+        if (origSizeTag) origSizeTag.textContent = `${(loadedImageObj.fileSize / 1024).toFixed(1)} KB`;
+
+        syncControlsToState();
+        render();
+
+        loadingCard.style.display = 'none';
+        workspace.style.display = 'block';
+      } catch (err) {
+        alert(err instanceof Error ? err.message : 'Failed to load image');
+        resetToDropzone();
+      }
+    }
+
+    function resetToDropzone() {
+      loadedImageObj = null;
+      if (fileInput) fileInput.value = '';
+      if (loadingCard) loadingCard.style.display = 'none';
+      if (workspace) workspace.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+
+    function syncControlsToState() {
+      modeBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-mode') === waOptions.mode));
+      if (bgSection) bgSection.style.display = waOptions.mode === 'fit' ? 'flex' : 'none';
+
+      segBgBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-bg') === waOptions.bgType));
+      if (blurControlsBox) blurControlsBox.style.display = waOptions.bgType === 'blur' ? 'block' : 'none';
+      if (colorControlsBox) colorControlsBox.style.display = waOptions.bgType === 'solid' ? 'block' : 'none';
+
+      if (blurSlider) blurSlider.value = String(waOptions.blurStrength);
+      if (blurValPill) blurValPill.textContent = `${waOptions.blurStrength} px`;
+
+      if (bgDimSlider) bgDimSlider.value = String(waOptions.bgDim);
+      if (bgDimValPill) bgDimValPill.textContent = `${waOptions.bgDim}%`;
+
+      if (zoomSlider) zoomSlider.value = String(waOptions.zoom);
+      if (zoomValPill) zoomValPill.textContent = `${waOptions.zoom.toFixed(2)}×`;
+
+      resPillBtns.forEach((b) => b.classList.toggle('active', parseInt(b.getAttribute('data-size') || '800', 10) === waOptions.outputSize));
+    }
+
+    if (changeImageBtn) changeImageBtn.addEventListener('click', resetToDropzone);
+
+    // Canvas Drag / Pan Handling
+    function handleDragStart(clientX: number, clientY: number) {
+      if (!loadedImageObj) return;
+      isDraggingCanvas = true;
+      dragStartX = clientX;
+      dragStartY = clientY;
+      initOffsetX = waOptions.offsetX;
+      initOffsetY = waOptions.offsetY;
+    }
+
+    function handleDragMove(clientX: number, clientY: number) {
+      if (!isDraggingCanvas || !loadedImageObj || !mainCanvas) return;
+      const rect = mainCanvas.getBoundingClientRect();
+      const deltaX = (clientX - dragStartX) / (rect.width / 2);
+      const deltaY = (clientY - dragStartY) / (rect.height / 2);
+
+      waOptions.offsetX = Math.max(-1.5, Math.min(1.5, initOffsetX + deltaX));
+      waOptions.offsetY = Math.max(-1.5, Math.min(1.5, initOffsetY + deltaY));
+      triggerUpdate();
+    }
+
+    function handleDragEnd() {
+      isDraggingCanvas = false;
+    }
+
+    if (canvasViewport) {
+      canvasViewport.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        handleDragStart(e.clientX, e.clientY);
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (isDraggingCanvas) {
+          handleDragMove(e.clientX, e.clientY);
+        }
+      });
+
+      window.addEventListener('mouseup', handleDragEnd);
+
+      // Touch events for mobile
+      canvasViewport.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+
+      canvasViewport.addEventListener('touchmove', (e) => {
+        if (isDraggingCanvas && e.touches.length === 1) {
+          handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+
+      canvasViewport.addEventListener('touchend', handleDragEnd);
+
+      // Mouse wheel zoom
+      canvasViewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomDelta = e.deltaY < 0 ? 0.05 : -0.05;
+        waOptions.zoom = Math.max(0.5, Math.min(3.0, waOptions.zoom + zoomDelta));
+        if (zoomSlider) zoomSlider.value = String(waOptions.zoom);
+        if (zoomValPill) zoomValPill.textContent = `${waOptions.zoom.toFixed(2)}×`;
+        triggerUpdate();
+      }, { passive: false });
+    }
+
+    // Presets
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const presetKey = btn.getAttribute('data-preset') || 'fullBlur';
+        const config = WA_PRESETS[presetKey];
+        if (config) {
+          waOptions = { ...waOptions, ...config };
+          syncControlsToState();
+          triggerUpdate();
+        }
+      });
+    });
+
+    // Mode Switcher
+    modeBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        waOptions.mode = (btn.getAttribute('data-mode') as any) || 'fit';
+        if (bgSection) bgSection.style.display = waOptions.mode === 'fit' ? 'flex' : 'none';
+        triggerUpdate();
+      });
+    });
+
+    // Background Style Switcher
+    segBgBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        segBgBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        waOptions.bgType = (btn.getAttribute('data-bg') as any) || 'blur';
+        if (blurControlsBox) blurControlsBox.style.display = waOptions.bgType === 'blur' ? 'block' : 'none';
+        if (colorControlsBox) colorControlsBox.style.display = waOptions.bgType === 'solid' ? 'block' : 'none';
+        triggerUpdate();
+      });
+    });
+
+    // Sliders
+    if (blurSlider) {
+      blurSlider.addEventListener('input', () => {
+        waOptions.blurStrength = parseInt(blurSlider.value, 10);
+        if (blurValPill) blurValPill.textContent = `${waOptions.blurStrength} px`;
+        triggerUpdate();
+      });
+    }
+
+    if (bgDimSlider) {
+      bgDimSlider.addEventListener('input', () => {
+        waOptions.bgDim = parseInt(bgDimSlider.value, 10);
+        if (bgDimValPill) bgDimValPill.textContent = `${waOptions.bgDim}%`;
+        triggerUpdate();
+      });
+    }
+
+    if (zoomSlider) {
+      zoomSlider.addEventListener('input', () => {
+        waOptions.zoom = parseFloat(zoomSlider.value);
+        if (zoomValPill) zoomValPill.textContent = `${waOptions.zoom.toFixed(2)}×`;
+        triggerUpdate();
+      });
+    }
+
+    // Color Swatches
+    colorSwatches.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        colorSwatches.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        waOptions.bgColor = btn.getAttribute('data-color') || '#ffffff';
+        if (customColorPicker) customColorPicker.value = waOptions.bgColor;
+        triggerUpdate();
+      });
+    });
+
+    if (customColorPicker) {
+      customColorPicker.addEventListener('input', () => {
+        waOptions.bgColor = customColorPicker.value;
+        colorSwatches.forEach((b) => b.classList.remove('active'));
+        triggerUpdate();
+      });
+    }
+
+    // Transform Actions
+    if (rotateBtn) {
+      rotateBtn.addEventListener('click', () => {
+        waOptions.rotation = (waOptions.rotation + 90) % 360;
+        triggerUpdate();
+      });
+    }
+
+    if (flipBtn) {
+      flipBtn.addEventListener('click', () => {
+        waOptions.flipH = !waOptions.flipH;
+        triggerUpdate();
+      });
+    }
+
+    if (centerBtn) {
+      centerBtn.addEventListener('click', () => {
+        waOptions.offsetX = 0;
+        waOptions.offsetY = 0;
+        waOptions.zoom = 1.0;
+        if (zoomSlider) zoomSlider.value = '1.0';
+        if (zoomValPill) zoomValPill.textContent = '1.00×';
+        triggerUpdate();
+      });
+    }
+
+    // Resolution Pills
+    resPillBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        resPillBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        waOptions.outputSize = parseInt(btn.getAttribute('data-size') || '800', 10);
+      });
+    });
+
+    // Export Settings
+    if (exportFormatSelect) {
+      exportFormatSelect.addEventListener('change', () => {
+        exportFormat = exportFormatSelect.value as any;
+        if (qualityFieldBox) {
+          qualityFieldBox.style.display = exportFormat === 'image/png' ? 'none' : 'block';
+        }
+      });
+    }
+
+    if (exportQualitySlider) {
+      exportQualitySlider.addEventListener('input', () => {
+        const q = parseInt(exportQualitySlider.value, 10);
+        exportQuality = q / 100;
+        if (qualityValPill) qualityValPill.textContent = `${q}%`;
+      });
+    }
+
+    // Reset Button
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        waOptions = { ...DEFAULT_WA_OPTIONS };
+        presetBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-preset') === 'fullBlur'));
+        syncControlsToState();
+        triggerUpdate();
+      });
+    }
+
+    // Download Action
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        if (!loadedImageObj) return;
+
+        const baseName = loadedImageObj.name.replace(/\.[^/.]+$/, '');
+        const fullCanvas = renderWhatsAppCanvas(loadedImageObj.img, waOptions);
+        exportWhatsAppImage(fullCanvas, exportFormat, exportQuality, `${baseName}-whatsapp-dp`);
+      });
+    }
+
+    // Copy to Clipboard Action
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        if (!loadedImageObj) return;
+        try {
+          const fullCanvas = renderWhatsAppCanvas(loadedImageObj.img, waOptions);
+          const success = await copyWhatsAppCanvasToClipboard(fullCanvas);
+          if (success) {
+            if (copyBtnText) copyBtnText.textContent = i18n.copiedSuccess || 'Copied!';
+            copyBtn.classList.add('btn-success');
+            setTimeout(() => {
+              if (copyBtnText) copyBtnText.textContent = 'Copy Image';
+              copyBtn.classList.remove('btn-success');
+            }, 2000);
+          } else {
+            alert('Clipboard copy is not supported in this browser.');
+          }
+        } catch (err) {
+          alert('Could not copy image to clipboard.');
+        }
+      });
+    }
+
+    // File Upload Handlers
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const files = (e.target as HTMLInputElement).files;
+        if (files && files[0]) loadFile(files[0]);
+      });
+    }
+
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', async () => {
+        showLoading(true);
+        try {
+          loadedImageObj = await generateSampleAvatar();
+          waOptions = { ...DEFAULT_WA_OPTIONS };
+
+          if (fileNameEl) fileNameEl.textContent = loadedImageObj.name;
+          if (origDimsTag) origDimsTag.textContent = `${loadedImageObj.originalWidth} × ${loadedImageObj.originalHeight} px`;
+          if (origSizeTag) origSizeTag.textContent = `${(loadedImageObj.fileSize / 1024).toFixed(1)} KB`;
+
+          syncControlsToState();
+          render();
+
+          loadingCard.style.display = 'none';
+          dropzone.style.display = 'none';
+          workspace.style.display = 'block';
+        } catch (err) {
+          showLoading(false);
+        }
+      });
+    }
+
+    function showLoading(show: boolean) {
+      if (show) {
+        loadingCard.style.display = 'flex';
+        workspace.style.display = 'none';
+        dropzone.style.display = 'none';
+      } else {
+        loadingCard.style.display = 'none';
+      }
+    }
+
+    // Drag & Drop
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropzone.classList.add('dragover');
+        });
+      });
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('dragover');
+        });
+      });
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt?.files?.[0]) loadFile(dt.files[0]);
+      });
+    }
+
+    // Global Clipboard Paste
+    window.addEventListener('paste', (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const file = items[i].getAsFile();
+          if (file) loadFile(file);
+          break;
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWhatsAppResizer);
+  } else {
+    initWhatsAppResizer();
+  }
 </script>
 
 <style>
-  .wa-resizer-card {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-md);
+  .wa-app-container {
+    width: 100%;
+    margin-inline: auto;
   }
 
-  .wa-dropzone {
-    border: 2px dashed var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-12) var(--space-6);
-    text-align: center;
-    cursor: pointer;
-    transition: border-color .15s, background-color .15s;
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Dropzone Card */
+  .wa-dropzone-card {
     background: var(--color-surface);
-  }
-  .wa-dropzone:hover,
-  .wa-dropzone.drag-over {
-    border-color: var(--color-accent);
-    background: var(--color-accent-light);
-  }
-  .dropzone-icon {
-    color: var(--color-accent);
-    margin-bottom: var(--space-4);
-    display: flex;
-    justify-content: center;
-  }
-  .dropzone-title {
-    font-size: var(--text-lg);
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--space-1);
-  }
-  .dropzone-subtitle {
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
   }
 
-  .wa-tip-box {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    background: var(--color-accent-light);
-    border: 1px solid var(--color-accent);
-    border-radius: var(--radius-md);
-    font-size: var(--text-sm);
-    color: var(--color-text);
-    margin-bottom: var(--space-6);
-  }
-  .wa-tip-box svg {
-    color: var(--color-accent);
-    flex-shrink: 0;
-  }
-
-  .editor-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-  }
-  @media (min-width: 768px) {
-    .editor-grid {
-      grid-template-columns: 340px 1fr;
+  @media (min-width: 640px) {
+    .wa-dropzone-card {
+      padding: var(--space-12) var(--space-8);
     }
   }
 
-  .canvas-column {
+  .wa-dropzone-card.dragover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .dropzone-inner {
+    max-width: 480px;
+    margin-inline: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-4);
   }
 
-  .canvas-wrapper {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    border: 2px solid var(--color-border);
-    touch-action: none;
-    cursor: grab;
+  .dropzone-icon-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #25D366;
   }
-  .canvas-wrapper:active {
+
+  .dropzone-headline {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subheadline {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-action-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .dropzone-browse-btn {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    padding: var(--space-3) var(--space-6);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .sample-demo-btn {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .dropzone-badges-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  .badge-pill-green {
+    color: #059669;
+    border-color: rgba(5, 150, 105, 0.2);
+    background: rgba(5, 150, 105, 0.06);
+  }
+
+  /* Loading State */
+  .wa-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Workspace */
+  .wa-workspace-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .image-meta-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .file-name-tag {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-dim-pill, .file-size-pill {
+    font-size: 11px;
+    font-family: monospace;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .wa-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .wa-main-grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  /* Left Column: Preview Column */
+  .wa-preview-column {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  /* Interactive Canvas Box */
+  .canvas-viewport-box {
+    width: 100%;
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: repeating-conic-gradient(#f1f5f9 0% 25%, #ffffff 0% 50%) 50% / 16px 16px;
+    border: 1px solid var(--color-border);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .canvas-viewport-box:active {
     cursor: grabbing;
   }
 
-  .wa-canvas {
+  .wa-master-canvas {
     width: 100%;
     height: 100%;
     display: block;
+    object-fit: contain;
   }
 
-  .circle-overlay {
+  /* Circular Safe Area Overlay */
+  .circular-safe-overlay {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     pointer-events: none;
-    background: radial-gradient(circle at center, transparent 48%, rgba(15, 23, 42, 0.55) 49%);
-    border-radius: var(--radius-md);
+    border-radius: 50%;
+    box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.45);
+    border: 2px dashed rgba(255, 255, 255, 0.85);
   }
 
-  .drag-badge {
+  .safe-zone-badge {
     position: absolute;
-    bottom: var(--space-2);
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
     font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
     pointer-events: none;
+    white-space: nowrap;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .preview-card {
-    display: flex;
-    justify-content: center;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    width: 100%;
+  /* Live Previews Panel */
+  .live-previews-panel {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 480px) {
+    .live-previews-panel {
+      grid-template-columns: 1fr;
+    }
   }
 
   .preview-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-2);
   }
 
-  .circle-preview-frame {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid var(--color-accent);
-    box-shadow: var(--shadow-sm);
+  .preview-title-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 
-  .circle-preview-frame canvas {
+  .circle-avatar-frame {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .circle-avatar-frame canvas {
     width: 100%;
     height: 100%;
     display: block;
   }
 
-  .preview-label {
-    font-size: var(--text-xs);
-    font-weight: 600;
-    color: var(--color-text-secondary);
+  /* WhatsApp Chat Header Mockup */
+  .chat-header-mockup {
+    width: 100%;
+    background: #075E54;
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
   }
 
-  .controls-column {
+  .mockup-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #ffffff;
+  }
+
+  .mockup-avatar canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .mockup-info {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .mockup-name {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mockup-status {
+    font-size: 10px;
+    color: #A2F3CE;
+  }
+
+  .mockup-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.9;
+  }
+
+  /* Action Buttons */
+  .wa-action-buttons-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 600px) {
+    .wa-action-buttons-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .wa-download-btn {
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .wa-copy-btn, .wa-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-success {
+    background: #10b981 !important;
+    color: #ffffff !important;
+  }
+
+  /* Controls Panel (Right Column) */
+  .wa-controls-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3-5);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .wa-controls-panel {
+      padding: var(--space-5);
+    }
   }
 
   .control-group {
@@ -326,113 +1298,254 @@ const { locale } = Astro.props;
   }
 
   .control-label {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-text);
-  }
-
-  .mode-tabs,
-  .bg-tabs {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-2);
-  }
-
-  .wa-mode-btn,
-  .wa-bg-btn,
-  .wa-preset-btn {
-    padding: var(--space-2) var(--space-3);
     font-size: var(--text-xs);
-    font-weight: 600;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    transition: all .15s;
-  }
-
-  .wa-mode-btn.active,
-  .wa-bg-btn.active,
-  .wa-preset-btn.active {
-    background: var(--color-accent-light);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-  }
-
-  .sub-control {
-    margin-top: var(--space-3);
-    padding: var(--space-3);
-    background: var(--color-surface);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 
   .sub-label {
-    font-size: var(--text-xs);
+    font-size: 11px;
     font-weight: 600;
     color: var(--color-text-secondary);
-    margin-bottom: var(--space-2);
-    display: block;
+  }
+
+  .slider-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .val-pill {
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
   }
 
   .wa-range {
     width: 100%;
     accent-color: var(--color-accent);
-  }
-
-  .color-picker-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-
-  .wa-color-pill {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--color-border);
     cursor: pointer;
-    transition: transform .15s;
-  }
-  .wa-color-pill:hover {
-    transform: scale(1.1);
   }
 
-  .wa-color-picker {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border);
-    cursor: pointer;
-    padding: 0;
-    background: none;
-  }
-
-  .preset-buttons {
+  /* Preset Chips */
+  .preset-chips-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
+    gap: var(--space-1-5);
+  }
+
+  @media (min-width: 480px) {
+    .preset-chips-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .preset-chip-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-2-5);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.15s ease;
+  }
+
+  .preset-chip-btn:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .preset-chip-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .preset-chip-btn strong {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .preset-chip-btn span {
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Segmented Bars */
+  .segmented-mode-bar {
+    display: flex;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .seg-btn, .seg-bg-btn {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .seg-btn.active, .seg-bg-btn.active {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .sub-controls-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2-5);
+    display: flex;
+    flex-direction: column;
     gap: var(--space-2);
   }
 
-  .wa-select {
-    width: 100%;
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--text-sm);
+  /* Color Swatches Grid */
+  .color-swatches-grid {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .color-swatch-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .color-swatch-btn.active {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent);
+  }
+
+  .custom-color-input {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  /* Transform Buttons Row */
+  .transform-buttons-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .transform-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  /* Resolution Pills */
+  .resolution-pills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .res-pill-btn {
+    background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background: var(--color-bg);
-  }
-
-  .actions-row {
+    padding: 6px 8px;
+    text-align: left;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
+    gap: 1px;
+    transition: all 0.15s ease;
   }
 
-  @media (min-width: 500px) {
-    .actions-row {
-      flex-direction: row;
-    }
+  .res-pill-btn:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .res-pill-btn.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+  }
+
+  .res-pill-btn strong {
+    font-size: 11px;
+    color: var(--color-text);
+  }
+
+  .res-pill-btn span {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Format Selector */
+  .wa-select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .select-field, .quality-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+  }
+
+  /* Cross Navigation */
+  .wa-cross-links-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .cross-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    padding: 6px 12px;
   }
 </style>
