@@ -5,6 +5,7 @@ export const GET: APIRoute = () => {
 Allow: /
 
 Sitemap: https://imgfeel.com/sitemap-index.xml
+Sitemap: https://imgfeel.com/sitemap-blog.xml
 `;
   return new Response(robotsTxt, {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },

@@ -1,8 +1,244 @@
 ---
-import LegalLayout from '@/layouts/LegalLayout.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+
+const canonicalUrl = 'https://imgfeel.com/blog/';
+
+const posts = [
+  {
+    title: 'Facebook Cover Photo Resizer: The Complete Guide to Dimensions, Safe Zones & Sizing',
+    description: 'Master official Facebook cover photo size and safe zones for Pages, Profiles, Groups, and Events. Learn how to prevent mobile cropping and keep your banners ultra-sharp.',
+    href: '/blog/facebook-cover-photo-resizer/',
+    readTime: '12 min read',
+    category: 'Facebook Optimization',
+    featured: true,
+  },
+  {
+    title: 'YouTube Thumbnail Resizer: The Complete Guide to Perfect Dimensions, High CTR & Sizing',
+    description: 'Master official YouTube thumbnail size and dimensions (1280x720, 16:9). Learn how to use an online YouTube Thumbnail Resizer tool to boost your CTR and avoid common pitfalls.',
+    href: '/blog/youtube-thumbnail-resizer/',
+    readTime: '12 min read',
+    category: 'YouTube Optimization',
+    featured: false,
+  },
+];
 ---
 
-<LegalLayout title="Blog — ImgFeel" description="ImgFeel blog. Tips, tutorials, and updates about image processing." canonicalUrl="https://imgfeel.com/blog/">
-  <h1>Blog</h1>
-  <p>Blog posts coming soon. Stay tuned for tips, tutorials, and updates about image processing.</p>
-</LegalLayout>
+<BaseLayout
+  locale="en"
+  title="Blog — ImgFeel | Guides, Tutorials & Image Processing Tips"
+  description="Explore actionable guides, sizing cheat sheets, and optimization tips for creators, designers, and web developers on ImgFeel."
+  canonicalUrl={canonicalUrl}
+  showLanguageSwitcher={false}
+>
+  <Header locale="en" showLanguageSwitcher={false} />
+
+  <main class="blog-index-main">
+    <div class="container blog-index-container">
+      <div class="breadcrumbs-wrap">
+        <Breadcrumbs locale="en" items={[
+          { label: 'Home', href: '/' },
+          { label: 'Blog' }
+        ]} />
+      </div>
+
+      <header class="blog-hero">
+        <span class="badge badge-primary">Creator Guides & Insights</span>
+        <h1 class="hero-title">ImgFeel Blog</h1>
+        <p class="hero-desc">
+          In-depth tutorials, technical sizing guides, and best practices to help you optimize images, elevate visual CTR, and streamline your workflow.
+        </p>
+      </header>
+
+      <section class="posts-section">
+        <div class="posts-grid">
+          {posts.map((post) => (
+            <article class="post-card featured-card">
+              <div class="card-meta">
+                <span class="post-category">{post.category}</span>
+                <span class="post-readtime">{post.readTime}</span>
+              </div>
+              <h2 class="post-title">
+                <a href={post.href}>{post.title}</a>
+              </h2>
+              <p class="post-excerpt">{post.description}</p>
+              <div class="post-footer">
+                <a href={post.href} class="read-more-link">
+                  Read Complete Guide
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer locale="en" />
+</BaseLayout>
+
+<style>
+  .blog-index-main {
+    padding-top: var(--header-height);
+    background: var(--color-bg);
+    min-height: calc(100vh - var(--header-height));
+    padding-bottom: var(--space-20);
+  }
+
+  .blog-index-container {
+    max-width: 960px;
+    padding-block: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .blog-index-container {
+      padding-block: var(--space-10);
+    }
+  }
+
+  .breadcrumbs-wrap {
+    margin-bottom: var(--space-6);
+  }
+
+  .blog-hero {
+    text-align: center;
+    max-width: 680px;
+    margin-inline: auto;
+    margin-bottom: var(--space-12);
+  }
+
+  .hero-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: var(--text-4xl);
+    }
+  }
+
+  .hero-desc {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .post-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (min-width: 640px) {
+    .post-card {
+      padding: var(--space-8);
+    }
+  }
+
+  .post-card:hover {
+    border-color: var(--color-accent-border);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .post-category {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    padding: var(--space-1) var(--space-2-5);
+    border-radius: var(--radius-sm);
+  }
+
+  .post-readtime {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .post-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.35;
+    margin-bottom: var(--space-3);
+  }
+
+  @media (min-width: 768px) {
+    .post-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  .post-title a {
+    color: inherit;
+    transition: color 0.15s ease;
+  }
+
+  .post-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .post-excerpt {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-5);
+  }
+
+  @media (min-width: 768px) {
+    .post-excerpt {
+      font-size: var(--text-base);
+    }
+  }
+
+  .post-footer {
+    display: flex;
+    align-items: center;
+  }
+
+  .read-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    transition: all 0.15s ease;
+  }
+
+  .read-more-link:hover {
+    color: var(--color-accent-hover);
+    gap: var(--space-2);
+  }
+</style>

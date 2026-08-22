@@ -15,6 +15,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      filter: (page) => !page.includes('/blog'),
       i18n: {
         defaultLocale: 'en',
         locales: {
