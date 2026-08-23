@@ -4,6 +4,36 @@ export const GET: APIRoute = () => {
   const siteUrl = 'https://imgfeel.com';
   const blogUrls = [
     {
+      url: `${siteUrl}/blog/image-to-base64-guide/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/pan-card-photo-size-guide/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/circular-profile-picture-guide/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/webp-image-compressor-guide/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/whatsapp-dp-size-guide/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
       url: `${siteUrl}/blog/facebook-cover-photo-resizer/`,
       lastmod: new Date().toISOString().split('T')[0],
       changefreq: 'monthly',

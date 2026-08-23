@@ -1,0 +1,498 @@
+---
+import BlogLayout from '@/layouts/BlogLayout.astro';
+
+const canonicalUrl = 'https://imgfeel.com/blog/pan-card-photo-size-guide/';
+const toolUrl = '/tools/pan-card-image-resizer/';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'PAN Card Photo & Document Size Guide' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  'headline': 'PAN Card Document Resizer: The Complete Photo & Signature Size Guide',
+  'description': 'Master official NSDL and UTIITSL PAN card photo size, signature dimensions, and document guidelines. Learn how to resize PAN card photos under 50KB for instant approval.',
+  'mainEntityOfPage': {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+  },
+  'author': {
+    '@type': 'Organization',
+    'name': 'ImgFeel Editorial Team',
+    'url': 'https://imgfeel.com',
+  },
+  'publisher': {
+    '@type': 'Organization',
+    'name': 'ImgFeel',
+    'logo': {
+      '@type': 'ImageObject',
+      'url': 'https://imgfeel.com/favicon.svg',
+    },
+  },
+  'image': 'https://imgfeel.com/favicon.svg',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  'mainEntity': [
+    {
+      '@type': 'Question',
+      'name': 'What is the exact photo size required for a PAN card application?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'The official PAN card photo size is 3.5 cm × 2.5 cm (or 213 × 213 pixels at 300 DPI for UTIITSL portals, and 3.5 × 2.5 cm at 200 DPI for NSDL/Protean). The file size must remain strictly under 50 KB in JPG or JPEG format.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'What are the official signature dimensions and file size for PAN card?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'The PAN card signature must measure 2.0 cm × 4.5 cm (or 400 × 200 pixels at 200 DPI) and the file size must be strictly under 20 KB in JPG or JPEG format on a pure white background.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'What background color is mandatory for PAN card passport photos?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'A plain white or very light off-white background is mandatory. Photos taken against dark, patterned, or outdoor scenic backdrops are automatically flagged and rejected by NSDL and UTIITSL verification systems.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Why do PAN card photo uploads fail or get rejected?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Rejections typically happen due to file sizes exceeding 50 KB (for photos) or 20 KB (for signatures), blurry or low-DPI scans, non-white backgrounds, red-eye glares, tilted face angles, or incorrect pixel aspect ratios.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'How do I resize my photo to under 50 KB without losing clarity?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Use the free online ImgFeel PAN Card Document Resizer. Upload your photo, select the official 3.5 × 2.5 cm preset, and the tool will automatically compress the file payload to between 20 KB and 45 KB while maintaining sharp 300 DPI clarity.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'What is the required file size for supporting PAN card PDF documents?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Supporting identity, address, and date of birth proof documents must be uploaded as a single combined PDF file with a maximum size limit of 300 KB scanned at 200 DPI.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Can I take a PAN card photo on my smartphone?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes. Stand against a well-lit white wall, capture a straight-facing front portrait with even lighting, and then use an online PAN Card Document Resizer to crop and compress the image to exact government standards.',
+      },
+    },
+  ],
+};
+---
+
+<BlogLayout
+  title="PAN Card Document Resizer: Complete Photo & Signature Size Guide"
+  description="Master official NSDL and UTIITSL PAN card photo size, signature dimensions, and document guidelines. Use the free PAN Card Document Resizer to prevent rejection."
+  canonicalUrl={canonicalUrl}
+  publishDate="Updated Guide"
+  readTime="12 min read"
+  breadcrumbs={breadcrumbs}
+  schema={articleSchema}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <h1>PAN Card Document Resizer: The Complete Photo, Signature & Sizing Guide</h1>
+
+  <p class="lead-text">
+    Applying for a Permanent Account Number (PAN Card) through government portals like NSDL (Protean) or UTIITSL is an essential financial milestone. However, tens of thousands of online PAN applications face delays, holds, or outright rejections every month for one single reason: <strong>improper photo and signature dimensions</strong>.
+  </p>
+
+  <div class="toc-box">
+    <div class="toc-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="8" y1="6" x2="21" y2="6"></line>
+        <line x1="8" y1="12" x2="21" y2="12"></line>
+        <line x1="8" y1="18" x2="21" y2="18"></line>
+        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+      </svg>
+      Table of Contents
+    </div>
+    <ol class="toc-list">
+      <li><a href="#section-1">1. Introduction: Why Strict PAN Sizing Rules Exist</a></li>
+      <li><a href="#section-2">2. Why Correct Photo & Document Size Matters for PAN Card</a></li>
+      <li><a href="#section-3">3. Official PAN Card Photo & Document Size Requirements</a></li>
+      <li><a href="#section-4">4. Why You Should Use a PAN Card Document Resizer</a></li>
+      <li><a href="#section-5">5. How to Use the PAN Card Document Resizer Tool (Step-by-Step)</a></li>
+      <li><a href="#section-6">6. Best Practices for PAN Card Photo & Documents</a></li>
+      <li><a href="#section-7">7. Common Mistakes to Avoid</a></li>
+      <li><a href="#section-8">8. Extra Tips for Smooth PAN Card Application</a></li>
+      <li><a href="#section-9">9. Frequently Asked Questions (FAQs)</a></li>
+      <li><a href="#section-10">10. Conclusion & Final Takeaways</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <h2 id="section-1">1. Introduction: Why Strict PAN Sizing Rules Exist</h2>
+  <p>
+    A PAN card is one of the most critical identity and taxation documents in India. It is mandatory for opening bank accounts, filing income tax returns, making high-value purchases, investing in mutual funds, and obtaining international passports. Because your physical PAN card is printed on a standardized plastic PVC card with strict laser-engraving specifications, government verification algorithms strictly enforce rigid dimensional rules.
+  </p>
+  <p>
+    When an applicant attempts to upload raw smartphone selfies, scanned documents with heavy megabyte weights, or cropped signature photos, the automated validation filters on the NSDL and UTIITSL portals immediately reject the upload with cryptic error codes. Applicants are left scrambling to find desktop photo editing software or paying fees at cyber cafes.
+  </p>
+  <p>
+    This is where a dedicated <a href={toolUrl}>PAN Card Document Resizer</a> becomes an indispensable utility. Instead of struggling with manual pixel calculations, an online resizer automatically converts your photo, signature, and identity proofs into exact millimeter dimensions, target kilobyte thresholds, and correct DPI standards in seconds.
+  </p>
+  <p>
+    In this comprehensive guide, you will master the exact <strong>PAN Card photo size</strong> and signature specifications, understand why applications get rejected, learn step-by-step how to resize your documents, and discover best practices for guaranteed first-time approval.
+  </p>
+
+  <!-- SECTION 2 -->
+  <h2 id="section-2">2. Why Correct Photo & Document Size Matters for PAN Card</h2>
+  <p>
+    Government portals process millions of digital forms using automated OCR (Optical Character Recognition) and facial verification pipelines. If your uploaded files fail any technical parameter, your entire application is put on hold.
+  </p>
+
+  <h3>Common Reasons for PAN Application Rejection</h3>
+  <ul>
+    <li><strong>File Size Exceeded:</strong> Uploading a photo above 50 KB or a signature above 20 KB causes immediate server-side validation failure.</li>
+    <li><strong>Incorrect Aspect Ratio:</strong> Stretched or squished photos lead to distorted facial printing on the physical PVC card.</li>
+    <li><strong>Non-Compliant Background:</strong> Uploading selfies taken in bedrooms, cars, or outdoor gardens violates the mandatory white background rule.</li>
+    <li><strong>Low-DPI Scans:</strong> Images scanned below 200 DPI appear pixelated when printed, triggering manual scrutiny rejections.</li>
+    <li><strong>Signature Illegibility:</strong> Signatures scanned with shadows, colored backgrounds, or faint ink fail optical verification checks.</li>
+  </ul>
+
+  <h3>How Wrong Sizing Delays Your Process</h3>
+  <p>
+    When an application is rejected due to invalid photo or document dimensions, applicants receive a discrepancy notification. Resolving this requires re-submitting files, undergoing manual re-verification, and waiting an additional two to four weeks. Using an accurate <strong>PAN Card Photo Resizer</strong> before submitting ensures your application sails through automated checks without a single day of delay.
+  </p>
+
+  <!-- SECTION 3 -->
+  <h2 id="section-3">3. Official PAN Card Photo & Document Size Requirements</h2>
+  <p>
+    Both official PAN processing bodies—NSDL (Protean eGov Technologies) and UTIITSL—maintain strict technical criteria for uploads. Here is the complete official specification breakdown:
+  </p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Document Type</th>
+          <th>Physical Dimensions</th>
+          <th>Pixel Resolution (DPI)</th>
+          <th>File Size Limit</th>
+          <th>Accepted Format</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Applicant Photograph</strong></td>
+          <td>3.5 cm × 2.5 cm</td>
+          <td>213 × 213 px (300 DPI) or 200 DPI</td>
+          <td>Under 50 KB (20 KB – 45 KB ideal)</td>
+          <td>JPEG / JPG</td>
+        </tr>
+        <tr>
+          <td><strong>Applicant Signature</strong></td>
+          <td>2.0 cm × 4.5 cm</td>
+          <td>400 × 200 px (or 200 × 60 px)</td>
+          <td>Under 20 KB (10 KB – 20 KB ideal)</td>
+          <td>JPEG / JPG</td>
+        </tr>
+        <tr>
+          <td><strong>Proof of Identity (POI)</strong></td>
+          <td>A4 Page</td>
+          <td>200 DPI Grayscale / Color</td>
+          <td>Under 300 KB per file</td>
+          <td>PDF format</td>
+        </tr>
+        <tr>
+          <td><strong>Proof of Address (POA)</strong></td>
+          <td>A4 Page</td>
+          <td>200 DPI Grayscale / Color</td>
+          <td>Under 300 KB per file</td>
+          <td>PDF format</td>
+        </tr>
+        <tr>
+          <td><strong>Proof of Date of Birth (DOB)</strong></td>
+          <td>A4 Page</td>
+          <td>200 DPI Grayscale / Color</td>
+          <td>Under 300 KB per file</td>
+          <td>PDF format</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Photo Specifics: 3.5 cm × 2.5 cm (213 × 213 Pixels)</h3>
+  <p>
+    For UTIITSL portal uploads, the photo must be exactly <strong>213 × 213 pixels</strong> at 300 DPI. For NSDL/Protean portals, the standard passport proportion of <strong>3.5 cm height by 2.5 cm width</strong> at 200 to 300 DPI is required. Your face must occupy between 70% and 80% of the vertical frame height, with both ears clearly visible.
+  </p>
+
+  <h3>Signature Specifics: 2.0 cm × 4.5 cm (Under 20 KB)</h3>
+  <p>
+    Your signature must be signed on clean, unruled white paper using <strong>black or dark blue ink</strong>. The digital file must measure 2.0 cm in height by 4.5 cm in width and stay strictly under the 20 KB ceiling.
+  </p>
+
+  <!-- SECTION 4 -->
+  <h2 id="section-4">4. Why You Should Use a PAN Card Document Resizer</h2>
+  <p>
+    Attempting to adjust dimensions and compress file sizes using basic phone galleries or general image editors is notoriously difficult. Reducing a 5 MB smartphone photo down to under 50 KB often crushes the image into an illegible, blurry mess.
+  </p>
+
+  <h3>Common Issues with Manual Resizing</h3>
+  <ul>
+    <li><strong>Severe Quality Loss:</strong> Generic compression algorithms introduce heavy pixelation around facial features and eyes.</li>
+    <li><strong>Distorted Aspect Ratios:</strong> Manually typing 213 × 213 into basic editors stretches portraits horizontally, distorting your appearance.</li>
+    <li><strong>Missing DPI Metadata:</strong> Standard phone editors discard DPI header tags, causing government verification tools to flag the file.</li>
+    <li><strong>Complex Software Frustrations:</strong> Professional desktop software like Photoshop requires expensive subscriptions and complex technical knowledge.</li>
+  </ul>
+
+  <div class="tip-box">
+    <p>
+      <strong>The Solution:</strong> A dedicated online <a href={toolUrl}>PAN Card Document Resizer</a> applies smart resampling algorithms. It locks the exact 3.5 × 2.5 cm aspect ratio, sets proper 200–300 DPI metadata, and compresses file weights under 50 KB while keeping your face razor-sharp.
+    </p>
+  </div>
+
+  <h3>Key Benefits of a Dedicated Online Tool</h3>
+  <ul>
+    <li><strong>Official Preset Templates:</strong> Instant 1-click presets for NSDL and UTIITSL photo, signature, and document specifications.</li>
+    <li><strong>Guaranteed Under-50KB Output:</strong> Automated smart quantization compresses payload weight while preserving crisp edge clarity.</li>
+    <li><strong>100% Client-Side Privacy:</strong> Your sensitive government identification photos and signature scans are processed locally in your browser without uploading to external servers.</li>
+    <li><strong>Mobile & Desktop Compatibility:</strong> Resize documents directly on your smartphone without downloading heavy mobile applications.</li>
+  </ul>
+
+  <!-- SECTION 5 -->
+  <h2 id="section-5">5. How to Use the PAN Card Document Resizer Tool (Step-by-Step)</h2>
+  <p>
+    Resizing your documents to official <strong>PAN Card photo size</strong> standards takes less than thirty seconds. Follow these simple steps:
+  </p>
+
+  <div class="steps-container">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <div class="step-body">
+        <h4>Open the Resizer Tool</h4>
+        <p>
+          Navigate to the free <a href={toolUrl}>ImgFeel PAN Card Document Resizer</a> in your desktop or smartphone web browser.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <div class="step-body">
+        <h4>Upload Your Photo or Signature</h4>
+        <p>
+          Click "Browse Image" or drag and drop your photo or signature scan into the upload area. Supported formats include JPG, PNG, and WebP.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <div class="step-body">
+        <h4>Select Your Official Preset</h4>
+        <p>
+          Choose between <strong>PAN Photo (3.5 × 2.5 cm / Under 50 KB)</strong> or <strong>PAN Signature (2.0 × 4.5 cm / Under 20 KB)</strong>. The tool automatically configures the exact aspect ratio and DPI.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <div class="step-body">
+        <h4>Adjust Framing & Crop</h4>
+        <p>
+          Position your face centrally within the interactive guide. Ensure your eyes, nose, mouth, and ears are clearly framed with ample headroom.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">5</div>
+      <div class="step-body">
+        <h4>Download Your Compliant File</h4>
+        <p>
+          Click the "Download Resized Document" button. Your compliant JPG file saves instantly to your device, ready for immediate upload to NSDL or UTIITSL portals.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="inline-tool-card">
+    <h3>Resize Your PAN Card Photo & Signature Now</h3>
+    <p>
+      Format your passport photo under 50 KB and signature under 20 KB with exact official dimensions. Fast, private, and 100% free.
+    </p>
+    <a href={toolUrl} class="btn btn-primary btn-lg">
+      Resize PAN Card Documents Now
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </div>
+
+  <!-- SECTION 6 -->
+  <h2 id="section-6">6. Best Practices for PAN Card Photo & Documents</h2>
+  <p>
+    To ensure your uploaded documents pass automated verification and manual biometric review without friction, follow these strict photography guidelines:
+  </p>
+
+  <h3>1. Background and Framing Rules</h3>
+  <ul>
+    <li><strong>Mandatory White Background:</strong> The background must be pure white or very light off-white with zero shadows, patterns, or furniture.</li>
+    <li><strong>75% Face Coverage:</strong> Your head, hair, and upper neck should occupy roughly three-quarters of the vertical frame height.</li>
+    <li><strong>Both Ears Visible:</strong> Tuck hair behind your ears. Both ears must be clearly visible to fulfill government biometric criteria.</li>
+  </ul>
+
+  <h3>2. Lighting, Eyes, and Head Position</h3>
+  <ul>
+    <li><strong>Straight Frontal Gaze:</strong> Look directly into the camera lens with your head level. Tilted, angled, or profile-view photos are disqualified.</li>
+    <li><strong>Neutral Facial Expression:</strong> Keep your mouth closed with a relaxed, natural expression. Avoid exaggerated smiles or frowning.</li>
+    <li><strong>No Tinted Eyeglasses or Headgear:</strong> Prescription clear glasses are permitted if there is zero flash reflection on the lenses. Sunglasses, hats, caps, and heavy head coverings are strictly prohibited (except for recognized religious headwear where the full face remains visible).</li>
+  </ul>
+
+  <h3>3. Perfect Signature Capture</h3>
+  <ul>
+    <li>Sign clearly on a clean, blank piece of white printer paper using a <strong>black or dark blue gel/ballpoint pen</strong>.</li>
+    <li>Avoid lined notebook paper, pencil signatures, or crumpled sheets.</li>
+    <li>Ensure the camera or scanner is held directly parallel to the paper to prevent skewed perspective distortion.</li>
+  </ul>
+
+  <!-- SECTION 7 -->
+  <h2 id="section-7">7. Common Mistakes to Avoid</h2>
+  <p>
+    Avoid these widespread mistakes that frequently result in application holds and rejection notices:
+  </p>
+
+  <div class="warning-box">
+    <p>
+      <strong>The 50 KB Trap:</strong> Even a file measuring 50.1 KB will be rejected by the portal upload script. Always aim for a safe file payload between 25 KB and 45 KB!
+    </p>
+  </div>
+
+  <h3>Top Mistakes Leading to Rejection</h3>
+  <ol>
+    <li>
+      <strong>Uploading Selfies with Angled Cameras:</strong> Selfies taken from high or low angles distort facial proportions. Always have someone take the photo from eye level or use a tripod.
+    </li>
+    <li>
+      <strong>Shadows on Face or Background:</strong> Harsh flash shadows cast against the wall behind your head will fail automated background checks. Use diffused, front-facing lighting.
+    </li>
+    <li>
+      <strong>Blurry Signature Scans:</strong> Signatures scanned in low resolution or captured in dim lighting look grey and fuzzy, leading to signature mismatch notices.
+    </li>
+    <li>
+      <strong>Cropping Too Close to the Face:</strong> Leaving zero margin around your hair or chin causes automated cropping tools to slice your head during PVC printing.
+    </li>
+    <li>
+      <strong>Uploading in Wrong File Formats:</strong> Attempting to upload PNG or PDF files where the portal explicitly demands JPG/JPEG causes immediate upload failure.
+    </li>
+  </ol>
+
+  <!-- SECTION 8 -->
+  <h2 id="section-8">8. Extra Tips for Smooth PAN Card Application</h2>
+  <p>
+    Follow these operational tips to make your online PAN card submission seamless:
+  </p>
+
+  <h3>Scanning Supporting Identity Documents (Aadhaar / Passport)</h3>
+  <p>
+    Supporting documents (Proof of Identity, Address, and DOB) must be submitted as PDF files under 300 KB:
+  </p>
+  <ul>
+    <li>Scan physical documents at <strong>200 DPI in grayscale mode</strong>. Grayscale scanning produces crisp text while keeping PDF file sizes under 150 KB.</li>
+    <li>If combining multiple documents into a single PDF, use a PDF compressor to ensure the final combined payload stays comfortably beneath the 300 KB limit.</li>
+  </ul>
+
+  <h3>What to Do If Your Document Upload Fails</h3>
+  <p>
+    If the portal rejects your file upload:
+  </p>
+  <ul>
+    <li>Check the exact file size on your computer or phone properties. Ensure it is strictly under 50 KB for photos and under 20 KB for signatures.</li>
+    <li>Verify that the file extension is strictly <code>.jpg</code> or <code>.jpeg</code> (not <code>.png</code> or <code>.webp</code>).</li>
+    <li>Re-run the image through the <a href={toolUrl}>PAN Card Document Resizer</a> to re-encode the file with clean sRGB metadata.</li>
+  </ul>
+
+  <!-- SECTION 9 -->
+  <h2 id="section-9">9. Frequently Asked Questions (FAQs)</h2>
+  <p>
+    Find quick, authoritative answers to common questions regarding PAN card photo dimensions and sizing:
+  </p>
+
+  <div class="faq-group">
+    <div class="faq-item">
+      <h3 class="faq-question">What is the exact photo size for PAN card applications?</h3>
+      <p class="faq-answer">
+        The official PAN card photo size is <strong>3.5 cm × 2.5 cm</strong> (or <strong>213 × 213 pixels</strong> at 300 DPI for UTIITSL portals, and 3.5 × 2.5 cm at 200 DPI for NSDL/Protean). The file size must remain strictly under <strong>50 KB</strong> in JPG format.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">What is the required signature size for PAN card?</h3>
+      <p class="faq-answer">
+        The signature must measure <strong>2.0 cm × 4.5 cm</strong> (or <strong>400 × 200 pixels</strong> at 200 DPI) and the file size must be strictly under <strong>20 KB</strong> in JPG format on a pure white background.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Can I use a blue background for my PAN card photo?</h3>
+      <p class="faq-answer">
+        No. Government guidelines mandate a <strong>pure white or very light off-white background</strong>. Photos with blue, red, dark, or patterned backgrounds will be rejected.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">How can I resize my PAN card photo to under 50 KB online?</h3>
+      <p class="faq-answer">
+        You can use the free <a href={toolUrl}>ImgFeel PAN Card Document Resizer</a>. Upload your photo, select the PAN Photo preset, and download your perfectly dimensioned file under 50 KB in seconds.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">What is the maximum file size for PAN supporting PDF documents?</h3>
+      <p class="faq-answer">
+        Supporting identity, address, and date of birth proof documents must be uploaded in PDF format with a maximum file size limit of <strong>300 KB</strong> per document.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Can I take my PAN card photo with a mobile phone?</h3>
+      <p class="faq-answer">
+        Yes! Take a well-lit photo against a plain white wall, ensuring both ears are visible and there are no shadows on your face. Then use an online resizer to format it to 3.5 × 2.5 cm and under 50 KB.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Is the PAN Card Document Resizer tool free and safe?</h3>
+      <p class="faq-answer">
+        Yes, the ImgFeel PAN Card Document Resizer is 100% free, requires no sign-up, and processes your images directly inside your browser so your personal documents are never stored on external servers.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 10 -->
+  <h2 id="section-10">10. Conclusion & Final Takeaways</h2>
+  <p>
+    Securing your Permanent Account Number should be a quick, stress-free process. By complying with official government dimensional standards, you eliminate the single most common obstacle that delays PAN card processing.
+  </p>
+  <p>
+    Remember the essential formula: <strong>3.5 cm × 2.5 cm photo under 50 KB</strong> on a white background, and a <strong>2.0 cm × 4.5 cm signature under 20 KB</strong> in black or dark blue ink.
+  </p>
+  <p>
+    Ensure your PAN card application is approved on the very first attempt. Use the free <a href={toolUrl}>PAN Card Document Resizer</a> to format, crop, and compress your photos and signatures to official standards today.
+  </p>
+</BlogLayout>
