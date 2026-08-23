@@ -4,6 +4,72 @@ export const GET: APIRoute = () => {
   const siteUrl = 'https://imgfeel.com';
   const blogUrls = [
     {
+      url: `${siteUrl}/blog/resize-image-to-250kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-200kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-150kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-100kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-80kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-60kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-50kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-40kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/compress-image-to-30kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-20kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
+      url: `${siteUrl}/blog/resize-image-to-10kb/`,
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'monthly',
+      priority: '0.8',
+    },
+    {
       url: `${siteUrl}/blog/image-to-base64-guide/`,
       lastmod: new Date().toISOString().split('T')[0],
       changefreq: 'monthly',

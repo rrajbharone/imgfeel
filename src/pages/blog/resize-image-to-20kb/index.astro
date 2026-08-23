@@ -1,0 +1,272 @@
+---
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import ImageResizer from '@/components/ImageResizer.astro';
+
+const canonicalUrl = 'https://imgfeel.com/blog/resize-image-to-20kb/';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Resize Image to 20KB' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  'headline': 'Resize Image to 20KB Online for Free (No Quality Loss) - ImgFeel',
+  'description': 'Compress and resize JPG, PNG, or WebP images to 20KB online for free. Perfect for SSC, UPSC, IBPS, passport photos, and government application forms.',
+  'mainEntityOfPage': {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+  },
+  'author': {
+    '@type': 'Organization',
+    'name': 'ImgFeel Editorial Team',
+    'url': 'https://imgfeel.com',
+  },
+  'publisher': {
+    '@type': 'Organization',
+    'name': 'ImgFeel',
+    'logo': {
+      '@type': 'ImageObject',
+      'url': 'https://imgfeel.com/favicon.svg',
+    },
+  },
+  'image': 'https://imgfeel.com/favicon.svg',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  'mainEntity': [
+    {
+      '@type': 'Question',
+      'name': 'How can I resize a photo to exact 20 KB online?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Upload your JPG, PNG, or WebP image into the ImgFeel Image Resizer tool above. The tool is already pre-configured to Target Size mode set at 20 KB. Simply click "Resize" and download your processed image compressed strictly under 20 KB.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Is 20 KB the standard size for passport photos in online forms?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes. Major recruitment portals (including SSC, UPSC, IBPS, and State PSCs) and university admission systems mandate candidate signatures and passport photos between 10 KB and 20 KB (or strictly under 20 KB) for successful digital submission.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Will compressing to 20 KB blur my face or text?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'No. ImgFeel uses intelligent adaptive quantization that resamples physical canvas dimensions proportionally before compressing. Facial features, eyes, and handwritten signature strokes remain sharp and legible for biometric and OCR scanners.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Is it safe to upload personal documents on ImgFeel?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes, 100%. ImgFeel processes all image resizing directly inside your web browser using HTML5 Canvas APIs. Your sensitive documents, passport headshots, and signatures are never sent to or stored on any remote cloud server.',
+      },
+    },
+  ],
+};
+---
+
+<BlogLayout
+  title="Resize Image to 20KB Online for Free (No Quality Loss) - ImgFeel"
+  description="Compress and resize JPG, PNG, or WebP images to 20KB online for free. Perfect for SSC, UPSC, IBPS, passport photos, and government application forms."
+  canonicalUrl={canonicalUrl}
+  publishDate="Updated Guide"
+  readTime="8 min read"
+  breadcrumbs={breadcrumbs}
+  schema={articleSchema}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- TOP SECTION (Above the fold) -->
+  <h1>Resize Image to 20KB Online for Free</h1>
+
+  <p class="lead-text">
+    Need to compress your passport photo, signature, or certificate to strictly under 20 KB for an online recruitment portal or exam form? The tool below is already pre-configured to <strong>20 KB target size</strong>—simply upload your image, click Resize, and download your optimized file in seconds.
+  </p>
+
+  <!-- EMBEDDED RESIZER TOOL (Pre-configured to 20 KB) -->
+  <div class="embedded-tool-wrapper">
+    <ImageResizer locale="en" initialTab="Target Size" defaultTargetSize={20} defaultUnit="KB" />
+  </div>
+
+  <div class="toc-box">
+    <div class="toc-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="8" y1="6" x2="21" y2="6"></line>
+        <line x1="8" y1="12" x2="21" y2="12"></line>
+        <line x1="8" y1="18" x2="21" y2="18"></line>
+        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+      </svg>
+      Table of Contents
+    </div>
+    <ol class="toc-list">
+      <li><a href="#how-to-resize">1. Step-by-Step Guide: How to Resize Photo to 20KB</a></li>
+      <li><a href="#crucial-use-cases">2. Crucial Use Cases for 20KB Image Compression</a></li>
+      <li><a href="#dimension-quality">3. Dimension & Quality Preservation (No Quality Loss)</a></li>
+      <li><a href="#supported-formats">4. Supported Image Formats (JPG, PNG, WebP)</a></li>
+      <li><a href="#security-privacy">5. Client-Side Security & Privacy Guarantee</a></li>
+      <li><a href="#faqs">6. Frequently Asked Questions (FAQs)</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <h2 id="how-to-resize">1. Step-by-Step Guide: How to Resize Photo to 20KB</h2>
+  <p>
+    Reducing your photos or digital signatures down to a strict 20 KB limit is fast, seamless, and completely free on ImgFeel. Follow these three simple steps:
+  </p>
+
+  <div class="steps-container">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <div class="step-body">
+        <h4>Upload Your Image File</h4>
+        <p>
+          Drag and drop your JPG, PNG, or WebP photo into the upload box above, or click "Browse Image" to select a file from your phone, tablet, or desktop.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <div class="step-body">
+        <h4>Verify the 20 KB Target Size</h4>
+        <p>
+          The tool automatically opens in <strong>Target File Size</strong> mode with <strong>20 KB</strong> pre-selected. You can retain the original format or export as standard JPG.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <div class="step-body">
+        <h4>Click Resize & Download</h4>
+        <p>
+          Hit the blue "Resize" button. The client-side optimization engine compresses your file under 20 KB instantly. Click "Download" to save your submission-ready file.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2 id="crucial-use-cases">2. Crucial Use Cases for 20KB Image Compression</h2>
+  <p>
+    Online registration systems for competitive examinations, government recruitment drives, and academic portals enforce strict file size thresholds. Files exceeding 20 KB are automatically blocked by server validation scripts.
+  </p>
+
+  <h3>1. Government & Competitive Examination Portals</h3>
+  <p>
+    National and state recruitment commissions mandate strict micro-payload caps for applicant signatures and identification photographs:
+  </p>
+  <ul>
+    <li><strong>SSC (Staff Selection Commission):</strong> Registration portals for SSC CGL, CHSL, MTS, CPO, and Stenographer strictly require candidate signatures between <strong>10 KB and 20 KB</strong> in JPG/JPEG format.</li>
+    <li><strong>UPSC (Union Public Service Commission):</strong> Civil Services Examination (CSE), NDA, CDS, and Engineering Services forms require signatures formatted under 20 KB and photos scaled to exact passport proportions.</li>
+    <li><strong>IBPS & SBI Banking Exams:</strong> Applications for Probationary Officers (PO), Clerks, and Specialist Officers across public sector banks mandate signatures strictly between <strong>10 KB and 20 KB</strong>.</li>
+    <li><strong>Railway Recruitment Board (RRB):</strong> NTPC, Group D, and ALP online applications enforce strict 20 KB file limits on candidate signatures and identity scans.</li>
+    <li><strong>State Public Service Commissions:</strong> State PSC boards (UPPSC, BPSC, MPSC, MPPSC, TNPSC, WBPSC) require candidate photographs and signatures capped at 20 KB to 50 KB.</li>
+  </ul>
+
+  <h3>2. Online Passport, Visa & Citizen Identity Portals</h3>
+  <p>
+    International e-Visa systems, national ID card portals, driving license applications (Sarathi Parivahan), and municipal civil services regularly impose a <strong>20 KB to 50 KB maximum payload limit</strong> to optimize database storage and high-volume applicant processing.
+  </p>
+
+  <h3>3. University Admissions & College Enrollment Portals</h3>
+  <p>
+    Centralized university admission platforms (such as CUET, state counseling boards, and medical/engineering admission portals) require applicants to upload identity photographs and signatures under 20 KB during document verification.
+  </p>
+
+  <!-- SECTION 3 -->
+  <h2 id="dimension-quality">3. Dimension & Quality Preservation (No Quality Loss)</h2>
+  <p>
+    The most common frustration when converting a 3 MB to 5 MB high-resolution smartphone image down to 20 KB is preventing facial blurriness and unreadable signature strokes.
+  </p>
+
+  <div class="tip-box">
+    <p>
+      <strong>How ImgFeel Preserves Sharpness:</strong> Rather than applying simple quality degradation that turns images into pixelated blocks, ImgFeel utilizes a multi-pass adaptive binary search algorithm. It proportionally resamples physical pixel dimensions and optimizes discrete cosine transform (DCT) quantization tables, preserving high-frequency edge contrast.
+    </p>
+  </div>
+
+  <ul>
+    <li><strong>Proportional Downsampling:</strong> If an image measures 4000 × 3000 pixels, ImgFeel calculates the ideal physical dimension (e.g. 600 × 450 px) before compression, preventing compression artifacts.</li>
+    <li><strong>Biometric OCR Compliance:</strong> Facial features (eyes, nose, ears) and handwritten pen lines are isolated and preserved with clean edge contrast, ensuring compliance with automated facial recognition and biometric scanners.</li>
+    <li><strong>Metadata Overhead Stripping:</strong> Removes bulky EXIF tags, GPS coordinates, and camera device profiles that otherwise consume 5 KB to 15 KB of unnecessary file weight.</li>
+  </ul>
+
+  <!-- SECTION 4 -->
+  <h2 id="supported-formats">4. Supported Image Formats (JPG, PNG, WebP)</h2>
+  <p>
+    ImgFeel provides seamless cross-format conversion and compression:
+  </p>
+  <ul>
+    <li><strong>JPG / JPEG:</strong> The universal format required by virtually all government and competitive examination portals. Provides optimal byte compression for photographic headshots and signatures under 20 KB.</li>
+    <li><strong>PNG:</strong> Excellent for digital signatures and black-and-white graphics requiring crisp line definition.</li>
+    <li><strong>WebP:</strong> The next-generation format delivering up to 35% smaller file sizes than JPEG with identical visual clarity.</li>
+  </ul>
+
+  <!-- SECTION 5 -->
+  <h2 id="security-privacy">5. Client-Side Security & Privacy Guarantee</h2>
+  <p>
+    When compressing sensitive identity documents, passport headshots, and signatures, data privacy is a top priority.
+  </p>
+  <div class="warning-box">
+    <p>
+      <strong>100% In-Browser Local Processing:</strong> Unlike traditional web resizers that upload your files to remote cloud servers, ImgFeel executes all compression algorithms locally in your browser using the HTML5 Canvas API. Your personal photographs and signatures never leave your device.
+    </p>
+  </div>
+
+  <!-- SECTION 6 -->
+  <h2 id="faqs">6. Frequently Asked Questions (FAQs)</h2>
+
+  <div class="faq-group">
+    <div class="faq-item">
+      <h3 class="faq-question">How can I resize a photo to exact 20 KB online?</h3>
+      <p class="faq-answer">
+        Upload your JPG, PNG, or WebP image into the ImgFeel Image Resizer tool at the top of this page. The tool is already pre-configured to Target Size mode set at 20 KB. Simply click "Resize" and download your processed image compressed strictly under 20 KB.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Is 20 KB the standard size for passport photos in online forms?</h3>
+      <p class="faq-answer">
+        Yes. Major recruitment portals (including SSC, UPSC, IBPS, and State PSCs) and university admission systems mandate candidate signatures and passport photos between 10 KB and 20 KB (or strictly under 20 KB) for successful digital submission.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Will compressing to 20 KB blur my face or text?</h3>
+      <p class="faq-answer">
+        No. ImgFeel uses intelligent adaptive quantization that resamples physical canvas dimensions proportionally before compressing. Facial features, eyes, and handwritten signature strokes remain sharp and legible for biometric and OCR scanners.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Is it safe to upload personal documents on ImgFeel?</h3>
+      <p class="faq-answer">
+        Yes, 100%. ImgFeel processes all image resizing directly inside your web browser using HTML5 Canvas APIs. Your sensitive documents, passport headshots, and signatures are never sent to or stored on any remote cloud server.
+      </p>
+    </div>
+  </div>
+</BlogLayout>
+
+<style>
+  .embedded-tool-wrapper {
+    margin-block: var(--space-6) var(--space-10);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+</style>

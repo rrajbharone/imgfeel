@@ -3,15 +3,30 @@ import { t } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
 
 interface Props {
-  locale: Locale;
+  locale?: Locale;
+  initialTab?: 'dimensions' | 'percentage' | 'targetSize' | 'target' | 'Target Size';
+  defaultTargetSize?: number;
+  defaultUnit?: string;
 }
 
-const { locale } = Astro.props;
+const {
+  locale = 'en',
+  initialTab,
+  defaultTargetSize,
+  defaultUnit = 'KB',
+} = Astro.props;
+
+const initialMode = initialTab
+  ? (initialTab.toLowerCase().includes('target') ? 'targetSize' : initialTab.toLowerCase().includes('percent') ? 'percentage' : 'dimensions')
+  : 'dimensions';
 ---
 
 <div
   class="resizer"
   id="image-resizer-app"
+  data-initial-mode={initialMode}
+  data-default-target-size={defaultTargetSize}
+  data-default-unit={defaultUnit}
   data-i18n-dropzone-title={t(locale, 'resizer.dropzone.title')}
   data-i18n-dropzone-subtitle={t(locale, 'resizer.dropzone.subtitle')}
   data-i18n-dropzone-formats={t(locale, 'resizer.dropzone.formats')}
@@ -88,13 +103,13 @@ const { locale } = Astro.props;
       <div class="controls-area">
         <!-- Mode Tabs -->
         <div class="mode-tabs" role="tablist">
-          <button class="mode-tab active" data-mode="dimensions" id="mode-dimensions" role="tab" aria-selected="true" aria-controls="controls-dimensions">{t(locale, 'resizer.mode.dimensions')}</button>
-          <button class="mode-tab" data-mode="percentage" id="mode-percentage" role="tab" aria-selected="false" aria-controls="controls-percentage">{t(locale, 'resizer.mode.percentage')}</button>
-          <button class="mode-tab" data-mode="targetSize" id="mode-target-size" role="tab" aria-selected="false" aria-controls="controls-target-size">{t(locale, 'resizer.mode.targetSize')}</button>
+          <button class={`mode-tab ${initialMode === 'dimensions' ? 'active' : ''}`} data-mode="dimensions" id="mode-dimensions" role="tab" aria-selected={initialMode === 'dimensions' ? 'true' : 'false'} aria-controls="controls-dimensions">{t(locale, 'resizer.mode.dimensions')}</button>
+          <button class={`mode-tab ${initialMode === 'percentage' ? 'active' : ''}`} data-mode="percentage" id="mode-percentage" role="tab" aria-selected={initialMode === 'percentage' ? 'true' : 'false'} aria-controls="controls-percentage">{t(locale, 'resizer.mode.percentage')}</button>
+          <button class={`mode-tab ${initialMode === 'targetSize' ? 'active' : ''}`} data-mode="targetSize" id="mode-target-size" role="tab" aria-selected={initialMode === 'targetSize' ? 'true' : 'false'} aria-controls="controls-target-size">{t(locale, 'resizer.mode.targetSize')}</button>
         </div>
 
         <!-- Dimensions Controls -->
-        <div class="control-group" id="controls-dimensions" role="tabpanel" aria-labelledby="mode-dimensions">
+        <div class="control-group" id="controls-dimensions" hidden={initialMode !== 'dimensions'} role="tabpanel" aria-labelledby="mode-dimensions">
           <div class="input-row">
             <div class="input-field">
               <label for="resize-width">{t(locale, 'resizer.label.width')}</label>
@@ -112,7 +127,7 @@ const { locale } = Astro.props;
         </div>
 
         <!-- Percentage Controls -->
-        <div class="control-group" id="controls-percentage" hidden role="tabpanel" aria-labelledby="mode-percentage">
+        <div class="control-group" id="controls-percentage" hidden={initialMode !== 'percentage'} role="tabpanel" aria-labelledby="mode-percentage">
           <div class="input-field">
             <label for="resize-percentage">{t(locale, 'resizer.label.percentage')}</label>
             <div class="percentage-input">
@@ -130,23 +145,23 @@ const { locale } = Astro.props;
         </div>
 
         <!-- Target File Size Controls -->
-        <div class="control-group" id="controls-target-size" hidden role="tabpanel" aria-labelledby="mode-target-size">
+        <div class="control-group" id="controls-target-size" hidden={initialMode !== 'targetSize'} role="tabpanel" aria-labelledby="mode-target-size">
           <div class="input-field">
             <label for="resize-target-size">{t(locale, 'resizer.label.targetFileSize')}</label>
             <div class="target-size-input">
-              <input type="number" id="resize-target-size" min="1" max="100000" value="100" />
-              <span class="unit-sign">KB</span>
+              <input type="number" id="resize-target-size" min="1" max="100000" value={defaultTargetSize ? String(defaultTargetSize) : "100"} />
+              <span class="unit-sign">{defaultUnit}</span>
             </div>
           </div>
           <div class="target-size-presets">
+            <button type="button" class="target-preset-btn" data-kb="10">10 KB</button>
             <button type="button" class="target-preset-btn" data-kb="15">15 KB</button>
             <button type="button" class="target-preset-btn" data-kb="20">20 KB</button>
             <button type="button" class="target-preset-btn" data-kb="25">25 KB</button>
             <button type="button" class="target-preset-btn" data-kb="50">50 KB</button>
-            <button type="button" class="target-preset-btn active" data-kb="100">100 KB</button>
+            <button type="button" class="target-preset-btn" data-kb="100">100 KB</button>
             <button type="button" class="target-preset-btn" data-kb="200">200 KB</button>
             <button type="button" class="target-preset-btn" data-kb="500">500 KB</button>
-            <button type="button" class="target-preset-btn" data-kb="1024">1 MB</button>
           </div>
         </div>
 

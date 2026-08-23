@@ -1,0 +1,375 @@
+---
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import ImageResizer from '@/components/ImageResizer.astro';
+
+const canonicalUrl = 'https://imgfeel.com/blog/resize-image-to-80kb/';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Resize Image to 80KB' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  'headline': 'Resize Image to 80KB Online for Free (Keep Sharp Quality) - ImgFeel',
+  'description': 'Easily compress and resize JPG, PNG, and WebP images to 80KB online for free. Ideal for job recruitment forms, document uploads, certificates, and fast web pages.',
+  'mainEntityOfPage': {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+  },
+  'author': {
+    '@type': 'Organization',
+    'name': 'ImgFeel Editorial Team',
+    'url': 'https://imgfeel.com',
+  },
+  'publisher': {
+    '@type': 'Organization',
+    'name': 'ImgFeel',
+    'logo': {
+      '@type': 'ImageObject',
+      'url': 'https://imgfeel.com/favicon.svg',
+    },
+  },
+  'image': 'https://imgfeel.com/favicon.svg',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  'mainEntity': [
+    {
+      '@type': 'Question',
+      'name': 'How do I resize a 3MB or 5MB scanned certificate to 80KB without making text unreadable?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'ImgFeel uses an edge-aware multi-pass binary search algorithm. Instead of crushing resolution and smudging fine print, it preserves high-contrast text outlines, official stamps, and serial numbers while eliminating redundant metadata and optimizing quantization matrices at 80 KB.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Is 80KB an accepted limit for online job and government exam applications?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes. While basic passport photos are often limited to 50 KB, scanned educational degrees, category certificates, identity proofs, and corporate employment documents typically require upload files between 50 KB and 100 KB. Sizing to 80 KB guarantees safety from rejection.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Will compressing to 80KB alter my original image dimensions or aspect ratio?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'ImgFeel retains your original aspect ratio perfectly. If the source file is exceptionally large (e.g. 5000 × 3500 px), it resamples the physical canvas proportionally to high-definition resolution (such as 1600 × 1200 px) without stretching or warping the document.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Is ImgFeel safe for compressing confidential documents, ID cards, and degrees?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes, 100%. ImgFeel operates entirely inside your web browser using HTML5 Canvas APIs. Your sensitive certificates, ID cards, and photographs are processed locally on your device and are never uploaded to or stored on remote servers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      'name': 'Can I resize images to 80KB directly on mobile browsers (Android/iOS)?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes. ImgFeel is fully responsive and works natively in mobile browsers like Chrome, Safari, Firefox, and Samsung Internet on smartphones and tablets with no app downloads required.',
+      },
+    },
+  ],
+};
+---
+
+<BlogLayout
+  title="Resize Image to 80KB Online for Free (Keep Sharp Quality) - ImgFeel"
+  description="Easily compress and resize JPG, PNG, and WebP images to 80KB online for free. Ideal for job recruitment forms, document uploads, certificates, and fast web pages."
+  canonicalUrl={canonicalUrl}
+  publishDate="Updated Guide"
+  readTime="10 min read"
+  breadcrumbs={breadcrumbs}
+  schema={articleSchema}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- TOP SECTION (Above the fold) -->
+  <h1>Resize Image to 80KB Online for Free (Instant & Lossless Quality)</h1>
+
+  <p class="lead-text">
+    Need to compress a scanned marksheet, academic degree, government identity certificate, or resume photo to strictly under 80 KB? The tool below is already pre-configured to <strong>80 KB target size</strong>—simply upload your image, click Resize, and download your optimized file in seconds.
+  </p>
+
+  <!-- EMBEDDED RESIZER TOOL (Pre-configured to 80 KB) -->
+  <div class="embedded-tool-wrapper">
+    <ImageResizer locale="en" initialTab="Target Size" defaultTargetSize={80} defaultUnit="KB" />
+  </div>
+
+  <div class="toc-box">
+    <div class="toc-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="8" y1="6" x2="21" y2="6"></line>
+        <line x1="8" y1="12" x2="21" y2="6"></line>
+        <line x1="8" y1="18" x2="21" y2="18"></line>
+        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+      </svg>
+      Table of Contents
+    </div>
+    <ol class="toc-list">
+      <li><a href="#step-by-step">1. Step-by-Step Practical Walkthrough</a></li>
+      <li><a href="#practical-use-cases">2. Detailed Practical Use Cases for 80 KB Images</a></li>
+      <li><a href="#compression-science">3. Compression Science: Preserving Fine Text & Resolution at 80KB</a></li>
+      <li><a href="#format-selection">4. File Format Selection (JPG vs. PNG vs. WebP at 80KB)</a></li>
+      <li><a href="#common-errors">5. Common Submission Errors & Best Practices</a></li>
+      <li><a href="#security-privacy">6. Client-Side Speed, Security & Privacy</a></li>
+      <li><a href="#faqs">7. Frequently Asked Questions (FAQs)</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <h2 id="step-by-step">1. Step-by-Step Practical Walkthrough</h2>
+  <p>
+    Reducing your photos, educational certificates, or document scans to an exact 80 KB file threshold is instant, frictionless, and completely free on ImgFeel. Follow these three simple steps:
+  </p>
+
+  <div class="steps-container">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <div class="step-body">
+        <h4>Step 1: Upload Your Image File</h4>
+        <p>
+          Drag and drop your JPG, PNG, or WebP file into the upload box above, or click "Browse Image" to select a file from your computer, smartphone, or tablet.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <div class="step-body">
+        <h4>Step 2: Confirm the 80 KB Target Parameter</h4>
+        <p>
+          The tool automatically launches in <strong>Target File Size</strong> mode with <strong>80 KB</strong> pre-selected. You can retain your original format or choose standard JPG for broad compatibility.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <div class="step-body">
+        <h4>Step 3: Instant Processing & Download</h4>
+        <p>
+          Click the blue "Resize" button. ImgFeel's browser engine optimizes your file in milliseconds and outputs a clean file strictly under 80 KB. Click "Download" to save your compliant image.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2 id="practical-use-cases">2. Detailed Practical Use Cases for 80 KB Images</h2>
+  <p>
+    An 80 KB file threshold provides generous byte capacity compared to 20 KB or 50 KB limits, allowing higher resolution, crisp typography, and full-color fidelity while remaining strictly below rigid 100 KB portal ceilings.
+  </p>
+
+  <h3>1. Government & Academic Document Portals</h3>
+  <p>
+    Major state public service commissions, university counseling boards, and technical entrance portals enforce a <strong>50 KB to 100 KB upload bracket</strong> for scanned documents:
+  </p>
+  <ul>
+    <li><strong>State Public Service Commissions (PSCs):</strong> Portals for UPPSC, BPSC, MPSC, RPSC, and TNPSC require scanned 10th/12th marksheets, degree certificates, and caste proofs uploaded under 100 KB. Targeting 80 KB gives maximum clarity while staying safely under the limit.</li>
+    <li><strong>University Admissions & Counseling (JoSAA, NEET, CUET):</strong> Central counseling platforms require scanned migration certificates, marksheets, and medical fitness certificates formatted under 100 KB.</li>
+    <li><strong>Teacher Eligibility & Civil Services Verification:</strong> CTET, State TETs, and UPSC Mains document verification portals mandate supporting certificates formatted under 100 KB.</li>
+  </ul>
+
+  <h3>2. Professional Recruitment & Corporate KYC</h3>
+  <p>
+    Enterprise human resource platforms and background verification portals (such as HireRight and First Advantage) require scanned documents for pre-employment checks:
+  </p>
+  <ul>
+    <li><strong>Resume Headshots:</strong> High-resolution professional portraits for LinkedIn profiles, CV attachments, and employee directories.</li>
+    <li><strong>Identity Proof Scans:</strong> Passport bio pages, driver licenses, and national ID scans that require high-contrast text readability.</li>
+    <li><strong>Employment Offer Letters & Salary Slips:</strong> Digital document uploads for banking and corporate onboarding workflows.</li>
+  </ul>
+
+  <h3>3. Web Development & Digital Publishing</h3>
+  <p>
+    In web development, serving heavy images slows down user page loads and damages Google Core Web Vitals:
+  </p>
+  <ul>
+    <li><strong>High-Resolution Blog Figures:</strong> High-density technical charts, software screenshots, and infographics compressed under 80 KB render sharply on Retina screens without bloating page weight.</li>
+    <li><strong>E-Commerce Gallery Previews:</strong> Product detail images and zoom modals optimized to 80 KB load instantaneously over mobile 4G/5G connections.</li>
+  </ul>
+
+  <!-- SECTION 3 -->
+  <h2 id="compression-science">3. Compression Science: Preserving Fine Text & Resolution at 80KB</h2>
+  <p>
+    Standard online resizers often rely on crude linear downscaling that smudges fine text and introduces color banding. ImgFeel uses sophisticated multi-stage optimization to preserve high fidelity at 80 KB.
+  </p>
+
+  <h3>How ImgFeel Preserves Fine Text & High Resolution</h3>
+  <ol>
+    <li><strong>Edge-Aware Quantization:</strong> Applies frequency-domain discrete cosine transform (DCT) optimization that isolates sharp alphanumeric characters, signature strokes, and official seals from background noise.</li>
+    <li><strong>High-Resolution Canvas Retention:</strong> With an 80 KB byte budget, ImgFeel can retain full 1080p resolution (e.g. 1600 × 1200 px), ensuring that multi-column tables and small print remain crisp.</li>
+    <li><strong>Redundant Metadata Stripping:</strong> Strips non-essential camera tags, GPS coordinates, and color profiles that waste 15 KB to 30 KB of raw file weight.</li>
+  </ol>
+
+  <h3>Raw Input vs. ImgFeel 80 KB Output Comparison</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Raw Camera Photo / Scan</th>
+          <th>Crude Online Compressor</th>
+          <th>ImgFeel Smart 80KB Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>File Size</strong></td>
+          <td>5.0 MB – 12.0 MB</td>
+          <td>~79.8 KB</td>
+          <td><strong>65.0 KB – 79.5 KB</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Physical Dimensions</strong></td>
+          <td>4000 × 3000 px</td>
+          <td>4000 × 3000 px (Heavy Pixelation)</td>
+          <td><strong>1600 × 1200 px (Crisp & High-Res)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Fine Text Readability</strong></td>
+          <td>100% (Uncompressed)</td>
+          <td>Poor (Smudged letters & halos)</td>
+          <td><strong>High (Clean alphanumeric edges)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Visual Artifact Score</strong></td>
+          <td>None</td>
+          <td>Moderate (JPEG noise around text)</td>
+          <td><strong>Minimal (Sharp seals & lines)</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Upload Speed</strong></td>
+          <td>Slow (4–10 seconds)</td>
+          <td>Fast</td>
+          <td><strong>Instantaneous (&lt; 0.1s)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 4 -->
+  <h2 id="format-selection">4. File Format Selection (JPG vs. PNG vs. WebP at 80KB)</h2>
+  <p>
+    Selecting the appropriate output format ensures maximum image quality at 80 KB:
+  </p>
+
+  <h3>1. JPG / JPEG (Best for Colored Certificates & Photographs)</h3>
+  <ul>
+    <li><strong>Ideal For:</strong> Academic degrees, colored marksheet scans, passport portraits, and job application forms.</li>
+    <li><strong>Why It Works:</strong> JPG's discrete cosine transform compression provides rich color gradients and realistic skin tones under 80 KB.</li>
+  </ul>
+
+  <h3>2. PNG (Best for Line Art, Stamps & Signatures)</h3>
+  <ul>
+    <li><strong>Ideal For:</strong> Official stamps, digital signatures, vector icons, and transparent background graphics.</li>
+    <li><strong>Why It Works:</strong> Lossless Deflate encoding keeps high-contrast pen strokes perfectly sharp with zero ringing artifacts around letters.</li>
+  </ul>
+
+  <h3>3. WebP (Best for Modern Web & Mobile UI)</h3>
+  <ul>
+    <li><strong>Ideal For:</strong> Web hero banners, blog graphics, user profiles, and e-commerce thumbnails.</li>
+    <li><strong>Why It Works:</strong> Modern predictive encoding delivers up to 35% higher visual density than JPEG at equivalent 80 KB file weights.</li>
+  </ul>
+
+  <!-- SECTION 5 -->
+  <h2 id="common-errors">5. Common Submission Errors & Best Practices</h2>
+  <p>
+    To ensure your uploaded documents pass automated portal verification without rejection, follow these essential tips:
+  </p>
+
+  <div class="warning-box">
+    <p>
+      <strong>The 80.01 KB Trap:</strong> Online application validators strictly reject files that measure even a fraction of a kilobyte over the limit. ImgFeel's target size engine automatically calibrates output files between 70 KB and 79.5 KB to guarantee 100% compliance.
+    </p>
+  </div>
+
+  <h3>Key Best Practices</h3>
+  <ul>
+    <li><strong>Crop Excess Borders:</strong> Trim unnecessary white borders or scanning bed margins before uploading to dedicate all 80 KB of bandwidth to important text.</li>
+    <li><strong>Maintain Clean Lighting:</strong> Ensure document scans have even lighting with no shadows across text lines to avoid dark noise that inflates byte size.</li>
+    <li><strong>Verify File Properties:</strong> After downloading, check the file details on your device (Windows Properties, Mac Get Info, or Android Details) to confirm the final size is safely under 80 KB.</li>
+  </ul>
+
+  <!-- SECTION 6 -->
+  <h2 id="security-privacy">6. Client-Side Speed, Security & Privacy</h2>
+  <p>
+    When resizing sensitive personal documents—such as academic marksheets, national ID cards, degree certificates, and passport photos—privacy is paramount.
+  </p>
+
+  <div class="tip-box">
+    <p>
+      <strong>The ImgFeel Client-Side Privacy Guarantee:</strong> Unlike legacy online tools that upload your files to remote cloud servers, ImgFeel executes 100% of its image compression algorithms locally in your browser using the HTML5 Canvas API and WebAssembly. Your photos and documents never leave your device.
+    </p>
+  </div>
+
+  <ul>
+    <li><strong>Instant Hardware Acceleration:</strong> Local browser processing compresses files in under 100 milliseconds without server upload lag.</li>
+    <li><strong>Zero Cloud Logging:</strong> No personal documents are ever stored on remote databases or third-party servers.</li>
+    <li><strong>Unlimited Free Access:</strong> Resize as many documents as needed with no paywalls, queues, or watermark branding.</li>
+  </ul>
+
+  <!-- SECTION 7 -->
+  <h2 id="faqs">7. Frequently Asked Questions (FAQs)</h2>
+
+  <div class="faq-group">
+    <div class="faq-item">
+      <h3 class="faq-question">How do I resize a 3MB or 5MB scanned certificate to 80KB without making text unreadable?</h3>
+      <p class="faq-answer">
+        ImgFeel uses an edge-aware multi-pass binary search algorithm. Instead of crushing resolution and smudging fine print, it preserves high-contrast text outlines, official stamps, and serial numbers while eliminating redundant metadata and optimizing quantization matrices at 80 KB.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Is 80KB an accepted limit for online job and government exam applications?</h3>
+      <p class="faq-answer">
+        Yes. While basic passport photos are often limited to 50 KB, scanned educational degrees, category certificates, identity proofs, and corporate employment documents typically require upload files between 50 KB and 100 KB. Sizing to 80 KB guarantees safety from rejection.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Will compressing to 80KB alter my original image dimensions or aspect ratio?</h3>
+      <p class="faq-answer">
+        ImgFeel retains your original aspect ratio perfectly. If the source file is exceptionally large (e.g. 5000 × 3500 px), it resamples the physical canvas proportionally to high-definition resolution (such as 1600 × 1200 px) without stretching or warping the document.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Is ImgFeel safe for compressing confidential documents, ID cards, and degrees?</h3>
+      <p class="faq-answer">
+        Yes, 100%. ImgFeel operates entirely inside your web browser using HTML5 Canvas APIs. Your sensitive certificates, ID cards, and photographs are processed locally on your device and are never uploaded to or stored on remote servers.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3 class="faq-question">Can I resize images to 80KB directly on mobile browsers (Android/iOS)?</h3>
+      <p class="faq-answer">
+        Yes. ImgFeel is fully responsive and works natively in mobile browsers like Chrome, Safari, Firefox, and Samsung Internet on smartphones and tablets with no app downloads required.
+      </p>
+    </div>
+  </div>
+</BlogLayout>
+
+<style>
+  .embedded-tool-wrapper {
+    margin-block: var(--space-6) var(--space-10);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+</style>

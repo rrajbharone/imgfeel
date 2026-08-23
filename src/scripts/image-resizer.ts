@@ -82,6 +82,9 @@ if (isAvifSupported && optAvif) {
   optAvif.hidden = false;
 }
 
+const initialModeAttr = app.dataset.initialMode as 'dimensions' | 'percentage' | 'targetSize' | undefined;
+const defaultTargetSizeAttr = app.dataset.defaultTargetSize;
+
 // State
 const state: ResizerState = {
   file: null,
@@ -89,10 +92,18 @@ const state: ResizerState = {
   originalWidth: 0,
   originalHeight: 0,
   aspectRatio: 1,
-  mode: 'dimensions',
+  mode: initialModeAttr ?? 'dimensions',
   resultBlob: null,
   resultUrl: null,
 };
+
+if (defaultTargetSizeAttr && targetSizeInput) {
+  targetSizeInput.value = defaultTargetSizeAttr;
+}
+
+if (initialModeAttr) {
+  setMode(initialModeAttr);
+}
 
 // Utility: format file size
 function formatSize(bytes: number): string {
@@ -372,6 +383,9 @@ function loadImage(file: File): void {
       // Set default values
       widthInput.value = String(img.naturalWidth);
       heightInput.value = String(img.naturalHeight);
+      if (defaultTargetSizeAttr) {
+        targetSizeInput.value = defaultTargetSizeAttr;
+      }
       formatSelect.value = 'original';
       updatePercentagePreview();
       updateTargetPresetHighlights();
