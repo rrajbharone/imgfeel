@@ -16,6 +16,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/blog'),
+      customSitemaps: ['https://imgfeel.com/sitemap-blog.xml'],
       i18n: {
         defaultLocale: 'en',
         locales: {
