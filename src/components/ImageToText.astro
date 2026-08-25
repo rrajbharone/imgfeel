@@ -1,0 +1,1010 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="image-to-text-wrapper" data-locale={locale}>
+  <!-- Upload Dropzone (Initial State) -->
+  <div id="dropzoneContainer" class="dropzone-container">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'imgtotext.dropzone.title')}>
+      <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" class="file-input" />
+      <div class="dropzone-content">
+        <div class="dropzone-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <h2 class="dropzone-title">{t(locale, 'imgtotext.dropzone.title')}</h2>
+        <p class="dropzone-subtitle">{t(locale, 'imgtotext.dropzone.subtitle')}</p>
+        <div class="dropzone-actions">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            {t(locale, 'imgtotext.dropzone.browse')}
+          </button>
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            {t(locale, 'imgtotext.dropzone.sample')}
+          </button>
+        </div>
+        <div class="privacy-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>{t(locale, 'imgtotext.privacy.badge')}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Workspace -->
+  <div id="workspace" class="workspace" style="display: none;">
+    <!-- Workspace Header / File Info Bar -->
+    <div class="workspace-header-bar">
+      <div class="file-info-col">
+        <div class="file-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span id="fileNameDisplay" class="file-name">document.jpg</span>
+        </div>
+        <div class="file-meta-row">
+          <span id="pixelDimBadge" class="badge">1600 × 2000 px</span>
+          <span id="fileSizeBadge" class="badge">Size: 320 KB</span>
+        </div>
+      </div>
+      <button type="button" id="changeImageBtn" class="btn btn-secondary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        {t(locale, 'imgtotext.action.changeImage')}
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">An error occurred</span>
+    </div>
+
+    <!-- Settings Bar Card -->
+    <div class="control-group settings-card">
+      <div class="settings-row">
+        <div class="setting-field">
+          <label for="ocrLangSelect">{t(locale, 'imgtotext.label.language')}</label>
+          <select id="ocrLangSelect" class="form-select">
+            <option value="eng" selected>{t(locale, 'imgtotext.lang.eng')}</option>
+            <option value="spa">{t(locale, 'imgtotext.lang.spa')}</option>
+            <option value="fra">{t(locale, 'imgtotext.lang.fra')}</option>
+            <option value="deu">{t(locale, 'imgtotext.lang.deu')}</option>
+            <option value="por">{t(locale, 'imgtotext.lang.por')}</option>
+            <option value="ind">{t(locale, 'imgtotext.lang.ind')}</option>
+            <option value="ita">{t(locale, 'imgtotext.lang.ita')}</option>
+            <option value="tur">{t(locale, 'imgtotext.lang.tur')}</option>
+          </select>
+        </div>
+
+        <div class="enhance-checkbox-col">
+          <label class="checkbox-label" title={t(locale, 'imgtotext.label.enhanceDesc')}>
+            <input type="checkbox" id="enhanceCheckbox" checked />
+            <div class="checkbox-body">
+              <strong>{t(locale, 'imgtotext.label.enhance')}</strong>
+              <span>{t(locale, 'imgtotext.label.enhanceDesc')}</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="extract-btn-col">
+          <button type="button" id="extractBtn" class="btn btn-primary btn-xl">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span id="extractBtnText">{t(locale, 'imgtotext.action.extract')}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- OCR Progress Bar -->
+      <div id="progressContainer" class="progress-box" style="display: none;">
+        <div class="progress-header">
+          <span id="progressStatus">Initializing OCR Engine...</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBar" class="progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-Column Workspace (Image on Left, Extracted Text on Right) -->
+    <div class="workspace-grid">
+      <!-- Left Column: Image Preview -->
+      <div class="preview-panel">
+        <div class="preview-panel-header">
+          <h3 class="preview-title">{t(locale, 'imgtotext.section.preview')}</h3>
+          <div class="zoom-controls">
+            <button type="button" id="zoomOutBtn" class="zoom-btn" title="Zoom Out">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </button>
+            <span id="zoomLevelDisplay" class="zoom-level">100%</span>
+            <button type="button" id="zoomInBtn" class="zoom-btn" title="Zoom In">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="preview-viewport">
+          <img id="previewImage" class="preview-img" alt="OCR Source Document" />
+        </div>
+      </div>
+
+      <!-- Right Column: Extracted Text Editor -->
+      <div class="text-editor-panel">
+        <div class="text-editor-header">
+          <h3 class="group-title">{t(locale, 'imgtotext.section.extractedText')}</h3>
+          <div class="stats-row">
+            <span class="stat-badge"><strong id="wordCount">0</strong> {t(locale, 'imgtotext.stat.words')}</span>
+            <span class="stat-badge"><strong id="charCount">0</strong> {t(locale, 'imgtotext.stat.chars')}</span>
+            <span class="stat-badge"><strong id="lineCount">0</strong> {t(locale, 'imgtotext.stat.lines')}</span>
+            <span id="confidenceBadge" class="stat-badge stat-accent" style="display: none;">Conf: <strong id="confidenceVal">95%</strong></span>
+          </div>
+        </div>
+
+        <textarea id="extractedTextArea" class="extracted-textarea" placeholder={t(locale, 'imgtotext.placeholder.empty')}></textarea>
+
+        <div class="editor-actions-row">
+          <div class="actions-left">
+            <button type="button" id="copyTextBtn" class="btn btn-primary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="copyBtnText">{t(locale, 'imgtotext.action.copy')}</span>
+            </button>
+
+            <button type="button" id="downloadTxtBtn" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              {t(locale, 'imgtotext.action.downloadTxt')}
+            </button>
+          </div>
+
+          <button type="button" id="clearTextBtn" class="btn btn-text-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            {t(locale, 'imgtotext.action.clear')}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { ImageToTextEngine } from '@/scripts/image-to-text';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const engine = new ImageToTextEngine();
+
+    // DOM Elements
+    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn')!;
+    const sampleBtn = document.getElementById('sampleBtn')!;
+    const workspace = document.getElementById('workspace')!;
+    const changeImageBtn = document.getElementById('changeImageBtn')!;
+    const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const pixelDimBadge = document.getElementById('pixelDimBadge')!;
+    const fileSizeBadge = document.getElementById('fileSizeBadge')!;
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
+    // Settings
+    const ocrLangSelect = document.getElementById('ocrLangSelect') as HTMLSelectElement;
+    const enhanceCheckbox = document.getElementById('enhanceCheckbox') as HTMLInputElement;
+    const extractBtn = document.getElementById('extractBtn')!;
+    const extractBtnText = document.getElementById('extractBtnText')!;
+
+    // Progress
+    const progressContainer = document.getElementById('progressContainer')!;
+    const progressStatus = document.getElementById('progressStatus')!;
+    const progressPercent = document.getElementById('progressPercent')!;
+    const progressBar = document.getElementById('progressBar')!;
+
+    // Preview
+    const previewImage = document.getElementById('previewImage') as HTMLImageElement;
+    const zoomInBtn = document.getElementById('zoomInBtn')!;
+    const zoomOutBtn = document.getElementById('zoomOutBtn')!;
+    const zoomLevelDisplay = document.getElementById('zoomLevelDisplay')!;
+
+    // Editor & Stats
+    const extractedTextArea = document.getElementById('extractedTextArea') as HTMLTextAreaElement;
+    const wordCount = document.getElementById('wordCount')!;
+    const charCount = document.getElementById('charCount')!;
+    const lineCount = document.getElementById('lineCount')!;
+    const confidenceBadge = document.getElementById('confidenceBadge')!;
+    const confidenceVal = document.getElementById('confidenceVal')!;
+    const copyTextBtn = document.getElementById('copyTextBtn')!;
+    const copyBtnText = document.getElementById('copyBtnText')!;
+    const downloadTxtBtn = document.getElementById('downloadTxtBtn')!;
+    const clearTextBtn = document.getElementById('clearTextBtn')!;
+
+    // State
+    let currentFile: File | null = null;
+    let previewZoom = 1;
+
+    function formatBytes(bytes: number): string {
+      if (bytes <= 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function showError(msg: string) {
+      errorMessage.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    function updateStats() {
+      const text = extractedTextArea.value;
+      const metrics = ImageToTextEngine.calculateMetrics(text);
+      wordCount.textContent = metrics.words.toString();
+      charCount.textContent = metrics.charsWithSpaces.toString();
+      lineCount.textContent = metrics.lines.toString();
+    }
+
+    async function handleImageLoaded(file: File, dataUrl?: string) {
+      try {
+        hideError();
+        currentFile = file;
+
+        fileNameDisplay.textContent = file.name;
+        fileSizeBadge.textContent = `Size: ${formatBytes(file.size)}`;
+
+        const src = dataUrl || URL.createObjectURL(file);
+        previewImage.src = src;
+
+        previewImage.onload = () => {
+          pixelDimBadge.textContent = `${previewImage.naturalWidth} × ${previewImage.naturalHeight} px`;
+        };
+
+        dropzoneContainer.style.display = 'none';
+        workspace.style.display = 'block';
+
+        // Auto trigger OCR on upload
+        runOcr();
+      } catch (err: any) {
+        showError(err.message || 'Failed to load image.');
+      }
+    }
+
+    async function runOcr() {
+      if (!currentFile && !previewImage.src) return;
+
+      try {
+        hideError();
+        extractBtn.setAttribute('disabled', 'true');
+        extractBtnText.textContent = 'Extracting...';
+        progressContainer.style.display = 'flex';
+
+        const lang = ocrLangSelect.value;
+        const enhance = enhanceCheckbox.checked;
+
+        const result = await engine.recognizeText(
+          previewImage,
+          lang,
+          enhance,
+          (prog) => {
+            progressStatus.textContent = prog.status;
+            const pct = Math.round(prog.progress * 100);
+            progressPercent.textContent = `${pct}%`;
+            progressBar.style.width = `${pct}%`;
+          }
+        );
+
+        extractedTextArea.value = result.text;
+        updateStats();
+
+        confidenceBadge.style.display = 'inline-flex';
+        confidenceVal.textContent = `${result.confidence}%`;
+
+        setTimeout(() => {
+          progressContainer.style.display = 'none';
+          progressBar.style.width = '0%';
+        }, 1000);
+
+        extractBtn.removeAttribute('disabled');
+        extractBtnText.textContent = 'Extract Text from Image';
+      } catch (err: any) {
+        progressContainer.style.display = 'none';
+        extractBtn.removeAttribute('disabled');
+        extractBtnText.textContent = 'Extract Text from Image';
+        showError(err.message || 'OCR extraction encountered an error.');
+      }
+    }
+
+    // Event Listeners
+    browseBtn.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const sample = await engine.generateSampleDocument();
+      handleImageLoaded(sample.file, sample.dataUrl);
+    });
+
+    changeImageBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) handleImageLoaded(file);
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer?.files[0];
+      if (file) handleImageLoaded(file);
+    });
+
+    // Actions
+    extractBtn.addEventListener('click', runOcr);
+    extractedTextArea.addEventListener('input', updateStats);
+
+    // Zoom
+    zoomInBtn.addEventListener('click', () => {
+      if (previewZoom < 3) {
+        previewZoom = Math.min(3, parseFloat((previewZoom + 0.25).toFixed(2)));
+        zoomLevelDisplay.textContent = `${Math.round(previewZoom * 100)}%`;
+        previewImage.style.transform = `scale(${previewZoom})`;
+      }
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+      if (previewZoom > 0.5) {
+        previewZoom = Math.max(0.5, parseFloat((previewZoom - 0.25).toFixed(2)));
+        zoomLevelDisplay.textContent = `${Math.round(previewZoom * 100)}%`;
+        previewImage.style.transform = `scale(${previewZoom})`;
+      }
+    });
+
+    // Copy Text
+    copyTextBtn.addEventListener('click', async () => {
+      const text = extractedTextArea.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const originalText = copyBtnText.textContent;
+        copyBtnText.textContent = 'Copied!';
+        copyTextBtn.classList.add('btn-success');
+        setTimeout(() => {
+          copyBtnText.textContent = originalText;
+          copyTextBtn.classList.remove('btn-success');
+        }, 2500);
+      } catch (err) {
+        console.error('Clipboard copy failed:', err);
+      }
+    });
+
+    // Download TXT
+    downloadTxtBtn.addEventListener('click', () => {
+      const text = extractedTextArea.value;
+      if (!text) return;
+
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const baseName = currentFile ? currentFile.name.replace(/\.[^/.]+$/, '') : 'extracted-text';
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${baseName}-ocr.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Clear
+    clearTextBtn.addEventListener('click', () => {
+      extractedTextArea.value = '';
+      updateStats();
+    });
+  });
+</script>
+
+<style>
+  .image-to-text-wrapper {
+    width: 100%;
+  }
+
+  /* Dropzone */
+  .dropzone-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .dropzone:hover,
+  .dropzone.drag-over {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .dropzone-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .privacy-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-2);
+  }
+
+  /* Workspace */
+  .workspace {
+    width: 100%;
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+  }
+
+  .file-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .file-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  /* Error Banner */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #EF4444;
+    border-radius: var(--radius-md);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Settings Card */
+  .settings-card {
+    margin-bottom: var(--space-5);
+  }
+
+  .settings-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .settings-row {
+      grid-template-columns: 220px 1fr auto;
+    }
+  }
+
+  .setting-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .setting-field label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .form-select {
+    height: 44px;
+    padding: 8px 12px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .form-select:focus {
+    outline: none;
+    border-color: #4F46E5;
+  }
+
+  .enhance-checkbox-col {
+    display: flex;
+    align-items: center;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    margin-top: 3px;
+    accent-color: #4F46E5;
+    width: 16px;
+    height: 16px;
+  }
+
+  .checkbox-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .checkbox-body strong {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .checkbox-body span {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Progress Box */
+  .progress-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    color: #4F46E5;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 8px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #4F46E5;
+    transition: width 0.2s ease;
+  }
+
+  /* Two Column Grid */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 900px) {
+    .workspace-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Left Panel: Preview */
+  .preview-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .preview-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .preview-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2px 4px;
+  }
+
+  .zoom-btn {
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .zoom-btn:hover {
+    background: var(--color-surface);
+  }
+
+  .zoom-level {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .preview-viewport {
+    width: 100%;
+    height: 480px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 16px;
+  }
+
+  .preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.15s ease;
+    transform-origin: center center;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Right Panel: Editor */
+  .text-editor-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .text-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .group-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .stat-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .stat-badge strong {
+    color: var(--color-text);
+  }
+
+  .stat-accent {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: rgba(79, 70, 229, 0.3);
+    color: #4F46E5;
+    font-weight: 700;
+  }
+
+  .extracted-textarea {
+    width: 100%;
+    height: 480px;
+    padding: 14px 16px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--color-text);
+    font-family: inherit;
+    resize: none;
+  }
+
+  .extracted-textarea:focus {
+    outline: none;
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+  }
+
+  .editor-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .actions-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn-text-link {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+  }
+
+  .btn-text-link:hover {
+    color: #DC2626;
+  }
+
+  /* General Control Group */
+  .control-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* General Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+  }
+
+  .btn-sm {
+    height: 36px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .btn-lg {
+    height: 42px;
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+
+  .btn-xl {
+    height: 46px;
+    padding: 10px 22px;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #4338CA;
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  .btn-success {
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+    color: #ffffff !important;
+  }
+</style>

@@ -1,0 +1,1409 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="svg-resizer-wrapper" data-locale={locale}>
+  <!-- Upload Dropzone (Initial State) -->
+  <div id="dropzoneContainer" class="dropzone-container">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'svgresizer.dropzone.title')}>
+      <input type="file" id="fileInput" accept=".svg,image/svg+xml" class="file-input" />
+      <div class="dropzone-content">
+        <div class="dropzone-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <circle cx="10" cy="13" r="2"></circle>
+            <path d="m20 17-1.09-1.09a2 2 0 0 0-2.82 0L10 22"></path>
+          </svg>
+        </div>
+        <h2 class="dropzone-title">{t(locale, 'svgresizer.dropzone.title')}</h2>
+        <p class="dropzone-subtitle">{t(locale, 'svgresizer.dropzone.subtitle')}</p>
+        <div class="dropzone-actions">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            {t(locale, 'svgresizer.dropzone.browse')}
+          </button>
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            {t(locale, 'svgresizer.dropzone.sample')}
+          </button>
+        </div>
+        <div class="privacy-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>{t(locale, 'svgresizer.privacy.badge')}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Active Workspace -->
+  <div id="workspace" class="workspace" style="display: none;">
+    <!-- Workspace Header / File Info Bar -->
+    <div class="workspace-header-bar">
+      <div class="file-info-col">
+        <div class="file-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span id="fileNameDisplay" class="file-name">graphic.svg</span>
+        </div>
+        <div class="file-meta-row">
+          <span id="origDimBadge" class="badge">Orig: 800 × 600 px</span>
+          <span id="origSizeBadge" class="badge">Size: 4.2 KB</span>
+          <span id="viewBoxBadge" class="badge badge-subtle">viewBox: 0 0 800 600</span>
+        </div>
+      </div>
+      <button type="button" id="changeImageBtn" class="btn btn-secondary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        {t(locale, 'svgresizer.action.changeImage')}
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">Invalid SVG file</span>
+    </div>
+
+    <!-- Two-Column Workspace Layout -->
+    <div class="workspace-grid">
+      <!-- Left Column: Controls & Presets -->
+      <div class="controls-panel">
+        <!-- 1. Custom Dimensions (px) -->
+        <div class="control-group">
+          <div class="control-group-header">
+            <h3 class="group-title">{t(locale, 'svgresizer.section.dimensions')}</h3>
+            <button type="button" id="resetBtn" class="btn-text-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              {t(locale, 'svgresizer.action.reset')}
+            </button>
+          </div>
+
+          <div class="dimension-inputs-row">
+            <div class="input-field">
+              <label for="widthInput">{t(locale, 'svgresizer.label.width')}</label>
+              <div class="input-with-unit">
+                <input type="number" id="widthInput" min="1" max="10000" step="1" value="800" />
+                <span class="unit-tag">px</span>
+              </div>
+            </div>
+
+            <!-- Aspect Ratio Lock Toggle Button -->
+            <div class="aspect-lock-box">
+              <button type="button" id="aspectLockBtn" class="aspect-lock-btn active" title={t(locale, 'svgresizer.label.lockAspect')} aria-label={t(locale, 'svgresizer.label.lockAspect')}>
+                <svg id="lockIconLocked" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <svg id="lockIconUnlocked" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="input-field">
+              <label for="heightInput">{t(locale, 'svgresizer.label.height')}</label>
+              <div class="input-with-unit">
+                <input type="number" id="heightInput" min="1" max="10000" step="1" value="600" />
+                <span class="unit-tag">px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Quick Scale Multipliers -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'svgresizer.section.scale')}</h3>
+          <div class="scale-multipliers-row">
+            <button type="button" class="scale-btn" data-scale="0.25">0.25×</button>
+            <button type="button" class="scale-btn" data-scale="0.5">0.5×</button>
+            <button type="button" class="scale-btn" data-scale="0.75">0.75×</button>
+            <button type="button" class="scale-btn active" data-scale="1">1×</button>
+            <button type="button" class="scale-btn" data-scale="1.5">1.5×</button>
+            <button type="button" class="scale-btn" data-scale="2">2×</button>
+            <button type="button" class="scale-btn" data-scale="3">3×</button>
+            <button type="button" class="scale-btn" data-scale="4">4×</button>
+          </div>
+        </div>
+
+        <!-- 3. Standard Icon & Graphic Presets -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'svgresizer.section.presets')}</h3>
+          <div class="presets-grid">
+            <button type="button" class="preset-card-btn" data-w="16" data-h="16">
+              <strong>{t(locale, 'svgresizer.preset.iconSmall')}</strong>
+              <span>{t(locale, 'svgresizer.preset.iconSmallDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="24" data-h="24">
+              <strong>{t(locale, 'svgresizer.preset.iconStandard')}</strong>
+              <span>{t(locale, 'svgresizer.preset.iconStandardDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="32" data-h="32">
+              <strong>{t(locale, 'svgresizer.preset.iconMedium')}</strong>
+              <span>{t(locale, 'svgresizer.preset.iconMediumDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="48" data-h="48">
+              <strong>{t(locale, 'svgresizer.preset.iconLarge')}</strong>
+              <span>{t(locale, 'svgresizer.preset.iconLargeDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="64" data-h="64">
+              <strong>{t(locale, 'svgresizer.preset.iconXLarge')}</strong>
+              <span>{t(locale, 'svgresizer.preset.iconXLargeDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="128" data-h="128">
+              <strong>{t(locale, 'svgresizer.preset.badge')}</strong>
+              <span>{t(locale, 'svgresizer.preset.badgeDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="256" data-h="256">
+              <strong>{t(locale, 'svgresizer.preset.logo')}</strong>
+              <span>{t(locale, 'svgresizer.preset.logoDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="512" data-h="512">
+              <strong>{t(locale, 'svgresizer.preset.illustration')}</strong>
+              <span>{t(locale, 'svgresizer.preset.illustrationDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="1024" data-h="1024">
+              <strong>{t(locale, 'svgresizer.preset.hdBanner')}</strong>
+              <span>{t(locale, 'svgresizer.preset.hdBannerDesc')}</span>
+            </button>
+            <button type="button" class="preset-card-btn" data-w="1920" data-h="1080">
+              <strong>{t(locale, 'svgresizer.preset.fullHd')}</strong>
+              <span>{t(locale, 'svgresizer.preset.fullHdDesc')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Preview Background Selector -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'svgresizer.section.previewBg')}</h3>
+          <div class="bg-selector-row">
+            <button type="button" class="bg-choice-btn active" data-bg="transparent">
+              <span class="bg-swatch checkerboard"></span>
+              <span>{t(locale, 'svgresizer.bg.transparent')}</span>
+            </button>
+            <button type="button" class="bg-choice-btn" data-bg="#ffffff">
+              <span class="bg-swatch white-swatch"></span>
+              <span>{t(locale, 'svgresizer.bg.light')}</span>
+            </button>
+            <button type="button" class="bg-choice-btn" data-bg="#0f172a">
+              <span class="bg-swatch dark-swatch"></span>
+              <span>{t(locale, 'svgresizer.bg.dark')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. Output Format & Download -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'svgresizer.section.export')}</h3>
+          
+          <div class="export-format-selector">
+            <label class="radio-label active" data-fmt="svg">
+              <input type="radio" name="exportFormat" value="svg" checked />
+              <div class="radio-body">
+                <strong>SVG (.svg)</strong>
+                <span>Clean vector code with updated width, height & viewBox</span>
+              </div>
+            </label>
+            <label class="radio-label" data-fmt="png">
+              <input type="radio" name="exportFormat" value="png" />
+              <div class="radio-body">
+                <strong>PNG (.png)</strong>
+                <span>High-resolution raster export with alpha transparency</span>
+              </div>
+            </label>
+            <label class="radio-label" data-fmt="webp">
+              <input type="radio" name="exportFormat" value="webp" />
+              <div class="radio-body">
+                <strong>WebP (.webp)</strong>
+                <span>Next-gen ultra-compressed image format</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="export-summary-box">
+            <div class="summary-item">
+              <span class="summary-label">{t(locale, 'svgresizer.label.newSize')}</span>
+              <strong id="summaryDimDisplay">800 × 600 px</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">{t(locale, 'svgresizer.size.estimate')}</span>
+              <strong id="summarySizeDisplay">~4.2 KB</strong>
+            </div>
+          </div>
+
+          <div class="action-buttons-stack">
+            <button type="button" id="downloadBtn" class="btn btn-primary btn-xl">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              {t(locale, 'svgresizer.action.download')}
+            </button>
+
+            <button type="button" id="copySvgBtn" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="copyBtnText">{t(locale, 'svgresizer.action.copySvg')}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Live Preview Viewport -->
+      <div class="preview-panel">
+        <div class="preview-panel-header">
+          <h3 class="preview-title">{t(locale, 'svgresizer.preview.title')}</h3>
+          <div class="zoom-controls">
+            <button type="button" id="zoomOutBtn" class="zoom-btn" title={t(locale, 'svgresizer.preview.zoomOut')}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </button>
+            <span id="zoomLevelDisplay" class="zoom-level">100%</span>
+            <button type="button" id="zoomInBtn" class="zoom-btn" title={t(locale, 'svgresizer.preview.zoomIn')}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </button>
+            <button type="button" id="zoomResetBtn" class="zoom-btn" title={t(locale, 'svgresizer.preview.zoomReset')}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="previewViewport" class="preview-viewport checkerboard">
+          <div id="svgContainer" class="svg-container">
+            <!-- Dynamic SVG content injected here -->
+          </div>
+        </div>
+
+        <div class="preview-footer-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>Vector graphics remain 100% sharp and crisp at any dimension.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { SvgResizerEngine } from '@/scripts/svg-resizer';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const engine = new SvgResizerEngine();
+
+    // DOM Elements
+    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn')!;
+    const sampleBtn = document.getElementById('sampleBtn')!;
+    const workspace = document.getElementById('workspace')!;
+    const changeImageBtn = document.getElementById('changeImageBtn')!;
+    const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const origDimBadge = document.getElementById('origDimBadge')!;
+    const origSizeBadge = document.getElementById('origSizeBadge')!;
+    const viewBoxBadge = document.getElementById('viewBoxBadge')!;
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
+    // Controls
+    const widthInput = document.getElementById('widthInput') as HTMLInputElement;
+    const heightInput = document.getElementById('heightInput') as HTMLInputElement;
+    const aspectLockBtn = document.getElementById('aspectLockBtn')!;
+    const lockIconLocked = document.getElementById('lockIconLocked')!;
+    const lockIconUnlocked = document.getElementById('lockIconUnlocked')!;
+    const resetBtn = document.getElementById('resetBtn')!;
+    const scaleBtns = document.querySelectorAll<HTMLButtonElement>('.scale-btn');
+    const presetBtns = document.querySelectorAll<HTMLButtonElement>('.preset-card-btn');
+    const bgBtns = document.querySelectorAll<HTMLButtonElement>('.bg-choice-btn');
+    const radioLabels = document.querySelectorAll<HTMLLabelElement>('.export-format-selector .radio-label');
+    const summaryDimDisplay = document.getElementById('summaryDimDisplay')!;
+    const summarySizeDisplay = document.getElementById('summarySizeDisplay')!;
+    const downloadBtn = document.getElementById('downloadBtn')!;
+    const copySvgBtn = document.getElementById('copySvgBtn')!;
+    const copyBtnText = document.getElementById('copyBtnText')!;
+
+    // Preview
+    const previewViewport = document.getElementById('previewViewport')!;
+    const svgContainer = document.getElementById('svgContainer')!;
+    const zoomInBtn = document.getElementById('zoomInBtn')!;
+    const zoomOutBtn = document.getElementById('zoomOutBtn')!;
+    const zoomResetBtn = document.getElementById('zoomResetBtn')!;
+    const zoomLevelDisplay = document.getElementById('zoomLevelDisplay')!;
+
+    // State
+    let isAspectLocked = true;
+    let currentScale = 1;
+    let previewZoom = 1;
+    let currentBg = 'transparent';
+    let currentFormat: 'svg' | 'png' | 'webp' = 'svg';
+
+    function formatBytes(bytes: number): string {
+      if (bytes <= 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function showError(msg: string) {
+      errorMessage.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    function loadSvgText(svgText: string, fileName: string, fileSize: number = 0) {
+      try {
+        hideError();
+        const meta = engine.parseSvg(svgText, fileName, fileSize);
+        
+        // Populate header badges
+        fileNameDisplay.textContent = meta.fileName;
+        origDimBadge.textContent = `Orig: ${meta.originalWidth} × ${meta.originalHeight} px`;
+        origSizeBadge.textContent = `Size: ${formatBytes(meta.fileSize)}`;
+        viewBoxBadge.textContent = `viewBox: ${meta.originalViewBox}`;
+
+        // Set inputs
+        widthInput.value = meta.originalWidth.toString();
+        heightInput.value = meta.originalHeight.toString();
+        currentScale = 1;
+
+        updateActiveScaleBtn(1);
+        updatePreview();
+
+        dropzoneContainer.style.display = 'none';
+        workspace.style.display = 'block';
+      } catch (err: any) {
+        showError(err.message || 'Failed to parse SVG file.');
+      }
+    }
+
+    function updatePreview() {
+      if (!engine.metadata) return;
+
+      const w = Math.max(1, parseInt(widthInput.value, 10) || engine.metadata.originalWidth);
+      const h = Math.max(1, parseInt(heightInput.value, 10) || engine.metadata.originalHeight);
+
+      const resizedSvg = engine.generateResizedSvg({ width: w, height: h });
+      
+      // Update preview container
+      svgContainer.innerHTML = resizedSvg;
+      const svgEl = svgContainer.querySelector('svg');
+      if (svgEl) {
+        svgEl.style.maxWidth = '100%';
+        svgEl.style.maxHeight = '100%';
+        svgEl.style.transform = `scale(${previewZoom})`;
+        svgEl.style.transformOrigin = 'center center';
+        svgEl.style.transition = 'transform 0.15s ease';
+      }
+
+      // Update summary info
+      summaryDimDisplay.textContent = `${w} × ${h} px`;
+      const estimatedBytes = new Blob([resizedSvg]).size;
+      summarySizeDisplay.textContent = `~${formatBytes(estimatedBytes)}`;
+
+      // Update download button label based on format
+      if (currentFormat === 'svg') {
+        downloadBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download Resized SVG`;
+      } else if (currentFormat === 'png') {
+        downloadBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Export as PNG (${w}×${h})`;
+      } else {
+        downloadBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Export as WebP (${w}×${h})`;
+      }
+    }
+
+    function handleWidthChange() {
+      if (!engine.metadata) return;
+      const w = parseInt(widthInput.value, 10);
+      if (isNaN(w) || w <= 0) return;
+
+      if (isAspectLocked && engine.metadata.aspectRatio > 0) {
+        const h = Math.round(w / engine.metadata.aspectRatio);
+        heightInput.value = h.toString();
+      }
+      clearActiveScaleBtns();
+      clearActivePresetBtns();
+      updatePreview();
+    }
+
+    function handleHeightChange() {
+      if (!engine.metadata) return;
+      const h = parseInt(heightInput.value, 10);
+      if (isNaN(h) || h <= 0) return;
+
+      if (isAspectLocked && engine.metadata.aspectRatio > 0) {
+        const w = Math.round(h * engine.metadata.aspectRatio);
+        widthInput.value = w.toString();
+      }
+      clearActiveScaleBtns();
+      clearActivePresetBtns();
+      updatePreview();
+    }
+
+    function updateActiveScaleBtn(scale: number) {
+      scaleBtns.forEach((btn) => {
+        const btnScale = parseFloat(btn.dataset.scale || '1');
+        if (Math.abs(btnScale - scale) < 0.01) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    function clearActiveScaleBtns() {
+      scaleBtns.forEach((btn) => btn.classList.remove('active'));
+    }
+
+    function clearActivePresetBtns() {
+      presetBtns.forEach((btn) => btn.classList.remove('active'));
+    }
+
+    // Event Listeners for Upload
+    browseBtn.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const sample = engine.generateSampleSvg();
+      loadSvgText(sample.svgText, sample.fileName, new Blob([sample.svgText]).size);
+    });
+
+    changeImageBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const content = evt.target?.result as string;
+        loadSvgText(content, file.name, file.size);
+      };
+      reader.readAsText(file);
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer?.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const content = evt.target?.result as string;
+        loadSvgText(content, file.name, file.size);
+      };
+      reader.readAsText(file);
+    });
+
+    // Controls listeners
+    widthInput.addEventListener('input', handleWidthChange);
+    heightInput.addEventListener('input', handleHeightChange);
+
+    aspectLockBtn.addEventListener('click', () => {
+      isAspectLocked = !isAspectLocked;
+      if (isAspectLocked) {
+        aspectLockBtn.classList.add('active');
+        lockIconLocked.style.display = 'block';
+        lockIconUnlocked.style.display = 'none';
+        handleWidthChange();
+      } else {
+        aspectLockBtn.classList.remove('active');
+        lockIconLocked.style.display = 'none';
+        lockIconUnlocked.style.display = 'block';
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (!engine.metadata) return;
+      widthInput.value = engine.metadata.originalWidth.toString();
+      heightInput.value = engine.metadata.originalHeight.toString();
+      isAspectLocked = true;
+      aspectLockBtn.classList.add('active');
+      lockIconLocked.style.display = 'block';
+      lockIconUnlocked.style.display = 'none';
+      updateActiveScaleBtn(1);
+      clearActivePresetBtns();
+      updatePreview();
+    });
+
+    // Scale Multipliers
+    scaleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!engine.metadata) return;
+        const scale = parseFloat(btn.dataset.scale || '1');
+        currentScale = scale;
+        clearActivePresetBtns();
+        updateActiveScaleBtn(scale);
+
+        widthInput.value = Math.round(engine.metadata.originalWidth * scale).toString();
+        heightInput.value = Math.round(engine.metadata.originalHeight * scale).toString();
+        updatePreview();
+      });
+    });
+
+    // Dimension Presets
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const w = parseInt(btn.dataset.w || '64', 10);
+        const h = parseInt(btn.dataset.h || '64', 10);
+        clearActiveScaleBtns();
+        clearActivePresetBtns();
+        btn.classList.add('active');
+
+        widthInput.value = w.toString();
+        heightInput.value = h.toString();
+        updatePreview();
+      });
+    });
+
+    // Background Selector
+    bgBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        bgBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentBg = btn.dataset.bg || 'transparent';
+
+        previewViewport.classList.remove('checkerboard');
+        if (currentBg === 'transparent') {
+          previewViewport.classList.add('checkerboard');
+          previewViewport.style.backgroundColor = '';
+        } else {
+          previewViewport.style.backgroundColor = currentBg;
+        }
+      });
+    });
+
+    // Format Selector
+    radioLabels.forEach((label) => {
+      label.addEventListener('click', () => {
+        radioLabels.forEach((l) => l.classList.remove('active'));
+        label.classList.add('active');
+        const radio = label.querySelector('input[type="radio"]') as HTMLInputElement;
+        if (radio) {
+          radio.checked = true;
+          currentFormat = radio.value as any;
+          updatePreview();
+        }
+      });
+    });
+
+    // Zoom Controls
+    zoomInBtn.addEventListener('click', () => {
+      if (previewZoom < 4) {
+        previewZoom = Math.min(4, parseFloat((previewZoom + 0.25).toFixed(2)));
+        zoomLevelDisplay.textContent = `${Math.round(previewZoom * 100)}%`;
+        updatePreview();
+      }
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+      if (previewZoom > 0.25) {
+        previewZoom = Math.max(0.25, parseFloat((previewZoom - 0.25).toFixed(2)));
+        zoomLevelDisplay.textContent = `${Math.round(previewZoom * 100)}%`;
+        updatePreview();
+      }
+    });
+
+    zoomResetBtn.addEventListener('click', () => {
+      previewZoom = 1;
+      zoomLevelDisplay.textContent = '100%';
+      updatePreview();
+    });
+
+    // Copy SVG Code
+    copySvgBtn.addEventListener('click', async () => {
+      if (!engine.metadata) return;
+      const w = parseInt(widthInput.value, 10);
+      const h = parseInt(heightInput.value, 10);
+      const svgCode = engine.generateResizedSvg({ width: w, height: h });
+
+      try {
+        await navigator.clipboard.writeText(svgCode);
+        const originalText = copyBtnText.textContent;
+        copyBtnText.textContent = 'Copied to Clipboard!';
+        copySvgBtn.classList.add('btn-success');
+        setTimeout(() => {
+          copyBtnText.textContent = originalText;
+          copySvgBtn.classList.remove('btn-success');
+        }, 2500);
+      } catch (err) {
+        console.error('Clipboard copy failed:', err);
+      }
+    });
+
+    // Download / Export Action
+    downloadBtn.addEventListener('click', async () => {
+      if (!engine.metadata) return;
+      const w = parseInt(widthInput.value, 10);
+      const h = parseInt(heightInput.value, 10);
+      const svgCode = engine.generateResizedSvg({ width: w, height: h });
+
+      const baseName = engine.metadata.fileName.replace(/\.svg$/i, '');
+      const exportResult = await engine.exportFile(svgCode, {
+        width: w,
+        height: h,
+        format: currentFormat,
+        backgroundColor: currentBg === 'transparent' ? 'transparent' : currentBg,
+      });
+
+      const url = URL.createObjectURL(exportResult.blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${baseName}-${w}x${h}.${exportResult.extension}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  });
+</script>
+
+<style>
+  .svg-resizer-wrapper {
+    width: 100%;
+  }
+
+  /* Dropzone */
+  .dropzone-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .dropzone:hover,
+  .dropzone.drag-over {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .dropzone-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    max-width: 500px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .privacy-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-2);
+  }
+
+  /* Workspace */
+  .workspace {
+    width: 100%;
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+  }
+
+  .file-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .file-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .badge-subtle {
+    font-family: monospace;
+    font-size: 11px;
+  }
+
+  /* Error Banner */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #EF4444;
+    border-radius: var(--radius-md);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Two Column Grid */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 900px) {
+    .workspace-grid {
+      grid-template-columns: 440px 1fr;
+    }
+  }
+
+  /* Left Panel: Controls */
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .control-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .control-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .group-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-text-link {
+    background: none;
+    border: none;
+    color: #4F46E5;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+  }
+
+  .btn-text-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Dimension Inputs */
+  .dimension-inputs-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .input-field label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  .input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-with-unit input {
+    width: 100%;
+    height: 42px;
+    padding: 8px 36px 8px 12px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-family: inherit;
+  }
+
+  .input-with-unit input:focus {
+    outline: none;
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+  }
+
+  .unit-tag {
+    position: absolute;
+    right: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+  }
+
+  .aspect-lock-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2px;
+  }
+
+  .aspect-lock-btn {
+    width: 42px;
+    height: 42px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .aspect-lock-btn:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  .aspect-lock-btn.active {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  /* Scale Multipliers */
+  .scale-multipliers-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  @media (min-width: 480px) {
+    .scale-multipliers-row {
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+
+  .scale-btn {
+    height: 36px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .scale-btn:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  .scale-btn.active {
+    background: #4F46E5;
+    border-color: #4F46E5;
+    color: #ffffff;
+  }
+
+  /* Presets Grid */
+  .presets-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  @media (min-width: 480px) {
+    .presets-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .preset-card-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition: all 0.15s ease;
+  }
+
+  .preset-card-btn:hover {
+    border-color: #4F46E5;
+  }
+
+  .preset-card-btn.active {
+    background: rgba(79, 70, 229, 0.08);
+    border: 1.5px solid #4F46E5;
+  }
+
+  .preset-card-btn strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .preset-card-btn span {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Background Selector */
+  .bg-selector-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  @media (min-width: 480px) {
+    .bg-selector-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bg-choice-btn {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .bg-choice-btn:hover {
+    border-color: #4F46E5;
+  }
+
+  .bg-choice-btn.active {
+    background: rgba(79, 70, 229, 0.08);
+    border: 1.5px solid #4F46E5;
+  }
+
+  .bg-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+  }
+
+  .bg-swatch.checkerboard {
+    background: repeating-conic-gradient(#cbd5e1 0% 25%, #ffffff 0% 50%) 50% / 8px 8px;
+  }
+
+  .bg-swatch.white-swatch {
+    background: #ffffff;
+  }
+
+  .bg-swatch.dark-swatch {
+    background: #0f172a;
+  }
+
+  /* Export Format */
+  .export-format-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .radio-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .radio-label:hover {
+    border-color: #4F46E5;
+  }
+
+  .radio-label.active {
+    background: rgba(79, 70, 229, 0.06);
+    border: 1.5px solid #4F46E5;
+  }
+
+  .radio-label input {
+    margin-top: 3px;
+    accent-color: #4F46E5;
+  }
+
+  .radio-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .radio-body strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .radio-body span {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+
+  .export-summary-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+  }
+
+  .summary-item strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .action-buttons-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Right Panel: Preview Viewport */
+  .preview-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .preview-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .preview-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2px 4px;
+  }
+
+  .zoom-btn {
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .zoom-btn:hover {
+    background: var(--color-surface);
+  }
+
+  .zoom-level {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text);
+    min-width: 44px;
+    text-align: center;
+  }
+
+  .preview-viewport {
+    width: 100%;
+    min-height: 380px;
+    height: 480px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    position: relative;
+    padding: 20px;
+  }
+
+  .preview-viewport.checkerboard {
+    background: repeating-conic-gradient(#e2e8f0 0% 25%, #ffffff 0% 50%) 50% / 16px 16px;
+  }
+
+  .svg-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-footer-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+
+  /* General Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+  }
+
+  .btn-sm {
+    height: 36px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .btn-lg {
+    height: 44px;
+    padding: 10px 20px;
+    font-size: 13.5px;
+  }
+
+  .btn-xl {
+    height: 48px;
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+
+  .btn-primary {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #4338CA;
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  .btn-success {
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+    color: #ffffff !important;
+  }
+</style>

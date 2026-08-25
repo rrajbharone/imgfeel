@@ -1,0 +1,1103 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="dpi-converter-wrapper" data-locale={locale}>
+  <!-- Upload Dropzone (Initial State) -->
+  <div id="dropzoneContainer" class="dropzone-container">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'dpiconv.dropzone.title')}>
+      <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" class="file-input" />
+      <div class="dropzone-content">
+        <div class="dropzone-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+        <h2 class="dropzone-title">{t(locale, 'dpiconv.dropzone.title')}</h2>
+        <p class="dropzone-subtitle">{t(locale, 'dpiconv.dropzone.subtitle')}</p>
+        <div class="dropzone-actions">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            {t(locale, 'dpiconv.dropzone.browse')}
+          </button>
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            {t(locale, 'dpiconv.dropzone.sample')}
+          </button>
+        </div>
+        <div class="privacy-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>{t(locale, 'dpiconv.privacy.badge')}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Workspace -->
+  <div id="workspace" class="workspace" style="display: none;">
+    <!-- Workspace Header / File Info Bar -->
+    <div class="workspace-header-bar">
+      <div class="file-info-col">
+        <div class="file-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span id="fileNameDisplay" class="file-name">photo.jpg</span>
+        </div>
+        <div class="file-meta-row">
+          <span id="pixelDimBadge" class="badge">2400 × 1600 px</span>
+          <span id="currentDpiBadge" class="badge badge-accent">Current: 72 DPI</span>
+          <span id="fileSizeBadge" class="badge">Size: 450 KB</span>
+        </div>
+      </div>
+      <button type="button" id="changeImageBtn" class="btn btn-secondary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        {t(locale, 'dpiconv.action.changeImage')}
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">An error occurred</span>
+    </div>
+
+    <!-- Two-Column Grid Layout -->
+    <div class="workspace-grid">
+      <!-- Left Column: Controls -->
+      <div class="controls-panel">
+        <!-- 1. Select Target DPI -->
+        <div class="control-group">
+          <div class="control-group-header">
+            <h3 class="group-title">{t(locale, 'dpiconv.section.dpiPreset')}</h3>
+            <button type="button" id="resetBtn" class="btn-text-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              {t(locale, 'dpiconv.action.reset')}
+            </button>
+          </div>
+
+          <div class="dpi-presets-grid">
+            <button type="button" class="dpi-preset-card" data-dpi="72">
+              <strong>{t(locale, 'dpiconv.preset.72')}</strong>
+              <span>{t(locale, 'dpiconv.preset.72Desc')}</span>
+            </button>
+            <button type="button" class="dpi-preset-card" data-dpi="96">
+              <strong>{t(locale, 'dpiconv.preset.96')}</strong>
+              <span>{t(locale, 'dpiconv.preset.96Desc')}</span>
+            </button>
+            <button type="button" class="dpi-preset-card" data-dpi="150">
+              <strong>{t(locale, 'dpiconv.preset.150')}</strong>
+              <span>{t(locale, 'dpiconv.preset.150Desc')}</span>
+            </button>
+            <button type="button" class="dpi-preset-card active" data-dpi="300">
+              <strong>{t(locale, 'dpiconv.preset.300')}</strong>
+              <span>{t(locale, 'dpiconv.preset.300Desc')}</span>
+            </button>
+            <button type="button" class="dpi-preset-card" data-dpi="600">
+              <strong>{t(locale, 'dpiconv.preset.600')}</strong>
+              <span>{t(locale, 'dpiconv.preset.600Desc')}</span>
+            </button>
+          </div>
+
+          <!-- Custom DPI Input -->
+          <div class="custom-dpi-row">
+            <label for="customDpiInput">{t(locale, 'dpiconv.label.customDpi')}:</label>
+            <div class="input-with-unit">
+              <input type="number" id="customDpiInput" min="1" max="2400" step="1" value="300" />
+              <span class="unit-tag">DPI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Conversion Mode -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'dpiconv.section.mode')}</h3>
+          <div class="mode-selector-stack">
+            <label class="mode-card active" data-mode="metadata">
+              <input type="radio" name="dpiMode" value="metadata" checked />
+              <div class="mode-card-body">
+                <strong>{t(locale, 'dpiconv.mode.metadata')}</strong>
+                <span>{t(locale, 'dpiconv.mode.metadataDesc')}</span>
+              </div>
+            </label>
+
+            <label class="mode-card" data-mode="resample">
+              <input type="radio" name="dpiMode" value="resample" />
+              <div class="mode-card-body">
+                <strong>{t(locale, 'dpiconv.mode.resample')}</strong>
+                <span>{t(locale, 'dpiconv.mode.resampleDesc')}</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 3. Physical Print Size Calculator Display -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'dpiconv.section.printSize')}</h3>
+          
+          <div class="print-sizes-grid">
+            <div class="print-size-item">
+              <span class="print-unit-label">{t(locale, 'dpiconv.label.inches')}</span>
+              <strong id="printInchesDisplay">8.00" × 5.33"</strong>
+            </div>
+            <div class="print-size-item">
+              <span class="print-unit-label">{t(locale, 'dpiconv.label.centimeters')}</span>
+              <strong id="printCmDisplay">20.32 × 13.55 cm</strong>
+            </div>
+            <div class="print-size-item">
+              <span class="print-unit-label">{t(locale, 'dpiconv.label.millimeters')}</span>
+              <strong id="printMmDisplay">203.2 × 135.5 mm</strong>
+            </div>
+          </div>
+
+          <div class="dpi-impact-tip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span id="dpiImpactText">{t(locale, 'dpiconv.preview.note')}</span>
+          </div>
+        </div>
+
+        <!-- 4. Convert & Download -->
+        <div class="control-group">
+          <h3 class="group-title">{t(locale, 'dpiconv.section.export')}</h3>
+          
+          <div class="export-summary-row">
+            <div class="summary-col">
+              <span class="summary-label">{t(locale, 'dpiconv.label.targetDpi')}</span>
+              <strong id="summaryTargetDpi" class="text-accent">300 DPI</strong>
+            </div>
+            <div class="summary-col">
+              <span class="summary-label">{t(locale, 'dpiconv.label.pixelDimensions')}</span>
+              <strong id="summaryPixels">2400 × 1600 px</strong>
+            </div>
+          </div>
+
+          <button type="button" id="downloadBtn" class="btn btn-primary btn-xl">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span id="downloadBtnText">{t(locale, 'dpiconv.action.download')}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Visual Preview -->
+      <div class="preview-panel">
+        <div class="preview-panel-header">
+          <h3 class="preview-title">{t(locale, 'dpiconv.preview.title')}</h3>
+        </div>
+
+        <div class="preview-viewport">
+          <img id="previewImage" class="preview-img" alt="DPI Preview" />
+        </div>
+
+        <div class="preview-print-card">
+          <div class="print-header-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <strong>Physical Print Scale at Target DPI</strong>
+          </div>
+          <div class="print-specs-list">
+            <div class="print-spec-row">
+              <span>Print Output Width:</span>
+              <strong id="cardInchesW">8.00 in (20.32 cm)</strong>
+            </div>
+            <div class="print-spec-row">
+              <span>Print Output Height:</span>
+              <strong id="cardInchesH">5.33 in (13.55 cm)</strong>
+            </div>
+            <div class="print-spec-row">
+              <span>Density Standard:</span>
+              <strong id="cardDensityNote">High Resolution (Magazine Quality)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { DpiConverterEngine } from '@/scripts/dpi-converter';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const engine = new DpiConverterEngine();
+
+    // DOM Elements
+    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn')!;
+    const sampleBtn = document.getElementById('sampleBtn')!;
+    const workspace = document.getElementById('workspace')!;
+    const changeImageBtn = document.getElementById('changeImageBtn')!;
+    const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const pixelDimBadge = document.getElementById('pixelDimBadge')!;
+    const currentDpiBadge = document.getElementById('currentDpiBadge')!;
+    const fileSizeBadge = document.getElementById('fileSizeBadge')!;
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
+    // Controls
+    const dpiPresetBtns = document.querySelectorAll<HTMLButtonElement>('.dpi-preset-card');
+    const customDpiInput = document.getElementById('customDpiInput') as HTMLInputElement;
+    const modeCards = document.querySelectorAll<HTMLLabelElement>('.mode-card');
+    const resetBtn = document.getElementById('resetBtn')!;
+
+    // Print Size Displays
+    const printInchesDisplay = document.getElementById('printInchesDisplay')!;
+    const printCmDisplay = document.getElementById('printCmDisplay')!;
+    const printMmDisplay = document.getElementById('printMmDisplay')!;
+    const summaryTargetDpi = document.getElementById('summaryTargetDpi')!;
+    const summaryPixels = document.getElementById('summaryPixels')!;
+    const downloadBtn = document.getElementById('downloadBtn')!;
+    const downloadBtnText = document.getElementById('downloadBtnText')!;
+    const previewImage = document.getElementById('previewImage') as HTMLImageElement;
+    const cardInchesW = document.getElementById('cardInchesW')!;
+    const cardInchesH = document.getElementById('cardInchesH')!;
+    const cardDensityNote = document.getElementById('cardDensityNote')!;
+
+    // State
+    let targetDpi = 300;
+    let conversionMode: 'metadata' | 'resample' = 'metadata';
+    let currentFile: File | null = null;
+
+    function formatBytes(bytes: number): string {
+      if (bytes <= 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function showError(msg: string) {
+      errorMessage.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    async function handleFileLoaded(file: File) {
+      try {
+        hideError();
+        currentFile = file;
+        const meta = await engine.loadImage(file);
+
+        // Update Header Badges
+        fileNameDisplay.textContent = meta.fileName;
+        pixelDimBadge.textContent = `${meta.width} × ${meta.height} px`;
+        currentDpiBadge.textContent = `Current: ${meta.currentDpi} DPI`;
+        fileSizeBadge.textContent = `Size: ${formatBytes(meta.fileSize)}`;
+
+        // Update preview image
+        previewImage.src = URL.createObjectURL(file);
+
+        updatePrintCalculations();
+
+        dropzoneContainer.style.display = 'none';
+        workspace.style.display = 'block';
+      } catch (err: any) {
+        showError(err.message || 'Failed to process image.');
+      }
+    }
+
+    function updatePrintCalculations() {
+      if (!engine.metadata) return;
+
+      const validDpi = Math.max(1, targetDpi);
+      const print = DpiConverterEngine.calculatePrintDimensions(engine.metadata.width, engine.metadata.height, validDpi);
+
+      printInchesDisplay.textContent = `${print.inchesW}" × ${print.inchesH}"`;
+      printCmDisplay.textContent = `${print.cmW} × ${print.cmH} cm`;
+      printMmDisplay.textContent = `${print.mmW} × ${print.mmH} mm`;
+
+      summaryTargetDpi.textContent = `${validDpi} DPI`;
+      summaryPixels.textContent = `${engine.metadata.width} × ${engine.metadata.height} px`;
+      downloadBtnText.textContent = `Download with ${validDpi} DPI`;
+
+      cardInchesW.textContent = `${print.inchesW} in (${print.cmW} cm)`;
+      cardInchesH.textContent = `${print.inchesH} in (${print.cmH} cm)`;
+
+      if (validDpi >= 600) {
+        cardDensityNote.textContent = 'Fine Art & Archival Museum Standard';
+      } else if (validDpi >= 300) {
+        cardDensityNote.textContent = 'High Resolution (Commercial Magazine Quality)';
+      } else if (validDpi >= 150) {
+        cardDensityNote.textContent = 'Medium Resolution (Newsprint & Draft Proof)';
+      } else {
+        cardDensityNote.textContent = 'Standard Web & Screen Display';
+      }
+    }
+
+    function setTargetDpi(dpi: number) {
+      targetDpi = dpi;
+      customDpiInput.value = dpi.toString();
+
+      dpiPresetBtns.forEach((btn) => {
+        if (parseInt(btn.dataset.dpi || '0', 10) === dpi) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      updatePrintCalculations();
+    }
+
+    // Upload Listeners
+    browseBtn.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const sample = await engine.generateSampleImage();
+      handleFileLoaded(sample.file);
+    });
+
+    changeImageBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) handleFileLoaded(file);
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer?.files[0];
+      if (file) handleFileLoaded(file);
+    });
+
+    // DPI Presets
+    dpiPresetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const dpi = parseInt(btn.dataset.dpi || '300', 10);
+        setTargetDpi(dpi);
+      });
+    });
+
+    customDpiInput.addEventListener('input', () => {
+      const dpi = parseInt(customDpiInput.value, 10);
+      if (!isNaN(dpi) && dpi > 0) {
+        targetDpi = dpi;
+        dpiPresetBtns.forEach((btn) => {
+          if (parseInt(btn.dataset.dpi || '0', 10) === dpi) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+        updatePrintCalculations();
+      }
+    });
+
+    // Conversion Modes
+    modeCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        modeCards.forEach((c) => c.classList.remove('active'));
+        card.classList.add('active');
+        const radio = card.querySelector('input[type="radio"]') as HTMLInputElement;
+        if (radio) {
+          radio.checked = true;
+          conversionMode = radio.value as any;
+        }
+      });
+    });
+
+    // Reset
+    resetBtn.addEventListener('click', () => {
+      setTargetDpi(300);
+      conversionMode = 'metadata';
+      modeCards.forEach((c) => {
+        if (c.dataset.mode === 'metadata') {
+          c.classList.add('active');
+          (c.querySelector('input[type="radio"]') as HTMLInputElement).checked = true;
+        } else {
+          c.classList.remove('active');
+        }
+      });
+    });
+
+    // Download Action
+    downloadBtn.addEventListener('click', async () => {
+      if (!engine.metadata) return;
+
+      try {
+        downloadBtn.setAttribute('disabled', 'true');
+        const originalText = downloadBtnText.textContent;
+        downloadBtnText.textContent = 'Processing DPI...';
+
+        const result = await engine.convertDpi(targetDpi, conversionMode);
+
+        const url = URL.createObjectURL(result.blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = result.fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        downloadBtnText.textContent = originalText;
+        downloadBtn.removeAttribute('disabled');
+      } catch (err: any) {
+        downloadBtn.removeAttribute('disabled');
+        showError(err.message || 'Failed to export image.');
+      }
+    });
+  });
+</script>
+
+<style>
+  .dpi-converter-wrapper {
+    width: 100%;
+  }
+
+  /* Dropzone */
+  .dropzone-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .dropzone:hover,
+  .dropzone.drag-over {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .dropzone-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .privacy-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-2);
+  }
+
+  /* Workspace */
+  .workspace {
+    width: 100%;
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+  }
+
+  .file-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .file-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .badge-accent {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: rgba(79, 70, 229, 0.3);
+    color: #4F46E5;
+    font-weight: 700;
+  }
+
+  /* Error Banner */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #EF4444;
+    border-radius: var(--radius-md);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Two Column Grid */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 900px) {
+    .workspace-grid {
+      grid-template-columns: 460px 1fr;
+    }
+  }
+
+  /* Controls Panel */
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .control-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .control-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .group-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-text-link {
+    background: none;
+    border: none;
+    color: #4F46E5;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+  }
+
+  .btn-text-link:hover {
+    text-decoration: underline;
+  }
+
+  /* DPI Presets Grid */
+  .dpi-presets-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 480px) {
+    .dpi-presets-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .dpi-preset-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.15s ease;
+  }
+
+  .dpi-preset-card:hover {
+    border-color: #4F46E5;
+  }
+
+  .dpi-preset-card.active {
+    background: rgba(79, 70, 229, 0.08);
+    border: 1.5px solid #4F46E5;
+  }
+
+  .dpi-preset-card strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .dpi-preset-card span {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Custom DPI */
+  .custom-dpi-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 4px;
+  }
+
+  .custom-dpi-row label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 140px;
+  }
+
+  .input-with-unit input {
+    width: 100%;
+    height: 40px;
+    padding: 8px 44px 8px 12px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-family: inherit;
+  }
+
+  .input-with-unit input:focus {
+    outline: none;
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+  }
+
+  .unit-tag {
+    position: absolute;
+    right: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+  }
+
+  /* Mode Selector */
+  .mode-selector-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mode-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mode-card:hover {
+    border-color: #4F46E5;
+  }
+
+  .mode-card.active {
+    background: rgba(79, 70, 229, 0.06);
+    border: 1.5px solid #4F46E5;
+  }
+
+  .mode-card input {
+    margin-top: 3px;
+    accent-color: #4F46E5;
+  }
+
+  .mode-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .mode-card-body strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .mode-card-body span {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.45;
+  }
+
+  /* Print Sizes Grid */
+  .print-sizes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 480px) {
+    .print-sizes-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .print-size-item {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .print-unit-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+  }
+
+  .print-size-item strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .dpi-impact-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(79, 70, 229, 0.05);
+    border-radius: var(--radius-md);
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.45;
+  }
+
+  .dpi-impact-tip svg {
+    color: #4F46E5;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Export Summary */
+  .export-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .summary-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+  }
+
+  .summary-col strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .text-accent {
+    color: #4F46E5 !important;
+  }
+
+  /* Right Panel: Preview */
+  .preview-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .preview-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .preview-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .preview-viewport {
+    width: 100%;
+    height: 360px;
+    background: repeating-conic-gradient(#e2e8f0 0% 25%, #ffffff 0% 50%) 50% / 16px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 16px;
+  }
+
+  .preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .preview-print-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .print-header-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .print-header-badge svg {
+    color: #4F46E5;
+  }
+
+  .print-specs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .print-spec-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12.5px;
+  }
+
+  .print-spec-row span {
+    color: var(--color-text-secondary);
+  }
+
+  .print-spec-row strong {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  /* General Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+  }
+
+  .btn-sm {
+    height: 36px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .btn-lg {
+    height: 44px;
+    padding: 10px 20px;
+    font-size: 13.5px;
+  }
+
+  .btn-xl {
+    height: 48px;
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+
+  .btn-primary {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #4338CA;
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+</style>

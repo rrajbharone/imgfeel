@@ -69,5 +69,11 @@
   "tools.youtubeThumbnailResizer.title": "YouTube Küçük Resim Boyutlandırma",
   "tools.youtubeThumbnailResizer.description": "Görselleri resmi 1280x720 16:9 YouTube thumbnail boyutuna bulanık arka planla 2MB altında ayarlayın.",
   "tools.facebookCoverResizer.title": "Facebook Kapak Fotoğrafı Boyutlandırma",
-  "tools.facebookCoverResizer.description": "Görselleri resmi Facebook kapak fotoğrafı boyutuna (820x312 / 1640x720) mobil ve masaüstü güvenli alanıyla ayarlayın."
+  "tools.facebookCoverResizer.description": "Görselleri resmi Facebook kapak fotoğrafı boyutuna (820x312 / 1640x720) mobil ve masaüstü güvenli alanıyla ayarlayın.",
+  "tools.svgResizer.title": "SVG Boyutlandırıcı",
+  "tools.svgResizer.description": "SVG genişlik, yükseklik ve ölçeğini kalite kaybı olmadan online boyutlandırın.",
+  "tools.dpiConverter.title": "Resim DPI Dönüştürücü",
+  "tools.dpiConverter.description": "Resim DPI değerini kalite kaybı olmadan online 300, 600 veya 72 yapın.",
+  "tools.imageToText.title": "Resimden Yazıya Dönüştürücü",
+  "tools.imageToText.description": "Ücretsiz OCR ile JPG, PNG ve WebP resimlerinden düzenlenebilir metin çıkarın."
 }

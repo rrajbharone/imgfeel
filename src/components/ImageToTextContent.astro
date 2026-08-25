@@ -1,0 +1,649 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq1Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq1A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq2Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq2A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq3Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq3A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq4Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq4A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq5Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq5A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq6Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq6A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'imgtotext.content.faq7Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'imgtotext.content.faq7A')
+      }
+    }
+  ]
+};
+---
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Overview & Value -->
+      <h2>{t(locale, 'imgtotext.content.h1')}</h2>
+      <p>{t(locale, 'imgtotext.content.p1a')}</p>
+      <p>{t(locale, 'imgtotext.content.p1b')}</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'imgtotext.content.feat1Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'imgtotext.content.feat2Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'imgtotext.content.feat3Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'imgtotext.content.feat4Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Step-by-Step Guide -->
+      <h2>{t(locale, 'imgtotext.content.h2')}</h2>
+      <p>{t(locale, 'imgtotext.content.p2a')}</p>
+      
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>{t(locale, 'imgtotext.content.step1Title')}</h3>
+            <p>{t(locale, 'imgtotext.content.step1Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>{t(locale, 'imgtotext.content.step2Title')}</h3>
+            <p>{t(locale, 'imgtotext.content.step2Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>{t(locale, 'imgtotext.content.step3Title')}</h3>
+            <p>{t(locale, 'imgtotext.content.step3Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>{t(locale, 'imgtotext.content.step4Title')}</h3>
+            <p>{t(locale, 'imgtotext.content.step4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: How OCR Works -->
+      <h2>{t(locale, 'imgtotext.content.h3')}</h2>
+      <p>{t(locale, 'imgtotext.content.p3a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.stepTech1Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.stepTech1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.stepTech2Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.stepTech2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.stepTech3Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.stepTech3Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 4: 99%+ Accuracy Tips -->
+      <h2>{t(locale, 'imgtotext.content.h4')}</h2>
+      <p>{t(locale, 'imgtotext.content.p4a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.tip1Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.tip1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.tip2Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.tip2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.tip3Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.tip3Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.tip4Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.tip4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Common Use Cases -->
+      <h2>{t(locale, 'imgtotext.content.h5')}</h2>
+      <p>{t(locale, 'imgtotext.content.p5a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.use1Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.use1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.use2Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.use2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.use3Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.use3Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.use4Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.use4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Common Challenges & Avoiding Errors -->
+      <h2>{t(locale, 'imgtotext.content.h6')}</h2>
+      <p>{t(locale, 'imgtotext.content.p6a')}</p>
+
+      <div class="types-grid">
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.mistake1Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.mistake1Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.mistake2Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.mistake2Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.mistake3Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.mistake3Desc')}</p>
+        </div>
+
+        <div class="type-card">
+          <h3>{t(locale, 'imgtotext.content.mistake4Title')}</h3>
+          <p>{t(locale, 'imgtotext.content.mistake4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 7: FAQ Accordion -->
+      <h2>{t(locale, 'imgtotext.content.faqTitle')}</h2>
+      <div class="faq-accordion">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq1Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq1A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq2Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq2A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq3Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq3A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq4Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq4A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq5Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq5A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq6Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq6A')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'imgtotext.content.faq7Q')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'imgtotext.content.faq7A')}</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Related Tools Box -->
+      <div class="related-tools-box">
+        <h3>Related Image Tools</h3>
+        <div class="related-chips-grid">
+          <a href="/tools/resize-image-to-exact-dimensions/" class="related-chip">{t(locale, 'imgtotext.cross.exact')}</a>
+          <a href="/tools/webp-image-compressor/" class="related-chip">{t(locale, 'imgtotext.cross.webp')}</a>
+          <a href="/tools/image-dpi-converter/" class="related-chip">{t(locale, 'imgtotext.cross.dpiConv')}</a>
+          <a href="/tools/image-to-base64-converter/" class="related-chip">{t(locale, 'imgtotext.cross.b64')}</a>
+          <a href="/tools/svg-resizer/" class="related-chip">{t(locale, 'imgtotext.cross.svgResizer')}</a>
+          <a href="/tools/facebook-cover-resizer/" class="related-chip">{t(locale, 'imgtotext.cross.fbCover')}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JSON-LD FAQ Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  .content-section {
+    padding: var(--space-8) 0 var(--space-16);
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .content-body {
+    max-width: 900px;
+    margin-inline: auto;
+    color: var(--color-text);
+    font-size: var(--text-base);
+    line-height: 1.7;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .content-body h2:first-of-type {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    line-height: 1.7;
+  }
+
+  /* Features Grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: var(--space-6) 0 var(--space-8);
+  }
+
+  @media (min-width: 600px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .feature-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+
+  .feature-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feature-card p {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Steps Grid */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: var(--space-6) 0 var(--space-8);
+  }
+
+  @media (min-width: 600px) {
+    .steps-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .step-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #4F46E5;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .step-content h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .step-content p {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Types Grid */
+  .types-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: var(--space-5) 0 var(--space-8);
+  }
+
+  @media (min-width: 600px) {
+    .types-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .type-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .type-card h3 {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .type-card p {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* FAQ Accordion */
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: var(--space-5) 0 var(--space-10);
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+
+  details[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 18px 16px;
+  }
+
+  .faq-answer p {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Related Tools Box */
+  .related-tools-box {
+    margin-top: var(--space-10);
+    padding: 20px 22px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+
+  .related-tools-box h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 var(--space-3);
+  }
+
+  .related-chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .related-chip {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .related-chip:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+</style>

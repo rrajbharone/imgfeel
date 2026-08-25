@@ -69,5 +69,11 @@
   "tools.youtubeThumbnailResizer.title": "Ubah Ukuran Thumbnail YouTube",
   "tools.youtubeThumbnailResizer.description": "Ubah ukuran dan potong gambar ke format resmi 1280x720 16:9 thumbnail YouTube dengan latar blur di bawah 2MB.",
   "tools.facebookCoverResizer.title": "Ubah Ukuran Sampul Facebook",
-  "tools.facebookCoverResizer.description": "Ubah ukuran dan potong gambar ke format resmi sampul Facebook (820x312 / 1640x720) dengan zona aman ponsel dan komputer."
+  "tools.facebookCoverResizer.description": "Ubah ukuran dan potong gambar ke format resmi sampul Facebook (820x312 / 1640x720) dengan zona aman ponsel dan komputer.",
+  "tools.svgResizer.title": "Pengubah Ukuran SVG",
+  "tools.svgResizer.description": "Ubah ukuran lebar, tinggi, dan skala vektor SVG online tanpa pecah.",
+  "tools.dpiConverter.title": "Pengubah DPI Gambar",
+  "tools.dpiConverter.description": "Ubah DPI foto ke 300, 600, atau 72 online tanpa menurunkan kualitas.",
+  "tools.imageToText.title": "Pengubah Gambar ke Teks",
+  "tools.imageToText.description": "Ekstrak teks yang dapat diedit dari gambar JPG, PNG, dan WebP dengan OCR gratis."
 }

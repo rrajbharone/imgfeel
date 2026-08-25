@@ -69,5 +69,11 @@
   "tools.youtubeThumbnailResizer.title": "YouTube Thumbnail Resizer",
   "tools.youtubeThumbnailResizer.description": "Resize and crop images to official 1280x720 16:9 YouTube thumbnail size with blurred background under 2MB.",
   "tools.facebookCoverResizer.title": "Facebook Cover Photo Resizer",
-  "tools.facebookCoverResizer.description": "Resize and crop images to official Facebook cover size (820x312 / 1640x720) with mobile & desktop safe zone."
+  "tools.facebookCoverResizer.description": "Resize and crop images to official Facebook cover size (820x312 / 1640x720) with mobile & desktop safe zone.",
+  "tools.svgResizer.title": "SVG Resizer",
+  "tools.svgResizer.description": "Resize vector SVG width, height, and scale online without quality loss.",
+  "tools.dpiConverter.title": "Image DPI Converter",
+  "tools.dpiConverter.description": "Change image DPI to 300, 600, or 72 online losslessly.",
+  "tools.imageToText.title": "Image to Text Converter",
+  "tools.imageToText.description": "Extract editable text from JPG, PNG, and WebP images with free OCR."
 }

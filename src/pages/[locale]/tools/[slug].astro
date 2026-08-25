@@ -19,6 +19,12 @@ import YouTubeThumbnailResizer from '@/components/YouTubeThumbnailResizer.astro'
 import YouTubeThumbnailResizerContent from '@/components/YouTubeThumbnailResizerContent.astro';
 import FacebookCoverResizer from '@/components/FacebookCoverResizer.astro';
 import FacebookCoverResizerContent from '@/components/FacebookCoverResizerContent.astro';
+import SvgResizer from '@/components/SvgResizer.astro';
+import SvgResizerContent from '@/components/SvgResizerContent.astro';
+import DpiConverter from '@/components/DpiConverter.astro';
+import DpiConverterContent from '@/components/DpiConverterContent.astro';
+import ImageToText from '@/components/ImageToText.astro';
+import ImageToTextContent from '@/components/ImageToTextContent.astro';
 import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
@@ -97,6 +103,9 @@ const toolPrefixMap: Record<string, string> = {
   'whatsapp-dp-resizer': 'waresizer',
   'ssc-photo-signature-resizer': 'sscresizer',
   'youtube-banner-resizer': 'ytresizer',
+  'image-to-text-converter': 'imgtotext',
+  'image-dpi-converter': 'dpiconv',
+  'svg-resizer': 'svgresizer',
   'facebook-cover-resizer': 'fbcover',
   'youtube-thumbnail-resizer': 'ytthumb',
   'image-to-base64-converter': 'b64',
@@ -170,6 +179,9 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'whatsapp-dp-resizer' && <WhatsAppResizer locale={locale} />}
       {toolId === 'ssc-photo-signature-resizer' && <SscResizer locale={locale} />}
       {toolId === 'youtube-banner-resizer' && <YouTubeResizer locale={locale} />}
+      {toolId === 'image-to-text-converter' && <ImageToText locale={locale} />}
+      {toolId === 'image-dpi-converter' && <DpiConverter locale={locale} />}
+      {toolId === 'svg-resizer' && <SvgResizer locale={locale} />}
       {toolId === 'facebook-cover-resizer' && <FacebookCoverResizer locale={locale} />}
       {toolId === 'youtube-thumbnail-resizer' && <YouTubeThumbnailResizer locale={locale} />}
       {toolId === 'image-to-base64-converter' && <Base64Converter locale={locale} />}
@@ -205,6 +217,9 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'whatsapp-dp-resizer' && <WhatsAppContent locale={locale} />}
   {toolId === 'ssc-photo-signature-resizer' && <SscContent locale={locale} />}
   {toolId === 'youtube-banner-resizer' && <YouTubeContent locale={locale} />}
+  {toolId === 'image-to-text-converter' && <ImageToTextContent locale={locale} />}
+  {toolId === 'image-dpi-converter' && <DpiConverterContent locale={locale} />}
+  {toolId === 'svg-resizer' && <SvgResizerContent locale={locale} />}
   {toolId === 'facebook-cover-resizer' && <FacebookCoverResizerContent locale={locale} />}
   {toolId === 'youtube-thumbnail-resizer' && <YouTubeThumbnailResizerContent locale={locale} />}
   {toolId === 'image-to-base64-converter' && <Base64Content locale={locale} />}

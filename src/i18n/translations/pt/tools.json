@@ -69,5 +69,11 @@
   "tools.youtubeThumbnailResizer.title": "Redimensionar Miniatura do YouTube",
   "tools.youtubeThumbnailResizer.description": "Ajuste e corte imagens para o formato oficial 1280x720 16:9 de miniaturas do YouTube com fundo desfocado sob 2MB.",
   "tools.facebookCoverResizer.title": "Redimensionar Capa do Facebook",
-  "tools.facebookCoverResizer.description": "Ajuste e corte fotos para o tamanho oficial da capa do Facebook (820x312 / 1640x720) com área segura para celular e computador."
+  "tools.facebookCoverResizer.description": "Ajuste e corte fotos para o tamanho oficial da capa do Facebook (820x312 / 1640x720) com área segura para celular e computador.",
+  "tools.svgResizer.title": "Redimensionador de SVG",
+  "tools.svgResizer.description": "Altere dimensões e escala de arquivos vetoriais SVG online sem perder qualidade.",
+  "tools.dpiConverter.title": "Conversor de DPI de Imagem",
+  "tools.dpiConverter.description": "Altere os DPIs da imagem para 300, 600 ou 72 online sem perda de qualidade.",
+  "tools.imageToText.title": "Conversor de Imagem para Texto",
+  "tools.imageToText.description": "Extraia texto editável de imagens JPG, PNG e WebP com OCR grátis."
 }

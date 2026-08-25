@@ -69,5 +69,11 @@
   "tools.youtubeThumbnailResizer.title": "YouTube Thumbnail Größe Anpassen",
   "tools.youtubeThumbnailResizer.description": "Bilder auf das offizielle 1280x720 16:9 YouTube-Vorschaubild-Format skalieren mit Unschärfe-Rand unter 2 MB.",
   "tools.facebookCoverResizer.title": "Facebook Titelbild Größe Anpassen",
-  "tools.facebookCoverResizer.description": "Bilder auf die offizielle Facebook-Titelbild-Größe (820x312 / 1640x720) anpassen mit Schutzzone für Smartphone und Desktop."
+  "tools.facebookCoverResizer.description": "Bilder auf die offizielle Facebook-Titelbild-Größe (820x312 / 1640x720) anpassen mit Schutzzone für Smartphone und Desktop.",
+  "tools.svgResizer.title": "SVG-Resizer",
+  "tools.svgResizer.description": "SVG-Breite, Höhe und Skalierung online ohne Qualitätsverlust anpassen.",
+  "tools.dpiConverter.title": "Bild-DPI-Konverter",
+  "tools.dpiConverter.description": "Bild-DPI auf 300, 600 oder 72 online verlustfrei anpassen.",
+  "tools.imageToText.title": "Bild in Text Umwandeln",
+  "tools.imageToText.description": "Extrahiere editierbaren Text aus JPG-, PNG- und WebP-Bildern mit kostenlosem OCR."
 }

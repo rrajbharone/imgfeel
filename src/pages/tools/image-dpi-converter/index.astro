@@ -1,0 +1,71 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import DpiConverter from '@/components/DpiConverter.astro';
+import DpiConverterContent from '@/components/DpiConverterContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+const locale = 'en';
+const toolUrl = getToolUrl('image-dpi-converter', locale);
+---
+
+<MainLayout
+  locale={locale}
+  title={t(locale, 'dpiconv.meta.title')}
+  description={t(locale, 'dpiconv.meta.description')}
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Image DPI Converter",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: t(locale, 'breadcrumb.home'), href: '/' },
+        { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
+        { label: t(locale, 'dpiconv.hero.title') }
+      ]} />
+      
+      <div class="tool-header">
+        <h1 class="tool-title">{t(locale, 'dpiconv.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'dpiconv.hero.subtitle')}</p>
+      </div>
+
+      <DpiConverter locale={locale} />
+    </div>
+  </div>
+
+  <DpiConverterContent locale={locale} />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+  }
+</style>
