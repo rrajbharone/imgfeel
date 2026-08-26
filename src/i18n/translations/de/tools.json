@@ -75,5 +75,13 @@
   "tools.dpiConverter.title": "Bild-DPI-Konverter",
   "tools.dpiConverter.description": "Bild-DPI auf 300, 600 oder 72 online verlustfrei anpassen.",
   "tools.imageToText.title": "Bild in Text Umwandeln",
-  "tools.imageToText.description": "Extrahiere editierbaren Text aus JPG-, PNG- und WebP-Bildern mit kostenlosem OCR."
+  "tools.imageToText.description": "Extrahiere editierbaren Text aus JPG-, PNG- und WebP-Bildern mit kostenlosem OCR.",
+  "tools.gifExtractor.title": "GIF Einzelbilder Extrahieren",
+  "tools.gifExtractor.description": "Zerlege animierte GIFs in einzelne Frames, betrachte Bilder Bild für Bild und lade sie als ZIP herunter.",
+  "tools.passportPhotoMaker.title": "Passfoto Generator",
+  "tools.passportPhotoMaker.description": "Erstelle biometrische Passfotos kostenlos online und generiere druckfertige Bogen mit 300 DPI.",
+  "tools.imageSrcsetGenerator.title": "HTML-Srcset-Generator",
+  "tools.imageSrcsetGenerator.description": "Erstelle optimierten HTML srcset & sizes Code für responsive Bilder und lade Assets als ZIP herunter.",
+  "tools.batchRenameImages.title": "Bilder im Batch Umbenennen",
+  "tools.batchRenameImages.description": "Benenne mehrere Bilder online kostenlos im Batch um mit fortlaufenden Nummern und ZIP-Download."
 }

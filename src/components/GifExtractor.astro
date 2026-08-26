@@ -1,0 +1,1153 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="gif-extractor-wrapper" data-locale={locale}>
+  <!-- Upload Dropzone (Initial State) -->
+  <div id="dropzoneContainer" class="dropzone-container">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'gifext.dropzone.title')}>
+      <input type="file" id="fileInput" accept="image/gif" class="file-input" />
+      <div class="dropzone-content">
+        <div class="dropzone-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <line x1="2" y1="7" x2="7" y2="7"></line>
+            <line x1="2" y1="17" x2="7" y2="17"></line>
+            <line x1="17" y1="17" x2="22" y2="17"></line>
+            <line x1="17" y1="7" x2="22" y2="7"></line>
+          </svg>
+        </div>
+        <h2 class="dropzone-title">{t(locale, 'gifext.dropzone.title')}</h2>
+        <p class="dropzone-subtitle">{t(locale, 'gifext.dropzone.subtitle')}</p>
+        <div class="dropzone-actions">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            {t(locale, 'gifext.dropzone.browse')}
+          </button>
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            {t(locale, 'gifext.dropzone.sample')}
+          </button>
+        </div>
+        <div class="privacy-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>{t(locale, 'gifext.privacy.badge')}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Workspace -->
+  <div id="workspace" class="workspace" style="display: none;">
+    <!-- Workspace Header / File Info Bar -->
+    <div class="workspace-header-bar">
+      <div class="file-info-col">
+        <div class="file-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+          </svg>
+          <span id="fileNameDisplay" class="file-name">animation.gif</span>
+        </div>
+        <div class="file-meta-row">
+          <span id="frameCountBadge" class="badge">0 {t(locale, 'gifext.stat.frames')}</span>
+          <span id="resolutionBadge" class="badge">0 × 0 px</span>
+          <span id="durationBadge" class="badge">0.0s {t(locale, 'gifext.stat.duration')}</span>
+          <span id="fpsBadge" class="badge">0 {t(locale, 'gifext.stat.fps')}</span>
+          <span id="transparencyBadge" class="badge">{t(locale, 'gifext.stat.transparency')}: {t(locale, 'gifext.val.no')}</span>
+        </div>
+      </div>
+      <button type="button" id="changeGifBtn" class="btn btn-secondary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        {t(locale, 'gifext.action.changeGif')}
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">An error occurred</span>
+    </div>
+
+    <!-- Section 1: Interactive Frame Player Card -->
+    <div class="control-group player-card">
+      <div class="player-header">
+        <h3 class="group-title">{t(locale, 'gifext.section.player')}</h3>
+        <div class="format-select-row">
+          <label for="exportFormatSelect" class="format-label">{t(locale, 'gifext.export.format')}:</label>
+          <select id="exportFormatSelect" class="form-select format-dropdown">
+            <option value="png" selected>{t(locale, 'gifext.export.png')}</option>
+            <option value="jpeg">{t(locale, 'gifext.export.jpg')}</option>
+            <option value="webp">{t(locale, 'gifext.export.webp')}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Player Stage -->
+      <div class="player-stage-container">
+        <div class="player-canvas-wrapper">
+          <canvas id="playerCanvas" class="player-canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Timeline Scrubber Bar -->
+      <div class="timeline-row">
+        <button type="button" id="prevFrameBtn" class="player-nav-btn" title={t(locale, 'gifext.player.prev')}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <button type="button" id="playPauseBtn" class="player-play-btn" title={t(locale, 'gifext.player.play')}>
+          <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" aria-hidden="true" style="display: none;">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+        </button>
+
+        <button type="button" id="nextFrameBtn" class="player-nav-btn" title={t(locale, 'gifext.player.next')}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <input type="range" id="timelineSlider" class="timeline-slider" min="1" max="1" value="1" step="1" />
+
+        <div class="time-readout">
+          <span id="frameIndicator">Frame 1 / 1</span>
+          <span id="timeIndicator" class="time-sub">0.00s / 0.00s</span>
+        </div>
+
+        <div class="speed-selector">
+          <button type="button" class="speed-btn" data-speed="0.25">0.25x</button>
+          <button type="button" class="speed-btn" data-speed="0.5">0.5x</button>
+          <button type="button" class="speed-btn active" data-speed="1">1x</button>
+          <button type="button" class="speed-btn" data-speed="2">2x</button>
+        </div>
+
+        <button type="button" id="downloadCurrentFrameBtn" class="btn btn-primary btn-md download-current-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>{t(locale, 'gifext.export.downloadCurrent')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 2: Extracted Frames Gallery Card -->
+    <div class="control-group gallery-card">
+      <div class="gallery-header-bar">
+        <div class="gallery-title-col">
+          <h3 class="group-title">{t(locale, 'gifext.section.gallery')}</h3>
+          <span id="selectedCountBadge" class="badge badge-accent">0 frames selected</span>
+        </div>
+
+        <div class="gallery-actions">
+          <button type="button" id="selectAllBtn" class="btn btn-secondary btn-sm">{t(locale, 'gifext.gallery.selectAll')}</button>
+          <button type="button" id="deselectAllBtn" class="btn btn-secondary btn-sm">{t(locale, 'gifext.gallery.deselectAll')}</button>
+          
+          <button type="button" id="downloadSelectedBtn" class="btn btn-secondary btn-md">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>{t(locale, 'gifext.export.downloadSelected')}</span>
+          </button>
+
+          <button type="button" id="downloadAllBtn" class="btn btn-primary btn-md">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>{t(locale, 'gifext.export.downloadAll')}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Frames Grid -->
+      <div id="framesGrid" class="frames-grid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { GifExtractorEngine, MicroZip, type GifFrameData, type GifMetadata } from '@/scripts/gif-extractor';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn')!;
+    const sampleBtn = document.getElementById('sampleBtn')!;
+    const workspace = document.getElementById('workspace')!;
+    const changeGifBtn = document.getElementById('changeGifBtn')!;
+    const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const frameCountBadge = document.getElementById('frameCountBadge')!;
+    const resolutionBadge = document.getElementById('resolutionBadge')!;
+    const durationBadge = document.getElementById('durationBadge')!;
+    const fpsBadge = document.getElementById('fpsBadge')!;
+    const transparencyBadge = document.getElementById('transparencyBadge')!;
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
+    // Player Elements
+    const playerCanvas = document.getElementById('playerCanvas') as HTMLCanvasElement;
+    const playerCtx = playerCanvas.getContext('2d')!;
+    const playPauseBtn = document.getElementById('playPauseBtn')!;
+    const playIcon = document.getElementById('playIcon')!;
+    const pauseIcon = document.getElementById('pauseIcon')!;
+    const prevFrameBtn = document.getElementById('prevFrameBtn')!;
+    const nextFrameBtn = document.getElementById('nextFrameBtn')!;
+    const timelineSlider = document.getElementById('timelineSlider') as HTMLInputElement;
+    const frameIndicator = document.getElementById('frameIndicator')!;
+    const timeIndicator = document.getElementById('timeIndicator')!;
+    const speedButtons = document.querySelectorAll('.speed-btn');
+    const exportFormatSelect = document.getElementById('exportFormatSelect') as HTMLSelectElement;
+    const downloadCurrentFrameBtn = document.getElementById('downloadCurrentFrameBtn')!;
+
+    // Gallery Elements
+    const framesGrid = document.getElementById('framesGrid')!;
+    const selectedCountBadge = document.getElementById('selectedCountBadge')!;
+    const selectAllBtn = document.getElementById('selectAllBtn')!;
+    const deselectAllBtn = document.getElementById('deselectAllBtn')!;
+    const downloadSelectedBtn = document.getElementById('downloadSelectedBtn')!;
+    const downloadAllBtn = document.getElementById('downloadAllBtn')!;
+
+    // App State
+    let currentFileName = 'animation.gif';
+    let metadata: GifMetadata | null = null;
+    let frames: GifFrameData[] = [];
+    let currentFrameIndex = 0; // 0-indexed
+    let isPlaying = false;
+    let playbackSpeed = 1.0;
+    let animationTimer: any = null;
+    const selectedFrames = new Set<number>(); // 0-indexed frame indices
+
+    function showError(msg: string) {
+      errorMessage.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    function renderCurrentFrame() {
+      if (!frames.length || currentFrameIndex < 0 || currentFrameIndex >= frames.length) return;
+      const frame = frames[currentFrameIndex];
+
+      playerCanvas.width = frame.width;
+      playerCanvas.height = frame.height;
+      playerCtx.clearRect(0, 0, frame.width, frame.height);
+      playerCtx.drawImage(frame.canvas, 0, 0);
+
+      timelineSlider.value = (currentFrameIndex + 1).toString();
+      frameIndicator.textContent = `Frame ${currentFrameIndex + 1} / ${frames.length}`;
+      const currentSec = (frame.timestampMs / 1000).toFixed(2);
+      const totalSec = ((metadata?.totalDurationMs || 0) / 1000).toFixed(2);
+      timeIndicator.textContent = `${currentSec}s / ${totalSec}s`;
+
+      // Highlight active frame card in gallery
+      document.querySelectorAll('.frame-card').forEach((card, idx) => {
+        if (idx === currentFrameIndex) {
+          card.classList.add('frame-card-active');
+        } else {
+          card.classList.remove('frame-card-active');
+        }
+      });
+    }
+
+    function startPlayback() {
+      if (isPlaying || !frames.length) return;
+      isPlaying = true;
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+
+      const scheduleNextFrame = () => {
+        if (!isPlaying) return;
+        const currentFrame = frames[currentFrameIndex];
+        const delay = Math.max(20, (currentFrame.delayMs || 100) / playbackSpeed);
+
+        animationTimer = setTimeout(() => {
+          if (!isPlaying) return;
+          currentFrameIndex = (currentFrameIndex + 1) % frames.length;
+          renderCurrentFrame();
+          scheduleNextFrame();
+        }, delay);
+      };
+
+      scheduleNextFrame();
+    }
+
+    function stopPlayback() {
+      isPlaying = false;
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      if (animationTimer) {
+        clearTimeout(animationTimer);
+        animationTimer = null;
+      }
+    }
+
+    function togglePlayback() {
+      if (isPlaying) {
+        stopPlayback();
+      } else {
+        startPlayback();
+      }
+    }
+
+    function updateSelectedBadge() {
+      selectedCountBadge.textContent = `${selectedFrames.size} / ${frames.length} selected`;
+    }
+
+    function buildGallery() {
+      framesGrid.innerHTML = '';
+      selectedFrames.clear();
+
+      frames.forEach((frame, idx) => {
+        selectedFrames.add(idx); // default select all
+
+        const card = document.createElement('div');
+        card.className = 'frame-card frame-card-active';
+        card.dataset.index = idx.toString();
+
+        const topRow = document.createElement('div');
+        topRow.className = 'frame-card-top';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'frame-checkbox';
+        checkbox.checked = true;
+        checkbox.addEventListener('change', (e) => {
+          e.stopPropagation();
+          if (checkbox.checked) {
+            selectedFrames.add(idx);
+          } else {
+            selectedFrames.delete(idx);
+          }
+          updateSelectedBadge();
+        });
+
+        const numBadge = document.createElement('span');
+        numBadge.className = 'frame-num-badge';
+        numBadge.textContent = `#${frame.index}`;
+
+        topRow.appendChild(checkbox);
+        topRow.appendChild(numBadge);
+
+        const thumbWrapper = document.createElement('div');
+        thumbWrapper.className = 'frame-thumb-wrapper';
+        const img = document.createElement('img');
+        img.src = frame.dataUrl;
+        img.className = 'frame-thumb-img';
+        img.alt = `Frame ${frame.index}`;
+        thumbWrapper.appendChild(img);
+
+        const metaRow = document.createElement('div');
+        metaRow.className = 'frame-card-meta';
+
+        const delaySpan = document.createElement('span');
+        delaySpan.className = 'frame-meta-tag';
+        delaySpan.textContent = `${frame.delayMs}ms`;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'frame-meta-tag';
+        timeSpan.textContent = `${(frame.timestampMs / 1000).toFixed(2)}s`;
+
+        metaRow.appendChild(delaySpan);
+        metaRow.appendChild(timeSpan);
+
+        const downloadBtn = document.createElement('button');
+        downloadBtn.type = 'button';
+        downloadBtn.className = 'btn btn-secondary btn-sm frame-dl-btn';
+        downloadBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download</span>
+        `;
+
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          downloadSingleFrame(idx);
+        });
+
+        // Click card to jump to frame
+        card.addEventListener('click', () => {
+          stopPlayback();
+          currentFrameIndex = idx;
+          renderCurrentFrame();
+        });
+
+        card.appendChild(topRow);
+        card.appendChild(thumbWrapper);
+        card.appendChild(metaRow);
+        card.appendChild(downloadBtn);
+
+        framesGrid.appendChild(card);
+      });
+
+      updateSelectedBadge();
+    }
+
+    async function handleGifLoaded(file: File | Blob, name: string) {
+      try {
+        hideError();
+        stopPlayback();
+        currentFileName = name;
+        fileNameDisplay.textContent = name;
+
+        dropzoneContainer.style.display = 'none';
+        workspace.style.display = 'block';
+
+        const result = await GifExtractorEngine.extractFrames(file);
+        metadata = result.metadata;
+        frames = result.frames;
+
+        // Update Metadata Badges
+        frameCountBadge.textContent = `${metadata.frameCount} Frames`;
+        resolutionBadge.textContent = `${metadata.width} × ${metadata.height} px`;
+        durationBadge.textContent = `${(metadata.totalDurationMs / 1000).toFixed(2)}s Duration`;
+        fpsBadge.textContent = `${metadata.avgFps} Avg FPS`;
+        transparencyBadge.textContent = `Transparency: ${metadata.hasTransparency ? 'Yes' : 'No'}`;
+
+        timelineSlider.max = frames.length.toString();
+        timelineSlider.value = '1';
+        currentFrameIndex = 0;
+
+        renderCurrentFrame();
+        buildGallery();
+        startPlayback();
+      } catch (err: any) {
+        showError(err.message || 'Failed to extract GIF frames.');
+      }
+    }
+
+    function downloadSingleFrame(index: number) {
+      if (!frames[index]) return;
+      const frame = frames[index];
+      const format = exportFormatSelect.value;
+      const mime = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
+      const ext = format === 'jpeg' ? 'jpg' : format;
+
+      const baseName = currentFileName.replace(/\.[^/.]+$/, '');
+      const paddedNum = String(frame.index).padStart(3, '0');
+      const filename = `${baseName}_frame_${paddedNum}.${ext}`;
+
+      frame.canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, mime, 0.95);
+    }
+
+    async function downloadFramesAsZip(indicesToExport: number[]) {
+      if (!indicesToExport.length) {
+        showError('No frames selected for export.');
+        return;
+      }
+
+      try {
+        hideError();
+        const zip = new MicroZip();
+        const format = exportFormatSelect.value;
+        const mime = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
+        const ext = format === 'jpeg' ? 'jpg' : format;
+        const baseName = currentFileName.replace(/\.[^/.]+$/, '');
+
+        for (const idx of indicesToExport) {
+          const frame = frames[idx];
+          const paddedNum = String(frame.index).padStart(3, '0');
+          const entryName = `${baseName}_frame_${paddedNum}.${ext}`;
+
+          const blob: Blob = await new Promise((resolve) => {
+            frame.canvas.toBlob((b) => resolve(b!), mime, 0.95);
+          });
+
+          const arrayBuffer = await blob.arrayBuffer();
+          zip.addFile(entryName, new Uint8Array(arrayBuffer));
+        }
+
+        const zipBlob = zip.generateZipBlob();
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${baseName}_frames.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err: any) {
+        showError(err.message || 'Failed to generate ZIP archive.');
+      }
+    }
+
+    // Event Listeners
+    browseBtn.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const sample = await GifExtractorEngine.generateSampleAnimatedGif();
+      handleGifLoaded(sample.file, sample.file.name);
+    });
+
+    changeGifBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) handleGifLoaded(file, file.name);
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer?.files[0];
+      if (file) handleGifLoaded(file, file.name);
+    });
+
+    // Player Controls
+    playPauseBtn.addEventListener('click', togglePlayback);
+
+    prevFrameBtn.addEventListener('click', () => {
+      stopPlayback();
+      if (currentFrameIndex > 0) {
+        currentFrameIndex--;
+      } else {
+        currentFrameIndex = frames.length - 1;
+      }
+      renderCurrentFrame();
+    });
+
+    nextFrameBtn.addEventListener('click', () => {
+      stopPlayback();
+      currentFrameIndex = (currentFrameIndex + 1) % frames.length;
+      renderCurrentFrame();
+    });
+
+    timelineSlider.addEventListener('input', () => {
+      stopPlayback();
+      currentFrameIndex = parseInt(timelineSlider.value, 10) - 1;
+      renderCurrentFrame();
+    });
+
+    speedButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        speedButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        playbackSpeed = parseFloat(btn.getAttribute('data-speed') || '1');
+      });
+    });
+
+    downloadCurrentFrameBtn.addEventListener('click', () => {
+      downloadSingleFrame(currentFrameIndex);
+    });
+
+    // Gallery Actions
+    selectAllBtn.addEventListener('click', () => {
+      selectedFrames.clear();
+      document.querySelectorAll<HTMLInputElement>('.frame-checkbox').forEach((cb, idx) => {
+        cb.checked = true;
+        selectedFrames.add(idx);
+      });
+      updateSelectedBadge();
+    });
+
+    deselectAllBtn.addEventListener('click', () => {
+      selectedFrames.clear();
+      document.querySelectorAll<HTMLInputElement>('.frame-checkbox').forEach((cb) => {
+        cb.checked = false;
+      });
+      updateSelectedBadge();
+    });
+
+    downloadSelectedBtn.addEventListener('click', () => {
+      downloadFramesAsZip(Array.from(selectedFrames).sort((a, b) => a - b));
+    });
+
+    downloadAllBtn.addEventListener('click', () => {
+      downloadFramesAsZip(frames.map((_, i) => i));
+    });
+  });
+</script>
+
+<style>
+  .gif-extractor-wrapper {
+    width: 100%;
+  }
+
+  /* Dropzone */
+  .dropzone-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .dropzone:hover,
+  .dropzone.drag-over {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .dropzone-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .privacy-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-2);
+  }
+
+  /* Workspace */
+  .workspace {
+    width: 100%;
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+  }
+
+  .file-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .file-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .badge-accent {
+    background: rgba(79, 70, 229, 0.08);
+    border-color: rgba(79, 70, 229, 0.25);
+    color: #4F46E5;
+    font-weight: 700;
+  }
+
+  /* Error Banner */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #EF4444;
+    border-radius: var(--radius-md);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Control Group Cards */
+  .control-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: var(--space-5);
+  }
+
+  .group-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Player Card */
+  .player-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .format-select-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .format-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  .format-dropdown {
+    height: 36px;
+    padding: 4px 10px;
+    font-size: 12.5px;
+  }
+
+  .player-stage-container {
+    width: 100%;
+    min-height: 280px;
+    max-height: 440px;
+    background-color: var(--color-surface-subtle);
+    background-image: 
+      linear-gradient(45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%), 
+      linear-gradient(-45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.04) 75%), 
+      linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.04) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 16px;
+  }
+
+  .player-canvas {
+    max-width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Timeline Scrubber Bar */
+  .timeline-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .player-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .player-nav-btn:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  .player-play-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4F46E5;
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .player-play-btn:hover {
+    background: #4338CA;
+  }
+
+  .timeline-slider {
+    flex: 1;
+    min-width: 140px;
+    accent-color: #4F46E5;
+    cursor: pointer;
+  }
+
+  .time-readout {
+    display: flex;
+    flex-direction: column;
+    min-width: 110px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .time-sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .speed-selector {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2px;
+  }
+
+  .speed-btn {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .speed-btn.active {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .download-current-btn {
+    margin-left: auto;
+  }
+
+  /* Gallery Card */
+  .gallery-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .gallery-title-col {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .gallery-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .frames-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 580px) {
+    .frames-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 820px) {
+    .frames-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .frames-grid {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  .frame-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .frame-card:hover {
+    border-color: #4F46E5;
+    transform: translateY(-2px);
+  }
+
+  .frame-card-active {
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  }
+
+  .frame-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .frame-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #4F46E5;
+    cursor: pointer;
+  }
+
+  .frame-num-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .frame-thumb-wrapper {
+    width: 100%;
+    height: 110px;
+    background-color: var(--color-surface);
+    background-image: 
+      linear-gradient(45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%), 
+      linear-gradient(-45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.04) 75%), 
+      linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.04) 75%);
+    background-size: 12px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .frame-thumb-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .frame-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+  }
+
+  .frame-meta-tag {
+    font-weight: 600;
+  }
+
+  .frame-dl-btn {
+    width: 100%;
+    height: 30px;
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  /* General Form Inputs & Buttons */
+  .form-select {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+  }
+
+  .btn-sm {
+    height: 34px;
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+
+  .btn-md {
+    height: 38px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .btn-lg {
+    height: 42px;
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+
+  .btn-primary {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #4338CA;
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+</style>

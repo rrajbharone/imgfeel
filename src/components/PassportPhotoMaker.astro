@@ -1,0 +1,1433 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { PASSPORT_PRESETS, PAPER_SIZE_PRESETS } from '@/scripts/passport-photo-maker';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="passport-maker-wrapper" data-locale={locale}>
+  <!-- Upload Dropzone (Initial State) -->
+  <div id="dropzoneContainer" class="dropzone-container">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'passport.dropzone.title')}>
+      <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" class="file-input" />
+      <div class="dropzone-content">
+        <div class="dropzone-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <h2 class="dropzone-title">{t(locale, 'passport.dropzone.title')}</h2>
+        <p class="dropzone-subtitle">{t(locale, 'passport.dropzone.subtitle')}</p>
+        <div class="dropzone-actions">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            {t(locale, 'passport.dropzone.browse')}
+          </button>
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+            {t(locale, 'passport.dropzone.sample')}
+          </button>
+        </div>
+        <div class="privacy-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>{t(locale, 'passport.privacy.badge')}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Workspace -->
+  <div id="workspace" class="workspace" style="display: none;">
+    <!-- Workspace Header / File Info Bar -->
+    <div class="workspace-header-bar">
+      <div class="file-info-col">
+        <div class="file-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+            <circle cx="9" cy="10" r="2"></circle>
+            <line x1="15" y1="8" x2="17" y2="8"></line>
+            <line x1="15" y1="12" x2="17" y2="12"></line>
+            <line x1="7" y1="16" x2="17" y2="16"></line>
+          </svg>
+          <span id="fileNameDisplay" class="file-name">portrait.jpg</span>
+        </div>
+        <div class="file-meta-row">
+          <span id="presetBadge" class="badge">US Passport (2×2 in)</span>
+          <span id="dimBadge" class="badge">600 × 600 px @ 300 DPI</span>
+          <span id="sheetSummaryBadge" class="badge badge-accent">4×6" Sheet: 6 Copies</span>
+        </div>
+      </div>
+      <button type="button" id="changePhotoBtn" class="btn btn-secondary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        {t(locale, 'passport.action.changePhoto')}
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">An error occurred</span>
+    </div>
+
+    <!-- Workspace Tabs Navigation -->
+    <div class="workspace-tabs-nav">
+      <button type="button" id="tabEditBtn" class="tab-nav-btn tab-active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        <span>{t(locale, 'passport.tab.edit')}</span>
+      </button>
+
+      <button type="button" id="tabSheetBtn" class="tab-nav-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
+        <span>{t(locale, 'passport.tab.sheet')}</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: Photo Framing & Editing Content -->
+    <div id="tabEditContent" class="tab-content-pane">
+      <div class="editor-grid">
+        <!-- Controls Column -->
+        <div class="editor-controls-col">
+          <!-- Preset Card -->
+          <div class="control-group">
+            <label for="countryPresetSelect" class="field-label">{t(locale, 'passport.preset.country')}</label>
+            <select id="countryPresetSelect" class="form-select">
+              {PASSPORT_PRESETS.map((preset) => (
+                <option value={preset.id}>{preset.name}</option>
+              ))}
+            </select>
+            <p id="presetDescText" class="field-hint">2×2 inches (51×51 mm), head 1 to 1 3/8 inches</p>
+
+            <!-- Custom Dimensions Row (Visible only when Custom is selected) -->
+            <div id="customDimRow" class="custom-dim-row" style="display: none;">
+              <div class="custom-dim-field">
+                <label for="customWidthInput">{t(locale, 'passport.label.customWidth')}</label>
+                <input type="number" id="customWidthInput" class="form-input" value="35" min="15" max="150" />
+              </div>
+              <div class="custom-dim-field">
+                <label for="customHeightInput">{t(locale, 'passport.label.customHeight')}</label>
+                <input type="number" id="customHeightInput" class="form-input" value="45" min="15" max="150" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Framing & Biometric Guides Card -->
+          <div class="control-group">
+            <div class="toggle-row">
+              <label class="checkbox-label" title={t(locale, 'passport.toggle.biometricDesc')}>
+                <input type="checkbox" id="biometricToggle" checked />
+                <div class="checkbox-body">
+                  <strong>{t(locale, 'passport.toggle.biometric')}</strong>
+                  <span>{t(locale, 'passport.toggle.biometricDesc')}</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Sliders -->
+            <div class="sliders-list">
+              <!-- Zoom Slider -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="slider-label">{t(locale, 'passport.label.zoom')}</span>
+                  <span id="zoomValDisplay" class="slider-val">100%</span>
+                </div>
+                <input type="range" id="zoomSlider" min="50" max="250" value="100" class="range-slider" />
+              </div>
+
+              <!-- Rotation Slider -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="slider-label">{t(locale, 'passport.label.rotation')}</span>
+                  <span id="rotationValDisplay" class="slider-val">0°</span>
+                </div>
+                <input type="range" id="rotationSlider" min="-45" max="45" value="0" class="range-slider" />
+              </div>
+
+              <!-- Brightness Slider -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="slider-label">{t(locale, 'passport.label.brightness')}</span>
+                  <span id="brightnessValDisplay" class="slider-val">100%</span>
+                </div>
+                <input type="range" id="brightnessSlider" min="50" max="150" value="100" class="range-slider" />
+              </div>
+
+              <!-- Contrast Slider -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="slider-label">{t(locale, 'passport.label.contrast')}</span>
+                  <span id="contrastValDisplay" class="slider-val">100%</span>
+                </div>
+                <input type="range" id="contrastSlider" min="50" max="150" value="100" class="range-slider" />
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="quick-btn-row">
+              <button type="button" id="rotate90Btn" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+                {t(locale, 'passport.action.rotate90')}
+              </button>
+
+              <button type="button" id="flipHBtn" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="8 3 4 7 8 11"></polyline>
+                  <line x1="4" y1="7" x2="20" y2="7"></line>
+                  <polyline points="16 21 20 17 16 13"></polyline>
+                  <line x1="20" y1="17" x2="4" y2="17"></line>
+                </svg>
+                {t(locale, 'passport.action.flipH')}
+              </button>
+
+              <button type="button" id="resetBtn" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                {t(locale, 'passport.action.reset')}
+              </button>
+            </div>
+          </div>
+
+          <!-- Background Color Options -->
+          <div class="control-group">
+            <label class="field-label">{t(locale, 'passport.label.bg')}</label>
+            <div class="bg-options-grid">
+              <button type="button" class="bg-chip active" data-bg="original">
+                <span class="bg-color-dot dot-original"></span>
+                <span>{t(locale, 'passport.bg.original')}</span>
+              </button>
+              <button type="button" class="bg-chip" data-bg="white">
+                <span class="bg-color-dot dot-white"></span>
+                <span>{t(locale, 'passport.bg.white')}</span>
+              </button>
+              <button type="button" class="bg-chip" data-bg="offwhite">
+                <span class="bg-color-dot dot-offwhite"></span>
+                <span>{t(locale, 'passport.bg.offwhite')}</span>
+              </button>
+              <button type="button" class="bg-chip" data-bg="gray">
+                <span class="bg-color-dot dot-gray"></span>
+                <span>{t(locale, 'passport.bg.gray')}</span>
+              </button>
+              <button type="button" class="bg-chip" data-bg="lightblue">
+                <span class="bg-color-dot dot-blue"></span>
+                <span>{t(locale, 'passport.bg.lightblue')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas Stage Column -->
+        <div class="editor-stage-col">
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-title">Interactive Positioning Canvas</span>
+              <span class="stage-hint">Drag/touch to pan photo inside the frame</span>
+            </div>
+
+            <div class="canvas-viewport" id="canvasViewport">
+              <canvas id="editorCanvas" class="editor-canvas"></canvas>
+            </div>
+
+            <div class="stage-actions">
+              <button type="button" id="downloadSingleBtn" class="btn btn-primary btn-lg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                {t(locale, 'passport.action.downloadSingle')}
+              </button>
+
+              <button type="button" id="goToSheetBtn" class="btn btn-secondary btn-lg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                </svg>
+                <span>Make Printable Sheet (4×6") &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Printable Sheet & Multi-Copy Content -->
+    <div id="tabSheetContent" class="tab-content-pane" style="display: none;">
+      <div class="editor-grid">
+        <!-- Sheet Settings Column -->
+        <div class="editor-controls-col">
+          <!-- Paper Size Card -->
+          <div class="control-group">
+            <label for="paperSizeSelect" class="field-label">{t(locale, 'passport.sheet.paperSize')}</label>
+            <select id="paperSizeSelect" class="form-select">
+              {PAPER_SIZE_PRESETS.map((paper) => (
+                <option value={paper.id}>{paper.name}</option>
+              ))}
+            </select>
+            <p id="paperDescText" class="field-hint">Standard 4×6 photo paper print at drugstores or home printers</p>
+          </div>
+
+          <!-- Copies Card -->
+          <div class="control-group">
+            <label for="sheetCopiesSelect" class="field-label">{t(locale, 'passport.sheet.copies')}</label>
+            <select id="sheetCopiesSelect" class="form-select">
+              <option value="auto" selected>{t(locale, 'passport.sheet.copiesAuto')}</option>
+              <option value="1">1 Photo</option>
+              <option value="2">2 Photos</option>
+              <option value="4">4 Photos</option>
+              <option value="6">6 Photos</option>
+              <option value="8">8 Photos</option>
+              <option value="12">12 Photos</option>
+              <option value="16">16 Photos</option>
+            </select>
+
+            <div class="toggle-row" style="margin-top: 10px;">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cuttingGuidesToggle" checked />
+                <div class="checkbox-body">
+                  <strong>{t(locale, 'passport.sheet.cuttingGuides')}</strong>
+                  <span>{t(locale, 'passport.sheet.cuttingGuidesDesc')}</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sheet Action Buttons Card -->
+          <div class="control-group">
+            <button type="button" id="downloadSheetBtn" class="btn btn-primary btn-xl">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              {t(locale, 'passport.action.downloadSheet')}
+            </button>
+
+            <button type="button" id="printSheetBtn" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              {t(locale, 'passport.action.printDirect')}
+            </button>
+          </div>
+        </div>
+
+        <!-- Sheet Preview Stage Column -->
+        <div class="editor-stage-col">
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-title">Printable Sheet Preview (300 DPI)</span>
+              <span id="sheetCopiesIndicator" class="stage-hint">6 Photos placed on 4×6" sheet</span>
+            </div>
+
+            <div class="canvas-viewport sheet-viewport">
+              <canvas id="sheetCanvas" class="sheet-canvas"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden off-screen canvas for high-res rendering and printing -->
+  <canvas id="exportSingleCanvas" style="display: none;"></canvas>
+  <img id="printReadyImage" class="print-only-element" alt="Passport Sheet" style="display: none;" />
+</div>
+
+<script>
+  import {
+    PassportPhotoEngine,
+    PASSPORT_PRESETS,
+    PAPER_SIZE_PRESETS,
+    type PassportPreset,
+    type PaperSizePreset,
+    type PhotoTransform,
+    type SheetOptions,
+  } from '@/scripts/passport-photo-maker';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn')!;
+    const sampleBtn = document.getElementById('sampleBtn')!;
+    const workspace = document.getElementById('workspace')!;
+    const changePhotoBtn = document.getElementById('changePhotoBtn')!;
+    const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const presetBadge = document.getElementById('presetBadge')!;
+    const dimBadge = document.getElementById('dimBadge')!;
+    const sheetSummaryBadge = document.getElementById('sheetSummaryBadge')!;
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
+    // Tabs
+    const tabEditBtn = document.getElementById('tabEditBtn')!;
+    const tabSheetBtn = document.getElementById('tabSheetBtn')!;
+    const tabEditContent = document.getElementById('tabEditContent')!;
+    const tabSheetContent = document.getElementById('tabSheetContent')!;
+    const goToSheetBtn = document.getElementById('goToSheetBtn')!;
+
+    // Editor Controls
+    const countryPresetSelect = document.getElementById('countryPresetSelect') as HTMLSelectElement;
+    const presetDescText = document.getElementById('presetDescText')!;
+    const customDimRow = document.getElementById('customDimRow')!;
+    const customWidthInput = document.getElementById('customWidthInput') as HTMLInputElement;
+    const customHeightInput = document.getElementById('customHeightInput') as HTMLInputElement;
+    const biometricToggle = document.getElementById('biometricToggle') as HTMLInputElement;
+
+    const zoomSlider = document.getElementById('zoomSlider') as HTMLInputElement;
+    const zoomValDisplay = document.getElementById('zoomValDisplay')!;
+    const rotationSlider = document.getElementById('rotationSlider') as HTMLInputElement;
+    const rotationValDisplay = document.getElementById('rotationValDisplay')!;
+    const brightnessSlider = document.getElementById('brightnessSlider') as HTMLInputElement;
+    const brightnessValDisplay = document.getElementById('brightnessValDisplay')!;
+    const contrastSlider = document.getElementById('contrastSlider') as HTMLInputElement;
+    const contrastValDisplay = document.getElementById('contrastValDisplay')!;
+
+    const rotate90Btn = document.getElementById('rotate90Btn')!;
+    const flipHBtn = document.getElementById('flipHBtn')!;
+    const resetBtn = document.getElementById('resetBtn')!;
+    const bgChips = document.querySelectorAll('.bg-chip');
+
+    // Canvas Elements
+    const canvasViewport = document.getElementById('canvasViewport')!;
+    const editorCanvas = document.getElementById('editorCanvas') as HTMLCanvasElement;
+    const sheetCanvas = document.getElementById('sheetCanvas') as HTMLCanvasElement;
+    const exportSingleCanvas = document.getElementById('exportSingleCanvas') as HTMLCanvasElement;
+    const printReadyImage = document.getElementById('printReadyImage') as HTMLImageElement;
+
+    // Sheet Controls
+    const paperSizeSelect = document.getElementById('paperSizeSelect') as HTMLSelectElement;
+    const paperDescText = document.getElementById('paperDescText')!;
+    const sheetCopiesSelect = document.getElementById('sheetCopiesSelect') as HTMLSelectElement;
+    const cuttingGuidesToggle = document.getElementById('cuttingGuidesToggle') as HTMLInputElement;
+    const sheetCopiesIndicator = document.getElementById('sheetCopiesIndicator')!;
+    const downloadSingleBtn = document.getElementById('downloadSingleBtn')!;
+    const downloadSheetBtn = document.getElementById('downloadSheetBtn')!;
+    const printSheetBtn = document.getElementById('printSheetBtn')!;
+
+    // State
+    let currentImage: HTMLImageElement | null = null;
+    let currentFileName = 'passport-photo.jpg';
+    let currentPreset: PassportPreset = PASSPORT_PRESETS[0];
+    let currentPaper: PaperSizePreset = PAPER_SIZE_PRESETS[0];
+
+    const transform: PhotoTransform = {
+      panX: 0,
+      panY: 0,
+      zoom: 1.0,
+      rotation: 0,
+      flipHorizontal: false,
+      brightness: 1.0,
+      contrast: 1.0,
+      backgroundColor: 'original',
+      showBiometricGuide: true,
+    };
+
+    const sheetOptions: SheetOptions = {
+      paperSizeId: currentPaper.id,
+      copies: 'auto',
+      showCuttingGuides: true,
+      marginMm: 6,
+      gapMm: 4,
+    };
+
+    // Pan Drag State
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialPanX = 0;
+    let initialPanY = 0;
+
+    function showError(msg: string) {
+      errorMessage.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    function updatePresetFromSelection() {
+      const selectedId = countryPresetSelect.value;
+      const found = PASSPORT_PRESETS.find((p) => p.id === selectedId);
+      if (found) {
+        currentPreset = { ...found };
+        if (selectedId === 'custom-preset') {
+          customDimRow.style.display = 'grid';
+          const w = parseFloat(customWidthInput.value) || 35;
+          const h = parseFloat(customHeightInput.value) || 45;
+          currentPreset.widthMm = w;
+          currentPreset.heightMm = h;
+          currentPreset.widthPx300Dpi = Math.round((w / 25.4) * 300);
+          currentPreset.heightPx300Dpi = Math.round((h / 25.4) * 300);
+        } else {
+          customDimRow.style.display = 'none';
+        }
+        presetDescText.textContent = currentPreset.description;
+        presetBadge.textContent = currentPreset.name;
+        dimBadge.textContent = `${currentPreset.widthPx300Dpi} × ${currentPreset.heightPx300Dpi} px @ 300 DPI`;
+      }
+    }
+
+    function renderEditor() {
+      if (!currentImage) return;
+      PassportPhotoEngine.renderPassportPhoto(
+        currentImage,
+        currentImage.naturalWidth,
+        currentImage.naturalHeight,
+        currentPreset,
+        transform,
+        editorCanvas,
+        true // include biometric guide in interactive editor
+      );
+    }
+
+    function renderSheet() {
+      if (!currentImage) return;
+
+      // 1. Render clean single photo onto offscreen canvas (without biometric overlay)
+      PassportPhotoEngine.renderPassportPhoto(
+        currentImage,
+        currentImage.naturalWidth,
+        currentImage.naturalHeight,
+        currentPreset,
+        transform,
+        exportSingleCanvas,
+        false // No biometric guides on exported photos
+      );
+
+      // 2. Render multi-photo sheet
+      const result = PassportPhotoEngine.generatePrintableSheet(
+        exportSingleCanvas,
+        currentPreset,
+        currentPaper,
+        sheetCanvas,
+        sheetOptions
+      );
+
+      sheetSummaryBadge.textContent = `${currentPaper.name.split(' ')[0]}: ${result.totalCopies} Copies`;
+      sheetCopiesIndicator.textContent = `${result.totalCopies} Photos placed on ${currentPaper.name} @ 300 DPI`;
+    }
+
+    function renderAll() {
+      renderEditor();
+      renderSheet();
+    }
+
+    function switchTab(tab: 'edit' | 'sheet') {
+      if (tab === 'edit') {
+        tabEditBtn.classList.add('tab-active');
+        tabSheetBtn.classList.remove('tab-active');
+        tabEditContent.style.display = 'block';
+        tabSheetContent.style.display = 'none';
+        renderEditor();
+      } else {
+        tabSheetBtn.classList.add('tab-active');
+        tabEditBtn.classList.remove('tab-active');
+        tabSheetContent.style.display = 'block';
+        tabEditContent.style.display = 'none';
+        renderSheet();
+      }
+    }
+
+    async function handlePhotoLoaded(file: File | Blob, name: string) {
+      try {
+        hideError();
+        currentFileName = name;
+        fileNameDisplay.textContent = name;
+
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        await new Promise((resolve, reject) => {
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error('Failed to decode image file.'));
+        });
+
+        currentImage = img;
+
+        dropzoneContainer.style.display = 'none';
+        workspace.style.display = 'block';
+
+        updatePresetFromSelection();
+        renderAll();
+      } catch (err: any) {
+        showError(err.message || 'Failed to load photo.');
+      }
+    }
+
+    // Drag / Pan Canvas Handlers
+    function startDrag(clientX: number, clientY: number) {
+      isDragging = true;
+      dragStartX = clientX;
+      dragStartY = clientY;
+      initialPanX = transform.panX;
+      initialPanY = transform.panY;
+    }
+
+    function moveDrag(clientX: number, clientY: number) {
+      if (!isDragging) return;
+      const dx = clientX - dragStartX;
+      const dy = clientY - dragStartY;
+      // Adjust pan relative to canvas display scale
+      const rect = editorCanvas.getBoundingClientRect();
+      const scaleFactor = currentPreset.widthPx300Dpi / rect.width;
+      transform.panX = initialPanX + dx * scaleFactor;
+      transform.panY = initialPanY + dy * scaleFactor;
+      renderAll();
+    }
+
+    function stopDrag() {
+      isDragging = false;
+    }
+
+    editorCanvas.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+    window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+    window.addEventListener('mouseup', stopDrag);
+
+    // Touch support for Mobile
+    editorCanvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        startDrag(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', stopDrag);
+
+    // Mouse Wheel Zoom
+    canvasViewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomStep = e.deltaY < 0 ? 0.05 : -0.05;
+      transform.zoom = Math.max(0.5, Math.min(2.5, parseFloat((transform.zoom + zoomStep).toFixed(2))));
+      zoomSlider.value = Math.round(transform.zoom * 100).toString();
+      zoomValDisplay.textContent = `${Math.round(transform.zoom * 100)}%`;
+      renderAll();
+    }, { passive: false });
+
+    // Preset & Custom Inputs
+    countryPresetSelect.addEventListener('change', () => {
+      updatePresetFromSelection();
+      renderAll();
+    });
+
+    customWidthInput.addEventListener('input', () => {
+      updatePresetFromSelection();
+      renderAll();
+    });
+
+    customHeightInput.addEventListener('input', () => {
+      updatePresetFromSelection();
+      renderAll();
+    });
+
+    biometricToggle.addEventListener('change', () => {
+      transform.showBiometricGuide = biometricToggle.checked;
+      renderEditor();
+    });
+
+    // Sliders
+    zoomSlider.addEventListener('input', () => {
+      transform.zoom = parseFloat(zoomSlider.value) / 100;
+      zoomValDisplay.textContent = `${zoomSlider.value}%`;
+      renderAll();
+    });
+
+    rotationSlider.addEventListener('input', () => {
+      transform.rotation = parseInt(rotationSlider.value, 10);
+      rotationValDisplay.textContent = `${rotationSlider.value}°`;
+      renderAll();
+    });
+
+    brightnessSlider.addEventListener('input', () => {
+      transform.brightness = parseFloat(brightnessSlider.value) / 100;
+      brightnessValDisplay.textContent = `${brightnessSlider.value}%`;
+      renderAll();
+    });
+
+    contrastSlider.addEventListener('input', () => {
+      transform.contrast = parseFloat(contrastSlider.value) / 100;
+      contrastValDisplay.textContent = `${contrastSlider.value}%`;
+      renderAll();
+    });
+
+    // Quick Actions
+    rotate90Btn.addEventListener('click', () => {
+      transform.rotation = (transform.rotation + 90) % 360;
+      rotationSlider.value = transform.rotation.toString();
+      rotationValDisplay.textContent = `${transform.rotation}°`;
+      renderAll();
+    });
+
+    flipHBtn.addEventListener('click', () => {
+      transform.flipHorizontal = !transform.flipHorizontal;
+      renderAll();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      transform.panX = 0;
+      transform.panY = 0;
+      transform.zoom = 1.0;
+      transform.rotation = 0;
+      transform.flipHorizontal = false;
+      transform.brightness = 1.0;
+      transform.contrast = 1.0;
+      transform.backgroundColor = 'original';
+
+      zoomSlider.value = '100';
+      zoomValDisplay.textContent = '100%';
+      rotationSlider.value = '0';
+      rotationValDisplay.textContent = '0°';
+      brightnessSlider.value = '100';
+      brightnessValDisplay.textContent = '100%';
+      contrastSlider.value = '100';
+      contrastValDisplay.textContent = '100%';
+
+      bgChips.forEach((c) => c.classList.remove('active'));
+      document.querySelector('.bg-chip[data-bg="original"]')?.classList.add('active');
+
+      renderAll();
+    });
+
+    // Background Chips
+    bgChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        bgChips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        transform.backgroundColor = (chip.getAttribute('data-bg') || 'original') as any;
+        renderAll();
+      });
+    });
+
+    // Tab Buttons
+    tabEditBtn.addEventListener('click', () => switchTab('edit'));
+    tabSheetBtn.addEventListener('click', () => switchTab('sheet'));
+    goToSheetBtn.addEventListener('click', () => switchTab('sheet'));
+
+    // Sheet Controls
+    paperSizeSelect.addEventListener('change', () => {
+      const found = PAPER_SIZE_PRESETS.find((p) => p.id === paperSizeSelect.value);
+      if (found) {
+        currentPaper = found;
+        sheetOptions.paperSizeId = found.id;
+        paperDescText.textContent = found.description;
+        renderSheet();
+      }
+    });
+
+    sheetCopiesSelect.addEventListener('change', () => {
+      const val = sheetCopiesSelect.value;
+      sheetOptions.copies = val === 'auto' ? 'auto' : parseInt(val, 10);
+      renderSheet();
+    });
+
+    cuttingGuidesToggle.addEventListener('change', () => {
+      sheetOptions.showCuttingGuides = cuttingGuidesToggle.checked;
+      renderSheet();
+    });
+
+    // Downloads
+    downloadSingleBtn.addEventListener('click', () => {
+      if (!currentImage) return;
+      PassportPhotoEngine.renderPassportPhoto(
+        currentImage,
+        currentImage.naturalWidth,
+        currentImage.naturalHeight,
+        currentPreset,
+        transform,
+        exportSingleCanvas,
+        false
+      );
+
+      exportSingleCanvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const baseName = currentFileName.replace(/\.[^/.]+$/, '');
+        a.download = `${baseName}_passport_300dpi.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 'image/jpeg', 0.95);
+    });
+
+    downloadSheetBtn.addEventListener('click', () => {
+      sheetCanvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const baseName = currentFileName.replace(/\.[^/.]+$/, '');
+        a.download = `${baseName}_passport_sheet_300dpi.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 'image/jpeg', 0.95);
+    });
+
+    printSheetBtn.addEventListener('click', () => {
+      const dataUrl = sheetCanvas.toDataURL('image/jpeg', 0.95);
+      printReadyImage.src = dataUrl;
+      printReadyImage.style.display = 'block';
+      setTimeout(() => {
+        window.print();
+        printReadyImage.style.display = 'none';
+      }, 250);
+    });
+
+    // Upload Listeners
+    browseBtn.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const sample = await PassportPhotoEngine.generateSamplePortrait();
+      handlePhotoLoaded(sample.file, sample.file.name);
+    });
+
+    changePhotoBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) handlePhotoLoaded(file, file.name);
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer?.files[0];
+      if (file) handlePhotoLoaded(file, file.name);
+    });
+  });
+</script>
+
+<style>
+  .passport-maker-wrapper {
+    width: 100%;
+  }
+
+  /* Dropzone */
+  .dropzone-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .dropzone:hover,
+  .dropzone.drag-over {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .dropzone-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .privacy-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-2);
+  }
+
+  /* Workspace */
+  .workspace {
+    width: 100%;
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+  }
+
+  .file-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .file-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .badge-accent {
+    background: rgba(79, 70, 229, 0.08);
+    border-color: rgba(79, 70, 229, 0.25);
+    color: #4F46E5;
+    font-weight: 700;
+  }
+
+  /* Error Banner */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #EF4444;
+    border-radius: var(--radius-md);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Tabs Navigation */
+  .workspace-tabs-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: var(--space-5);
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 8px;
+  }
+
+  .tab-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .tab-nav-btn:hover {
+    color: #4F46E5;
+    border-color: #4F46E5;
+  }
+
+  .tab-nav-btn.tab-active {
+    background: #4F46E5;
+    color: #ffffff;
+    border-color: #4F46E5;
+  }
+
+  /* Editor Two-Column Layout */
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .editor-grid {
+      grid-template-columns: 360px 1fr;
+    }
+  }
+
+  .editor-controls-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Control Group */
+  .control-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .field-hint {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .form-select,
+  .form-input {
+    width: 100%;
+    height: 42px;
+    padding: 8px 12px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .custom-dim-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .custom-dim-field label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Checkbox Toggle */
+  .toggle-row {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    margin-top: 3px;
+    accent-color: #4F46E5;
+    width: 16px;
+    height: 16px;
+  }
+
+  .checkbox-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .checkbox-body strong {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .checkbox-body span {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Sliders */
+  .sliders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .slider-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slider-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+
+  .slider-label {
+    color: var(--color-text);
+  }
+
+  .slider-val {
+    color: #4F46E5;
+    font-weight: 700;
+  }
+
+  .range-slider {
+    width: 100%;
+    accent-color: #4F46E5;
+    cursor: pointer;
+  }
+
+  /* Quick Actions */
+  .quick-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  /* Background Chips */
+  .bg-options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .bg-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+  }
+
+  .bg-chip:hover {
+    border-color: #4F46E5;
+  }
+
+  .bg-chip.active {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.06);
+    color: #4F46E5;
+  }
+
+  .bg-color-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+  }
+
+  .dot-original { background: linear-gradient(135deg, #EF4444 33%, #10B981 66%, #3B82F6 100%); }
+  .dot-white { background: #FFFFFF; }
+  .dot-offwhite { background: #F9FAFB; }
+  .dot-gray { background: #E5E7EB; }
+  .dot-blue { background: #BAE6FD; }
+
+  /* Canvas Stage Column */
+  .editor-stage-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .stage-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .stage-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stage-hint {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .canvas-viewport {
+    width: 100%;
+    height: 480px;
+    background-color: var(--color-surface-subtle);
+    background-image: 
+      linear-gradient(45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%), 
+      linear-gradient(-45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.04) 75%), 
+      linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.04) 75%);
+    background-size: 16px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .canvas-viewport:active {
+    cursor: grabbing;
+  }
+
+  .editor-canvas {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .sheet-viewport {
+    height: 540px;
+    cursor: default;
+  }
+
+  .sheet-canvas {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    background: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .stage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  /* General Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+  }
+
+  .btn-sm {
+    height: 34px;
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+
+  .btn-lg {
+    height: 42px;
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+
+  .btn-xl {
+    height: 46px;
+    padding: 10px 22px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .btn-primary {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #4338CA;
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  /* Direct Print Scaling Styles */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    .print-only-element,
+    .print-only-element * {
+      visibility: visible;
+    }
+
+    .print-only-element {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100% !important;
+      height: auto !important;
+      display: block !important;
+    }
+
+    @page {
+      margin: 0;
+      size: auto;
+    }
+  }
+</style>

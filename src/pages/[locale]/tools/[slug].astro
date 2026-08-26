@@ -25,6 +25,14 @@ import DpiConverter from '@/components/DpiConverter.astro';
 import DpiConverterContent from '@/components/DpiConverterContent.astro';
 import ImageToText from '@/components/ImageToText.astro';
 import ImageToTextContent from '@/components/ImageToTextContent.astro';
+import GifExtractor from '@/components/GifExtractor.astro';
+import GifExtractorContent from '@/components/GifExtractorContent.astro';
+import PassportPhotoMaker from '@/components/PassportPhotoMaker.astro';
+import PassportPhotoMakerContent from '@/components/PassportPhotoMakerContent.astro';
+import SrcsetGenerator from '@/components/SrcsetGenerator.astro';
+import SrcsetGeneratorContent from '@/components/SrcsetGeneratorContent.astro';
+import BatchRenamer from '@/components/BatchRenamer.astro';
+import BatchRenamerContent from '@/components/BatchRenamerContent.astro';
 import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
@@ -103,6 +111,10 @@ const toolPrefixMap: Record<string, string> = {
   'whatsapp-dp-resizer': 'waresizer',
   'ssc-photo-signature-resizer': 'sscresizer',
   'youtube-banner-resizer': 'ytresizer',
+  'batch-rename-images': 'renamer',
+  'image-srcset-generator': 'srcset',
+  'passport-photo-maker': 'passport',
+  'gif-frame-extractor': 'gifext',
   'image-to-text-converter': 'imgtotext',
   'image-dpi-converter': 'dpiconv',
   'svg-resizer': 'svgresizer',
@@ -179,6 +191,10 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'whatsapp-dp-resizer' && <WhatsAppResizer locale={locale} />}
       {toolId === 'ssc-photo-signature-resizer' && <SscResizer locale={locale} />}
       {toolId === 'youtube-banner-resizer' && <YouTubeResizer locale={locale} />}
+      {toolId === 'batch-rename-images' && <BatchRenamer locale={locale} />}
+      {toolId === 'image-srcset-generator' && <SrcsetGenerator locale={locale} />}
+      {toolId === 'passport-photo-maker' && <PassportPhotoMaker locale={locale} />}
+      {toolId === 'gif-frame-extractor' && <GifExtractor locale={locale} />}
       {toolId === 'image-to-text-converter' && <ImageToText locale={locale} />}
       {toolId === 'image-dpi-converter' && <DpiConverter locale={locale} />}
       {toolId === 'svg-resizer' && <SvgResizer locale={locale} />}
@@ -217,6 +233,10 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'whatsapp-dp-resizer' && <WhatsAppContent locale={locale} />}
   {toolId === 'ssc-photo-signature-resizer' && <SscContent locale={locale} />}
   {toolId === 'youtube-banner-resizer' && <YouTubeContent locale={locale} />}
+  {toolId === 'batch-rename-images' && <BatchRenamerContent locale={locale} />}
+  {toolId === 'image-srcset-generator' && <SrcsetGeneratorContent locale={locale} />}
+  {toolId === 'passport-photo-maker' && <PassportPhotoMakerContent locale={locale} />}
+  {toolId === 'gif-frame-extractor' && <GifExtractorContent locale={locale} />}
   {toolId === 'image-to-text-converter' && <ImageToTextContent locale={locale} />}
   {toolId === 'image-dpi-converter' && <DpiConverterContent locale={locale} />}
   {toolId === 'svg-resizer' && <SvgResizerContent locale={locale} />}

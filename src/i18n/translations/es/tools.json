@@ -75,5 +75,13 @@
   "tools.dpiConverter.title": "Convertidor de DPI de Imagen",
   "tools.dpiConverter.description": "Cambia los DPI de tus imágenes a 300, 600 o 72 online sin perder calidad.",
   "tools.imageToText.title": "Convertidor de Imagen a Texto",
-  "tools.imageToText.description": "Extrae texto editable de imágenes JPG, PNG y WebP con OCR gratis."
+  "tools.imageToText.description": "Extrae texto editable de imágenes JPG, PNG y WebP con OCR gratis.",
+  "tools.gifExtractor.title": "Extractor de Fotogramas GIF",
+  "tools.gifExtractor.description": "Extrae fotogrammas de GIFs animados, previsualiza fotograma por fotograma y descarga imágenes individuales o en ZIP.",
+  "tools.passportPhotoMaker.title": "Creador de Fotos Tamaño Pasaporte",
+  "tools.passportPhotoMaker.description": "Crea fotos oficiales tamaño pasaporte gratis y genera hojas imprimibles a 300 DPI.",
+  "tools.imageSrcsetGenerator.title": "Generador de Srcset de Imágenes",
+  "tools.imageSrcsetGenerator.description": "Genera código HTML srcset y sizes para imágenes responsivas y descarga imágenes en ZIP.",
+  "tools.batchRenameImages.title": "Cambiar Nombre de Imágenes por Lotes",
+  "tools.batchRenameImages.description": "Renombra varias imágenes masivamente online con numeración secuencial y descarga en ZIP."
 }

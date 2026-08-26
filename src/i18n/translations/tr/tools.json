@@ -75,5 +75,13 @@
   "tools.dpiConverter.title": "Resim DPI Dönüştürücü",
   "tools.dpiConverter.description": "Resim DPI değerini kalite kaybı olmadan online 300, 600 veya 72 yapın.",
   "tools.imageToText.title": "Resimden Yazıya Dönüştürücü",
-  "tools.imageToText.description": "Ücretsiz OCR ile JPG, PNG ve WebP resimlerinden düzenlenebilir metin çıkarın."
+  "tools.imageToText.description": "Ücretsiz OCR ile JPG, PNG ve WebP resimlerinden düzenlenebilir metin çıkarın.",
+  "tools.gifExtractor.title": "GIF Kare Çıkarıcı",
+  "tools.gifExtractor.description": "Hareketli GIF'leri karelerine ayırın, kare kare inceleyin ve tekli resimler veya ZIP arşivi indirin.",
+  "tools.passportPhotoMaker.title": "Biyometrik Vesikalık Fotoğraf Yapıcı",
+  "tools.passportPhotoMaker.description": "Ücretsiz biyometrik vesikalık fotoğraf hazırlayın ve 300 DPI çoklu baskı sayfası oluşturun.",
+  "tools.imageSrcsetGenerator.title": "Resim Srcset Oluşturucu",
+  "tools.imageSrcsetGenerator.description": "Duyarlı görseller için optimize edilmiş HTML srcset ve sizes kodları oluşturun ve ZIP olarak indirin.",
+  "tools.batchRenameImages.title": "Toplu Resim Yeniden Adlandırma",
+  "tools.batchRenameImages.description": "Birden fazla resim dosyasının adını sıralı numaralandırma ve şablonlarla toplu değiştirin."
 }

@@ -15,6 +15,10 @@ const { title, description, href, id = '', icon, badge } = Astro.props;
 
 // Determine icon type from icon prop or id
 const iconType = icon || (
+  id.includes('rename') || icon === 'edit' ? 'edit' :
+  id.includes('srcset') || icon === 'code' ? 'code' :
+  id.includes('passport') || icon === 'user-check' || icon === 'userCheck' ? 'userCheck' :
+  id.includes('gif') || icon === 'film' || icon === 'gif' ? 'film' :
   id.includes('text') || icon === 'file-text' || icon === 'fileText' ? 'fileText' :
   id.includes('svg') || icon === 'vector' ? 'vector' :
   id.includes('exact') ? 'sliders' :
@@ -52,6 +56,25 @@ const iconType = icon || (
 <a href={href} class="compact-tool-card" data-tool-id={id}>
   <div class="card-top">
     <div class="tool-icon-box">
+      {(iconType === 'userCheck' || iconType === 'user-check') && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <polyline points="16 11 18 13 22 9"></polyline>
+        </svg>
+      )}
+      {(iconType === 'film' || iconType === 'gif') && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+          <line x1="7" y1="2" x2="7" y2="22"></line>
+          <line x1="17" y1="2" x2="17" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <line x1="2" y1="7" x2="7" y2="7"></line>
+          <line x1="2" y1="17" x2="7" y2="17"></line>
+          <line x1="17" y1="17" x2="22" y2="17"></line>
+          <line x1="17" y1="7" x2="22" y2="7"></line>
+        </svg>
+      )}
       {(iconType === 'vector' || iconType === 'svg') && (
         <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="6" cy="6" r="3"></circle>
@@ -119,6 +142,12 @@ const iconType = icon || (
         <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="5" width="20" height="14" rx="4"></rect>
           <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+        </svg>
+      )}
+      {iconType === 'edit' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
         </svg>
       )}
       {iconType === 'code' && (

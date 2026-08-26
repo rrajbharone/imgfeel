@@ -75,5 +75,13 @@
   "tools.dpiConverter.title": "Image DPI Converter",
   "tools.dpiConverter.description": "Change image DPI to 300, 600, or 72 online losslessly.",
   "tools.imageToText.title": "Image to Text Converter",
-  "tools.imageToText.description": "Extract editable text from JPG, PNG, and WebP images with free OCR."
+  "tools.imageToText.description": "Extract editable text from JPG, PNG, and WebP images with free OCR.",
+  "tools.gifExtractor.title": "GIF Frame Extractor",
+  "tools.gifExtractor.description": "Extract individual frames from animated GIFs, preview frame by frame, and download single frames or full ZIP packages.",
+  "tools.passportPhotoMaker.title": "Passport Size Photo Maker",
+  "tools.passportPhotoMaker.description": "Create official passport size photos online for free and generate 300 DPI multi-photo printable sheets.",
+  "tools.imageSrcsetGenerator.title": "Image Srcset Generator",
+  "tools.imageSrcsetGenerator.description": "Generate optimized HTML srcset & sizes responsive image markup and download resized assets in ZIP.",
+  "tools.batchRenameImages.title": "Batch Rename Images",
+  "tools.batchRenameImages.description": "Rename multiple image files in bulk online with sequential numbering, custom patterns, and lossless ZIP download."
 }

@@ -75,5 +75,13 @@
   "tools.dpiConverter.title": "Pengubah DPI Gambar",
   "tools.dpiConverter.description": "Ubah DPI foto ke 300, 600, atau 72 online tanpa menurunkan kualitas.",
   "tools.imageToText.title": "Pengubah Gambar ke Teks",
-  "tools.imageToText.description": "Ekstrak teks yang dapat diedit dari gambar JPG, PNG, dan WebP dengan OCR gratis."
+  "tools.imageToText.description": "Ekstrak teks yang dapat diedit dari gambar JPG, PNG, dan WebP dengan OCR gratis.",
+  "tools.gifExtractor.title": "Ekstrak Frame GIF",
+  "tools.gifExtractor.description": "Ekstrak frame dari GIF animasi, tinjau per frame, dan unduh gambar tunggal atau paket ZIP lengkap.",
+  "tools.passportPhotoMaker.title": "Pembuat Pas Foto Paspor",
+  "tools.passportPhotoMaker.description": "Buat pas foto resmi untuk paspor dan visa online gratis dan susun lembar cetak foto 300 DPI.",
+  "tools.imageSrcsetGenerator.title": "Generator Srcset Gambar",
+  "tools.imageSrcsetGenerator.description": "Buat kode HTML srcset & sizes untuk gambar responsif dan unduh aset gambar dalam ZIP.",
+  "tools.batchRenameImages.title": "Ubah Nama Gambar Masal",
+  "tools.batchRenameImages.description": "Ganti nama banyak file gambar sekaligus secara online dengan penomoran urut dan unduhan ZIP."
 }
