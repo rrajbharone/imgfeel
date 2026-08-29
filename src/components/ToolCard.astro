@@ -15,6 +15,7 @@ const { title, description, href, id = '', icon, badge } = Astro.props;
 
 // Determine icon type from icon prop or id
 const iconType = icon || (
+  id.includes('ppt') || icon === 'presentation' ? 'presentation' :
   id.includes('rename') || icon === 'edit' ? 'edit' :
   id.includes('srcset') || icon === 'code' ? 'code' :
   id.includes('passport') || icon === 'user-check' || icon === 'userCheck' ? 'userCheck' :
@@ -142,6 +143,15 @@ const iconType = icon || (
         <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="5" width="20" height="14" rx="4"></rect>
           <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+        </svg>
+      )}
+      {iconType === 'presentation' && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+          <path d="M7 8h4a2 2 0 0 1 0 4H7z"></path>
+          <line x1="7" y1="8" x2="7" y2="14"></line>
         </svg>
       )}
       {iconType === 'edit' && (

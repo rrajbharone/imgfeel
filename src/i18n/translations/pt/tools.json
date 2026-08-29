@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Crie fotos oficiais tipo passe grátis e gere folhas imprimíveis a 300 DPI para várias fotos.",
   "tools.imageSrcsetGenerator.title": "Gerador de Srcset de Imagens",
   "tools.imageSrcsetGenerator.description": "Gere código HTML srcset e sizes para imagens responsivas e baixe imagens em ZIP.",
-  "tools.batchRenameImages.title": "Renomear Imagens em Lote",
-  "tools.batchRenameImages.description": "Renomeie várias fotos em massa online com numeração sequencial e download em ZIP sem perdas."
+  "tools.pptResizer.title": "Redimensionar PowerPoint",
+  "tools.pptResizer.description": "Altere as dimensões e proporção de slides PowerPoint online (16:9, 4:3, A4, Carta).",
+  "tools.batchRenameImages.title": "Renomear Imagens em Lote Online",
+  "tools.batchRenameImages.description": "Renomeie várias fotos individualmente online e grátis com total privacidade no navegador."
 }

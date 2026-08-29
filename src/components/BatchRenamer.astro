@@ -9,77 +9,47 @@ interface Props {
 const { locale } = Astro.props;
 ---
 
-<div class="batch-renamer-wrapper" data-locale={locale}>
-  <!-- Upload Dropzone (Initial State) -->
-  <div id="dropzoneContainer" class="dropzone-container">
-    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'renamer.dropzone.title')}>
-      <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp,image/avif,image/gif,image/svg+xml" multiple class="file-input" />
-      <div class="dropzone-content">
-        <div class="dropzone-icon">
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+<div id="batch-renamer-container" class="batch-renamer-container" data-locale={locale} data-download-text={t(locale, 'renamer.action.downloadSingle')} data-remove-text={t(locale, 'renamer.action.remove')}>
+  <!-- Hidden File Input -->
+  <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp,image/avif,image/gif,image/svg+xml" multiple class="sr-only" />
+
+  <!-- 1. Initial Upload Dropzone View (Shown when 0 images) -->
+  <div id="uploadSection" class="upload-section">
+    <div id="dropzone" class="upload-dropzone" role="button" tabindex="0" aria-label={t(locale, 'renamer.dropzone.title')}>
+      <div class="upload-icon">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </div>
+      <h2 class="upload-title">{t(locale, 'renamer.upload.title')}</h2>
+      <p class="upload-subtitle">{t(locale, 'renamer.dropzone.subtitle')}</p>
+      
+      <div class="upload-actions">
+        <button type="button" id="chooseImagesBtn" class="btn btn-primary btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-        </div>
-        <h2 class="dropzone-title">{t(locale, 'renamer.dropzone.title')}</h2>
-        <p class="dropzone-subtitle">{t(locale, 'renamer.dropzone.subtitle')}</p>
-        <div class="dropzone-actions">
-          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="17 8 12 3 7 8"></polyline>
-              <line x1="12" y1="3" x2="12" y2="15"></line>
-            </svg>
-            {t(locale, 'renamer.dropzone.browse')}
-          </button>
-          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-            {t(locale, 'renamer.dropzone.sample')}
-          </button>
-        </div>
-        <div class="privacy-badge">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <span>{t(locale, 'renamer.dropzone.browse')}</span>
+        </button>
+        <button type="button" id="sampleDemoBtn" class="btn btn-secondary btn-lg">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
           </svg>
-          <span>{t(locale, 'renamer.privacy.badge')}</span>
-        </div>
+          <span>{t(locale, 'renamer.dropzone.sample')}</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Active Workspace -->
-  <div id="workspace" class="workspace" style="display: none;">
-    <!-- Workspace Header Bar -->
-    <div class="workspace-header-bar">
-      <div class="workspace-stats-col">
-        <span id="statImagesCount" class="badge badge-accent">0 Images</span>
-        <span id="statTotalSize" class="badge">Total Size: 0 MB</span>
-      </div>
-      <div class="workspace-actions-col">
-        <button type="button" id="addMoreBtn" class="btn btn-secondary btn-sm">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          {t(locale, 'renamer.action.addMore')}
-        </button>
-        <button type="button" id="clearAllBtn" class="btn btn-secondary btn-sm">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          {t(locale, 'renamer.action.clearAll')}
-        </button>
-      </div>
-    </div>
-
+  <!-- 2. Two-Panel Workspace View (Shown after upload - Exact Screenshot Match) -->
+  <div id="workspaceSection" class="workspace-section" style="display: none;">
     <!-- Error Banner -->
     <div id="errorBanner" class="error-banner" style="display: none;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -87,166 +57,136 @@ const { locale } = Astro.props;
       <span id="errorMessage">An error occurred</span>
     </div>
 
-    <!-- Workspace Grid -->
-    <div class="workspace-grid">
-      <!-- Left Column: Settings & Renaming Modes -->
-      <div class="settings-col">
-        <!-- Mode Tabs -->
-        <div class="mode-tabs-container">
-          <button type="button" class="mode-tab active" data-mode="pattern">
-            {t(locale, 'renamer.tab.pattern')}
+    <div class="two-panel-layout">
+      <!-- LEFT PANEL: Large Image Preview Card with < 1 / 10 > Controls -->
+      <div class="left-preview-panel">
+        <div class="large-preview-card">
+          <div class="preview-image-container">
+            <img id="largePreviewImg" src="" alt="Active Image Preview" class="large-preview-image" />
+          </div>
+        </div>
+
+        <!-- Navigation Controls: < 1 / 10 > -->
+        <div class="preview-navigation-bar">
+          <button type="button" id="prevBtn" class="nav-btn" aria-label={t(locale, 'renamer.nav.prev')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
           </button>
-          <button type="button" class="mode-tab" data-mode="find-replace">
-            {t(locale, 'renamer.tab.findReplace')}
+          <span id="navCounter" class="nav-counter">1 / 1</span>
+          <button type="button" id="nextBtn" class="nav-btn" aria-label={t(locale, 'renamer.nav.next')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
-          <button type="button" class="mode-tab" data-mode="prefix-suffix">
-            {t(locale, 'renamer.tab.prefixSuffix')}
-          </button>
-          <button type="button" class="mode-tab" data-mode="casing">
-            {t(locale, 'renamer.tab.casing')}
-          </button>
-        </div>
-
-        <!-- Mode 1: Pattern Controls -->
-        <div id="panelPattern" class="mode-panel active control-group">
-          <div class="field-row">
-            <label for="patternInput" class="field-label">{t(locale, 'renamer.label.pattern')}</label>
-            <span class="field-hint">{t(locale, 'renamer.hint.pattern')}</span>
-            <input type="text" id="patternInput" class="form-input" value="photo-{00n}" />
-          </div>
-
-          <div class="presets-row">
-            <button type="button" class="preset-pill" data-pattern="photo-{00n}">{t(locale, 'renamer.preset.photoSeq')}</button>
-            <button type="button" class="preset-pill" data-pattern="vacation-2026-{n}">{t(locale, 'renamer.preset.vacation')}</button>
-            <button type="button" class="preset-pill" data-pattern="{orig}-edited">{t(locale, 'renamer.preset.origEdit')}</button>
-            <button type="button" class="preset-pill" data-pattern="product-{w}x{h}-{n}">{t(locale, 'renamer.preset.productDim')}</button>
-          </div>
-
-          <div class="two-cols-grid">
-            <div class="field-row">
-              <label for="startNumInput" class="field-label-sm">{t(locale, 'renamer.label.startNum')}</label>
-              <input type="number" id="startNumInput" class="form-input" value="1" min="0" max="99999" />
-            </div>
-            <div class="field-row">
-              <label for="paddingSelect" class="field-label-sm">{t(locale, 'renamer.label.padding')}</label>
-              <select id="paddingSelect" class="form-select">
-                <option value="1">{t(locale, 'renamer.pad.none')}</option>
-                <option value="2">{t(locale, 'renamer.pad.two')}</option>
-                <option value="3" selected>{t(locale, 'renamer.pad.three')}</option>
-                <option value="4">{t(locale, 'renamer.pad.four')}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mode 2: Find & Replace Controls -->
-        <div id="panelFindReplace" class="mode-panel control-group" style="display: none;">
-          <div class="field-row">
-            <label for="findTextInput" class="field-label">{t(locale, 'renamer.label.findText')}</label>
-            <input type="text" id="findTextInput" class="form-input" placeholder={t(locale, 'renamer.placeholder.find')} />
-          </div>
-
-          <div class="field-row">
-            <label for="replaceTextInput" class="field-label">{t(locale, 'renamer.label.replaceText')}</label>
-            <input type="text" id="replaceTextInput" class="form-input" placeholder={t(locale, 'renamer.placeholder.replace')} />
-          </div>
-
-          <div class="checkbox-list">
-            <label class="checkbox-inline">
-              <input type="checkbox" id="matchCaseToggle" />
-              <span>{t(locale, 'renamer.toggle.matchCase')}</span>
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="regexToggle" />
-              <span>{t(locale, 'renamer.toggle.regex')}</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Mode 3: Prefix / Suffix Controls -->
-        <div id="panelPrefixSuffix" class="mode-panel control-group" style="display: none;">
-          <div class="field-row">
-            <label for="prefixInput" class="field-label">{t(locale, 'renamer.label.prefix')}</label>
-            <input type="text" id="prefixInput" class="form-input" placeholder={t(locale, 'renamer.placeholder.prefix')} />
-          </div>
-
-          <div class="field-row">
-            <label for="suffixInput" class="field-label">{t(locale, 'renamer.label.suffix')}</label>
-            <input type="text" id="suffixInput" class="form-input" placeholder={t(locale, 'renamer.placeholder.suffix')} />
-          </div>
-        </div>
-
-        <!-- Mode 4: Case & Cleanup Controls -->
-        <div id="panelCasing" class="mode-panel control-group" style="display: none;">
-          <div class="field-row">
-            <label for="caseTransformSelect" class="field-label">{t(locale, 'renamer.label.caseTransform')}</label>
-            <select id="caseTransformSelect" class="form-select">
-              <option value="none" selected>{t(locale, 'renamer.case.none')}</option>
-              <option value="lowercase">{t(locale, 'renamer.case.lower')}</option>
-              <option value="uppercase">{t(locale, 'renamer.case.upper')}</option>
-              <option value="titlecase">{t(locale, 'renamer.case.title')}</option>
-            </select>
-          </div>
-
-          <div class="field-row">
-            <label for="spaceReplacementSelect" class="field-label">{t(locale, 'renamer.label.spaces')}</label>
-            <select id="spaceReplacementSelect" class="form-select">
-              <option value="none">{t(locale, 'renamer.space.none')}</option>
-              <option value="hyphen" selected>{t(locale, 'renamer.space.hyphen')}</option>
-              <option value="underscore">{t(locale, 'renamer.space.underscore')}</option>
-              <option value="remove">{t(locale, 'renamer.space.remove')}</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Universal Global Sanitizers Card -->
-        <div class="control-group">
-          <div class="checkbox-list">
-            <label class="checkbox-inline">
-              <input type="checkbox" id="cleanCharsToggle" checked />
-              <div class="checkbox-text-col">
-                <strong>{t(locale, 'renamer.toggle.cleanChars')}</strong>
-                <span class="field-hint">{t(locale, 'renamer.toggle.cleanCharsDesc')}</span>
-              </div>
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="lowerExtToggle" checked />
-              <div class="checkbox-text-col">
-                <strong>{t(locale, 'renamer.toggle.lowerExt')}</strong>
-              </div>
-            </label>
-          </div>
         </div>
       </div>
 
-      <!-- Right Column: Live Table & Actions -->
-      <div class="table-col">
-        <div class="output-card">
-          <!-- Top Action Bar -->
-          <div class="table-header-row">
-            <div class="table-title-col">
-              <span class="table-title">{t(locale, 'renamer.table.previewTitle')}</span>
-              <span class="table-subtitle">Live real-time preview of your renamed files</span>
+      <!-- RIGHT PANEL: Custom Names Dropdown, Scrollable List & Download Controls -->
+      <div class="right-sidebar-panel">
+        <!-- Top: Batch Mode Dropdown / Custom Names -->
+        <div class="batch-dropdown-container">
+          <div class="custom-select-wrapper">
+            <select id="batchModeSelect" class="batch-select" aria-label="Batch renaming mode">
+              <option value="custom">{t(locale, 'renamer.batch.customNames')}</option>
+              <option value="sequential">{t(locale, 'renamer.batch.sequential')}</option>
+              <option value="prefix-suffix">{t(locale, 'renamer.batch.prefixSuffix')}</option>
+              <option value="find-replace">{t(locale, 'renamer.batch.findReplace')}</option>
+              <option value="datestamp">{t(locale, 'renamer.batch.dateStamp')}</option>
+            </select>
+            <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+
+          <!-- Drawer for batch patterns when selected -->
+          <div id="batchDrawer" class="batch-drawer" style="display: none;">
+            <div id="drawerSequential" class="drawer-group" style="display: none;">
+              <div class="drawer-row">
+                <input type="text" id="seqBaseInput" class="drawer-input" placeholder={t(locale, 'renamer.batch.baseName')} value="photo" />
+                <input type="number" id="seqStartInput" class="drawer-input drawer-input-sm" placeholder={t(locale, 'renamer.batch.startNumber')} value="1" min="0" />
+              </div>
             </div>
-            <button type="button" id="downloadZipBtn" class="btn btn-primary btn-lg download-zip-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span id="zipBtnText">{t(locale, 'renamer.action.downloadZip')}</span>
+
+            <div id="drawerPrefixSuffix" class="drawer-group" style="display: none;">
+              <div class="drawer-row">
+                <input type="text" id="prefixInput" class="drawer-input" placeholder={t(locale, 'renamer.batch.prefix')} />
+                <input type="text" id="suffixInput" class="drawer-input" placeholder={t(locale, 'renamer.batch.suffix')} />
+              </div>
+            </div>
+
+            <div id="drawerFindReplace" class="drawer-group" style="display: none;">
+              <div class="drawer-row">
+                <input type="text" id="findInput" class="drawer-input" placeholder={t(locale, 'renamer.batch.find')} />
+                <input type="text" id="replaceInput" class="drawer-input" placeholder={t(locale, 'renamer.batch.replace')} />
+              </div>
+            </div>
+
+            <button type="button" id="applyBatchBtn" class="btn btn-secondary btn-sm apply-btn">
+              {t(locale, 'renamer.batch.apply')}
             </button>
           </div>
+        </div>
 
-          <!-- Progress Bar -->
-          <div id="zipProgressBar" class="progress-bar-container" style="display: none;">
-            <div id="zipProgressFill" class="progress-fill" style="width: 0%;"></div>
+        <!-- Middle: Scrollable Image Rows List -->
+        <div id="imageList" class="image-rows-list">
+          <!-- Dynamically inserted image rows matching screenshot -->
+        </div>
+
+        <!-- Bottom Actions: Download All Split Button + Auxiliary Buttons -->
+        <div class="sidebar-bottom-actions">
+          <div class="download-split-group">
+            <button type="button" id="downloadAllMainBtn" class="split-btn-main">
+              <span id="downloadAllText">{t(locale, 'renamer.action.downloadZip')} (0)</span>
+            </button>
+            <button type="button" id="downloadDropdownTrigger" class="split-btn-dropdown" aria-label="More download options">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu for single vs zip download -->
+            <div id="downloadDropdownMenu" class="download-dropdown-menu" style="display: none;">
+              <button type="button" id="downloadZipOption" class="dropdown-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download All (.ZIP)</span>
+              </button>
+              <button type="button" id="downloadSingleOption" class="dropdown-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="downloadSingleText">Download Selected Image</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Interactive Responsive Before & After List -->
-          <div class="items-list-container" id="itemsListContainer">
-            <!-- Cards Injected Here -->
-          </div>
+          <!-- Add More Button -->
+          <button type="button" id="addMoreBtn" class="action-icon-btn" title={t(locale, 'renamer.action.addMore')}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+          </button>
+
+          <!-- Clear / Reset Button -->
+          <button type="button" id="clearAllBtn" class="action-icon-btn" title={t(locale, 'renamer.action.clearAll')}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Packaging Progress Bar -->
+        <div id="zipProgressBar" class="progress-bar-container" style="display: none;">
+          <div id="zipProgressFill" class="progress-fill" style="width: 0%;"></div>
         </div>
       </div>
     </div>
@@ -257,73 +197,59 @@ const { locale } = Astro.props;
   import {
     BatchRenamerEngine,
     type ImageItem,
-    type RenameOptions,
-    type RenameMode,
   } from '@/scripts/batch-renamer';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
-    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
-    const dropzone = document.getElementById('dropzone')!;
+    const wrapper = document.getElementById('batch-renamer-container') as HTMLElement;
+    const downloadLabel = wrapper?.getAttribute('data-download-text') || 'Download';
+    const removeLabel = wrapper?.getAttribute('data-remove-text') || 'Delete';
+
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    const browseBtn = document.getElementById('browseBtn')!;
-    const sampleBtn = document.getElementById('sampleBtn')!;
-    const workspace = document.getElementById('workspace')!;
-    const addMoreBtn = document.getElementById('addMoreBtn')!;
-    const clearAllBtn = document.getElementById('clearAllBtn')!;
-    const statImagesCount = document.getElementById('statImagesCount')!;
-    const statTotalSize = document.getElementById('statTotalSize')!;
-    const errorBanner = document.getElementById('errorBanner')!;
-    const errorMessage = document.getElementById('errorMessage')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const chooseImagesBtn = document.getElementById('chooseImagesBtn')!;
+    const sampleDemoBtn = document.getElementById('sampleDemoBtn')!;
 
-    // Mode Tabs & Panels
-    const modeTabs = document.querySelectorAll('.mode-tab');
-    const panelPattern = document.getElementById('panelPattern')!;
-    const panelFindReplace = document.getElementById('panelFindReplace')!;
-    const panelPrefixSuffix = document.getElementById('panelPrefixSuffix')!;
-    const panelCasing = document.getElementById('panelCasing')!;
+    const uploadSection = document.getElementById('uploadSection')!;
+    const workspaceSection = document.getElementById('workspaceSection')!;
+    const imageList = document.getElementById('imageList')!;
 
-    // Inputs
-    const patternInput = document.getElementById('patternInput') as HTMLInputElement;
-    const startNumInput = document.getElementById('startNumInput') as HTMLInputElement;
-    const paddingSelect = document.getElementById('paddingSelect') as HTMLSelectElement;
-    const findTextInput = document.getElementById('findTextInput') as HTMLInputElement;
-    const replaceTextInput = document.getElementById('replaceTextInput') as HTMLInputElement;
-    const matchCaseToggle = document.getElementById('matchCaseToggle') as HTMLInputElement;
-    const regexToggle = document.getElementById('regexToggle') as HTMLInputElement;
+    const largePreviewImg = document.getElementById('largePreviewImg') as HTMLImageElement;
+    const prevBtn = document.getElementById('prevBtn')!;
+    const nextBtn = document.getElementById('nextBtn')!;
+    const navCounter = document.getElementById('navCounter')!;
+
+    const batchModeSelect = document.getElementById('batchModeSelect') as HTMLSelectElement;
+    const batchDrawer = document.getElementById('batchDrawer')!;
+    const drawerSequential = document.getElementById('drawerSequential')!;
+    const drawerPrefixSuffix = document.getElementById('drawerPrefixSuffix')!;
+    const drawerFindReplace = document.getElementById('drawerFindReplace')!;
+    const applyBatchBtn = document.getElementById('applyBatchBtn')!;
+
+    const seqBaseInput = document.getElementById('seqBaseInput') as HTMLInputElement;
+    const seqStartInput = document.getElementById('seqStartInput') as HTMLInputElement;
     const prefixInput = document.getElementById('prefixInput') as HTMLInputElement;
     const suffixInput = document.getElementById('suffixInput') as HTMLInputElement;
-    const caseTransformSelect = document.getElementById('caseTransformSelect') as HTMLSelectElement;
-    const spaceReplacementSelect = document.getElementById('spaceReplacementSelect') as HTMLSelectElement;
-    const cleanCharsToggle = document.getElementById('cleanCharsToggle') as HTMLInputElement;
-    const lowerExtToggle = document.getElementById('lowerExtToggle') as HTMLInputElement;
-    const presetPills = document.querySelectorAll('.preset-pill');
+    const findInput = document.getElementById('findInput') as HTMLInputElement;
+    const replaceInput = document.getElementById('replaceInput') as HTMLInputElement;
 
-    // List & Download
-    const itemsListContainer = document.getElementById('itemsListContainer')!;
-    const downloadZipBtn = document.getElementById('downloadZipBtn')!;
-    const zipBtnText = document.getElementById('zipBtnText')!;
+    const downloadAllMainBtn = document.getElementById('downloadAllMainBtn')!;
+    const downloadAllText = document.getElementById('downloadAllText')!;
+    const downloadDropdownTrigger = document.getElementById('downloadDropdownTrigger')!;
+    const downloadDropdownMenu = document.getElementById('downloadDropdownMenu')!;
+    const downloadZipOption = document.getElementById('downloadZipOption')!;
+    const downloadSingleOption = document.getElementById('downloadSingleOption')!;
+    const downloadSingleText = document.getElementById('downloadSingleText')!;
+
+    const addMoreBtn = document.getElementById('addMoreBtn')!;
+    const clearAllBtn = document.getElementById('clearAllBtn')!;
     const zipProgressBar = document.getElementById('zipProgressBar')!;
     const zipProgressFill = document.getElementById('zipProgressFill')!;
 
-    // State
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
     let items: ImageItem[] = [];
-    const options: RenameOptions = {
-      mode: 'pattern',
-      pattern: 'photo-{00n}',
-      startNumber: 1,
-      numberPadding: 3,
-      findText: '',
-      replaceText: '',
-      isRegex: false,
-      matchCase: false,
-      prefix: '',
-      suffix: '',
-      caseTransformation: 'none',
-      spaceReplacement: 'hyphen',
-      cleanSpecialChars: true,
-      lowercaseExtension: true,
-    };
+    let selectedIndex = 0;
 
     function showError(msg: string) {
       errorMessage.textContent = msg;
@@ -334,248 +260,273 @@ const { locale } = Astro.props;
       errorBanner.style.display = 'none';
     }
 
-    function updateStats() {
-      const totalBytes = items.reduce((acc, item) => acc + item.sizeBytes, 0);
-      statImagesCount.textContent = `${items.length} Images`;
-      statTotalSize.textContent = `Total: ${BatchRenamerEngine.formatBytes(totalBytes)}`;
+    function updatePreview() {
+      if (items.length === 0) return;
+      if (selectedIndex < 0) selectedIndex = 0;
+      if (selectedIndex >= items.length) selectedIndex = items.length - 1;
+
+      const current = items[selectedIndex];
+      if (current) {
+        largePreviewImg.src = current.thumbnailUrl;
+        largePreviewImg.alt = current.newName;
+        navCounter.textContent = `${selectedIndex + 1} / ${items.length}`;
+        downloadSingleText.textContent = `Download "${current.newName}"`;
+      }
+
+      // Update active highlight in the right list
+      const rows = imageList.querySelectorAll('.image-item-row');
+      rows.forEach((row, idx) => {
+        if (idx === selectedIndex) {
+          row.classList.add('active-row');
+          row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          row.classList.remove('active-row');
+        }
+      });
     }
 
-    function refreshTable() {
-      items = BatchRenamerEngine.computeNewNames(items, options);
-      itemsListContainer.innerHTML = '';
+    function updateSummary() {
+      downloadAllText.textContent = `Download All (${items.length})`;
+      navCounter.textContent = `${items.length > 0 ? selectedIndex + 1 : 0} / ${items.length}`;
+    }
 
-      items.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'renamer-item-card';
+    function computeSanitizedBase(inputVal: string, extension: string): string {
+      let val = inputVal.trim();
+      if (!val) return 'image';
+      if (extension && val.toLowerCase().endsWith('.' + extension.toLowerCase())) {
+        val = val.substring(0, val.length - (extension.length + 1));
+      }
+      return val;
+    }
 
-        card.innerHTML = `
-          <div class="card-left-col">
-            <span class="index-badge">#${index + 1}</span>
-            <img src="${item.thumbnailUrl}" class="item-thumb" alt="" loading="lazy" />
-            <div class="old-file-meta">
-              <span class="old-name-text" title="${item.originalName}">${item.originalName}</span>
-              <span class="size-text">${BatchRenamerEngine.formatBytes(item.sizeBytes)}</span>
+    function renderList() {
+      imageList.innerHTML = '';
+
+      items.forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = `image-item-row ${idx === selectedIndex ? 'active-row' : ''}`;
+        row.setAttribute('data-id', item.id);
+        row.setAttribute('data-index', idx.toString());
+
+        row.innerHTML = `
+          <!-- Left: Small compact thumbnail -->
+          <div class="row-thumbnail">
+            <img src="${item.thumbnailUrl}" alt="${item.originalName}" class="thumb-img" loading="lazy" />
+          </div>
+
+          <!-- Right: Meta header (#5 and .png) + Editable Filename Field -->
+          <div class="row-content">
+            <div class="row-meta">
+              <span class="meta-number">#${idx + 1}</span>
+              <span class="meta-extension">.${item.extension || 'png'}</span>
             </div>
+            <input
+              type="text"
+              class="row-input"
+              value="${item.baseName}"
+              data-id="${item.id}"
+              data-index="${idx}"
+              placeholder="Filename..."
+              aria-label="Edit filename"
+              spellcheck="false"
+            />
           </div>
 
-          <div class="card-center-col">
-            <div class="new-name-wrapper">
-              <span class="new-name-label">New Name</span>
-              <input type="text" class="rename-inline-input" data-id="${item.id}" value="${item.newName}" spellcheck="false" />
-            </div>
-          </div>
-
-          <div class="card-right-col">
-            <button type="button" class="action-btn download-single-btn" data-id="${item.id}" title="Download ${item.newName}" aria-label="Download ${item.newName}">
-              <svg class="action-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </button>
-            <button type="button" class="action-btn action-btn-delete remove-item-btn" data-id="${item.id}" title="Delete ${item.originalName}" aria-label="Delete ${item.originalName}">
-              <svg class="action-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-              </svg>
-            </button>
-          </div>
+          <!-- Quick delete button on hover -->
+          <button type="button" class="row-delete-btn" data-id="${item.id}" title="${removeLabel}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         `;
 
-        itemsListContainer.appendChild(card);
+        // Click row to select
+        row.addEventListener('click', (e) => {
+          if ((e.target as HTMLElement).closest('.row-delete-btn')) return;
+          selectedIndex = idx;
+          updatePreview();
+        });
+
+        imageList.appendChild(row);
       });
 
-      // Bind inline rename override
-      itemsListContainer.querySelectorAll('.rename-inline-input').forEach((input) => {
-        input.addEventListener('change', (e) => {
-          const targetId = (e.currentTarget as HTMLInputElement).getAttribute('data-id');
-          const item = items.find((i) => i.id === targetId);
+      // Bind input changes
+      imageList.querySelectorAll('.row-input').forEach((input) => {
+        const handleInputChange = (e: Event) => {
+          const target = e.target as HTMLInputElement;
+          const id = target.getAttribute('data-id');
+          const item = items.find((it) => it.id === id);
           if (item) {
-            item.customOverride = (e.currentTarget as HTMLInputElement).value;
-            refreshTable();
+            item.baseName = computeSanitizedBase(target.value, item.extension);
+            item.newName = item.extension ? `${item.baseName}.${item.extension}` : item.baseName;
           }
+        };
+        input.addEventListener('input', handleInputChange);
+        input.addEventListener('focus', () => {
+          const idx = parseInt(input.getAttribute('data-index') || '0', 10);
+          selectedIndex = idx;
+          updatePreview();
         });
       });
 
-      // Bind single download
-      itemsListContainer.querySelectorAll('.download-single-btn').forEach((btn) => {
+      // Bind delete buttons
+      imageList.querySelectorAll('.row-delete-btn').forEach((btn) => {
         btn.addEventListener('click', (e) => {
-          const targetId = (e.currentTarget as HTMLElement).getAttribute('data-id');
-          const item = items.find((i) => i.id === targetId);
-          if (item) {
-            const url = URL.createObjectURL(item.file);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = item.newName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const target = items.find((it) => it.id === id);
+          if (target && target.thumbnailUrl) {
+            URL.revokeObjectURL(target.thumbnailUrl);
           }
-        });
-      });
+          items = items.filter((it) => it.id !== id);
 
-      // Bind remove single item
-      itemsListContainer.querySelectorAll('.remove-item-btn').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          const targetId = (e.currentTarget as HTMLElement).getAttribute('data-id');
-          items = items.filter((i) => i.id !== targetId);
           if (items.length === 0) {
-            workspace.style.display = 'none';
-            dropzoneContainer.style.display = 'block';
+            workspaceSection.style.display = 'none';
+            uploadSection.style.display = 'block';
+            fileInput.value = '';
           } else {
-            updateStats();
-            refreshTable();
+            if (selectedIndex >= items.length) {
+              selectedIndex = items.length - 1;
+            }
+            renderList();
+            updatePreview();
+            updateSummary();
           }
         });
       });
     }
 
-    async function addFiles(files: FileList | File[]) {
+    async function handleAddFiles(fileList: FileList | File[]) {
+      hideError();
+      const filesArray = Array.from(fileList);
+      if (filesArray.length === 0) return;
+
       try {
-        hideError();
-        const fileArr = Array.from(files);
-        if (fileArr.length === 0) return;
+        const inspected = await Promise.all(
+          filesArray.map((f) => BatchRenamerEngine.inspectImageFile(f))
+        );
+        items.push(...inspected);
 
-        for (const file of fileArr) {
-          const id = Math.random().toString(36).substring(2, 9);
-          const originalName = file.name;
-          const lastDot = originalName.lastIndexOf('.');
-          const baseName = lastDot > 0 ? originalName.substring(0, lastDot) : originalName;
-          const extension = lastDot > 0 ? originalName.substring(lastDot + 1) : '';
-          const thumbnailUrl = URL.createObjectURL(file);
-
-          const { width, height } = await BatchRenamerEngine.getImageDimensions(file);
-
-          items.push({
-            id,
-            file,
-            originalName,
-            baseName,
-            extension,
-            sizeBytes: file.size,
-            width,
-            height,
-            thumbnailUrl,
-            newName: originalName,
-          });
+        if (items.length > 0) {
+          uploadSection.style.display = 'none';
+          workspaceSection.style.display = 'block';
+          renderList();
+          updatePreview();
+          updateSummary();
         }
-
-        dropzoneContainer.style.display = 'none';
-        workspace.style.display = 'block';
-
-        updateStats();
-        refreshTable();
       } catch (err: any) {
-        showError(err.message || 'Failed to add image files.');
+        showError(err.message || 'Failed to process images.');
       }
     }
 
-    // Mode Tabs Switcher
-    modeTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        modeTabs.forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
+    // Navigation Controls
+    prevBtn.addEventListener('click', () => {
+      if (items.length <= 1) return;
+      selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : items.length - 1;
+      updatePreview();
+    });
 
-        const mode = tab.getAttribute('data-mode') as RenameMode;
-        options.mode = mode;
+    nextBtn.addEventListener('click', () => {
+      if (items.length <= 1) return;
+      selectedIndex = selectedIndex < items.length - 1 ? selectedIndex + 1 : 0;
+      updatePreview();
+    });
 
-        panelPattern.style.display = mode === 'pattern' ? 'flex' : 'none';
-        panelFindReplace.style.display = mode === 'find-replace' ? 'flex' : 'none';
-        panelPrefixSuffix.style.display = mode === 'prefix-suffix' ? 'flex' : 'none';
-        panelCasing.style.display = mode === 'casing' ? 'flex' : 'none';
+    // Keyboard Arrow Navigation
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes((document.activeElement?.tagName || ''))) return;
+      if (items.length <= 1) return;
+      if (e.key === 'ArrowLeft') {
+        selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : items.length - 1;
+        updatePreview();
+      } else if (e.key === 'ArrowRight') {
+        selectedIndex = selectedIndex < items.length - 1 ? selectedIndex + 1 : 0;
+        updatePreview();
+      }
+    });
 
-        refreshTable();
+    // Batch Renaming Drawer
+    function updateBatchDrawer() {
+      const mode = batchModeSelect.value;
+      if (mode === 'custom') {
+        batchDrawer.style.display = 'none';
+      } else {
+        batchDrawer.style.display = 'flex';
+        drawerSequential.style.display = mode === 'sequential' ? 'block' : 'none';
+        drawerPrefixSuffix.style.display = mode === 'prefix-suffix' ? 'block' : 'none';
+        drawerFindReplace.style.display = mode === 'find-replace' ? 'block' : 'none';
+      }
+    }
+
+    batchModeSelect.addEventListener('change', () => {
+      updateBatchDrawer();
+      if (batchModeSelect.value === 'datestamp') {
+        applyDatestamp();
+      }
+    });
+
+    function applySequential() {
+      const base = seqBaseInput.value.trim() || 'image';
+      const start = parseInt(seqStartInput.value, 10) || 1;
+      items.forEach((it, idx) => {
+        const num = start + idx;
+        it.baseName = `${base}-${num}`;
+        it.newName = it.extension ? `${it.baseName}.${it.extension}` : it.baseName;
       });
-    });
+      renderList();
+      updatePreview();
+    }
 
-    // Preset Pills
-    presetPills.forEach((pill) => {
-      pill.addEventListener('click', () => {
-        const pat = pill.getAttribute('data-pattern') || 'photo-{00n}';
-        patternInput.value = pat;
-        options.pattern = pat;
-        refreshTable();
+    function applyPrefixSuffix() {
+      const p = prefixInput.value;
+      const s = suffixInput.value;
+      items.forEach((it) => {
+        it.baseName = `${p}${it.baseName}${s}`;
+        it.newName = it.extension ? `${it.baseName}.${it.extension}` : it.baseName;
       });
+      renderList();
+      updatePreview();
+    }
+
+    function applyFindReplace() {
+      const f = findInput.value;
+      const r = replaceInput.value;
+      if (!f) return;
+      items.forEach((it) => {
+        it.baseName = it.baseName.split(f).join(r);
+        it.newName = it.extension ? `${it.baseName}.${it.extension}` : it.baseName;
+      });
+      renderList();
+      updatePreview();
+    }
+
+    function applyDatestamp() {
+      const date = new Date().toISOString().slice(0, 10);
+      items.forEach((it, idx) => {
+        it.baseName = `${date}_${idx + 1}`;
+        it.newName = it.extension ? `${it.baseName}.${it.extension}` : it.baseName;
+      });
+      renderList();
+      updatePreview();
+    }
+
+    applyBatchBtn.addEventListener('click', () => {
+      const mode = batchModeSelect.value;
+      if (mode === 'sequential') applySequential();
+      else if (mode === 'prefix-suffix') applyPrefixSuffix();
+      else if (mode === 'find-replace') applyFindReplace();
+      else if (mode === 'datestamp') applyDatestamp();
     });
 
-    // Inputs Listeners
-    patternInput.addEventListener('input', () => {
-      options.pattern = patternInput.value;
-      refreshTable();
-    });
-
-    startNumInput.addEventListener('input', () => {
-      options.startNumber = parseInt(startNumInput.value, 10) || 1;
-      refreshTable();
-    });
-
-    paddingSelect.addEventListener('change', () => {
-      options.numberPadding = parseInt(paddingSelect.value, 10) || 3;
-      refreshTable();
-    });
-
-    findTextInput.addEventListener('input', () => {
-      options.findText = findTextInput.value;
-      refreshTable();
-    });
-
-    replaceTextInput.addEventListener('input', () => {
-      options.replaceText = replaceTextInput.value;
-      refreshTable();
-    });
-
-    matchCaseToggle.addEventListener('change', () => {
-      options.matchCase = matchCaseToggle.checked;
-      refreshTable();
-    });
-
-    regexToggle.addEventListener('change', () => {
-      options.isRegex = regexToggle.checked;
-      refreshTable();
-    });
-
-    prefixInput.addEventListener('input', () => {
-      options.prefix = prefixInput.value;
-      refreshTable();
-    });
-
-    suffixInput.addEventListener('input', () => {
-      options.suffix = suffixInput.value;
-      refreshTable();
-    });
-
-    caseTransformSelect.addEventListener('change', () => {
-      options.caseTransformation = caseTransformSelect.value as any;
-      refreshTable();
-    });
-
-    spaceReplacementSelect.addEventListener('change', () => {
-      options.spaceReplacement = spaceReplacementSelect.value as any;
-      refreshTable();
-    });
-
-    cleanCharsToggle.addEventListener('change', () => {
-      options.cleanSpecialChars = cleanCharsToggle.checked;
-      refreshTable();
-    });
-
-    lowerExtToggle.addEventListener('change', () => {
-      options.lowercaseExtension = lowerExtToggle.checked;
-      refreshTable();
-    });
-
-    // Batch ZIP Download
-    downloadZipBtn.addEventListener('click', async () => {
+    // ZIP Package Download
+    async function triggerZipDownload() {
       if (items.length === 0) return;
-
       try {
-        downloadZipBtn.setAttribute('disabled', 'true');
-        zipBtnText.textContent = 'Packaging ZIP Archive...';
+        downloadAllMainBtn.setAttribute('disabled', 'true');
+        downloadAllText.textContent = 'Packaging ZIP...';
         zipProgressBar.style.display = 'block';
-        zipProgressFill.style.width = '10%';
+        zipProgressFill.style.width = '15%';
 
         const zipBlob = await BatchRenamerEngine.createRenamedZip(items, (curr, total) => {
           const pct = Math.round((curr / total) * 100);
@@ -589,59 +540,103 @@ const { locale } = Astro.props;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-        zipBtnText.textContent = 'Download Complete!';
+        downloadAllText.textContent = 'Download Complete!';
         setTimeout(() => {
-          downloadZipBtn.removeAttribute('disabled');
-          zipBtnText.textContent = 'Download All Renamed Images (.ZIP)';
+          downloadAllMainBtn.removeAttribute('disabled');
+          updateSummary();
           zipProgressBar.style.display = 'none';
+          zipProgressFill.style.width = '0%';
         }, 2000);
       } catch (err: any) {
         showError('Failed to create ZIP: ' + err.message);
-        downloadZipBtn.removeAttribute('disabled');
-        zipBtnText.textContent = 'Download All Renamed Images (.ZIP)';
+        downloadAllMainBtn.removeAttribute('disabled');
+        updateSummary();
         zipProgressBar.style.display = 'none';
+      }
+    }
+
+    downloadAllMainBtn.addEventListener('click', () => {
+      downloadDropdownMenu.style.display = 'none';
+      triggerZipDownload();
+    });
+
+    downloadDropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      downloadDropdownMenu.style.display = downloadDropdownMenu.style.display === 'none' ? 'flex' : 'none';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!downloadDropdownMenu.contains(e.target as Node) && e.target !== downloadDropdownTrigger) {
+        downloadDropdownMenu.style.display = 'none';
       }
     });
 
-    // Upload & Sample Handlers
-    browseBtn.addEventListener('click', () => fileInput.click());
-    dropzone.addEventListener('click', (e) => {
-      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+    downloadZipOption.addEventListener('click', () => {
+      downloadDropdownMenu.style.display = 'none';
+      triggerZipDownload();
+    });
+
+    downloadSingleOption.addEventListener('click', () => {
+      downloadDropdownMenu.style.display = 'none';
+      const current = items[selectedIndex];
+      if (current) {
+        const url = URL.createObjectURL(current.file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = current.newName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    });
+
+    // Upload Triggers
+    chooseImagesBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       fileInput.click();
     });
 
-    sampleBtn.addEventListener('click', async (e) => {
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleDemoBtn || sampleDemoBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleDemoBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
       const samples = await BatchRenamerEngine.generateSampleBatch();
-      addFiles(samples);
+      handleAddFiles(samples);
     });
 
     addMoreBtn.addEventListener('click', () => fileInput.click());
 
     clearAllBtn.addEventListener('click', () => {
+      items.forEach((it) => {
+        if (it.thumbnailUrl) URL.revokeObjectURL(it.thumbnailUrl);
+      });
       items = [];
+      selectedIndex = 0;
       fileInput.value = '';
-      workspace.style.display = 'none';
-      dropzoneContainer.style.display = 'block';
+      workspaceSection.style.display = 'none';
+      uploadSection.style.display = 'block';
     });
 
     fileInput.addEventListener('change', (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files) addFiles(files);
+      if (files) handleAddFiles(files);
     });
 
-    // Drag & Drop
-    ['dragenter', 'dragover'].forEach((eventName) => {
-      dropzone.addEventListener(eventName, (e) => {
+    ['dragenter', 'dragover'].forEach((ev) => {
+      dropzone.addEventListener(ev, (e) => {
         e.preventDefault();
         dropzone.classList.add('drag-over');
       });
     });
 
-    ['dragleave', 'drop'].forEach((eventName) => {
-      dropzone.addEventListener(eventName, (e) => {
+    ['dragleave', 'drop'].forEach((ev) => {
+      dropzone.addEventListener(ev, (e) => {
         e.preventDefault();
         dropzone.classList.remove('drag-over');
       });
@@ -649,670 +644,755 @@ const { locale } = Astro.props;
 
     dropzone.addEventListener('drop', (e) => {
       const files = e.dataTransfer?.files;
-      if (files) addFiles(files);
+      if (files) handleAddFiles(files);
     });
   });
 </script>
 
 <style>
-  .batch-renamer-wrapper {
+  /* Root Container - Responsive Light Mode Pure White Aesthetic */
+  .batch-renamer-container {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    max-width: 1100px;
+    margin-inline: auto;
     width: 100%;
-    max-width: 100%;
+    min-width: 0;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    color: #1f2937;
+    overflow-x: hidden;
   }
 
-  /* Dropzone */
-  .dropzone-container {
-    max-width: 800px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
+  @media (min-width: 640px) {
+    .batch-renamer-container {
+      padding: 24px;
+    }
   }
 
-  .dropzone {
-    border: 2px dashed var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-12) var(--space-6);
-    background: var(--color-surface);
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* 1. Initial Upload Dropzone View */
+  .upload-section {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .upload-dropzone {
+    border: 2px dashed #d1d5db;
+    border-radius: 14px;
+    padding: 40px 16px;
     text-align: center;
+    background: #f9fafb;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-    box-sizing: border-box;
-  }
-
-  .dropzone:hover,
-  .dropzone.drag-over {
-    border-color: #4F46E5;
-    background: rgba(79, 70, 229, 0.04);
-  }
-
-  .file-input {
-    display: none;
-  }
-
-  .dropzone-content {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-4);
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
   }
 
-  .dropzone-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: rgba(79, 70, 229, 0.08);
-    color: #4F46E5;
+  @media (min-width: 640px) {
+    .upload-dropzone {
+      padding: 48px 24px;
+    }
+  }
+
+  .upload-dropzone:hover,
+  .upload-dropzone.drag-over {
+    border-color: #2563eb;
+    background: #eff6ff;
+  }
+
+  .upload-icon {
+    color: #2563eb;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .dropzone-title {
-    font-size: var(--text-xl);
+  .upload-title {
+    font-size: 20px;
     font-weight: 700;
-    color: var(--color-text);
+    color: #111827;
     margin: 0;
-  }
-
-  .dropzone-subtitle {
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
-    max-width: 520px;
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .dropzone-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    justify-content: center;
-    margin-top: var(--space-2);
-  }
-
-  .privacy-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    margin-top: var(--space-2);
+    word-break: break-word;
     text-align: center;
   }
 
-  /* Workspace */
-  .workspace {
+  .upload-subtitle {
+    font-size: 13.5px;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+    text-align: center;
+    max-width: 480px;
+  }
+
+  .upload-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
     width: 100%;
     max-width: 100%;
+  }
+
+  /* 2. Two-Panel Workspace View (Screenshot Layout) */
+  .workspace-section {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     box-sizing: border-box;
   }
 
-  .workspace-header-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px 16px;
-    padding: 14px 18px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-5);
-    box-sizing: border-box;
-  }
-
-  .workspace-stats-col {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .workspace-actions-col {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .badge {
-    font-size: 11.5px;
-    font-weight: 600;
-    padding: 4px 10px;
-    background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    color: var(--color-text-secondary);
-  }
-
-  .badge-accent {
-    background: rgba(79, 70, 229, 0.08);
-    border-color: rgba(79, 70, 229, 0.25);
-    color: #4F46E5;
-    font-weight: 700;
-  }
-
-  /* Error Banner */
   .error-banner {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid #EF4444;
-    border-radius: var(--radius-md);
-    color: #DC2626;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #fee2e2;
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    color: #b91c1c;
     font-size: 13px;
     font-weight: 600;
-    margin-bottom: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  /* Workspace Grid */
-  .workspace-grid {
+  .two-panel-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-5);
+    gap: 20px;
     align-items: start;
     width: 100%;
     min-width: 0;
+    max-width: 100%;
     box-sizing: border-box;
   }
 
-  @media (min-width: 960px) {
-    .workspace-grid {
-      grid-template-columns: 360px 1fr;
+  @media (min-width: 860px) {
+    .two-panel-layout {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 360px);
+      gap: 24px;
     }
   }
 
-  .settings-col {
+  /* LEFT PANEL: Large Image Preview Card */
+  .left-preview-panel {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .table-col {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Mode Tabs */
-  .mode-tabs-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 6px;
-    box-sizing: border-box;
-  }
-
-  .mode-tab {
-    flex: 1 1 calc(50% - 6px);
-    padding: 9px 8px;
-    background: none;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.15s ease;
-    min-height: 38px;
-    box-sizing: border-box;
-  }
-
-  .mode-tab:hover {
-    color: #4F46E5;
-  }
-
-  .mode-tab.active {
-    background: #4F46E5;
-    color: #ffffff;
-  }
-
-  /* Control Group */
-  .control-group {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    box-sizing: border-box;
     width: 100%;
     min-width: 0;
-  }
-
-  .field-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .field-label {
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0;
-  }
-
-  .field-label-sm {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    display: block;
-  }
-
-  .field-hint {
-    font-size: 11px;
-    color: var(--color-text-secondary);
-    display: block;
-    line-height: 1.4;
-    word-break: break-word;
-  }
-
-  .form-select,
-  .form-input {
-    width: 100%;
     max-width: 100%;
-    height: 40px;
-    padding: 8px 12px;
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-text);
-    font-size: 13px;
-    font-weight: 600;
     box-sizing: border-box;
   }
 
-  .two-cols-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Presets */
-  .presets-row {
+  .large-preview-card {
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 12px;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    max-height: 480px;
+    padding: 12px;
+    overflow: hidden;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
-  .preset-pill {
-    padding: 5px 9px;
-    background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
+  @media (min-width: 640px) {
+    .large-preview-card {
+      min-height: 380px;
+      padding: 16px;
+    }
+  }
+
+  .preview-image-container {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .large-preview-image {
+    max-width: 100%;
+    max-height: 440px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Bottom Navigation Bar (< 1 / 10 >) */
+  .preview-navigation-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #4b5563;
     cursor: pointer;
     transition: all 0.15s ease;
-  }
-
-  .preset-pill:hover {
-    border-color: #4F46E5;
-    color: #4F46E5;
-  }
-
-  /* Checkbox List */
-  .checkbox-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .checkbox-inline {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text);
-  }
-
-  .checkbox-inline input {
-    margin-top: 2px;
-    accent-color: #4F46E5;
     flex-shrink: 0;
   }
 
-  .checkbox-text-col {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+  .nav-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #f8fafc;
+    transform: scale(1.05);
   }
 
-  /* Output Card */
-  .output-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
+  .nav-counter {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    letter-spacing: 0.03em;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* RIGHT PANEL: Sidebar with Rows List and Download */
+  .right-sidebar-panel {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
+    background: #ffffff;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Batch Dropdown Control */
+  .batch-dropdown-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .custom-select-wrapper {
+    position: relative;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
   }
 
-  .table-header-row {
+  .batch-select {
+    width: 100%;
+    height: 40px;
+    padding: 0 36px 0 14px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 500;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease;
+    box-sizing: border-box;
+  }
+
+  .batch-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  }
+
+  .dropdown-chevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #9ca3af;
+  }
+
+  /* Expandable Batch Drawer (Fully Responsive with 0 horizontal overflow) */
+  .batch-drawer {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .drawer-group {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .drawer-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     flex-wrap: wrap;
-    gap: 12px;
+  }
+
+  .drawer-input {
+    flex: 1 1 120px;
+    min-width: 0;
+    height: 36px;
+    padding: 0 10px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #111827;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
     width: 100%;
   }
 
-  .table-title-col {
+  .drawer-input:focus {
+    border-color: #2563eb;
+  }
+
+  .drawer-input-sm {
+    flex: 0 1 70px;
+    min-width: 50px;
+  }
+
+  .apply-btn {
+    width: 100%;
+    height: 34px;
+    box-sizing: border-box;
+  }
+
+  /* Scrollable Image Rows List */
+  .image-rows-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 2px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* EXACT IMAGE ROW STYLING FROM SCREENSHOT (Responsive & Contained) */
+  .image-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .image-item-row {
+      gap: 12px;
+      padding: 8px 12px;
+    }
+  }
+
+  .image-item-row:hover {
+    border-color: #cbd5e1;
+  }
+
+  /* Active Card Selection */
+  .image-item-row.active-row {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb;
+  }
+
+  /* Small Thumbnail */
+  .row-thumbnail {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 6px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Row Content */
+  .row-content {
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .row-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    width: 100%;
     min-width: 0;
+    box-sizing: border-box;
   }
 
-  .table-title {
-    font-size: 14.5px;
-    font-weight: 700;
-    color: var(--color-text);
+  .meta-number {
+    color: #6b7280;
+    flex-shrink: 0;
   }
 
-  .table-subtitle {
+  .meta-extension {
+    color: #6b7280;
     font-size: 11.5px;
-    color: var(--color-text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .download-zip-btn {
-    width: auto;
+  .row-input {
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+    padding: 0 4px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #111827;
+    font-size: 13.5px;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    box-sizing: border-box;
   }
 
-  @media (max-width: 640px) {
-    .table-header-row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .download-zip-btn {
-      width: 100%;
-    }
+  .row-input:hover {
+    border-color: #d1d5db;
+    background: #f9fafb;
   }
 
+  .row-input:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  }
+
+  /* Quick Delete Button */
+  .row-delete-btn {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    box-sizing: border-box;
+  }
+
+  .row-delete-btn:hover {
+    color: #ef4444;
+    background: #fee2e2;
+  }
+
+  /* Sidebar Bottom Actions Bar (Matches Screenshot) */
+  .sidebar-bottom-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 6px;
+    margin-top: auto;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+  }
+
+  /* Split Download Button */
+  .download-split-group {
+    flex: 1 1 160px;
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .split-btn-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 42px;
+    background: #0070f3;
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    transition: background-color 0.15s ease;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .split-btn-main:hover {
+    background: #0060df;
+  }
+
+  .split-btn-dropdown {
+    width: 36px;
+    min-width: 36px;
+    height: 42px;
+    background: #0070f3;
+    color: #ffffff;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  .split-btn-dropdown:hover {
+    background: #0060df;
+  }
+
+  /* Dropdown Menu Popup */
+  .download-dropdown-menu {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 200px;
+    max-width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    gap: 2px;
+    box-sizing: border-box;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    text-align: left;
+    transition: background 0.15s ease;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dropdown-item:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+
+  /* Auxiliary Icon Buttons (Copy/Add/Clear) */
+  .action-icon-btn {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  .action-icon-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #f8fafc;
+  }
+
+  /* Progress Bar */
   .progress-bar-container {
     width: 100%;
     height: 6px;
-    background: var(--color-surface-subtle);
-    border-radius: var(--radius-full);
+    background: #f3f4f6;
+    border-radius: 9999px;
     overflow: hidden;
+    box-sizing: border-box;
   }
 
   .progress-fill {
     height: 100%;
-    background: #4F46E5;
+    background: #0070f3;
     transition: width 0.2s ease;
   }
 
-  /* Responsive Items List (Cards) */
-  .items-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    min-width: 0;
-    max-height: 600px;
-    overflow-y: auto;
-    padding-right: 2px;
-    box-sizing: border-box;
-  }
-
-  .renamer-item-card {
-    background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease;
-  }
-
-  .renamer-item-card:hover {
-    border-color: rgba(79, 70, 229, 0.4);
-  }
-
-  @media (min-width: 768px) {
-    .renamer-item-card {
-      flex-direction: row;
-      align-items: center;
-      gap: 14px;
-    }
-  }
-
-  .card-left-col {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  @media (min-width: 768px) {
-    .card-left-col {
-      flex: 0 0 240px;
-      max-width: 240px;
-    }
-  }
-
-  .index-badge {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--color-text-secondary);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 2px 6px;
-    flex-shrink: 0;
-  }
-
-  .item-thumb {
-    width: 38px;
-    height: 38px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
-    flex-shrink: 0;
-    background: var(--color-background);
-  }
-
-  .old-file-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  .old-name-text {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    max-width: 100%;
-  }
-
-  .size-text {
-    font-size: 11px;
-    color: var(--color-text-secondary);
-    opacity: 0.8;
-  }
-
-  .card-center-col {
-    flex: 1 1 auto;
-    min-width: 0;
-    width: 100%;
-  }
-
-  .new-name-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .new-name-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #4F46E5;
-  }
-
-  .rename-inline-input {
-    width: 100%;
-    height: 36px;
-    padding: 6px 10px;
-    background: var(--color-background);
-    border: 1px solid rgba(79, 70, 229, 0.35);
-    border-radius: var(--radius-sm);
-    color: var(--color-text);
-    font-weight: 700;
-    font-size: 12.5px;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .rename-inline-input:focus {
-    border-color: #4F46E5;
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
-    outline: none;
-  }
-
-  .card-right-col {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
-    flex-shrink: 0;
-  }
-
-  .action-btn {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-    flex-shrink: 0;
-    padding: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  }
-
-  .action-svg {
-    width: 16px;
-    height: 16px;
-    display: block;
-    pointer-events: none;
-    transition: transform 0.15s ease;
-  }
-
-  .action-btn:hover {
-    border-color: rgba(79, 70, 229, 0.4);
-    background: rgba(79, 70, 229, 0.08);
-    color: #4F46E5;
-  }
-
-  .action-btn:hover .action-svg {
-    transform: translateY(1px);
-  }
-
-  .action-btn-delete:hover {
-    border-color: rgba(239, 68, 68, 0.4);
-    background: rgba(239, 68, 68, 0.08);
-    color: #DC2626;
-  }
-
-  .action-btn-delete:hover .action-svg {
-    transform: scale(1.08);
-  }
-
-  .action-btn:active {
-    transform: scale(0.95);
-  }
-
-  /* General Buttons */
+  /* Shared Buttons */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     font-family: inherit;
-    font-weight: 700;
-    border-radius: var(--radius-md);
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.15s ease;
     border: 1px solid transparent;
     box-sizing: border-box;
+    line-height: 1;
+    max-width: 100%;
   }
 
   .btn-sm {
-    height: 36px;
-    padding: 4px 12px;
+    height: 32px;
+    padding: 0 10px;
     font-size: 12px;
   }
 
   .btn-lg {
-    height: 42px;
-    padding: 8px 18px;
-    font-size: 13px;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    min-height: 44px;
+  }
+
+  @media (min-width: 640px) {
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 15px;
+      min-height: 46px;
+    }
   }
 
   .btn-primary {
-    background: #4F46E5;
+    background: #0070f3;
     color: #ffffff;
   }
-
   .btn-primary:hover {
-    background: #4338CA;
+    background: #0060df;
   }
 
   .btn-secondary {
-    background: var(--color-surface-subtle);
-    border-color: var(--color-border);
-    color: var(--color-text);
+    background: #ffffff;
+    border-color: #e5e7eb;
+    color: #374151;
   }
-
   .btn-secondary:hover {
-    border-color: #4F46E5;
-    color: #4F46E5;
+    border-color: #0070f3;
+    color: #0070f3;
+    background: #f8fafc;
   }
 </style>

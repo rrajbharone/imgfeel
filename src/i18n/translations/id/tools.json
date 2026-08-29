@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Buat pas foto resmi untuk paspor dan visa online gratis dan susun lembar cetak foto 300 DPI.",
   "tools.imageSrcsetGenerator.title": "Generator Srcset Gambar",
   "tools.imageSrcsetGenerator.description": "Buat kode HTML srcset & sizes untuk gambar responsif dan unduh aset gambar dalam ZIP.",
-  "tools.batchRenameImages.title": "Ubah Nama Gambar Masal",
-  "tools.batchRenameImages.description": "Ganti nama banyak file gambar sekaligus secara online dengan penomoran urut dan unduhan ZIP."
+  "tools.pptResizer.title": "Ubah Ukuran PowerPoint",
+  "tools.pptResizer.description": "Ganti ukuran dimensi dan rasio aspek slide PowerPoint secara online (16:9, 4:3, A4, Letter).",
+  "tools.batchRenameImages.title": "Ubah Nama Gambar Masal Online",
+  "tools.batchRenameImages.description": "Ganti nama banyak gambar secara online dan gratis dengan privasi 100% di browser."
 }

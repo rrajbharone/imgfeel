@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Crea fotos oficiales tamaño pasaporte gratis y genera hojas imprimibles a 300 DPI.",
   "tools.imageSrcsetGenerator.title": "Generador de Srcset de Imágenes",
   "tools.imageSrcsetGenerator.description": "Genera código HTML srcset y sizes para imágenes responsivas y descarga imágenes en ZIP.",
-  "tools.batchRenameImages.title": "Cambiar Nombre de Imágenes por Lotes",
-  "tools.batchRenameImages.description": "Renombra varias imágenes masivamente online con numeración secuencial y descarga en ZIP."
+  "tools.pptResizer.title": "Cambiar Tamaño de PowerPoint",
+  "tools.pptResizer.description": "Cambia el tamaño y relación de aspecto de diapositivas PowerPoint online (16:9, 4:3, A4, Carta).",
+  "tools.batchRenameImages.title": "Cambiar Nombre de Imágenes por Lotes Online",
+  "tools.batchRenameImages.description": "Renombra múltiples imágenes individualmente online y gratis con privacidad total."
 }

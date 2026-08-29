@@ -14,58 +14,58 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq1Q'),
+      "name": t(locale, 'renamer.faq.q1'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq1A')
+        "text": t(locale, 'renamer.faq.a1')
       }
     },
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq2Q'),
+      "name": t(locale, 'renamer.faq.q2'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq2A')
+        "text": t(locale, 'renamer.faq.a2')
       }
     },
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq3Q'),
+      "name": t(locale, 'renamer.faq.q3'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq3A')
+        "text": t(locale, 'renamer.faq.a3')
       }
     },
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq4Q'),
+      "name": t(locale, 'renamer.faq.q4'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq4A')
+        "text": t(locale, 'renamer.faq.a4')
       }
     },
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq5Q'),
+      "name": t(locale, 'renamer.faq.q5'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq5A')
+        "text": t(locale, 'renamer.faq.a5')
       }
     },
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq6Q'),
+      "name": t(locale, 'renamer.faq.q6'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq6A')
+        "text": t(locale, 'renamer.faq.a6')
       }
     },
     {
       "@type": "Question",
-      "name": t(locale, 'renamer.content.faq7Q'),
+      "name": t(locale, 'renamer.faq.q7'),
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": t(locale, 'renamer.content.faq7A')
+        "text": t(locale, 'renamer.faq.a7')
       }
     }
   ]
@@ -74,66 +74,15 @@ const faqSchema = {
 
 <section class="section content-section">
   <div class="container">
-    <div class="content-body">
-      <!-- Section 1: Overview & Value -->
-      <h2>{t(locale, 'renamer.content.h1')}</h2>
-      <p>{t(locale, 'renamer.content.p1a')}</p>
-      <p>{t(locale, 'renamer.content.p1b')}</p>
+    <article class="content-body">
+      <!-- Section 1: Intro -->
+      <h2>{t(locale, 'renamer.content.introTitle')}</h2>
+      <p>{t(locale, 'renamer.content.introP1')}</p>
+      <p>{t(locale, 'renamer.content.introP2')}</p>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
-          <h3>{t(locale, 'renamer.content.feat1Title')}</h3>
-          <p>{t(locale, 'renamer.content.feat1Desc')}</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <line x1="10" y1="6" x2="21" y2="6"></line>
-              <line x1="10" y1="12" x2="21" y2="12"></line>
-              <line x1="10" y1="18" x2="21" y2="18"></line>
-              <path d="M4 6h1v4"></path>
-              <path d="M4 10h2"></path>
-              <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
-            </svg>
-          </div>
-          <h3>{t(locale, 'renamer.content.feat2Title')}</h3>
-          <p>{t(locale, 'renamer.content.feat2Desc')}</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </div>
-          <h3>{t(locale, 'renamer.content.feat3Title')}</h3>
-          <p>{t(locale, 'renamer.content.feat3Desc')}</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </div>
-          <h3>{t(locale, 'renamer.content.feat4Title')}</h3>
-          <p>{t(locale, 'renamer.content.feat4Desc')}</p>
-        </div>
-      </div>
-
-      <!-- Section 2: Step-by-Step Guide -->
-      <h2>{t(locale, 'renamer.content.h2')}</h2>
-      <p>{t(locale, 'renamer.content.p2a')}</p>
-      
+      <!-- Section 2: How to Rename Multiple Images Online -->
+      <h2>{t(locale, 'renamer.content.howToTitle')}</h2>
+      <p>{t(locale, 'renamer.content.howToDesc')}</p>
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-number">1</div>
@@ -142,7 +91,6 @@ const faqSchema = {
             <p>{t(locale, 'renamer.content.step1Desc')}</p>
           </div>
         </div>
-
         <div class="step-card">
           <div class="step-number">2</div>
           <div class="step-content">
@@ -150,7 +98,6 @@ const faqSchema = {
             <p>{t(locale, 'renamer.content.step2Desc')}</p>
           </div>
         </div>
-
         <div class="step-card">
           <div class="step-number">3</div>
           <div class="step-content">
@@ -158,7 +105,6 @@ const faqSchema = {
             <p>{t(locale, 'renamer.content.step3Desc')}</p>
           </div>
         </div>
-
         <div class="step-card">
           <div class="step-number">4</div>
           <div class="step-content">
@@ -166,213 +112,165 @@ const faqSchema = {
             <p>{t(locale, 'renamer.content.step4Desc')}</p>
           </div>
         </div>
+        <div class="step-card">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>{t(locale, 'renamer.content.step5Title')}</h3>
+            <p>{t(locale, 'renamer.content.step5Desc')}</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Section 3: SEO Best Practices -->
-      <h2>{t(locale, 'renamer.content.h3')}</h2>
-      <p>{t(locale, 'renamer.content.p3a')}</p>
+      <!-- Section 3: Why Rename in Bulk? -->
+      <h2>{t(locale, 'renamer.content.whyBulkTitle')}</h2>
+      <p>{t(locale, 'renamer.content.whyBulkP1')}</p>
+      <p>{t(locale, 'renamer.content.whyBulkP2')}</p>
 
+      <!-- Section 4: Benefits -->
+      <h2>{t(locale, 'renamer.content.benefitsTitle')}</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>{t(locale, 'renamer.content.benefit1Title')}</h3>
+          <p>{t(locale, 'renamer.content.benefit1Desc')}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'renamer.content.benefit2Title')}</h3>
+          <p>{t(locale, 'renamer.content.benefit2Desc')}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'renamer.content.benefit3Title')}</h3>
+          <p>{t(locale, 'renamer.content.benefit3Desc')}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3>{t(locale, 'renamer.content.benefit4Title')}</h3>
+          <p>{t(locale, 'renamer.content.benefit4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 5: How to Create Better Image File Names -->
+      <h2>{t(locale, 'renamer.content.betterNamesTitle')}</h2>
+      <p>{t(locale, 'renamer.content.betterNamesDesc')}</p>
+      <div class="tips-list">
+        <div class="tip-item">
+          <strong>{t(locale, 'renamer.content.tip1Title')}:</strong>
+          <span>{t(locale, 'renamer.content.tip1Desc')}</span>
+        </div>
+        <div class="tip-item">
+          <strong>{t(locale, 'renamer.content.tip2Title')}:</strong>
+          <span>{t(locale, 'renamer.content.tip2Desc')}</span>
+        </div>
+        <div class="tip-item">
+          <strong>{t(locale, 'renamer.content.tip3Title')}:</strong>
+          <span>{t(locale, 'renamer.content.tip3Desc')}</span>
+        </div>
+        <div class="tip-item">
+          <strong>{t(locale, 'renamer.content.tip4Title')}:</strong>
+          <span>{t(locale, 'renamer.content.tip4Desc')}</span>
+        </div>
+      </div>
+
+      <!-- Section 6: Use Cases -->
+      <h2>{t(locale, 'renamer.content.useCasesTitle')}</h2>
       <div class="types-grid">
         <div class="type-card">
-          <h3>{t(locale, 'renamer.content.seo1Title')}</h3>
-          <p>{t(locale, 'renamer.content.seo1Desc')}</p>
+          <h3>{t(locale, 'renamer.content.uc1Title')}</h3>
+          <p>{t(locale, 'renamer.content.uc1Desc')}</p>
         </div>
-
         <div class="type-card">
-          <h3>{t(locale, 'renamer.content.seo2Title')}</h3>
-          <p>{t(locale, 'renamer.content.seo2Desc')}</p>
+          <h3>{t(locale, 'renamer.content.uc2Title')}</h3>
+          <p>{t(locale, 'renamer.content.uc2Desc')}</p>
         </div>
-
         <div class="type-card">
-          <h3>{t(locale, 'renamer.content.seo3Title')}</h3>
-          <p>{t(locale, 'renamer.content.seo3Desc')}</p>
+          <h3>{t(locale, 'renamer.content.uc3Title')}</h3>
+          <p>{t(locale, 'renamer.content.uc3Desc')}</p>
         </div>
-
         <div class="type-card">
-          <h3>{t(locale, 'renamer.content.seo4Title')}</h3>
-          <p>{t(locale, 'renamer.content.seo4Desc')}</p>
+          <h3>{t(locale, 'renamer.content.uc4Title')}</h3>
+          <p>{t(locale, 'renamer.content.uc4Desc')}</p>
         </div>
       </div>
 
-      <!-- Section 4: Common Use Cases -->
-      <h2>{t(locale, 'renamer.content.h4')}</h2>
-      <p>{t(locale, 'renamer.content.p4a')}</p>
+      <!-- Section 7: Security & Privacy -->
+      <h2>{t(locale, 'renamer.content.privacyTitle')}</h2>
+      <p>{t(locale, 'renamer.content.privacyP1')}</p>
+      <p>{t(locale, 'renamer.content.privacyP2')}</p>
 
-      <div class="types-grid">
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.use1Title')}</h3>
-          <p>{t(locale, 'renamer.content.use1Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.use2Title')}</h3>
-          <p>{t(locale, 'renamer.content.use2Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.use3Title')}</h3>
-          <p>{t(locale, 'renamer.content.use3Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.use4Title')}</h3>
-          <p>{t(locale, 'renamer.content.use4Desc')}</p>
-        </div>
-      </div>
-
-      <!-- Section 5: OS Safety -->
-      <h2>{t(locale, 'renamer.content.h5')}</h2>
-      <p>{t(locale, 'renamer.content.p5a')}</p>
-
-      <div class="types-grid">
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.safe1Title')}</h3>
-          <p>{t(locale, 'renamer.content.safe1Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.safe2Title')}</h3>
-          <p>{t(locale, 'renamer.content.safe2Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.safe3Title')}</h3>
-          <p>{t(locale, 'renamer.content.safe3Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.safe4Title')}</h3>
-          <p>{t(locale, 'renamer.content.safe4Desc')}</p>
-        </div>
-      </div>
-
-      <!-- Section 6: Common Mistakes to Avoid -->
-      <h2>{t(locale, 'renamer.content.h6')}</h2>
-      <p>{t(locale, 'renamer.content.p6a')}</p>
-
-      <div class="types-grid">
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.mistake1Title')}</h3>
-          <p>{t(locale, 'renamer.content.mistake1Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.mistake2Title')}</h3>
-          <p>{t(locale, 'renamer.content.mistake2Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.mistake3Title')}</h3>
-          <p>{t(locale, 'renamer.content.mistake3Desc')}</p>
-        </div>
-
-        <div class="type-card">
-          <h3>{t(locale, 'renamer.content.mistake4Title')}</h3>
-          <p>{t(locale, 'renamer.content.mistake4Desc')}</p>
-        </div>
-      </div>
-
-      <!-- Section 7: FAQ Accordion -->
+      <!-- Section 8: FAQ Accordion -->
       <h2>{t(locale, 'renamer.content.faqTitle')}</h2>
       <div class="faq-accordion">
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq1Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q1')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq1A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a1')}</p></div>
         </details>
-
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq2Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q2')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq2A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a2')}</p></div>
         </details>
-
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq3Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q3')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq3A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a3')}</p></div>
         </details>
-
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq4Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q4')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq4A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a4')}</p></div>
         </details>
-
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq5Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q5')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq5A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a5')}</p></div>
         </details>
-
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq6Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q6')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq6A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a6')}</p></div>
         </details>
-
         <details class="faq-item">
           <summary class="faq-question">
-            <span>{t(locale, 'renamer.content.faq7Q')}</span>
-            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            <span>{t(locale, 'renamer.faq.q7')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
-          <div class="faq-answer">
-            <p>{t(locale, 'renamer.content.faq7A')}</p>
-          </div>
+          <div class="faq-answer"><p>{t(locale, 'renamer.faq.a7')}</p></div>
         </details>
       </div>
-
-      <!-- Related Tools Box -->
-      <div class="related-tools-box">
-        <h3>Related Image Tools</h3>
-        <div class="related-chips-grid">
-          <a href="/tools/resize-image-to-exact-dimensions/" class="related-chip">{t(locale, 'renamer.cross.exact')}</a>
-          <a href="/tools/webp-image-compressor/" class="related-chip">{t(locale, 'renamer.cross.webp')}</a>
-          <a href="/tools/image-dpi-converter/" class="related-chip">{t(locale, 'renamer.cross.dpiConv')}</a>
-          <a href="/tools/image-to-text-converter/" class="related-chip">{t(locale, 'renamer.cross.imgToText')}</a>
-          <a href="/tools/gif-frame-extractor/" class="related-chip">{t(locale, 'renamer.cross.gifExt')}</a>
-          <a href="/tools/image-srcset-generator/" class="related-chip">{t(locale, 'renamer.cross.srcset')}</a>
-        </div>
-      </div>
-    </div>
+    </article>
   </div>
 </section>
 
@@ -414,7 +312,63 @@ const faqSchema = {
     line-height: 1.7;
   }
 
-  /* Features Grid */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: var(--space-6) 0 var(--space-8);
+  }
+
+  @media (min-width: 600px) {
+    .steps-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .step-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .step-content h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .step-content p {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
   .features-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -443,7 +397,7 @@ const faqSchema = {
     height: 40px;
     border-radius: var(--radius-md);
     background: rgba(79, 70, 229, 0.08);
-    color: #4F46E5;
+    color: #4f46e5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -464,65 +418,27 @@ const faqSchema = {
     line-height: 1.5;
   }
 
-  /* Steps Grid */
-  .steps-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin: var(--space-6) 0 var(--space-8);
-  }
-
-  @media (min-width: 600px) {
-    .steps-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  .step-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .step-number {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #4F46E5;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .step-content {
+  .tips-list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
+    margin: var(--space-4) 0 var(--space-8);
   }
 
-  .step-content h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0;
-  }
-
-  .step-content p {
-    font-size: 12.5px;
+  .tip-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
     color: var(--color-text-secondary);
-    margin: 0;
-    line-height: 1.5;
   }
 
-  /* Types Grid */
+  .tip-item strong {
+    color: var(--color-text);
+  }
+
   .types-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -561,7 +477,6 @@ const faqSchema = {
     line-height: 1.5;
   }
 
-  /* FAQ Accordion */
   .faq-accordion {
     display: flex;
     flex-direction: column;
@@ -577,16 +492,16 @@ const faqSchema = {
   }
 
   .faq-question {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 16px 18px;
     font-size: 14px;
     font-weight: 700;
     color: var(--color-text);
     cursor: pointer;
-    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     list-style: none;
+    user-select: none;
   }
 
   .faq-question::-webkit-details-marker {
@@ -595,8 +510,8 @@ const faqSchema = {
 
   .faq-chevron {
     color: var(--color-text-secondary);
-    transition: transform 0.2s ease;
     flex-shrink: 0;
+    transition: transform 0.2s ease;
     margin-left: 10px;
   }
 
@@ -609,48 +524,9 @@ const faqSchema = {
   }
 
   .faq-answer p {
-    font-size: 13px;
-    color: var(--color-text-secondary);
     margin: 0;
+    font-size: 13px;
     line-height: 1.6;
-  }
-
-  /* Related Tools Box */
-  .related-tools-box {
-    margin-top: var(--space-10);
-    padding: 20px 22px;
-    background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-  }
-
-  .related-tools-box h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0 0 var(--space-3);
-  }
-
-  .related-chips-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .related-chip {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    padding: 6px 12px;
-    border-radius: var(--radius-full);
-    text-decoration: none;
-    transition: border-color 0.15s ease;
-  }
-
-  .related-chip:hover {
-    border-color: #4F46E5;
-    color: #4F46E5;
+    color: var(--color-text-secondary);
   }
 </style>

@@ -12,6 +12,16 @@ export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
     tr: 'toplu-resim-yeniden-adlandirma',
     it: 'rinominare-immagini-in-blocco',
   },
+  'ppt-resizer': {
+    en: 'ppt-resizer',
+    es: 'cambiar-tamano-powerpoint',
+    pt: 'redimensionar-powerpoint',
+    fr: 'redimensionner-powerpoint',
+    de: 'powerpoint-groesse-aendern',
+    id: 'ubah-ukuran-powerpoint',
+    tr: 'powerpoint-boyutlandirma',
+    it: 'ridimensionare-powerpoint',
+  },
   'image-srcset-generator': {
     en: 'image-srcset-generator',
     es: 'generador-srcset-imagenes',
@@ -411,6 +421,16 @@ export interface ToolDefinition {
  */
 export const tools: ToolDefinition[] = [
   {
+    id: 'batch-rename-images',
+    icon: 'edit',
+    category: 'edit',
+    titleKey: 'tools.batchRenameImages.title',
+    descKey: 'tools.batchRenameImages.description',
+    keywords: ['batch rename images', 'rename multiple images', 'bulk image renamer', 'rename photos in bulk', 'batch photo renaming', 'online image renamer', 'photo sequence renamer'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
     id: 'image-resizer',
     icon: 'resize',
     category: 'resize',
@@ -490,15 +510,16 @@ export const tools: ToolDefinition[] = [
     isActive: true,
   },
   {
-    id: 'batch-rename-images',
-    icon: 'edit',
-    category: 'edit',
-    titleKey: 'tools.batchRenameImages.title',
-    descKey: 'tools.batchRenameImages.description',
-    keywords: ['batch rename images', 'rename multiple images', 'bulk image renamer', 'rename photos in bulk', 'batch photo renaming', 'online image renamer', 'photo sequence renamer'],
+    id: 'ppt-resizer',
+    icon: 'presentation',
+    category: 'resize',
+    titleKey: 'tools.pptResizer.title',
+    descKey: 'tools.pptResizer.description',
+    keywords: ['ppt resizer', 'powerpoint resizer', 'resize ppt online', 'resize powerpoint slides', 'change powerpoint slide size', 'ppt aspect ratio', 'powerpoint slide dimensions', 'pptx resizer', 'powerpoint 16:9 to 4:3'],
     badge: 'NEW',
     isActive: true,
   },
+  
   {
     id: 'image-srcset-generator',
     icon: 'code',

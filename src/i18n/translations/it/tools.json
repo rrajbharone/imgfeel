@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Crea fototessere ufficiali per passaporto e carta d'identità e genera fogli stampabili a 300 DPI.",
   "tools.imageSrcsetGenerator.title": "Generatore Srcset Immagini",
   "tools.imageSrcsetGenerator.description": "Genera codice HTML srcset e sizes per immagini responsive e scarica immagini in ZIP.",
-  "tools.batchRenameImages.title": "Rinominare Immagini in Blocco",
-  "tools.batchRenameImages.description": "Rinomina più immagini in blocco online con numerazione sequenziale e download in archivio ZIP."
+  "tools.pptResizer.title": "Ridimensionare PowerPoint",
+  "tools.pptResizer.description": "Modifica dimensioni e rapporto d'aspetto delle diapositive PowerPoint online (16:9, 4:3, A4, Lettera).",
+  "tools.batchRenameImages.title": "Rinominare Immagini in Blocco Online",
+  "tools.batchRenameImages.description": "Rinomina più immagini online gratuitamente con privacy al 100% nel browser."
 }

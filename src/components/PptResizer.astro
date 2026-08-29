@@ -1,0 +1,1131 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { SLIDE_PRESETS } from '@/scripts/ppt-resizer';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="ppt-resizer-wrapper" data-locale={locale}>
+  <!-- Upload Dropzone (Initial State) -->
+  <div id="dropzoneContainer" class="dropzone-container">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'pptresize.dropzone.title')}>
+      <input type="file" id="fileInput" accept=".pptx,.ppt,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint" class="file-input" />
+      <div class="dropzone-content">
+        <div class="dropzone-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+            <path d="M7 8h4a2 2 0 0 1 0 4H7z"></path>
+            <line x1="7" y1="8" x2="7" y2="14"></line>
+          </svg>
+        </div>
+        <h2 class="dropzone-title">{t(locale, 'pptresize.dropzone.title')}</h2>
+        <p class="dropzone-subtitle">{t(locale, 'pptresize.dropzone.subtitle')}</p>
+        <div class="dropzone-actions">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            {t(locale, 'pptresize.dropzone.browse')}
+          </button>
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+            {t(locale, 'pptresize.dropzone.sample')}
+          </button>
+        </div>
+        <div class="privacy-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>{t(locale, 'pptresize.privacy.badge')}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Workspace -->
+  <div id="workspace" class="workspace" style="display: none;">
+    <!-- Workspace Header Bar -->
+    <div class="workspace-header-bar">
+      <div class="file-info-col">
+        <div class="file-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span id="fileNameDisplay" class="file-name">presentation.pptx</span>
+        </div>
+        <div class="file-meta-row">
+          <span id="statSlidesCount" class="badge badge-accent">1 Slide</span>
+          <span id="statOriginalSize" class="badge">4:3 Standard (10.0 × 7.5 in)</span>
+          <span id="statFileSize" class="badge">Size: 0 KB</span>
+        </div>
+      </div>
+      <button type="button" id="changeFileBtn" class="btn btn-secondary btn-sm">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        {t(locale, 'pptresize.action.changeFile')}
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="errorMessage">An error occurred</span>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <div class="workspace-grid">
+      <!-- Settings Column -->
+      <div class="settings-col">
+        <!-- Preset Card -->
+        <div class="control-group">
+          <label for="presetSelect" class="field-label">{t(locale, 'pptresize.label.preset')}</label>
+          <select id="presetSelect" class="form-select">
+            {SLIDE_PRESETS.map((p) => (
+              <option value={p.id}>{p.name}</option>
+            ))}
+          </select>
+
+          <!-- Orientation Toggle -->
+          <div class="field-row" style="margin-top: 4px;">
+            <label class="field-label-sm">{t(locale, 'pptresize.label.orientation')}</label>
+            <div class="orientation-buttons">
+              <button type="button" id="orientLandscapeBtn" class="orient-btn active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                </svg>
+                <span>{t(locale, 'pptresize.orient.landscape')}</span>
+              </button>
+              <button type="button" id="orientPortraitBtn" class="orient-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                </svg>
+                <span>{t(locale, 'pptresize.orient.portrait')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Dimensions Card -->
+        <div class="control-group">
+          <div class="field-row">
+            <label for="unitSelect" class="field-label-sm">{t(locale, 'pptresize.label.unit')}</label>
+            <select id="unitSelect" class="form-select">
+              <option value="in" selected>{t(locale, 'pptresize.unit.inches')}</option>
+              <option value="cm">{t(locale, 'pptresize.unit.cm')}</option>
+              <option value="pt">{t(locale, 'pptresize.unit.pt')}</option>
+            </select>
+          </div>
+
+          <div class="two-cols-grid">
+            <div class="field-row">
+              <label for="widthInput" class="field-label-sm">{t(locale, 'pptresize.label.width')}</label>
+              <input type="number" id="widthInput" class="form-input" value="13.33" step="0.01" min="1" max="100" />
+            </div>
+            <div class="field-row">
+              <label for="heightInput" class="field-label-sm">{t(locale, 'pptresize.label.height')}</label>
+              <input type="number" id="heightInput" class="form-input" value="7.50" step="0.01" min="1" max="100" />
+            </div>
+          </div>
+
+          <div class="checkbox-wrapper" style="margin-top: 4px;">
+            <label class="checkbox-inline">
+              <input type="checkbox" id="scaleContentToggle" checked />
+              <div class="checkbox-text-col">
+                <strong>{t(locale, 'pptresize.label.scaleContent')}</strong>
+                <span class="field-hint">{t(locale, 'pptresize.label.scaleContentDesc')}</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview & Download Column -->
+      <div class="preview-col">
+        <!-- Visual Aspect Ratio Comparison Card -->
+        <div class="output-card">
+          <div class="preview-header">
+            <span class="output-title">{t(locale, 'pptresize.preview.title')}</span>
+          </div>
+
+          <div class="aspect-ratio-comparison-stage">
+            <!-- Original Slide Frame -->
+            <div class="slide-visual-box original-box">
+              <div class="slide-box-header">
+                <span class="box-badge">{t(locale, 'pptresize.preview.original')}</span>
+                <span id="originalRatioLabel" class="box-ratio">4:3</span>
+              </div>
+              <div class="slide-frame-canvas-wrap">
+                <div id="originalSlideFrame" class="slide-frame original-frame">
+                  <div class="slide-inner-mockup">
+                    <div class="mock-line title-line"></div>
+                    <div class="mock-line body-line"></div>
+                    <div class="mock-line body-line short"></div>
+                  </div>
+                </div>
+              </div>
+              <span id="originalDimsLabel" class="box-dims-text">10.0 × 7.5 in</span>
+            </div>
+
+            <!-- Arrow Indicator -->
+            <div class="comparison-arrow">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+
+            <!-- Target Slide Frame -->
+            <div class="slide-visual-box target-box">
+              <div class="slide-box-header">
+                <span class="box-badge box-badge-target">{t(locale, 'pptresize.preview.target')}</span>
+                <span id="targetRatioLabel" class="box-ratio">16:9</span>
+              </div>
+              <div class="slide-frame-canvas-wrap">
+                <div id="targetSlideFrame" class="slide-frame target-frame">
+                  <div class="slide-inner-mockup">
+                    <div class="mock-line title-line"></div>
+                    <div class="mock-line body-line"></div>
+                    <div class="mock-line body-line short"></div>
+                  </div>
+                </div>
+              </div>
+              <span id="targetDimsLabel" class="box-dims-text">13.33 × 7.5 in</span>
+            </div>
+          </div>
+
+          <!-- Download Action Area -->
+          <div class="download-action-box">
+            <button type="button" id="downloadBtn" class="btn btn-primary btn-xl">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span id="downloadBtnText">{t(locale, 'pptresize.action.download')}</span>
+            </button>
+            <div id="progressBar" class="progress-bar-container" style="display: none;">
+              <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    PptResizerEngine,
+    SLIDE_PRESETS,
+    type PresentationInfo,
+    type PptResizeOptions,
+    type SlideSizePreset,
+  } from '@/scripts/ppt-resizer';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const dropzoneContainer = document.getElementById('dropzoneContainer')!;
+    const dropzone = document.getElementById('dropzone')!;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn')!;
+    const sampleBtn = document.getElementById('sampleBtn')!;
+    const workspace = document.getElementById('workspace')!;
+    const changeFileBtn = document.getElementById('changeFileBtn')!;
+    const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const statSlidesCount = document.getElementById('statSlidesCount')!;
+    const statOriginalSize = document.getElementById('statOriginalSize')!;
+    const statFileSize = document.getElementById('statFileSize')!;
+    const errorBanner = document.getElementById('errorBanner')!;
+    const errorMessage = document.getElementById('errorMessage')!;
+
+    // Controls
+    const presetSelect = document.getElementById('presetSelect') as HTMLSelectElement;
+    const orientLandscapeBtn = document.getElementById('orientLandscapeBtn')!;
+    const orientPortraitBtn = document.getElementById('orientPortraitBtn')!;
+    const unitSelect = document.getElementById('unitSelect') as HTMLSelectElement;
+    const widthInput = document.getElementById('widthInput') as HTMLInputElement;
+    const heightInput = document.getElementById('heightInput') as HTMLInputElement;
+    const scaleContentToggle = document.getElementById('scaleContentToggle') as HTMLInputElement;
+
+    // Visual Preview & Download
+    const originalRatioLabel = document.getElementById('originalRatioLabel')!;
+    const originalDimsLabel = document.getElementById('originalDimsLabel')!;
+    const originalSlideFrame = document.getElementById('originalSlideFrame')!;
+    const targetRatioLabel = document.getElementById('targetRatioLabel')!;
+    const targetDimsLabel = document.getElementById('targetDimsLabel')!;
+    const targetSlideFrame = document.getElementById('targetSlideFrame')!;
+    const downloadBtn = document.getElementById('downloadBtn')!;
+    const downloadBtnText = document.getElementById('downloadBtnText')!;
+    const progressBar = document.getElementById('progressBar')!;
+    const progressFill = document.getElementById('progressFill')!;
+
+    // State
+    let currentZipEntries: { name: string; data: Uint8Array }[] = [];
+    let presentationInfo: PresentationInfo | null = null;
+    let selectedOrientation: 'landscape' | 'portrait' = 'landscape';
+    let currentUnit: 'in' | 'cm' | 'pt' = 'in';
+
+    const resizeOptions: PptResizeOptions = {
+      presetId: '16-9',
+      targetWidthEmus: 12192000,
+      targetHeightEmus: 6858000,
+      orientation: 'landscape',
+      scaleContent: true,
+      typeAttr: 'screen16x9',
+    };
+
+    function showError(msg: string) {
+      errorMessage.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    function formatBytes(bytes: number): string {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function updateVisualFrames() {
+      if (!presentationInfo) return;
+
+      // 1. Update Original Frame Aspect Ratio
+      const origAspect = presentationInfo.originalWidthEmus / presentationInfo.originalHeightEmus;
+      originalRatioLabel.textContent = presentationInfo.aspectRatioName;
+      originalDimsLabel.textContent = `${presentationInfo.originalWidthInches} × ${presentationInfo.originalHeightInches} in`;
+      originalSlideFrame.style.aspectRatio = `${origAspect}`;
+
+      // 2. Update Target Frame Aspect Ratio
+      const targetAspect = resizeOptions.targetWidthEmus / resizeOptions.targetHeightEmus;
+      let targetRatioName = 'Custom';
+      if (Math.abs(targetAspect - 16 / 9) < 0.05) targetRatioName = '16:9';
+      else if (Math.abs(targetAspect - 4 / 3) < 0.05) targetRatioName = '4:3';
+      else if (Math.abs(targetAspect - 16 / 10) < 0.05) targetRatioName = '16:10';
+      else if (Math.abs(targetAspect - 1.414) < 0.05) targetRatioName = 'A4 Landscape';
+      else if (Math.abs(targetAspect - 1 / 1.414) < 0.05) targetRatioName = 'A4 Portrait';
+      else if (Math.abs(targetAspect - 1.0) < 0.05) targetRatioName = '1:1 Square';
+
+      targetRatioLabel.textContent = targetRatioName;
+      targetSlideFrame.style.aspectRatio = `${targetAspect}`;
+
+      // Convert target to current display unit
+      let wVal = 0;
+      let hVal = 0;
+      if (currentUnit === 'in') {
+        wVal = parseFloat((resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_INCH).toFixed(2));
+        hVal = parseFloat((resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_INCH).toFixed(2));
+        targetDimsLabel.textContent = `${wVal} × ${hVal} in`;
+      } else if (currentUnit === 'cm') {
+        wVal = parseFloat((resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_CM).toFixed(2));
+        hVal = parseFloat((resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_CM).toFixed(2));
+        targetDimsLabel.textContent = `${wVal} × ${hVal} cm`;
+      } else {
+        wVal = Math.round(resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_PT);
+        hVal = Math.round(resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_PT);
+        targetDimsLabel.textContent = `${wVal} × ${hVal} pt`;
+      }
+
+      widthInput.value = wVal.toString();
+      heightInput.value = hVal.toString();
+    }
+
+    function applyPreset(presetId: string) {
+      resizeOptions.presetId = presetId;
+      const found = SLIDE_PRESETS.find((p) => p.id === presetId);
+      if (!found) return;
+
+      let cx = found.widthEmus;
+      let cy = found.heightEmus;
+
+      // Handle orientation swapping
+      if (selectedOrientation === 'portrait' && cx > cy) {
+        const tmp = cx;
+        cx = cy;
+        cy = tmp;
+      } else if (selectedOrientation === 'landscape' && cy > cx) {
+        const tmp = cx;
+        cx = cy;
+        cy = tmp;
+      }
+
+      resizeOptions.targetWidthEmus = cx;
+      resizeOptions.targetHeightEmus = cy;
+      resizeOptions.typeAttr = found.typeAttr;
+
+      updateVisualFrames();
+    }
+
+    async function handleFileSelected(file: File) {
+      try {
+        hideError();
+        const { info, zipEntries } = await PptResizerEngine.inspectPptx(file);
+        presentationInfo = info;
+        currentZipEntries = zipEntries;
+
+        fileNameDisplay.textContent = info.fileName;
+        statSlidesCount.textContent = `${info.totalSlides} Slide${info.totalSlides > 1 ? 's' : ''}`;
+        statOriginalSize.textContent = `${info.aspectRatioName} (${info.originalWidthInches} × ${info.originalHeightInches} in)`;
+        statFileSize.textContent = `Size: ${formatBytes(info.fileSizeBytes)}`;
+
+        // Smart preset detection: if original is 4:3, recommend 16:9; if 16:9, default to A4 or 4:3
+        if (Math.abs(info.aspectRatioDecimal - 4 / 3) < 0.05) {
+          presetSelect.value = '16-9';
+          applyPreset('16-9');
+        } else {
+          presetSelect.value = '16-9';
+          applyPreset('16-9');
+        }
+
+        dropzoneContainer.style.display = 'none';
+        workspace.style.display = 'block';
+      } catch (err: any) {
+        showError(err.message || 'Failed to inspect PowerPoint file. Please ensure it is a valid .pptx presentation.');
+      }
+    }
+
+    // Preset Select Change
+    presetSelect.addEventListener('change', () => {
+      applyPreset(presetSelect.value);
+    });
+
+    // Orientation Buttons
+    orientLandscapeBtn.addEventListener('click', () => {
+      orientLandscapeBtn.classList.add('active');
+      orientPortraitBtn.classList.remove('active');
+      selectedOrientation = 'landscape';
+      resizeOptions.orientation = 'landscape';
+      applyPreset(presetSelect.value);
+    });
+
+    orientPortraitBtn.addEventListener('click', () => {
+      orientPortraitBtn.classList.add('active');
+      orientLandscapeBtn.classList.remove('active');
+      selectedOrientation = 'portrait';
+      resizeOptions.orientation = 'portrait';
+      applyPreset(presetSelect.value);
+    });
+
+    // Unit Select Change
+    unitSelect.addEventListener('change', () => {
+      currentUnit = unitSelect.value as any;
+      updateVisualFrames();
+    });
+
+    // Custom Width / Height Inputs
+    function onCustomDimensionInput() {
+      presetSelect.value = 'custom';
+      resizeOptions.presetId = 'custom';
+      resizeOptions.typeAttr = 'custom';
+
+      const w = parseFloat(widthInput.value) || 1;
+      const h = parseFloat(heightInput.value) || 1;
+
+      if (currentUnit === 'in') {
+        resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_INCH);
+        resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_INCH);
+      } else if (currentUnit === 'cm') {
+        resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_CM);
+        resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_CM);
+      } else {
+        resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_PT);
+        resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_PT);
+      }
+
+      const aspect = resizeOptions.targetWidthEmus / resizeOptions.targetHeightEmus;
+      targetRatioLabel.textContent = aspect >= 1 ? `${aspect.toFixed(2)}:1` : `1:${(1 / aspect).toFixed(2)}`;
+      targetSlideFrame.style.aspectRatio = `${aspect}`;
+      targetDimsLabel.textContent = `${w} × ${h} ${currentUnit}`;
+    }
+
+    widthInput.addEventListener('input', onCustomDimensionInput);
+    heightInput.addEventListener('input', onCustomDimensionInput);
+
+    scaleContentToggle.addEventListener('change', () => {
+      resizeOptions.scaleContent = scaleContentToggle.checked;
+    });
+
+    // Download Handler
+    downloadBtn.addEventListener('click', async () => {
+      if (!presentationInfo || currentZipEntries.length === 0) return;
+
+      try {
+        downloadBtn.setAttribute('disabled', 'true');
+        downloadBtnText.textContent = 'Resizing & Packaging PPTX...';
+        progressBar.style.display = 'block';
+        progressFill.style.width = '10%';
+
+        const blob = await PptResizerEngine.resizePptx(
+          currentZipEntries,
+          resizeOptions,
+          presentationInfo.originalWidthEmus,
+          presentationInfo.originalHeightEmus,
+          (pct) => {
+            progressFill.style.width = `${pct}%`;
+          }
+        );
+
+        const baseName = presentationInfo.fileName.replace(/\.[^/.]+$/, '');
+        const outName = `${baseName}-resized.pptx`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = outName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        downloadBtnText.textContent = 'Download Complete!';
+        setTimeout(() => {
+          downloadBtn.removeAttribute('disabled');
+          downloadBtnText.textContent = 'Download Resized Presentation (.PPTX)';
+          progressBar.style.display = 'none';
+        }, 2000);
+      } catch (err: any) {
+        showError('Failed to resize PowerPoint: ' + err.message);
+        downloadBtn.removeAttribute('disabled');
+        downloadBtnText.textContent = 'Download Resized Presentation (.PPTX)';
+        progressBar.style.display = 'none';
+      }
+    });
+
+    // Upload & Sample Handlers
+    browseBtn.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('click', (e) => {
+      if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
+      fileInput.click();
+    });
+
+    sampleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const sample = await PptResizerEngine.generateSamplePptx();
+      handleFileSelected(sample);
+    });
+
+    changeFileBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) handleFileSelected(file);
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer?.files[0];
+      if (file) handleFileSelected(file);
+    });
+  });
+</script>
+
+<style>
+  .ppt-resizer-wrapper {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Dropzone */
+  .dropzone-container {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .dropzone:hover,
+  .dropzone.drag-over {
+    border-color: #4F46E5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .dropzone-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .privacy-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-2);
+    text-align: center;
+  }
+
+  /* Workspace */
+  .workspace {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .workspace-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+    box-sizing: border-box;
+  }
+
+  .file-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .file-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .badge-accent {
+    background: rgba(79, 70, 229, 0.08);
+    border-color: rgba(79, 70, 229, 0.25);
+    color: #4F46E5;
+    font-weight: 700;
+  }
+
+  /* Error Banner */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #EF4444;
+    border-radius: var(--radius-md);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Workspace Grid */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 960px) {
+    .workspace-grid {
+      grid-template-columns: 380px 1fr;
+    }
+  }
+
+  .settings-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .preview-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Control Group */
+  .control-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .field-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .field-label-sm {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    display: block;
+  }
+
+  .field-hint {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    display: block;
+    line-height: 1.4;
+  }
+
+  .form-select,
+  .form-input {
+    width: 100%;
+    max-width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: 13px;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+
+  .two-cols-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Orientation Buttons */
+  .orientation-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .orient-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 38px;
+    padding: 6px 12px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .orient-btn:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  .orient-btn.active {
+    background: rgba(79, 70, 229, 0.08);
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+
+  /* Checkbox */
+  .checkbox-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .checkbox-inline {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .checkbox-inline input {
+    margin-top: 2px;
+    accent-color: #4F46E5;
+    flex-shrink: 0;
+  }
+
+  .checkbox-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* Output Card */
+  .output-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .output-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* Visual Aspect Ratio Comparison Stage */
+  .aspect-ratio-comparison-stage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 16px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    .aspect-ratio-comparison-stage {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  .slide-visual-box {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .slide-box-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 4px;
+  }
+
+  .box-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .box-badge-target {
+    color: #4F46E5;
+  }
+
+  .box-ratio {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .slide-frame-canvas-wrap {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide-frame {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+    transition: all 0.25s ease;
+  }
+
+  .original-frame {
+    border: 1.5px solid var(--color-border);
+  }
+
+  .target-frame {
+    border: 2px solid #4F46E5;
+    background: rgba(79, 70, 229, 0.03);
+  }
+
+  .slide-inner-mockup {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mock-line {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-border);
+  }
+
+  .title-line {
+    width: 60%;
+    height: 8px;
+    background: #4F46E5;
+    opacity: 0.6;
+    margin-bottom: 2px;
+  }
+
+  .body-line {
+    width: 85%;
+    opacity: 0.4;
+  }
+
+  .body-line.short {
+    width: 45%;
+  }
+
+  .box-dims-text {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .comparison-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .comparison-arrow {
+      transform: rotate(90deg);
+    }
+  }
+
+  /* Download Action */
+  .download-action-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #4F46E5;
+    transition: width 0.2s ease;
+  }
+
+  /* General Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+  }
+
+  .btn-sm {
+    height: 36px;
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+
+  .btn-lg {
+    height: 42px;
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+
+  .btn-xl {
+    height: 46px;
+    padding: 10px 22px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .btn-primary {
+    background: #4F46E5;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #4338CA;
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
+</style>

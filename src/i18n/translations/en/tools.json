@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Create official passport size photos online for free and generate 300 DPI multi-photo printable sheets.",
   "tools.imageSrcsetGenerator.title": "Image Srcset Generator",
   "tools.imageSrcsetGenerator.description": "Generate optimized HTML srcset & sizes responsive image markup and download resized assets in ZIP.",
-  "tools.batchRenameImages.title": "Batch Rename Images",
-  "tools.batchRenameImages.description": "Rename multiple image files in bulk online with sequential numbering, custom patterns, and lossless ZIP download."
+  "tools.pptResizer.title": "PPT Resizer",
+  "tools.pptResizer.description": "Resize PowerPoint presentation slide dimensions and aspect ratio online (16:9, 4:3, A4, Letter, Custom).",
+  "tools.batchRenameImages.title": "Batch Rename Images Online",
+  "tools.batchRenameImages.description": "Rename multiple image files individually online for free with 100% in-browser privacy."
 }

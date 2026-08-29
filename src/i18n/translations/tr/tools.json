@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Ücretsiz biyometrik vesikalık fotoğraf hazırlayın ve 300 DPI çoklu baskı sayfası oluşturun.",
   "tools.imageSrcsetGenerator.title": "Resim Srcset Oluşturucu",
   "tools.imageSrcsetGenerator.description": "Duyarlı görseller için optimize edilmiş HTML srcset ve sizes kodları oluşturun ve ZIP olarak indirin.",
-  "tools.batchRenameImages.title": "Toplu Resim Yeniden Adlandırma",
-  "tools.batchRenameImages.description": "Birden fazla resim dosyasının adını sıralı numaralandırma ve şablonlarla toplu değiştirin."
+  "tools.pptResizer.title": "PowerPoint Boyutlandırma",
+  "tools.pptResizer.description": "PowerPoint slayt boyutunu ve en-boy oranını online değiştirin (16:9, 4:3, A4, Letter, Özel).",
+  "tools.batchRenameImages.title": "Toplu Resim Yeniden Adlandırma Online",
+  "tools.batchRenameImages.description": "Birden fazla resmi çevrimiçi olarak tek tek ve ücretsiz olarak yeniden adlandırın."
 }

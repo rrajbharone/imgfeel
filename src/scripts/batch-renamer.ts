@@ -1,162 +1,70 @@
 /**
- * batch-renamer.ts
- * 100% Client-Side Pure TypeScript Batch Image Renaming & Lossless PKZIP Packaging Engine.
+ * Client-Side Engine for Batch Rename Images Online
+ * 100% in-browser processing with zero server uploads and lossless byte preservation.
  */
 
 export interface ImageItem {
   id: string;
-  file: File | Blob;
+  file: File;
   originalName: string;
   baseName: string;
   extension: string;
   sizeBytes: number;
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   thumbnailUrl: string;
   newName: string;
-  customOverride?: string;
-}
-
-export type RenameMode = 'pattern' | 'find-replace' | 'prefix-suffix' | 'casing';
-
-export interface RenameOptions {
-  mode: RenameMode;
-  pattern: string; // e.g. "photo-{00n}" or "{orig}-v2"
-  startNumber: number;
-  numberPadding: number; // 1 = "1", 2 = "01", 3 = "001", 4 = "0001"
-  findText: string;
-  replaceText: string;
-  isRegex: boolean;
-  matchCase: boolean;
-  prefix: string;
-  suffix: string;
-  caseTransformation: 'none' | 'lowercase' | 'uppercase' | 'titlecase';
-  spaceReplacement: 'none' | 'hyphen' | 'underscore' | 'remove';
-  cleanSpecialChars: boolean;
-  lowercaseExtension: boolean;
 }
 
 export class BatchRenamerEngine {
   /**
-   * Compute new filenames for all images in the batch based on options and conflict resolution.
+   * Inspect an uploaded File and build an ImageItem
    */
-  public static computeNewNames(items: ImageItem[], options: RenameOptions): ImageItem[] {
-    const now = new Date();
-    const dateStr = now.toISOString().slice(0, 10); // YYYY-MM-DD
-    const timeStr = now.toTimeString().slice(0, 8).replace(/:/g, '-'); // HH-MM-SS
+  static async inspectImageFile(file: File): Promise<ImageItem> {
+    const id = 'img_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now().toString(36);
+    const originalName = file.name;
+    const lastDot = originalName.lastIndexOf('.');
+    let baseName = originalName;
+    let extension = '';
 
-    const usedNames = new Set<string>();
+    if (lastDot > 0) {
+      baseName = originalName.substring(0, lastDot);
+      extension = originalName.substring(lastDot + 1).toLowerCase();
+    }
 
-    return items.map((item, index) => {
-      if (item.customOverride && item.customOverride.trim().length > 0) {
-        return {
-          ...item,
-          newName: item.customOverride.trim(),
-        };
-      }
+    const thumbnailUrl = URL.createObjectURL(file);
+    const dims = await this.getImageDimensions(thumbnailUrl);
 
-      let nameWithoutExt = item.baseName;
-      const currentSeq = options.startNumber + index;
+    return {
+      id,
+      file,
+      originalName,
+      baseName,
+      extension,
+      sizeBytes: file.size,
+      width: dims.width,
+      height: dims.height,
+      thumbnailUrl,
+      newName: originalName,
+    };
+  }
 
-      if (options.mode === 'pattern') {
-        let patternStr = options.pattern || '{orig}-{n}';
-
-        patternStr = patternStr
-          .replace(/{orig}/gi, item.baseName)
-          .replace(/{original}/gi, item.baseName)
-          .replace(/{date}/gi, dateStr)
-          .replace(/{time}/gi, timeStr)
-          .replace(/{w}/gi, (item.width || 0).toString())
-          .replace(/{h}/gi, (item.height || 0).toString());
-
-        // Zero-padding tokens like {00n}, {000n}, or standard {n} / {number}
-        patternStr = patternStr.replace(/{0*n}|{number}/gi, (match) => {
-          const zeroCount = (match.match(/0/g) || []).length;
-          const padLen = Math.max(zeroCount + 1, options.numberPadding);
-          return currentSeq.toString().padStart(padLen, '0');
-        });
-
-        nameWithoutExt = patternStr;
-      } else if (options.mode === 'find-replace') {
-        if (options.findText && options.findText.length > 0) {
-          try {
-            if (options.isRegex) {
-              const flags = options.matchCase ? 'g' : 'gi';
-              const re = new RegExp(options.findText, flags);
-              nameWithoutExt = nameWithoutExt.replace(re, options.replaceText || '');
-            } else {
-              if (options.matchCase) {
-                nameWithoutExt = nameWithoutExt.split(options.findText).join(options.replaceText || '');
-              } else {
-                const escaped = options.findText.replace(/[.*+?^$\{\}()|[\]\\]/g, '\\$&');
-                const re = new RegExp(escaped, 'gi');
-                nameWithoutExt = nameWithoutExt.replace(re, options.replaceText || '');
-              }
-            }
-          } catch {
-            // Keep existing if regex invalid
-          }
-        }
-      } else if (options.mode === 'prefix-suffix') {
-        nameWithoutExt = `${options.prefix || ''}${nameWithoutExt}${options.suffix || ''}`;
-      }
-
-      // Space replacements
-      if (options.spaceReplacement === 'hyphen') {
-        nameWithoutExt = nameWithoutExt.replace(/\s+/g, '-');
-      } else if (options.spaceReplacement === 'underscore') {
-        nameWithoutExt = nameWithoutExt.replace(/\s+/g, '_');
-      } else if (options.spaceReplacement === 'remove') {
-        nameWithoutExt = nameWithoutExt.replace(/\s+/g, '');
-      }
-
-      // Clean special characters (sanitizer)
-      if (options.cleanSpecialChars) {
-        nameWithoutExt = nameWithoutExt.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-');
-      }
-
-      // Case transformation
-      if (options.caseTransformation === 'lowercase') {
-        nameWithoutExt = nameWithoutExt.toLowerCase();
-      } else if (options.caseTransformation === 'uppercase') {
-        nameWithoutExt = nameWithoutExt.toUpperCase();
-      } else if (options.caseTransformation === 'titlecase') {
-        nameWithoutExt = nameWithoutExt.replace(
-          /\w\S*/g,
-          (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-        );
-      }
-
-      // Extension formatting
-      let ext = item.extension;
-      if (options.lowercaseExtension) {
-        ext = ext.toLowerCase();
-      }
-
-      let finalFullName = ext ? `${nameWithoutExt}.${ext}` : nameWithoutExt;
-
-      // Conflict Resolution: Prevent duplicates in the batch
-      let duplicateCounter = 1;
-      const baseForDup = nameWithoutExt;
-      while (usedNames.has(finalFullName.toLowerCase())) {
-        nameWithoutExt = `${baseForDup}_${duplicateCounter}`;
-        finalFullName = ext ? `${nameWithoutExt}.${ext}` : nameWithoutExt;
-        duplicateCounter++;
-      }
-
-      usedNames.add(finalFullName.toLowerCase());
-
-      return {
-        ...item,
-        newName: finalFullName,
-      };
+  /**
+   * Read natural dimensions from an image URL
+   */
+  private static getImageDimensions(url: string): Promise<{ width: number; height: number }> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve({ width: img.naturalWidth || 0, height: img.naturalHeight || 0 });
+      img.onerror = () => resolve({ width: 0, height: 0 });
+      img.src = url;
     });
   }
 
   /**
-   * Helper to format file size in human-readable units.
+   * Format bytes to human readable string
    */
-  public static formatBytes(bytes: number): string {
+  static formatBytes(bytes: number): string {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -165,40 +73,20 @@ export class BatchRenamerEngine {
   }
 
   /**
-   * Read image dimensions asynchronously.
+   * Create in-memory PKZIP archive from ImageItem list without external dependencies
    */
-  public static async getImageDimensions(file: File | Blob): Promise<{ width: number; height: number }> {
-    return new Promise((resolve) => {
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = () => {
-        const dimensions = { width: img.naturalWidth, height: img.naturalHeight };
-        URL.revokeObjectURL(url);
-        resolve(dimensions);
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        resolve({ width: 0, height: 0 });
-      };
-      img.src = url;
-    });
-  }
-
-  /**
-   * In-Memory Lossless PKZIP Archiver (Packages original raw bytes without re-encoding).
-   */
-  public static async createRenamedZip(
+  static async createRenamedZip(
     items: ImageItem[],
     onProgress?: (current: number, total: number) => void
   ): Promise<Blob> {
-    const files: { name: string; data: Uint8Array }[] = [];
+    const filesToZip: { name: string; data: Uint8Array }[] = [];
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      const arrayBuffer = await item.file.arrayBuffer();
-      files.push({
-        name: item.newName,
-        data: new Uint8Array(arrayBuffer),
+      const buffer = await item.file.arrayBuffer();
+      filesToZip.push({
+        name: item.newName || item.originalName,
+        data: new Uint8Array(buffer),
       });
 
       if (onProgress) {
@@ -206,158 +94,156 @@ export class BatchRenamerEngine {
       }
     }
 
-    return BatchRenamerEngine.createZipArchive(files);
+    return this.createZipArchive(filesToZip);
   }
 
   /**
-   * Pure TypeScript in-memory PKZIP archive builder.
+   * Pure TypeScript in-memory standard PKZIP builder
    */
-  public static createZipArchive(files: { name: string; data: Uint8Array }[]): Blob {
-    const fileEntries: {
-      nameBytes: Uint8Array;
-      data: Uint8Array;
-      crc: number;
-      offset: number;
-    }[] = [];
-
-    let currentOffset = 0;
+  private static createZipArchive(files: { name: string; data: Uint8Array }[]): Blob {
+    const textEncoder = new TextEncoder();
     const localHeaders: Uint8Array[] = [];
+    const centralHeaders: Uint8Array[] = [];
+    let offset = 0;
 
     for (const file of files) {
-      const nameBytes = new TextEncoder().encode(file.name);
-      const crc = BatchRenamerEngine.crc32(file.data);
+      const nameBytes = textEncoder.encode(file.name);
+      const crc = this.crc32(file.data);
+      const size = file.data.length;
 
-      const localHeader = new Uint8Array(30 + nameBytes.length + file.data.length);
-      const view = new DataView(localHeader.buffer);
+      // Local file header (30 bytes + filename)
+      const localHeader = new Uint8Array(30 + nameBytes.length);
+      const lv = new DataView(localHeader.buffer);
 
-      view.setUint32(0, 0x04034b50, true);
-      view.setUint16(4, 20, true);
-      view.setUint16(6, 0, true);
-      view.setUint16(8, 0, true);
-      view.setUint16(10, 0, true);
-      view.setUint16(12, 0, true);
-      view.setUint32(14, crc, true);
-      view.setUint32(18, file.data.length, true);
-      view.setUint32(22, file.data.length, true);
-      view.setUint16(26, nameBytes.length, true);
-      view.setUint16(28, 0, true);
-
+      lv.setUint32(0, 0x04034b50, true); // Local file header signature
+      lv.setUint16(4, 20, true); // Version needed to extract (2.0)
+      lv.setUint16(6, 0x0800, true); // General purpose bit flag (UTF-8)
+      lv.setUint16(8, 0, true); // Compression method (0 = uncompressed store)
+      lv.setUint16(10, 0, true); // File last mod time
+      lv.setUint16(12, 0, true); // File last mod date
+      lv.setUint32(14, crc, true); // CRC-32
+      lv.setUint32(18, size, true); // Compressed size
+      lv.setUint32(22, size, true); // Uncompressed size
+      lv.setUint16(26, nameBytes.length, true); // File name length
+      lv.setUint16(28, 0, true); // Extra field length
       localHeader.set(nameBytes, 30);
-      localHeader.set(file.data, 30 + nameBytes.length);
-
-      fileEntries.push({
-        nameBytes,
-        data: file.data,
-        crc,
-        offset: currentOffset,
-      });
 
       localHeaders.push(localHeader);
-      currentOffset += localHeader.length;
+      localHeaders.push(file.data);
+
+      // Central directory file header (46 bytes + filename)
+      const centralHeader = new Uint8Array(46 + nameBytes.length);
+      const cv = new DataView(centralHeader.buffer);
+
+      cv.setUint32(0, 0x02014b50, true); // Central directory header signature
+      cv.setUint16(4, 20, true); // Version made by
+      cv.setUint16(6, 20, true); // Version needed to extract
+      cv.setUint16(8, 0x0800, true); // General purpose bit flag (UTF-8)
+      cv.setUint16(10, 0, true); // Compression method
+      cv.setUint16(12, 0, true); // Mod time
+      cv.setUint16(14, 0, true); // Mod date
+      cv.setUint32(16, crc, true); // CRC-32
+      cv.setUint32(20, size, true); // Compressed size
+      cv.setUint32(24, size, true); // Uncompressed size
+      cv.setUint16(28, nameBytes.length, true); // File name length
+      cv.setUint16(30, 0, true); // Extra field length
+      cv.setUint16(32, 0, true); // File comment length
+      cv.setUint16(34, 0, true); // Disk number start
+      cv.setUint16(36, 0, true); // Internal file attributes
+      cv.setUint32(38, 0, true); // External file attributes
+      cv.setUint32(42, offset, true); // Relative offset of local header
+      centralHeader.set(nameBytes, 46);
+
+      centralHeaders.push(centralHeader);
+      offset += localHeader.length + file.data.length;
     }
 
-    const centralDirectoryStart = currentOffset;
-    const centralDirectoryHeaders: Uint8Array[] = [];
-
-    for (const entry of fileEntries) {
-      const cdHeader = new Uint8Array(46 + entry.nameBytes.length);
-      const view = new DataView(cdHeader.buffer);
-
-      view.setUint32(0, 0x02014b50, true);
-      view.setUint16(4, 20, true);
-      view.setUint16(6, 20, true);
-      view.setUint16(8, 0, true);
-      view.setUint16(10, 0, true);
-      view.setUint16(12, 0, true);
-      view.setUint16(14, 0, true);
-      view.setUint32(16, entry.crc, true);
-      view.setUint32(20, entry.data.length, true);
-      view.setUint32(24, entry.data.length, true);
-      view.setUint16(28, entry.nameBytes.length, true);
-      view.setUint16(30, 0, true);
-      view.setUint16(32, 0, true);
-      view.setUint16(34, 0, true);
-      view.setUint16(36, 0, true);
-      view.setUint32(38, 0, true);
-      view.setUint32(42, entry.offset, true);
-
-      cdHeader.set(entry.nameBytes, 46);
-      centralDirectoryHeaders.push(cdHeader);
-      currentOffset += cdHeader.length;
+    const centralDirectoryOffset = offset;
+    let centralDirectorySize = 0;
+    for (const ch of centralHeaders) {
+      centralDirectorySize += ch.length;
     }
 
-    const centralDirectorySize = currentOffset - centralDirectoryStart;
-
+    // End of central directory record (22 bytes)
     const eocd = new Uint8Array(22);
-    const eocdView = new DataView(eocd.buffer);
+    const ev = new DataView(eocd.buffer);
 
-    eocdView.setUint32(0, 0x06054b50, true);
-    eocdView.setUint16(4, 0, true);
-    eocdView.setUint16(6, 0, true);
-    eocdView.setUint16(8, files.length, true);
-    eocdView.setUint16(10, files.length, true);
-    eocdView.setUint32(12, centralDirectorySize, true);
-    eocdView.setUint32(16, centralDirectoryStart, true);
-    eocdView.setUint16(20, 0, true);
+    ev.setUint32(0, 0x06054b50, true); // EOCD signature
+    ev.setUint16(4, 0, true); // Number of this disk
+    ev.setUint16(6, 0, true); // Disk where central directory starts
+    ev.setUint16(8, files.length, true); // Number of central directory records on this disk
+    ev.setUint16(10, files.length, true); // Total number of central directory records
+    ev.setUint32(12, centralDirectorySize, true); // Size of central directory
+    ev.setUint32(16, centralDirectoryOffset, true); // Offset of start of central directory
+    ev.setUint16(20, 0, true); // Comment length
 
-    return new Blob([...localHeaders, ...centralDirectoryHeaders, eocd], {
-      type: 'application/zip',
-    });
+    const allParts: (Uint8Array | BlobPart)[] = [...localHeaders, ...centralHeaders, eocd];
+    return new Blob(allParts, { type: 'application/zip' });
   }
 
   /**
-   * Fast CRC32 calculation.
+   * Fast CRC32 checksum calculator
    */
-  public static crc32(data: Uint8Array): number {
-    let crc = 0xffffffff;
+  private static crc32(data: Uint8Array): number {
+    let crc = 0 ^ -1;
     for (let i = 0; i < data.length; i++) {
-      let byte = data[i];
-      for (let j = 0; j < 8; j++) {
-        const bit = (crc ^ byte) & 1;
-        crc >>>= 1;
-        if (bit) crc ^= 0xedb88320;
-        byte >>>= 1;
-      }
+      crc = (crc >>> 8) ^ this.crc32Table[(crc ^ data[i]) & 0xff];
     }
-    return (crc ^ 0xffffffff) >>> 0;
+    return (crc ^ -1) >>> 0;
   }
 
+  private static crc32Table: Uint32Array = (() => {
+    const table = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) {
+      let c = i;
+      for (let j = 0; j < 8; j++) {
+        c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+      }
+      table[i] = c;
+    }
+    return table;
+  })();
+
   /**
-   * Generate 4 procedural sample photos with messy camera/screenshot filenames for instant testing.
+   * Generate 4 demo sample photos on HTML Canvas for testing
    */
-  public static async generateSampleBatch(): Promise<File[]> {
+  static async generateSampleBatch(): Promise<File[]> {
     const samples = [
-      { name: 'DSC_0041.jpg', color1: '#3B82F6', color2: '#1D4ED8', label: 'Beach Vacation' },
-      { name: 'IMG_20260826_9921.jpg', color1: '#10B981', color2: '#047857', label: 'Mountain Hike' },
-      { name: 'screenshot 2026-08-26 at 2.15.42 PM.png', color1: '#8B5CF6', color2: '#6D28D9', label: 'Dashboard UI' },
-      { name: 'photo (1).webp', color1: '#F59E0B', color2: '#D97706', label: 'Coffee Cup' },
+      { name: 'IMG_20260824_104218.jpg', color: '#3b82f6', label: 'Beach Sunset' },
+      { name: 'DSC_0042.PNG', color: '#10b981', label: 'Mountain Trail' },
+      { name: 'Screenshot 2026-08-25 at 4.12.33 PM.png', color: '#f59e0b', label: 'Product Mockup' },
+      { name: 'Photo_Scan_0088.webp', color: '#8b5cf6', label: 'Family Reunion' },
     ];
 
     const files: File[] = [];
 
     for (const s of samples) {
       const canvas = document.createElement('canvas');
-      canvas.width = 600;
-      canvas.height = 400;
-      const ctx = canvas.getContext('2d')!;
+      canvas.width = 400;
+      canvas.height = 300;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        const grad = ctx.createLinearGradient(0, 0, 400, 300);
+        grad.addColorStop(0, s.color);
+        grad.addColorStop(1, '#1e293b');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 400, 300);
 
-      const grad = ctx.createLinearGradient(0, 0, 600, 400);
-      grad.addColorStop(0, s.color1);
-      grad.addColorStop(1, s.color2);
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 600, 400);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 22px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(s.label, 200, 140);
 
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 28px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(s.label, 300, 200);
+        ctx.font = '14px Inter, sans-serif';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillText(s.name, 200, 175);
 
-      ctx.font = '16px monospace';
-      ctx.fillText(s.name, 300, 240);
-
-      const mime = s.name.endsWith('.png') ? 'image/png' : s.name.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
-      const blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), mime, 0.9));
-      files.push(new File([blob], s.name, { type: mime }));
+        const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+        if (blob) {
+          files.push(new File([blob], s.name, { type: 'image/jpeg' }));
+        }
+      }
     }
 
     return files;

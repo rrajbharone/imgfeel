@@ -1,5 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
+import BatchRenamer from '@/components/BatchRenamer.astro';
+import BatchRenamerContent from '@/components/BatchRenamerContent.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ExactResizer from '@/components/ExactResizer.astro';
 import ExactResizerContent from '@/components/ExactResizerContent.astro';
@@ -31,8 +33,8 @@ import PassportPhotoMaker from '@/components/PassportPhotoMaker.astro';
 import PassportPhotoMakerContent from '@/components/PassportPhotoMakerContent.astro';
 import SrcsetGenerator from '@/components/SrcsetGenerator.astro';
 import SrcsetGeneratorContent from '@/components/SrcsetGeneratorContent.astro';
-import BatchRenamer from '@/components/BatchRenamer.astro';
-import BatchRenamerContent from '@/components/BatchRenamerContent.astro';
+import PptResizer from '@/components/PptResizer.astro';
+import PptResizerContent from '@/components/PptResizerContent.astro';
 import Base64Converter from '@/components/Base64Converter.astro';
 import Base64Content from '@/components/Base64Content.astro';
 import DataUriConverter from '@/components/DataUriConverter.astro';
@@ -104,6 +106,7 @@ const { toolId } = Astro.props as { toolId: string };
 const toolUrl = getToolUrl(toolId, locale);
 
 const toolPrefixMap: Record<string, string> = {
+  'batch-rename-images': 'renamer',
   'exact-dimension-resizer': 'exactresizer',
   'webp-compressor': 'webpcomp',
   'cm-mm-resizer': 'cmresizer',
@@ -111,7 +114,7 @@ const toolPrefixMap: Record<string, string> = {
   'whatsapp-dp-resizer': 'waresizer',
   'ssc-photo-signature-resizer': 'sscresizer',
   'youtube-banner-resizer': 'ytresizer',
-  'batch-rename-images': 'renamer',
+  'ppt-resizer': 'pptresize',
   'image-srcset-generator': 'srcset',
   'passport-photo-maker': 'passport',
   'gif-frame-extractor': 'gifext',
@@ -184,6 +187,7 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
         <p class="tool-subtitle">{heroSubtitle}</p>
       </div>
 
+      {toolId === 'batch-rename-images' && <BatchRenamer locale={locale} />}
       {toolId === 'exact-dimension-resizer' && <ExactResizer locale={locale} />}
       {toolId === 'webp-compressor' && <WebpCompressor locale={locale} />}
       {toolId === 'cm-mm-resizer' && <CmMmResizer locale={locale} />}
@@ -191,7 +195,7 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'whatsapp-dp-resizer' && <WhatsAppResizer locale={locale} />}
       {toolId === 'ssc-photo-signature-resizer' && <SscResizer locale={locale} />}
       {toolId === 'youtube-banner-resizer' && <YouTubeResizer locale={locale} />}
-      {toolId === 'batch-rename-images' && <BatchRenamer locale={locale} />}
+      {toolId === 'ppt-resizer' && <PptResizer locale={locale} />}
       {toolId === 'image-srcset-generator' && <SrcsetGenerator locale={locale} />}
       {toolId === 'passport-photo-maker' && <PassportPhotoMaker locale={locale} />}
       {toolId === 'gif-frame-extractor' && <GifExtractor locale={locale} />}
@@ -226,6 +230,7 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
     </div>
   </div>
 
+  {toolId === 'batch-rename-images' && <BatchRenamerContent locale={locale} />}
   {toolId === 'exact-dimension-resizer' && <ExactResizerContent locale={locale} />}
   {toolId === 'webp-compressor' && <WebpCompressorContent locale={locale} />}
   {toolId === 'cm-mm-resizer' && <CmMmContent locale={locale} />}
@@ -233,7 +238,7 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'whatsapp-dp-resizer' && <WhatsAppContent locale={locale} />}
   {toolId === 'ssc-photo-signature-resizer' && <SscContent locale={locale} />}
   {toolId === 'youtube-banner-resizer' && <YouTubeContent locale={locale} />}
-  {toolId === 'batch-rename-images' && <BatchRenamerContent locale={locale} />}
+  {toolId === 'ppt-resizer' && <PptResizerContent locale={locale} />}
   {toolId === 'image-srcset-generator' && <SrcsetGeneratorContent locale={locale} />}
   {toolId === 'passport-photo-maker' && <PassportPhotoMakerContent locale={locale} />}
   {toolId === 'gif-frame-extractor' && <GifExtractorContent locale={locale} />}

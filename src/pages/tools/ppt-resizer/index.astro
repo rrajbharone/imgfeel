@@ -1,24 +1,20 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PptResizer from '@/components/PptResizer.astro';
+import PptResizerContent from '@/components/PptResizerContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
-import BatchRenamer from '@/components/BatchRenamer.astro';
-import BatchRenamerContent from '@/components/BatchRenamerContent.astro';
 import { t } from '@/i18n/utils';
 import { getToolUrl } from '@/data/tools';
 
 const locale = 'en';
-const toolUrl = getToolUrl('batch-rename-images', locale);
-const metaTitle = t(locale, 'renamer.meta.title');
-const metaDesc = t(locale, 'renamer.meta.description');
-const heroTitle = t(locale, 'renamer.hero.title');
-const heroSubtitle = t(locale, 'renamer.hero.subtitle');
+const toolUrl = getToolUrl('ppt-resizer', locale);
 ---
 
 <MainLayout
   locale={locale}
-  title={metaTitle}
-  description={metaDesc}
+  title={t(locale, 'pptresize.meta.title')}
+  description={t(locale, 'pptresize.meta.description')}
   canonicalUrl={`https://imgfeel.com${toolUrl}`}
   basePath={toolUrl}
 >
@@ -26,7 +22,7 @@ const heroSubtitle = t(locale, 'renamer.hero.subtitle');
     <SEOHead schema={{
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": heroTitle,
+      "name": "PPT Resizer",
       "url": `https://imgfeel.com${toolUrl}`,
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Any",
@@ -37,21 +33,21 @@ const heroSubtitle = t(locale, 'renamer.hero.subtitle');
   <div class="section">
     <div class="container">
       <Breadcrumbs locale={locale} items={[
-        { label: 'Home', href: '/' },
-        { label: 'Tools', href: '/tools/' },
-        { label: heroTitle }
+        { label: t(locale, 'breadcrumb.home'), href: '/' },
+        { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
+        { label: t(locale, 'pptresize.hero.title') }
       ]} />
-
+      
       <div class="tool-header">
-        <h1 class="tool-title">{heroTitle}</h1>
-        <p class="tool-subtitle">{heroSubtitle}</p>
+        <h1 class="tool-title">{t(locale, 'pptresize.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'pptresize.hero.subtitle')}</p>
       </div>
 
-      <BatchRenamer locale={locale} />
+      <PptResizer locale={locale} />
     </div>
   </div>
 
-  <BatchRenamerContent locale={locale} />
+  <PptResizerContent locale={locale} />
 </MainLayout>
 
 <style>
@@ -62,14 +58,12 @@ const heroSubtitle = t(locale, 'renamer.hero.subtitle');
     margin-top: var(--space-6);
     margin-bottom: var(--space-8);
   }
-
   .tool-title {
     font-size: var(--text-3xl);
     font-weight: 800;
     color: var(--color-text);
     margin-bottom: var(--space-2);
   }
-
   .tool-subtitle {
     font-size: var(--text-base);
     color: var(--color-text-secondary);

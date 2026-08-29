@@ -82,6 +82,8 @@
   "tools.passportPhotoMaker.description": "Créez vos photos d'identité et passeport officielles et générez des planches imprimables à 300 DPI.",
   "tools.imageSrcsetGenerator.title": "Générateur de Srcset d'Images",
   "tools.imageSrcsetGenerator.description": "Générez du code HTML srcset et sizes pour images responsives et téléchargez vos images en ZIP.",
-  "tools.batchRenameImages.title": "Renommer des Images en Masse",
-  "tools.batchRenameImages.description": "Renommez plusieurs images en lot gratuitement avec numérotation séquentielle et téléchargement ZIP."
+  "tools.pptResizer.title": "Redimensionner PowerPoint",
+  "tools.pptResizer.description": "Changez les dimensions et le format des diapositives PowerPoint en ligne (16:9, 4:3, A4, Lettre).",
+  "tools.batchRenameImages.title": "Renommer des Images en Masse en Ligne",
+  "tools.batchRenameImages.description": "Renommez plusieurs images individuellement en ligne et gratuitement en toute confidentialité."
 }
