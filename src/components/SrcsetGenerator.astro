@@ -57,19 +57,22 @@ const { locale } = Astro.props;
   <div id="workspace" class="workspace" style="display: none;">
     <!-- Workspace Header / File Info Bar -->
     <div class="workspace-header-bar">
-      <div class="file-info-col">
-        <div class="file-title-row">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-          <span id="fileNameDisplay" class="file-name">hero.jpg</span>
-        </div>
-        <div class="file-meta-row">
-          <span id="naturalDimBadge" class="badge">1920 × 1080 px</span>
-          <span id="aspectRatioBadge" class="badge">16:9 Aspect Ratio</span>
-          <span id="breakpointsCountBadge" class="badge badge-accent">4 Breakpoints</span>
+      <div class="file-info-main">
+        <img id="filePreviewThumb" class="file-preview-thumb" alt="Uploaded Preview" style="display: none;" />
+        <div class="file-info-col">
+          <div class="file-title-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span id="fileNameDisplay" class="file-name">hero.jpg</span>
+          </div>
+          <div class="file-meta-row">
+            <span id="naturalDimBadge" class="badge">1920 × 1080 px</span>
+            <span id="aspectRatioBadge" class="badge">16:9 Aspect Ratio</span>
+            <span id="breakpointsCountBadge" class="badge badge-accent">4 Breakpoints</span>
+          </div>
         </div>
       </div>
       <button type="button" id="changeImageBtn" class="btn btn-secondary btn-sm">
@@ -298,6 +301,7 @@ const { locale } = Astro.props;
     const workspace = document.getElementById('workspace')!;
     const changeImageBtn = document.getElementById('changeImageBtn')!;
     const fileNameDisplay = document.getElementById('fileNameDisplay')!;
+    const filePreviewThumb = document.getElementById('filePreviewThumb') as HTMLImageElement;
     const naturalDimBadge = document.getElementById('naturalDimBadge')!;
     const aspectRatioBadge = document.getElementById('aspectRatioBadge')!;
     const breakpointsCountBadge = document.getElementById('breakpointsCountBadge')!;
@@ -445,6 +449,11 @@ const { locale } = Astro.props;
         });
 
         currentImage = img;
+
+        if (filePreviewThumb) {
+          filePreviewThumb.src = img.src;
+          filePreviewThumb.style.display = 'block';
+        }
 
         naturalDimBadge.textContent = `${img.naturalWidth} × ${img.naturalHeight} px`;
         const ar = (img.naturalWidth / img.naturalHeight).toFixed(2);
@@ -682,12 +691,18 @@ const { locale } = Astro.props;
 <style>
   .srcset-generator-wrapper {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   /* Dropzone */
   .dropzone-container {
     max-width: 800px;
+    width: 100%;
     margin: 0 auto;
+    box-sizing: border-box;
+    min-width: 0;
   }
 
   .dropzone {
@@ -698,6 +713,9 @@ const { locale } = Astro.props;
     text-align: center;
     cursor: pointer;
     transition: border-color 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
   }
 
   .dropzone:hover,
@@ -715,6 +733,8 @@ const { locale } = Astro.props;
     flex-direction: column;
     align-items: center;
     gap: var(--space-4);
+    width: 100%;
+    max-width: 100%;
   }
 
   .dropzone-icon {
@@ -726,6 +746,7 @@ const { locale } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
 
   .dropzone-title {
@@ -733,6 +754,8 @@ const { locale } = Astro.props;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
+    max-width: 100%;
+    word-break: break-word;
   }
 
   .dropzone-subtitle {
@@ -741,6 +764,7 @@ const { locale } = Astro.props;
     max-width: 520px;
     margin: 0;
     line-height: 1.5;
+    word-break: break-word;
   }
 
   .dropzone-actions {
@@ -749,20 +773,41 @@ const { locale } = Astro.props;
     gap: var(--space-3);
     justify-content: center;
     margin-top: var(--space-2);
+    width: 100%;
+    max-width: 100%;
   }
 
   .privacy-badge {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     font-size: 12px;
     color: var(--color-text-secondary);
     margin-top: var(--space-2);
+    max-width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .dropzone {
+      padding: var(--space-8) var(--space-4);
+    }
+    .dropzone-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .dropzone-actions .btn {
+      width: 100%;
+    }
   }
 
   /* Workspace */
   .workspace {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .workspace-header-bar {
@@ -776,12 +821,38 @@ const { locale } = Astro.props;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-5);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .file-info-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
+
+  .file-preview-thumb {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+    background: var(--color-surface-subtle);
   }
 
   .file-info-col {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 0;
+    flex: 1 1 auto;
+    max-width: 100%;
   }
 
   .file-title-row {
@@ -791,12 +862,27 @@ const { locale } = Astro.props;
     font-weight: 700;
     color: var(--color-text);
     font-size: 14px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .file-title-row svg {
+    flex-shrink: 0;
+  }
+
+  .file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .file-meta-row {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    max-width: 100%;
   }
 
   .badge {
@@ -807,6 +893,8 @@ const { locale } = Astro.props;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     color: var(--color-text-secondary);
+    white-space: nowrap;
+    max-width: 100%;
   }
 
   .badge-accent {
@@ -814,6 +902,17 @@ const { locale } = Astro.props;
     border-color: rgba(79, 70, 229, 0.25);
     color: #4F46E5;
     font-weight: 700;
+  }
+
+  @media (max-width: 600px) {
+    .workspace-header-bar {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 12px 14px;
+    }
+    #changeImageBtn {
+      width: 100%;
+    }
   }
 
   /* Error Banner */
@@ -829,19 +928,26 @@ const { locale } = Astro.props;
     font-size: 13px;
     font-weight: 600;
     margin-bottom: var(--space-4);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-break: break-word;
   }
 
   /* Workspace Grid */
   .workspace-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-5);
     align-items: start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   @media (min-width: 900px) {
     .workspace-grid {
-      grid-template-columns: 380px 1fr;
+      grid-template-columns: 360px minmax(0, 1fr);
     }
   }
 
@@ -849,12 +955,18 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .output-col {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   /* Control Group */
@@ -866,6 +978,16 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .field-row {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .field-label {
@@ -873,6 +995,7 @@ const { locale } = Astro.props;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
+    word-break: break-word;
   }
 
   .field-label-sm {
@@ -881,6 +1004,7 @@ const { locale } = Astro.props;
     color: var(--color-text-secondary);
     display: block;
     margin-bottom: 4px;
+    word-break: break-word;
   }
 
   .field-hint {
@@ -888,11 +1012,14 @@ const { locale } = Astro.props;
     color: var(--color-text-secondary);
     margin-bottom: 4px;
     display: block;
+    word-break: break-word;
   }
 
   .form-select,
   .form-input {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     height: 40px;
     padding: 8px 12px;
     background: var(--color-background);
@@ -901,6 +1028,7 @@ const { locale } = Astro.props;
     color: var(--color-text);
     font-size: 13px;
     font-weight: 600;
+    box-sizing: border-box;
   }
 
   /* Radio Card */
@@ -908,6 +1036,9 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .radio-card {
@@ -920,6 +1051,10 @@ const { locale } = Astro.props;
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all 0.15s ease;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .radio-card:hover {
@@ -933,12 +1068,19 @@ const { locale } = Astro.props;
 
   .radio-card input {
     accent-color: #4F46E5;
+    flex-shrink: 0;
+  }
+
+  .radio-card-body {
+    min-width: 0;
+    flex: 1;
   }
 
   .radio-card-body strong {
     font-size: 12px;
     color: var(--color-text);
     line-height: 1.35;
+    word-break: break-word;
   }
 
   /* Width Chips */
@@ -946,6 +1088,9 @@ const { locale } = Astro.props;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .width-chip {
@@ -959,6 +1104,7 @@ const { locale } = Astro.props;
     color: #4F46E5;
     font-size: 12px;
     font-weight: 700;
+    max-width: 100%;
   }
 
   .chip-remove-btn {
@@ -980,10 +1126,28 @@ const { locale } = Astro.props;
   .add-width-row {
     display: flex;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .add-width-row .form-input {
     flex: 1;
+    min-width: 0;
+  }
+
+  .add-width-row .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 360px) {
+    .add-width-row {
+      flex-direction: column;
+    }
+    .add-width-row .btn {
+      width: 100%;
+    }
   }
 
   /* Checkbox inline */
@@ -991,6 +1155,8 @@ const { locale } = Astro.props;
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
   }
 
   .checkbox-inline {
@@ -1001,10 +1167,12 @@ const { locale } = Astro.props;
     font-weight: 600;
     color: var(--color-text);
     cursor: pointer;
+    max-width: 100%;
   }
 
   .checkbox-inline input {
     accent-color: #4F46E5;
+    flex-shrink: 0;
   }
 
   /* Output Card */
@@ -1016,6 +1184,17 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 480px) {
+    .control-group,
+    .output-card {
+      padding: 14px 12px;
+    }
   }
 
   .output-card-header {
@@ -1024,12 +1203,17 @@ const { locale } = Astro.props;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .code-format-pills {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .format-pill {
@@ -1042,6 +1226,7 @@ const { locale } = Astro.props;
     color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.15s ease;
+    white-space: nowrap;
   }
 
   .format-pill:hover {
@@ -1055,21 +1240,57 @@ const { locale } = Astro.props;
     color: #ffffff;
   }
 
+  @media (max-width: 520px) {
+    .output-card-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .code-format-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 100%;
+    }
+    .format-pill {
+      padding: 6px 4px;
+      font-size: 11px;
+      text-align: center;
+      justify-content: center;
+    }
+    #copyCodeBtn {
+      width: 100%;
+    }
+  }
+
   /* Code Pre Box */
   .code-box-wrapper {
     background: #0F172A;
     border-radius: var(--radius-md);
-    padding: 16px;
+    padding: 14px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .code-pre {
     margin: 0;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 12.5px;
+    font-size: 12px;
     line-height: 1.6;
     color: #38BDF8;
     white-space: pre;
+    overflow-x: auto;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .code-content {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
   }
 
   /* Export Controls */
@@ -1077,23 +1298,43 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .export-title {
     font-size: 13.5px;
     font-weight: 700;
     color: var(--color-text);
+    word-break: break-word;
   }
 
   .export-subtitle {
     font-size: 11.5px;
     color: var(--color-text-secondary);
+    word-break: break-word;
+    line-height: 1.4;
   }
 
   .export-controls-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  @media (max-width: 500px) {
+    .export-controls-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .export-control-field {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .progress-bar-container {
@@ -1103,6 +1344,7 @@ const { locale } = Astro.props;
     border-radius: var(--radius-full);
     overflow: hidden;
     margin-top: 4px;
+    max-width: 100%;
   }
 
   .progress-fill {
@@ -1114,10 +1356,17 @@ const { locale } = Astro.props;
   /* Table */
   .table-container {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
   }
 
   .breakpoints-table {
     width: 100%;
+    min-width: 420px;
     border-collapse: collapse;
     font-size: 12px;
     text-align: left;
@@ -1129,17 +1378,20 @@ const { locale } = Astro.props;
     color: var(--color-text);
     font-weight: 700;
     border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
   }
 
   .breakpoints-table td {
     padding: 8px 10px;
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text-secondary);
+    white-space: nowrap;
   }
 
   .code-mono {
     font-family: monospace;
     color: #4F46E5;
+    white-space: nowrap;
   }
 
   /* General Buttons */
@@ -1155,6 +1407,8 @@ const { locale } = Astro.props;
     text-decoration: none;
     transition: all 0.15s ease;
     border: 1px solid transparent;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .btn-sm {
@@ -1170,10 +1424,15 @@ const { locale } = Astro.props;
   }
 
   .btn-xl {
-    height: 46px;
-    padding: 10px 22px;
-    font-size: 14px;
+    height: auto;
+    min-height: 46px;
+    padding: 10px 16px;
+    font-size: 13.5px;
     width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
   }
 
   .btn-primary {

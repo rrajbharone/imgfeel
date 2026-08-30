@@ -1,0 +1,922 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const resizerUrl = getToolUrl('exact-dimension-resizer', locale);
+const dimcheckUrl = getToolUrl('image-dimensions-checker', locale);
+const aspectUrl = getToolUrl('image-aspect-ratio-checker', locale);
+const filesizeUrl = getToolUrl('image-file-size-checker', locale);
+const compressorUrl = getToolUrl('webp-compressor', locale);
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q1'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a1')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q2'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a2')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q3'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a3')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q4'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a4')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q5'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a5')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q6'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a6')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q7'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a7')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'pixelcounter.faq.q8'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'pixelcounter.faq.a8')
+      }
+    }
+  ]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="pixel-counter-article section">
+  <div class="container narrow-container">
+    <!-- Section 1: Intro & What is a Pixel Counter -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h1')}</h2>
+      <p>{t(locale, 'pixelcounter.content.p1a')}</p>
+      <p>{t(locale, 'pixelcounter.content.p1b')}</p>
+
+      <div class="feature-cards-grid">
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="9" x2="20" y2="9"></line>
+              <line x1="4" y1="15" x2="20" y2="15"></line>
+              <line x1="10" y1="3" x2="8" y2="21"></line>
+              <line x1="16" y1="3" x2="14" y2="21"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'pixelcounter.content.feat1Title')}</h3>
+          <p>{t(locale, 'pixelcounter.content.feat1Desc')}</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'pixelcounter.content.feat2Title')}</h3>
+          <p>{t(locale, 'pixelcounter.content.feat2Desc')}</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'pixelcounter.content.feat3Title')}</h3>
+          <p>{t(locale, 'pixelcounter.content.feat3Desc')}</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'pixelcounter.content.feat4Title')}</h3>
+          <p>{t(locale, 'pixelcounter.content.feat4Desc')}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Mathematical Formula -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h2')}</h2>
+      <p>{t(locale, 'pixelcounter.content.p2a')}</p>
+      
+      <div class="formula-box">
+        <span class="formula-label">Pixel Calculation Formula:</span>
+        <code class="formula-code">Total Pixels = Width (px) × Height (px)</code>
+        <code class="formula-code">Megapixels (MP) = Total Pixels ÷ 1,000,000</code>
+      </div>
+
+      <p>{t(locale, 'pixelcounter.content.p2b')}</p>
+    </div>
+
+    <!-- Section 3: Differences breakdown -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h3')}</h2>
+      <div class="differences-list">
+        <div class="diff-item">
+          <span class="diff-bullet">1</span>
+          <p>{t(locale, 'pixelcounter.content.p3a')}</p>
+        </div>
+        <div class="diff-item">
+          <span class="diff-bullet">2</span>
+          <p>{t(locale, 'pixelcounter.content.p3b')}</p>
+        </div>
+        <div class="diff-item">
+          <span class="diff-bullet">3</span>
+          <p>{t(locale, 'pixelcounter.content.p3c')}</p>
+        </div>
+        <div class="diff-item">
+          <span class="diff-bullet">4</span>
+          <p>{t(locale, 'pixelcounter.content.p3d')}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Reference Table -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h4')}</h2>
+      <p>{t(locale, 'pixelcounter.content.p4a')}</p>
+
+      <div class="table-responsive-wrapper">
+        <table class="specs-table">
+          <thead>
+            <tr>
+              <th>{t(locale, 'pixelcounter.table.thName')}</th>
+              <th>{t(locale, 'pixelcounter.table.thDimensions')}</th>
+              <th>{t(locale, 'pixelcounter.table.thTotalPixels')}</th>
+              <th>{t(locale, 'pixelcounter.table.thMegapixels')}</th>
+              <th>{t(locale, 'pixelcounter.table.thAspect')}</th>
+              <th>{t(locale, 'pixelcounter.table.thUseCase')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r1Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r1Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r1TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r1Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r1Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r1UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r2Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r2Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r2TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r2Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r2Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r2UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r3Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r3Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r3TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r3Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r3Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r3UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r4Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r4Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r4TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r4Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r4Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r4UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r5Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r5Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r5TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r5Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r5Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r5UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r6Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r6Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r6TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r6Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r6Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r6UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r7Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r7Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r7TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r7Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r7Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r7UseCase')}</td>
+            </tr>
+            <tr>
+              <td><strong>{t(locale, 'pixelcounter.table.r8Name')}</strong></td>
+              <td><code>{t(locale, 'pixelcounter.table.r8Dimensions')}</code></td>
+              <td><strong>{t(locale, 'pixelcounter.table.r8TotalPixels')}</strong></td>
+              <td><span class="badge-mp">{t(locale, 'pixelcounter.table.r8Megapixels')}</span></td>
+              <td>{t(locale, 'pixelcounter.table.r8Aspect')}</td>
+              <td>{t(locale, 'pixelcounter.table.r8UseCase')}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 5: Why Pixel Dimensions Matter -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h5')}</h2>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <h4>⚡ Web Performance</h4>
+          <p>{t(locale, 'pixelcounter.content.p5a')}</p>
+        </div>
+        <div class="benefit-item">
+          <h4>📱 Social Media</h4>
+          <p>{t(locale, 'pixelcounter.content.p5b')}</p>
+        </div>
+        <div class="benefit-item">
+          <h4>🖨️ Physical Print</h4>
+          <p>{t(locale, 'pixelcounter.content.p5c')}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6: Aspect Ratio Relationship -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h6')}</h2>
+      <p>{t(locale, 'pixelcounter.content.p6a')}</p>
+      <p>{t(locale, 'pixelcounter.content.p6b')}</p>
+    </div>
+
+    <!-- Section 7: Step-by-Step Instructions -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.content.h7')}</h2>
+      <p>{t(locale, 'pixelcounter.content.p7Intro')}</p>
+
+      <div class="steps-timeline">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>{t(locale, 'pixelcounter.steps.s1Title')}</h4>
+            <p>{t(locale, 'pixelcounter.steps.s1Desc')} <code>Ctrl+V</code>.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>{t(locale, 'pixelcounter.steps.s2Title')}</h4>
+            <p>{t(locale, 'pixelcounter.steps.s2Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>{t(locale, 'pixelcounter.steps.s3Title')}</h4>
+            <p>{t(locale, 'pixelcounter.steps.s3Desc')}</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>{t(locale, 'pixelcounter.steps.s4Title')}</h4>
+            <p>{t(locale, 'pixelcounter.steps.s4Desc')}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross Tools Navigation -->
+    <div class="content-block">
+      <h2>{t(locale, 'pixelcounter.cross.heading')}</h2>
+      <div class="cross-tools-grid">
+        <a href={resizerUrl} class="cross-tool-card">
+          <div class="cross-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+            </svg>
+          </div>
+          <div class="cross-info">
+            <span class="cross-title">{t(locale, 'pixelcounter.cross.resizer')}</span>
+            <p class="cross-desc">{t(locale, 'pixelcounter.cross.resizerDesc')}</p>
+          </div>
+        </a>
+
+        <a href={dimcheckUrl} class="cross-tool-card">
+          <div class="cross-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          </div>
+          <div class="cross-info">
+            <span class="cross-title">{t(locale, 'pixelcounter.cross.dimcheck')}</span>
+            <p class="cross-desc">{t(locale, 'pixelcounter.cross.dimcheckDesc')}</p>
+          </div>
+        </a>
+
+        <a href={aspectUrl} class="cross-tool-card">
+          <div class="cross-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <div class="cross-info">
+            <span class="cross-title">{t(locale, 'pixelcounter.cross.aspect')}</span>
+            <p class="cross-desc">{t(locale, 'pixelcounter.cross.aspectDesc')}</p>
+          </div>
+        </a>
+
+        <a href={filesizeUrl} class="cross-tool-card">
+          <div class="cross-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <div class="cross-info">
+            <span class="cross-title">{t(locale, 'pixelcounter.cross.filesize')}</span>
+            <p class="cross-desc">{t(locale, 'pixelcounter.cross.filesizeDesc')}</p>
+          </div>
+        </a>
+
+        <a href={compressorUrl} class="cross-tool-card">
+          <div class="cross-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div class="cross-info">
+            <span class="cross-title">{t(locale, 'pixelcounter.cross.compressor')}</span>
+            <p class="cross-desc">{t(locale, 'pixelcounter.cross.compressorDesc')}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 8: FAQ -->
+    <div class="content-block faq-section">
+      <h2>{t(locale, 'pixelcounter.faq.heading')}</h2>
+      
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q1')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a1')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q2')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a2')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q3')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a3')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q4')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a4')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q5')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a5')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q6')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a6')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q7')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a7')}</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{t(locale, 'pixelcounter.faq.q8')}</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{t(locale, 'pixelcounter.faq.a8')}</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pixel-counter-article {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+    padding-top: var(--space-10);
+  }
+
+  .narrow-container {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+
+  .content-block {
+    margin-bottom: var(--space-10);
+  }
+
+  .content-block h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-4) 0;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .content-block p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  /* Feature cards */
+  .feature-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .feature-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .feat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .feat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-light, rgba(99, 102, 241, 0.1));
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feat-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .feat-card p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Formula box */
+  .formula-box {
+    background: var(--color-surface-offset, #0f172a);
+    color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    margin: var(--space-4) 0 var(--space-5) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .formula-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  .formula-code {
+    font-family: monospace;
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: #38bdf8;
+  }
+
+  /* Differences list */
+  .differences-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .diff-item {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .diff-bullet {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .diff-item p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Table responsive */
+  .table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    margin: var(--space-4) 0;
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    text-align: left;
+    min-width: 620px;
+  }
+
+  .specs-table th {
+    background: var(--color-surface-offset, #f8fafc);
+    color: var(--color-text);
+    font-weight: 700;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .specs-table td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+  }
+
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .specs-table code {
+    font-family: monospace;
+    font-size: var(--text-xs);
+    background: var(--color-surface-offset, rgba(0, 0, 0, 0.04));
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .badge-mp {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 11px;
+    background: var(--color-primary-light, rgba(99, 102, 241, 0.1));
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Benefits Grid */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 768px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+
+  .benefit-item h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 var(--space-2) 0;
+  }
+
+  .benefit-item p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Steps timeline */
+  .steps-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .step-card {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-light, rgba(99, 102, 241, 0.1));
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 var(--space-1) 0;
+  }
+
+  .step-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Cross tools */
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 640px) {
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .cross-tool-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .cross-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-offset, rgba(99, 102, 241, 0.08));
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .cross-title {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .cross-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* FAQ */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-primary);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-4) var(--space-4);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

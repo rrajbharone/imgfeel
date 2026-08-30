@@ -85,5 +85,9 @@
   "tools.pptResizer.title": "Cambiar Tamaño de PowerPoint",
   "tools.pptResizer.description": "Cambia el tamaño y relación de aspecto de diapositivas PowerPoint online (16:9, 4:3, A4, Carta).",
   "tools.batchRenameImages.title": "Cambiar Nombre de Imágenes por Lotes Online",
-  "tools.batchRenameImages.description": "Renombra múltiples imágenes individualmente online y gratis con privacidad total."
+  "tools.batchRenameImages.description": "Renombra múltiples imágenes individualmente online y gratis con privacidad total.",
+  "tools.imageSplitter.title": "Divisor de Imágenes (Dividir Fotos en Cuadrícula, Filas y Columnas)",
+  "tools.imageSplitter.description": "Divide imágenes en partes iguales, filas, columnas o cuadrícula online para Instagram 3x3, carruseles y banners con 100% de privacidad en el navegador.",
+  "tools.pixelCounter.title": "Contador de Píxeles (Contar Píxeles y Dimensiones Exactas)",
+  "tools.pixelCounter.description": "Calcula al instante dimensiones en píxeles, cuenta píxeles totales, megapíxeles, relación de aspecto y formato con 100% de privacidad en el navegador."
 }

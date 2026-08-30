@@ -2,6 +2,26 @@ import type { Locale } from '@/i18n/config';
 import { t } from '@/i18n/utils';
 
 export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
+  'pixel-counter': {
+    en: 'pixel-counter',
+    es: 'contador-de-pixeles',
+    pt: 'contador-de-pixels',
+    fr: 'compteur-de-pixels',
+    de: 'pixel-zaehler-online',
+    id: 'penghitung-piksel-gambar',
+    tr: 'piksel-sayaci-online',
+    it: 'contatore-di-pixel',
+  },
+  'image-splitter': {
+    en: 'image-splitter',
+    es: 'divisor-de-imagenes',
+    pt: 'divisor-de-imagens',
+    fr: 'diviseur-d-images',
+    de: 'bilder-teilen-online',
+    id: 'pemisah-gambar-online',
+    tr: 'resim-bolucu-online',
+    it: 'divisore-di-immagini',
+  },
   'batch-rename-images': {
     en: 'batch-rename-images',
     es: 'cambiar-nombre-imagenes-lotes',
@@ -825,6 +845,26 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.productWhiteBg.title',
     descKey: 'tools.productWhiteBg.description',
     keywords: ['product image white background', 'white background product photos', 'make product image background white', 'product photo background remover', 'ecommerce product images', 'white background product photography', 'amazon white background product photo', 'shopify product image background'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
+    id: 'image-splitter',
+    icon: 'split',
+    category: 'edit',
+    titleKey: 'tools.imageSplitter.title',
+    descKey: 'tools.imageSplitter.description',
+    keywords: ['image splitter', 'split image online', 'split image into parts', 'split photo online', 'image split tool', 'split image into grid', 'divide image into sections', 'split photo into rows', 'split picture into columns', 'instagram grid splitter'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
+    id: 'pixel-counter',
+    icon: 'hash',
+    category: 'inspect',
+    titleKey: 'tools.pixelCounter.title',
+    descKey: 'tools.pixelCounter.description',
+    keywords: ['pixel counter', 'image pixel counter', 'count image pixels', 'image dimensions checker', 'photo pixel size checker', 'pixels in image', 'check image resolution', 'total pixels calculator', 'megapixels calculator', 'how many pixels in photo'],
     badge: 'NEW',
     isActive: true,
   },

@@ -85,5 +85,9 @@
   "tools.pptResizer.title": "PPT Resizer",
   "tools.pptResizer.description": "Resize PowerPoint presentation slide dimensions and aspect ratio online (16:9, 4:3, A4, Letter, Custom).",
   "tools.batchRenameImages.title": "Batch Rename Images Online",
-  "tools.batchRenameImages.description": "Rename multiple image files individually online for free with 100% in-browser privacy."
+  "tools.batchRenameImages.description": "Rename multiple image files individually online for free with 100% in-browser privacy.",
+  "tools.imageSplitter.title": "Image Splitter (Split Photo into Grid, Rows & Columns)",
+  "tools.imageSplitter.description": "Split images into equal parts, rows, columns, or grids online for Instagram 3x3 posts, carousels, and banners with 100% in-browser privacy.",
+  "tools.pixelCounter.title": "Pixel Counter (Count Image Pixels & Exact Dimensions)",
+  "tools.pixelCounter.description": "Instantly check image pixel dimensions, count total pixels, calculate megapixels, aspect ratio, and file format with 100% in-browser privacy."
 }

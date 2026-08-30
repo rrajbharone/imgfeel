@@ -1,0 +1,1604 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const cropperUrl = getToolUrl('freeform-image-cropper', locale);
+const circleUrl = getToolUrl('circle-image-cropper', locale);
+const stitcherUrl = getToolUrl('image-stitcher', locale);
+const resizerUrl = getToolUrl('image-resizer', locale);
+const mosaicUrl = getToolUrl('image-mosaic-generator', locale);
+
+const i18nDict = {
+  statusReady: t(locale, 'splitter.status.ready'),
+  statusProcessing: t(locale, 'splitter.status.processing'),
+  errorLoad: t(locale, 'splitter.error.load'),
+  errorZip: t(locale, 'splitter.error.zip'),
+  downloadName: t(locale, 'splitter.download.filename'),
+  partLabel: t(locale, 'splitter.part.label'),
+  summaryExpected: t(locale, 'splitter.summary.expected'),
+  summaryEach: t(locale, 'splitter.summary.each'),
+  resultsSuccess: t(locale, 'splitter.results.success'),
+  actionDownload: t(locale, 'splitter.action.download'),
+  ratioSquare: t(locale, 'splitter.ratio.square'),
+  ratioWide: t(locale, 'splitter.ratio.wide'),
+  ratioPortrait: t(locale, 'splitter.ratio.portrait'),
+  ratioStory: t(locale, 'splitter.ratio.story'),
+};
+---
+
+<div class="splitter-tool-wrapper" id="splitterApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone / Initial Upload Card -->
+  <div class="splitter-dropzone-card" id="splitterDropzone">
+    <div class="splitter-dropzone-content">
+      <div class="splitter-icon-circle">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+          <line x1="12" y1="3" x2="12" y2="21"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+        </svg>
+      </div>
+
+      <h2 class="splitter-drop-title">{t(locale, 'splitter.dropzone.title')}</h2>
+      <p class="splitter-drop-subtitle">{t(locale, 'splitter.dropzone.subtitle')}</p>
+
+      <div class="splitter-btn-row">
+        <label class="btn btn-primary splitter-btn-primary" for="splitterFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'splitter.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="splitterFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary splitter-sample-btn" id="splitterSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>{t(locale, 'splitter.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="splitter-formats-hint">{t(locale, 'splitter.dropzone.formats')}</p>
+
+      <div class="splitter-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'splitter.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="splitter-loading-card" id="splitterLoadingCard" style="display: none;">
+    <div class="splitter-spinner"></div>
+    <p class="splitter-loading-text">{t(locale, 'splitter.status.processing')}</p>
+  </div>
+
+  <!-- Main Splitter Workspace -->
+  <div class="splitter-workspace" id="splitterWorkspace" style="display: none;">
+    <!-- Workspace Top Header Bar -->
+    <div class="splitter-workspace-header">
+      <div class="splitter-meta-badge">
+        <span class="splitter-status-dot"></span>
+        <span id="splitterFileName" class="splitter-filename-label">photo.jpg</span>
+        <span class="splitter-meta-tag" id="splitterDimsTag">1200 × 1200 px</span>
+        <span class="splitter-meta-tag" id="splitterSizeTag">450 KB</span>
+      </div>
+
+      <div class="splitter-header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="splitterChangeBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'splitter.action.changeImage')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Splitter Layout: Preview on Left, Controls on Right -->
+    <div class="splitter-main-grid">
+      <!-- Left Column: Compact Image Preview with Live Split Grid Overlay -->
+      <div class="splitter-preview-card">
+        <div class="preview-header-bar">
+          <span class="preview-title">{t(locale, 'splitter.hero.title')}</span>
+          <span class="badge-ratio" id="splitterRatioBadge">{t(locale, 'splitter.ratio.square')}</span>
+        </div>
+
+        <div class="preview-viewport-box" id="splitterViewportBox">
+          <img id="splitterPreviewImg" class="preview-image" src="" alt="Image preview" />
+          <div class="preview-grid-overlay" id="splitterGridOverlay"></div>
+        </div>
+
+        <div class="preview-footer-summary" id="splitterSummaryFooter">
+          <div class="summary-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <div class="summary-text-box">
+            <span class="summary-main-text" id="splitterPiecesCountText">{t(locale, 'splitter.summary.expected').replace('{n}', '9')}</span>
+            <span class="summary-sub-text" id="splitterPieceDimsText">{t(locale, 'splitter.summary.each').replace('{w}', '400').replace('{h}', '400')}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Settings & Split Controls -->
+      <div class="splitter-controls-card">
+        <!-- Split Mode Selector -->
+        <div class="control-group">
+          <label class="control-label">{t(locale, 'splitter.mode.label')}</label>
+          <div class="split-mode-tabs">
+            <button type="button" class="mode-tab active" data-mode="grid">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>{t(locale, 'splitter.mode.grid')}</span>
+            </button>
+            <button type="button" class="mode-tab" data-mode="rows">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="6" rx="1"></rect>
+                <rect x="3" y="14" width="18" height="6" rx="1"></rect>
+              </svg>
+              <span>{t(locale, 'splitter.mode.rows')}</span>
+            </button>
+            <button type="button" class="mode-tab" data-mode="cols">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="3" width="6" height="18" rx="1"></rect>
+                <rect x="14" y="3" width="6" height="18" rx="1"></rect>
+              </svg>
+              <span>{t(locale, 'splitter.mode.cols')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="control-group" id="splitterPresetsGroup">
+          <label class="control-label">{t(locale, 'splitter.preset.label')}</label>
+          <div class="presets-chip-row">
+            <button type="button" class="preset-chip active" data-rows="3" data-cols="3" data-mode="grid">
+              {t(locale, 'splitter.preset.insta9')}
+            </button>
+            <button type="button" class="preset-chip" data-rows="1" data-cols="3" data-mode="cols">
+              {t(locale, 'splitter.preset.carousel3')}
+            </button>
+            <button type="button" class="preset-chip" data-rows="2" data-cols="2" data-mode="grid">
+              {t(locale, 'splitter.preset.grid4')}
+            </button>
+            <button type="button" class="preset-chip" data-rows="3" data-cols="1" data-mode="rows">
+              {t(locale, 'splitter.preset.banner3')}
+            </button>
+            <button type="button" class="preset-chip" data-rows="2" data-cols="3" data-mode="grid">
+              {t(locale, 'splitter.preset.grid6')}
+            </button>
+          </div>
+        </div>
+
+        <!-- Stepper Controls (Rows & Columns) -->
+        <div class="steppers-grid">
+          <div class="stepper-box" id="rowsStepperContainer">
+            <label class="stepper-label" for="rowsInput">{t(locale, 'splitter.config.rows')}</label>
+            <div class="stepper-control-row">
+              <button type="button" class="stepper-btn" id="rowsMinusBtn" aria-label={t(locale, 'splitter.aria.decreaseRows')}>−</button>
+              <input type="number" id="rowsInput" min="1" max="20" value="3" class="stepper-input" />
+              <button type="button" class="stepper-btn" id="rowsPlusBtn" aria-label={t(locale, 'splitter.aria.increaseRows')}>+</button>
+            </div>
+          </div>
+
+          <div class="stepper-box" id="colsStepperContainer">
+            <label class="stepper-label" for="colsInput">{t(locale, 'splitter.config.cols')}</label>
+            <div class="stepper-control-row">
+              <button type="button" class="stepper-btn" id="colsMinusBtn" aria-label={t(locale, 'splitter.aria.decreaseCols')}>−</button>
+              <input type="number" id="colsInput" min="1" max="20" value="3" class="stepper-input" />
+              <button type="button" class="stepper-btn" id="colsPlusBtn" aria-label={t(locale, 'splitter.aria.increaseCols')}>+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Format & Naming Settings in 2-Columns -->
+        <div class="settings-options-row">
+          <div class="option-field">
+            <label class="control-label" for="splitterFormatSelect">{t(locale, 'splitter.format.label')}</label>
+            <select id="splitterFormatSelect" class="form-select">
+              <option value="original">{t(locale, 'splitter.format.original')}</option>
+              <option value="png">{t(locale, 'splitter.format.png')}</option>
+              <option value="jpeg">{t(locale, 'splitter.format.jpg')}</option>
+              <option value="webp">{t(locale, 'splitter.format.webp')}</option>
+            </select>
+          </div>
+
+          <div class="option-field">
+            <label class="control-label" for="splitterNamingSelect">{t(locale, 'splitter.naming.label')}</label>
+            <select id="splitterNamingSelect" class="form-select">
+              <option value="row_col">{t(locale, 'splitter.naming.rowCol')}</option>
+              <option value="part_number">{t(locale, 'splitter.naming.partNumber')}</option>
+              <option value="grid_order">{t(locale, 'splitter.naming.gridOrder')}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Prominent Split Action Button -->
+        <button type="button" class="btn btn-primary btn-lg splitter-execute-btn" id="splitterExecuteBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+            <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+            <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+          </svg>
+          <span>{t(locale, 'splitter.action.split')}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slices Results & Download Gallery -->
+  <div class="splitter-results-card" id="splitterResultsCard" style="display: none;">
+    <div class="results-header-bar">
+      <div class="results-title-col">
+        <div class="results-success-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span class="results-count-text" id="resultsCountText">{t(locale, 'splitter.results.success').replace('{n}', '9')}</span>
+        </div>
+      </div>
+
+      <div class="results-action-buttons">
+        <button type="button" class="btn btn-secondary btn-sm" id="splitterResetBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          <span>{t(locale, 'splitter.action.reset')}</span>
+        </button>
+
+        <button type="button" class="btn btn-primary btn-md download-all-btn" id="splitterDownloadAllBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>{t(locale, 'splitter.action.downloadAll')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Slices Grid Display -->
+    <div class="slices-grid-container" id="splitterSlicesContainer"></div>
+  </div>
+</div>
+
+<script>
+  import { ImageSplitterEngine, type ImageMetadata, type SplitSlice, type SplitOptions } from '@/scripts/image-splitter';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const appEl = document.getElementById('splitterApp');
+    if (!appEl) return;
+
+    let i18n = {
+      statusReady: 'Ready to Split',
+      statusProcessing: 'Splitting Image Slices...',
+      errorLoad: 'Failed to load image',
+      errorZip: 'Failed to generate ZIP archive',
+      downloadName: 'split-images',
+      partLabel: 'Part {n}',
+      summaryExpected: 'Outputs {n} image slices',
+      summaryEach: 'Approx. {w} × {h} px per piece',
+      resultsSuccess: 'Successfully generated {n} image slices',
+      actionDownload: 'Download',
+      ratioSquare: '1:1 Square',
+      ratioWide: '16:9 Wide',
+      ratioPortrait: '4:5 Portrait',
+      ratioStory: '9:16 Story',
+    };
+
+    try {
+      if (appEl.dataset.i18n) {
+        i18n = { ...i18n, ...JSON.parse(appEl.dataset.i18n) };
+      }
+    } catch (e) {
+      console.warn('Failed to parse i18n data', e);
+    }
+
+    // Elements
+    const dropzone = document.getElementById('splitterDropzone')!;
+    const fileInput = document.getElementById('splitterFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('splitterSampleBtn')!;
+    const loadingCard = document.getElementById('splitterLoadingCard')!;
+    const workspace = document.getElementById('splitterWorkspace')!;
+    const changeBtn = document.getElementById('splitterChangeBtn')!;
+    const resultsCard = document.getElementById('splitterResultsCard')!;
+    const resetBtn = document.getElementById('splitterResetBtn')!;
+    const downloadAllBtn = document.getElementById('splitterDownloadAllBtn')!;
+    const executeBtn = document.getElementById('splitterExecuteBtn')!;
+
+    // Info Elements
+    const fileNameEl = document.getElementById('splitterFileName')!;
+    const dimsTagEl = document.getElementById('splitterDimsTag')!;
+    const sizeTagEl = document.getElementById('splitterSizeTag')!;
+    const ratioBadgeEl = document.getElementById('splitterRatioBadge')!;
+    const previewImg = document.getElementById('splitterPreviewImg') as HTMLImageElement;
+    const gridOverlay = document.getElementById('splitterGridOverlay')!;
+    const piecesCountText = document.getElementById('splitterPiecesCountText')!;
+    const pieceDimsText = document.getElementById('splitterPieceDimsText')!;
+    const resultsCountText = document.getElementById('resultsCountText')!;
+    const slicesContainer = document.getElementById('splitterSlicesContainer')!;
+
+    // Form inputs
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    const presetChips = document.querySelectorAll('.preset-chip');
+    const rowsInput = document.getElementById('rowsInput') as HTMLInputElement;
+    const colsInput = document.getElementById('colsInput') as HTMLInputElement;
+    const rowsMinusBtn = document.getElementById('rowsMinusBtn')!;
+    const rowsPlusBtn = document.getElementById('rowsPlusBtn')!;
+    const colsMinusBtn = document.getElementById('colsMinusBtn')!;
+    const colsPlusBtn = document.getElementById('colsPlusBtn')!;
+    const rowsContainer = document.getElementById('rowsStepperContainer')!;
+    const colsContainer = document.getElementById('colsStepperContainer')!;
+    const formatSelect = document.getElementById('splitterFormatSelect') as HTMLSelectElement;
+    const namingSelect = document.getElementById('splitterNamingSelect') as HTMLSelectElement;
+
+    // State
+    let currentMetadata: ImageMetadata | null = null;
+    let currentSlices: SplitSlice[] = [];
+    let currentMode: 'grid' | 'rows' | 'cols' = 'grid';
+
+    // Helper: update live summary and overlay
+    function updateMetricsAndOverlay() {
+      if (!currentMetadata) return;
+
+      let r = parseInt(rowsInput.value) || 1;
+      let c = parseInt(colsInput.value) || 1;
+
+      r = Math.max(1, Math.min(20, r));
+      c = Math.max(1, Math.min(20, c));
+
+      if (currentMode === 'rows') {
+        c = 1;
+        rowsContainer.style.display = 'block';
+        colsContainer.style.display = 'none';
+      } else if (currentMode === 'cols') {
+        r = 1;
+        rowsContainer.style.display = 'none';
+        colsContainer.style.display = 'block';
+      } else {
+        rowsContainer.style.display = 'block';
+        colsContainer.style.display = 'block';
+      }
+
+      const totalCount = r * c;
+      const avgW = Math.round(currentMetadata.width / c);
+      const avgH = Math.round(currentMetadata.height / r);
+
+      piecesCountText.textContent = i18n.summaryExpected.replace('{n}', totalCount.toString());
+      pieceDimsText.textContent = i18n.summaryEach.replace('{w}', avgW.toString()).replace('{h}', avgH.toString());
+
+      // Render grid overlay lines
+      gridOverlay.innerHTML = '';
+      gridOverlay.style.gridTemplateRows = `repeat(${r}, 1fr)`;
+      gridOverlay.style.gridTemplateColumns = `repeat(${c}, 1fr)`;
+
+      for (let i = 0; i < totalCount; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'overlay-cell';
+        const num = document.createElement('span');
+        num.className = 'overlay-cell-number';
+        num.textContent = (i + 1).toString();
+        cell.appendChild(num);
+        gridOverlay.appendChild(cell);
+      }
+    }
+
+    // Handle File upload
+    async function handleFile(file: File) {
+      try {
+        loadingCard.style.display = 'flex';
+        dropzone.style.display = 'none';
+        workspace.style.display = 'none';
+        resultsCard.style.display = 'none';
+
+        if (currentMetadata?.previewUrl) {
+          URL.revokeObjectURL(currentMetadata.previewUrl);
+        }
+        ImageSplitterEngine.cleanupSlices(currentSlices);
+        currentSlices = [];
+
+        currentMetadata = await ImageSplitterEngine.inspectFile(file);
+
+        fileNameEl.textContent = currentMetadata.name;
+        dimsTagEl.textContent = `${currentMetadata.width} × ${currentMetadata.height} px`;
+        sizeTagEl.textContent = ImageSplitterEngine.formatBytes(currentMetadata.sizeBytes);
+
+        // Aspect ratio badge
+        const ratio = currentMetadata.width / currentMetadata.height;
+        if (Math.abs(ratio - 1) < 0.05) {
+          ratioBadgeEl.textContent = i18n.ratioSquare;
+        } else if (Math.abs(ratio - 16 / 9) < 0.05) {
+          ratioBadgeEl.textContent = i18n.ratioWide;
+        } else if (Math.abs(ratio - 4 / 5) < 0.05) {
+          ratioBadgeEl.textContent = i18n.ratioPortrait;
+        } else if (Math.abs(ratio - 9 / 16) < 0.05) {
+          ratioBadgeEl.textContent = i18n.ratioStory;
+        } else {
+          ratioBadgeEl.textContent = `${ratio.toFixed(2)}:1`;
+        }
+
+        previewImg.src = currentMetadata.previewUrl;
+        const viewportBox = document.getElementById('splitterViewportBox');
+        if (viewportBox && currentMetadata.width > 0 && currentMetadata.height > 0) {
+          viewportBox.style.aspectRatio = `${currentMetadata.width} / ${currentMetadata.height}`;
+        }
+
+        loadingCard.style.display = 'none';
+        workspace.style.display = 'block';
+
+        updateMetricsAndOverlay();
+      } catch (err) {
+        console.error(err);
+        alert(i18n.errorLoad);
+        loadingCard.style.display = 'none';
+        dropzone.style.display = 'block';
+      }
+    }
+
+    // Perform Split
+    async function executeSplit() {
+      if (!currentMetadata) return;
+
+      try {
+        executeBtn.setAttribute('disabled', 'true');
+        loadingCard.style.display = 'flex';
+
+        const r = parseInt(rowsInput.value) || 1;
+        const c = parseInt(colsInput.value) || 1;
+
+        const options: SplitOptions = {
+          mode: currentMode,
+          rows: r,
+          cols: c,
+          format: formatSelect.value as any,
+          quality: 0.92,
+          namingPattern: namingSelect.value as any,
+        };
+
+        ImageSplitterEngine.cleanupSlices(currentSlices);
+        currentSlices = await ImageSplitterEngine.splitImage(currentMetadata.previewUrl, currentMetadata, options);
+
+        renderResults();
+
+        loadingCard.style.display = 'none';
+        executeBtn.removeAttribute('disabled');
+        resultsCard.style.display = 'block';
+        resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        console.error(err);
+        alert(i18n.errorLoad);
+        loadingCard.style.display = 'none';
+        executeBtn.removeAttribute('disabled');
+      }
+    }
+
+    // Render results gallery
+    function renderResults() {
+      slicesContainer.innerHTML = '';
+      resultsCountText.textContent = i18n.resultsSuccess.replace('{n}', currentSlices.length.toString());
+
+      // Set grid column layout
+      slicesContainer.style.gridTemplateColumns = `repeat(auto-fill, minmax(130px, 1fr))`;
+
+      currentSlices.forEach((slice) => {
+        const card = document.createElement('div');
+        card.className = 'slice-item-card';
+
+        const thumbBox = document.createElement('div');
+        thumbBox.className = 'slice-thumb-box';
+
+        const img = document.createElement('img');
+        img.src = slice.url;
+        img.alt = slice.fileName;
+        img.className = 'slice-thumb-img';
+        img.loading = 'lazy';
+        thumbBox.appendChild(img);
+
+        const badge = document.createElement('span');
+        badge.className = 'slice-index-badge';
+        badge.textContent = `#${slice.index}`;
+        thumbBox.appendChild(badge);
+
+        const detailsBox = document.createElement('div');
+        detailsBox.className = 'slice-details-box';
+
+        const title = document.createElement('h4');
+        title.className = 'slice-name-title';
+        title.textContent = slice.fileName;
+        title.title = slice.fileName;
+
+        const metaRow = document.createElement('div');
+        metaRow.className = 'slice-meta-row';
+        metaRow.textContent = `${slice.width}×${slice.height} px • ${slice.formattedSize}`;
+
+        const dlBtn = document.createElement('button');
+        dlBtn.type = 'button';
+        dlBtn.className = 'btn btn-primary btn-sm slice-download-btn';
+        dlBtn.innerHTML = `
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>${i18n.actionDownload}</span>
+        `;
+        dlBtn.addEventListener('click', () => {
+          ImageSplitterEngine.downloadFile(slice.url, slice.fileName);
+        });
+
+        detailsBox.appendChild(title);
+        detailsBox.appendChild(metaRow);
+        detailsBox.appendChild(dlBtn);
+
+        card.appendChild(thumbBox);
+        card.appendChild(detailsBox);
+        slicesContainer.appendChild(card);
+      });
+    }
+
+    // Download All ZIP
+    downloadAllBtn.addEventListener('click', async () => {
+      if (currentSlices.length === 0) return;
+      try {
+        downloadAllBtn.setAttribute('disabled', 'true');
+        const zipBase = currentMetadata?.baseName ? `${currentMetadata.baseName}_split` : 'split_images';
+        const zipBlob = await ImageSplitterEngine.createZipArchive(currentSlices, zipBase);
+        const zipUrl = URL.createObjectURL(zipBlob);
+        ImageSplitterEngine.downloadFile(zipUrl, `${zipBase}.zip`);
+        setTimeout(() => URL.revokeObjectURL(zipUrl), 30000);
+      } catch (err) {
+        console.error(err);
+        alert(i18n.errorZip);
+      } finally {
+        downloadAllBtn.removeAttribute('disabled');
+      }
+    });
+
+    // File input changes
+    fileInput.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        handleFile(target.files[0]);
+      }
+    });
+
+    // Sample button
+    sampleBtn.addEventListener('click', async () => {
+      try {
+        loadingCard.style.display = 'flex';
+        dropzone.style.display = 'none';
+        const sampleFile = await ImageSplitterEngine.generateSampleImage();
+        handleFile(sampleFile);
+      } catch (e) {
+        console.error(e);
+        loadingCard.style.display = 'none';
+        dropzone.style.display = 'block';
+      }
+    });
+
+    // Change photo
+    changeBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // Reset button
+    resetBtn.addEventListener('click', () => {
+      resultsCard.style.display = 'none';
+      workspace.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('drag-active');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('drag-active');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Paste support
+    document.addEventListener('paste', (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          if (file) handleFile(file);
+          break;
+        }
+      }
+    });
+
+    // Mode tab buttons
+    modeTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = (tab.getAttribute('data-mode') as any) || 'grid';
+        updateMetricsAndOverlay();
+      });
+    });
+
+    // Preset chip buttons
+    presetChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        presetChips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const r = chip.getAttribute('data-rows');
+        const c = chip.getAttribute('data-cols');
+        const m = chip.getAttribute('data-mode');
+
+        if (r) rowsInput.value = r;
+        if (c) colsInput.value = c;
+        if (m) {
+          currentMode = m as any;
+          modeTabs.forEach((t) => {
+            if (t.getAttribute('data-mode') === m) t.classList.add('active');
+            else t.classList.remove('active');
+          });
+        }
+
+        updateMetricsAndOverlay();
+      });
+    });
+
+    // Steppers
+    rowsMinusBtn.addEventListener('click', () => {
+      const v = Math.max(1, (parseInt(rowsInput.value) || 1) - 1);
+      rowsInput.value = v.toString();
+      presetChips.forEach((c) => c.classList.remove('active'));
+      updateMetricsAndOverlay();
+    });
+
+    rowsPlusBtn.addEventListener('click', () => {
+      const v = Math.min(20, (parseInt(rowsInput.value) || 1) + 1);
+      rowsInput.value = v.toString();
+      presetChips.forEach((c) => c.classList.remove('active'));
+      updateMetricsAndOverlay();
+    });
+
+    colsMinusBtn.addEventListener('click', () => {
+      const v = Math.max(1, (parseInt(colsInput.value) || 1) - 1);
+      colsInput.value = v.toString();
+      presetChips.forEach((c) => c.classList.remove('active'));
+      updateMetricsAndOverlay();
+    });
+
+    colsPlusBtn.addEventListener('click', () => {
+      const v = Math.min(20, (parseInt(colsInput.value) || 1) + 1);
+      colsInput.value = v.toString();
+      presetChips.forEach((c) => c.classList.remove('active'));
+      updateMetricsAndOverlay();
+    });
+
+    rowsInput.addEventListener('input', () => {
+      presetChips.forEach((c) => c.classList.remove('active'));
+      updateMetricsAndOverlay();
+    });
+
+    colsInput.addEventListener('input', () => {
+      presetChips.forEach((c) => c.classList.remove('active'));
+      updateMetricsAndOverlay();
+    });
+
+    executeBtn.addEventListener('click', executeSplit);
+  });
+</script>
+
+<style>
+  .splitter-tool-wrapper {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  /* --- Dropzone / Empty State --- */
+  .splitter-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .splitter-dropzone-card {
+      padding: var(--space-12) var(--space-6);
+    }
+  }
+
+  .splitter-dropzone-card:hover,
+  .splitter-dropzone-card.drag-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-subtle);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .splitter-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: 480px;
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .splitter-icon-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .splitter-drop-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .splitter-drop-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .splitter-btn-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-2);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .splitter-btn-primary {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 0.65rem 1.25rem;
+    box-sizing: border-box;
+  }
+
+  .splitter-sample-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 0.65rem 1.15rem;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 420px) {
+    .splitter-btn-primary,
+    .splitter-sample-btn {
+      width: 100%;
+    }
+  }
+
+  .splitter-formats-hint {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+    word-break: break-word;
+  }
+
+  .splitter-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-success);
+    margin-top: var(--space-2);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* --- Loading State --- */
+  .splitter-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .splitter-spinner {
+    width: 42px;
+    height: 42px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .splitter-loading-text {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* --- Workspace --- */
+  .splitter-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .splitter-workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2-5) var(--space-4);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 520px) {
+    .splitter-workspace-header {
+      flex-direction: column;
+      align-items: stretch;
+      padding: var(--space-3);
+      gap: var(--space-2-5);
+    }
+    .splitter-header-actions,
+    .splitter-header-actions button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .splitter-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .splitter-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+    flex-shrink: 0;
+  }
+
+  .splitter-filename-label {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .splitter-filename-label {
+      max-width: 280px;
+    }
+  }
+
+  .splitter-meta-tag {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  .splitter-main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 860px) {
+    .splitter-main-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      align-items: start;
+    }
+  }
+
+  /* --- Left: Preview Card --- */
+  .splitter-preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 480px) {
+    .splitter-preview-card {
+      padding: var(--space-3-5);
+    }
+  }
+
+  .preview-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .preview-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-ratio {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  .preview-viewport-box {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: 380px;
+    background: #0f172a;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+  }
+
+  .preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* --- Strong, High-Contrast Split Lines --- */
+  .preview-grid-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  :global(.overlay-cell) {
+    border: 2px solid #0f172a;
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.95), 0 0 0 1.5px rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.1);
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  :global(.overlay-cell-number) {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: #ffffff;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+    letter-spacing: 0.02em;
+    user-select: none;
+  }
+
+  .preview-footer-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2-5);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2-5) var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .summary-icon {
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .summary-text-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .summary-main-text {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+
+  .summary-sub-text {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    word-break: break-word;
+  }
+
+  /* --- Right: Controls Card --- */
+  .splitter-controls-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 480px) {
+    .splitter-controls-card {
+      padding: var(--space-3-5);
+    }
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .control-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .split-mode-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-1-5);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mode-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: var(--space-2) var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    min-width: 0;
+    box-sizing: border-box;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    cursor: pointer;
+  }
+
+  .mode-tab svg {
+    flex-shrink: 0;
+  }
+
+  .mode-tab:hover {
+    color: var(--color-text);
+  }
+
+  .mode-tab.active {
+    background: var(--color-surface);
+    color: var(--color-accent);
+    font-weight: 700;
+    box-shadow: var(--shadow-xs);
+  }
+
+  @media (max-width: 600px) {
+    .split-mode-tabs {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 6px;
+      border-radius: var(--radius-lg);
+    }
+
+    .mode-tab {
+      justify-content: flex-start;
+      padding: 10px 14px;
+      font-size: var(--text-sm);
+      gap: 10px;
+      border-radius: var(--radius-md);
+      min-height: 44px;
+      text-align: left;
+    }
+  }
+
+  .presets-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1-5);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .preset-chip {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 5px 11px;
+    transition: all var(--transition-fast);
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .preset-chip:hover {
+    border-color: var(--color-border-hover);
+    color: var(--color-text);
+  }
+
+  .preset-chip.active {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .steppers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 360px) {
+    .steppers-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .stepper-box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    min-width: 0;
+  }
+
+  .stepper-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  .stepper-control-row {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .stepper-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .stepper-btn:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .stepper-input {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    text-align: center;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    border: none;
+    background: transparent;
+    -moz-appearance: textfield;
+  }
+
+  .stepper-input::-webkit-outer-spin-button,
+  .stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .settings-options-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 480px) {
+    .settings-options-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .option-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    min-width: 0;
+  }
+
+  .form-select {
+    height: 38px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0 var(--space-2-5);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .splitter-execute-btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 0.85rem var(--space-4);
+    font-weight: 700;
+    margin-top: var(--space-1);
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* --- Results Card --- */
+  .splitter-results-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 480px) {
+    .splitter-results-card {
+      padding: var(--space-3-5);
+    }
+  }
+
+  .results-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: var(--space-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 520px) {
+    .results-header-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .results-action-buttons {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+    .results-action-buttons button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+
+  .results-success-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .results-count-text {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+
+  .results-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2-5);
+  }
+
+  .download-all-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-weight: 700;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .slices-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  :global(.slice-item-card) {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all var(--transition-fast);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  :global(.slice-item-card:hover) {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  :global(.slice-thumb-box) {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  :global(.slice-thumb-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  :global(.slice-index-badge) {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  :global(.slice-details-box) {
+    padding: var(--space-2-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  :global(.slice-name-title) {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    min-width: 0;
+  }
+
+  :global(.slice-meta-row) {
+    font-size: 10.5px;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(.slice-download-btn) {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 5px 8px;
+    margin-top: 4px;
+    white-space: normal;
+    text-align: center;
+  }
+</style>

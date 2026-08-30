@@ -47,6 +47,8 @@ import enGifExt from './translations/en/gif-frame-extractor.json';
 import enPassport from './translations/en/passport-photo-maker.json';
 import enSrcset from './translations/en/image-srcset-generator.json';
 import enPpt from './translations/en/ppt-resizer.json';
+import enImageSplitter from './translations/en/image-splitter.json';
+import enPixelCounter from './translations/en/pixel-counter.json';
 
 import esCommon from './translations/es/common.json';
 import esHome from './translations/es/home.json';
@@ -93,6 +95,8 @@ import esGifExt from './translations/es/gif-frame-extractor.json';
 import esPassport from './translations/es/passport-photo-maker.json';
 import esSrcset from './translations/es/image-srcset-generator.json';
 import esPpt from './translations/es/ppt-resizer.json';
+import esImageSplitter from './translations/es/image-splitter.json';
+import esPixelCounter from './translations/es/pixel-counter.json';
 
 import ptCommon from './translations/pt/common.json';
 import ptHome from './translations/pt/home.json';
@@ -139,6 +143,8 @@ import ptGifExt from './translations/pt/gif-frame-extractor.json';
 import ptPassport from './translations/pt/passport-photo-maker.json';
 import ptSrcset from './translations/pt/image-srcset-generator.json';
 import ptPpt from './translations/pt/ppt-resizer.json';
+import ptImageSplitter from './translations/pt/image-splitter.json';
+import ptPixelCounter from './translations/pt/pixel-counter.json';
 
 import frCommon from './translations/fr/common.json';
 import frHome from './translations/fr/home.json';
@@ -185,6 +191,8 @@ import frGifExt from './translations/fr/gif-frame-extractor.json';
 import frPassport from './translations/fr/passport-photo-maker.json';
 import frSrcset from './translations/fr/image-srcset-generator.json';
 import frPpt from './translations/fr/ppt-resizer.json';
+import frImageSplitter from './translations/fr/image-splitter.json';
+import frPixelCounter from './translations/fr/pixel-counter.json';
 
 import deCommon from './translations/de/common.json';
 import deHome from './translations/de/home.json';
@@ -231,6 +239,8 @@ import deGifExt from './translations/de/gif-frame-extractor.json';
 import dePassport from './translations/de/passport-photo-maker.json';
 import deSrcset from './translations/de/image-srcset-generator.json';
 import dePpt from './translations/de/ppt-resizer.json';
+import deImageSplitter from './translations/de/image-splitter.json';
+import dePixelCounter from './translations/de/pixel-counter.json';
 
 import idCommon from './translations/id/common.json';
 import idHome from './translations/id/home.json';
@@ -277,6 +287,8 @@ import idGifExt from './translations/id/gif-frame-extractor.json';
 import idPassport from './translations/id/passport-photo-maker.json';
 import idSrcset from './translations/id/image-srcset-generator.json';
 import idPpt from './translations/id/ppt-resizer.json';
+import idImageSplitter from './translations/id/image-splitter.json';
+import idPixelCounter from './translations/id/pixel-counter.json';
 
 import trCommon from './translations/tr/common.json';
 import trHome from './translations/tr/home.json';
@@ -323,6 +335,8 @@ import trGifExt from './translations/tr/gif-frame-extractor.json';
 import trPassport from './translations/tr/passport-photo-maker.json';
 import trSrcset from './translations/tr/image-srcset-generator.json';
 import trPpt from './translations/tr/ppt-resizer.json';
+import trImageSplitter from './translations/tr/image-splitter.json';
+import trPixelCounter from './translations/tr/pixel-counter.json';
 
 import itCommon from './translations/it/common.json';
 import itHome from './translations/it/home.json';
@@ -369,27 +383,29 @@ import itGifExt from './translations/it/gif-frame-extractor.json';
 import itPassport from './translations/it/passport-photo-maker.json';
 import itSrcset from './translations/it/image-srcset-generator.json';
 import itPpt from './translations/it/ppt-resizer.json';
+import itImageSplitter from './translations/it/image-splitter.json';
+import itPixelCounter from './translations/it/pixel-counter.json';
 
 type TranslationMap = Record<string, string>;
 
 /** All translations indexed by locale, with all namespaces merged into a flat map */
 const translations: Record<Locale, TranslationMap> = {
   en: { ...enCommon, ...enHome, ...enTools,
-    ...enRenamer, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enProductWhiteBg, ...enVidTrim, ...enVidRotate, ...enYtThumbnail, ...enFbCover, ...enSvgResizer, ...enDpiConv, ...enImgToText, ...enGifExt, ...enPassport, ...enSrcset,  ...enPpt },
+    ...enRenamer, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enProductWhiteBg, ...enVidTrim, ...enVidRotate, ...enYtThumbnail, ...enFbCover, ...enSvgResizer, ...enDpiConv, ...enImgToText, ...enGifExt, ...enPassport, ...enSrcset,  ...enPpt, ...enImageSplitter, ...enPixelCounter },
   es: { ...esCommon, ...esHome, ...esTools,
-    ...esRenamer, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esProductWhiteBg, ...esVidTrim, ...esVidRotate, ...esYtThumbnail, ...esFbCover, ...esSvgResizer, ...esDpiConv, ...esImgToText, ...esGifExt, ...esPassport, ...esSrcset,  ...esPpt },
+    ...esRenamer, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esProductWhiteBg, ...esVidTrim, ...esVidRotate, ...esYtThumbnail, ...esFbCover, ...esSvgResizer, ...esDpiConv, ...esImgToText, ...esGifExt, ...esPassport, ...esSrcset,  ...esPpt, ...esImageSplitter, ...esPixelCounter },
   pt: { ...ptCommon, ...ptHome, ...ptTools,
-    ...ptRenamer, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptProductWhiteBg, ...ptVidTrim, ...ptVidRotate, ...ptYtThumbnail, ...ptFbCover, ...ptSvgResizer, ...ptDpiConv, ...ptImgToText, ...ptGifExt, ...ptPassport, ...ptSrcset,  ...ptPpt },
+    ...ptRenamer, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptProductWhiteBg, ...ptVidTrim, ...ptVidRotate, ...ptYtThumbnail, ...ptFbCover, ...ptSvgResizer, ...ptDpiConv, ...ptImgToText, ...ptGifExt, ...ptPassport, ...ptSrcset,  ...ptPpt, ...ptImageSplitter, ...ptPixelCounter },
   fr: { ...frCommon, ...frHome, ...frTools,
-    ...frRenamer, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frProductWhiteBg, ...frVidTrim, ...frVidRotate, ...frYtThumbnail, ...frFbCover, ...frSvgResizer, ...frDpiConv, ...frImgToText, ...frGifExt, ...frPassport, ...frSrcset,  ...frPpt },
+    ...frRenamer, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frProductWhiteBg, ...frVidTrim, ...frVidRotate, ...frYtThumbnail, ...frFbCover, ...frSvgResizer, ...frDpiConv, ...frImgToText, ...frGifExt, ...frPassport, ...frSrcset,  ...frPpt, ...frImageSplitter, ...frPixelCounter },
   de: { ...deCommon, ...deHome, ...deTools,
-    ...deRenamer, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deProductWhiteBg, ...deVidTrim, ...deVidRotate, ...deYtThumbnail, ...deFbCover, ...deSvgResizer, ...deDpiConv, ...deImgToText, ...deGifExt, ...dePassport, ...deSrcset,  ...dePpt },
+    ...deRenamer, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deProductWhiteBg, ...deVidTrim, ...deVidRotate, ...deYtThumbnail, ...deFbCover, ...deSvgResizer, ...deDpiConv, ...deImgToText, ...deGifExt, ...dePassport, ...deSrcset,  ...dePpt, ...deImageSplitter, ...dePixelCounter },
   id: { ...idCommon, ...idHome, ...idTools,
-    ...idRenamer, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idProductWhiteBg, ...idVidTrim, ...idVidRotate, ...idYtThumbnail, ...idFbCover, ...idSvgResizer, ...idDpiConv, ...idImgToText, ...idGifExt, ...idPassport, ...idSrcset,  ...idPpt },
+    ...idRenamer, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idProductWhiteBg, ...idVidTrim, ...idVidRotate, ...idYtThumbnail, ...idFbCover, ...idSvgResizer, ...idDpiConv, ...idImgToText, ...idGifExt, ...idPassport, ...idSrcset,  ...idPpt, ...idImageSplitter, ...idPixelCounter },
   tr: { ...trCommon, ...trHome, ...trTools,
-    ...trRenamer, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trProductWhiteBg, ...trVidTrim, ...trVidRotate, ...trYtThumbnail, ...trFbCover, ...trSvgResizer, ...trDpiConv, ...trImgToText, ...trGifExt, ...trPassport, ...trSrcset,  ...trPpt },
+    ...trRenamer, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trProductWhiteBg, ...trVidTrim, ...trVidRotate, ...trYtThumbnail, ...trFbCover, ...trSvgResizer, ...trDpiConv, ...trImgToText, ...trGifExt, ...trPassport, ...trSrcset,  ...trPpt, ...trImageSplitter, ...trPixelCounter },
   it: { ...itCommon, ...itHome, ...itTools,
-    ...itRenamer, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itProductWhiteBg, ...itVidTrim, ...itVidRotate, ...itYtThumbnail, ...itFbCover, ...itSvgResizer, ...itDpiConv, ...itImgToText, ...itGifExt, ...itPassport, ...itSrcset,  ...itPpt },
+    ...itRenamer, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itProductWhiteBg, ...itVidTrim, ...itVidRotate, ...itYtThumbnail, ...itFbCover, ...itSvgResizer, ...itDpiConv, ...itImgToText, ...itGifExt, ...itPassport, ...itSrcset,  ...itPpt, ...itImageSplitter, ...itPixelCounter },
 };
 
 /**

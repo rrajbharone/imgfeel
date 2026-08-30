@@ -1,20 +1,20 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import DataUriConverter from '@/components/DataUriConverter.astro';
-import DataUriContent from '@/components/DataUriContent.astro';
+import PixelCounter from '@/components/PixelCounter.astro';
+import PixelCounterContent from '@/components/PixelCounterContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t } from '@/i18n/utils';
 import { getToolUrl } from '@/data/tools';
 
 const locale = 'en';
-const toolUrl = getToolUrl('image-to-data-uri-converter', locale);
+const toolUrl = getToolUrl('pixel-counter', locale);
 ---
 
 <MainLayout
   locale={locale}
-  title={t(locale, 'datauri.meta.title')}
-  description={t(locale, 'datauri.meta.description')}
+  title={t(locale, 'pixelcounter.meta.title')}
+  description={t(locale, 'pixelcounter.meta.description')}
   canonicalUrl={`https://imgfeel.com${toolUrl}`}
   basePath={toolUrl}
 >
@@ -22,9 +22,9 @@ const toolUrl = getToolUrl('image-to-data-uri-converter', locale);
     <SEOHead schema={{
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "Image to Data URI Converter",
+      "name": "Pixel Counter (Count Image Pixels & Exact Dimensions)",
       "url": `https://imgfeel.com${toolUrl}`,
-      "applicationCategory": "DeveloperApplication",
+      "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Any",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     }} />
@@ -35,19 +35,19 @@ const toolUrl = getToolUrl('image-to-data-uri-converter', locale);
       <Breadcrumbs locale={locale} items={[
         { label: t(locale, 'breadcrumb.home'), href: '/' },
         { label: t(locale, 'breadcrumb.tools'), href: '/tools/' },
-        { label: t(locale, 'datauri.hero.title') }
+        { label: t(locale, 'pixelcounter.hero.title') }
       ]} />
       
       <div class="tool-header">
-        <h1 class="tool-title">{t(locale, 'datauri.hero.title')}</h1>
-        <p class="tool-subtitle">{t(locale, 'datauri.hero.subtitle')}</p>
+        <h1 class="tool-title">{t(locale, 'pixelcounter.hero.title')}</h1>
+        <p class="tool-subtitle">{t(locale, 'pixelcounter.hero.subtitle')}</p>
       </div>
 
-      <DataUriConverter locale={locale} />
+      <PixelCounter locale={locale} />
     </div>
   </div>
 
-  <DataUriContent locale={locale} />
+  <PixelCounterContent locale={locale} />
 </MainLayout>
 
 <style>
@@ -55,31 +55,35 @@ const toolUrl = getToolUrl('image-to-data-uri-converter', locale);
     text-align: center;
     max-width: var(--container-narrow);
     margin-inline: auto;
-    margin-top: var(--space-6);
-    margin-bottom: var(--space-8);
-    width: 100%;
-    box-sizing: border-box;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
   }
+
   .tool-title {
-    font-size: var(--text-3xl);
+    font-size: var(--text-2xl);
     font-weight: 800;
     color: var(--color-text);
-    margin-bottom: var(--space-2);
-    word-break: break-word;
-    overflow-wrap: break-word;
+    margin: 0 0 var(--space-2) 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
   }
-  .tool-subtitle {
-    font-size: var(--text-base);
-    color: var(--color-text-secondary);
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-  @media (max-width: 640px) {
+
+  @media (min-width: 640px) {
     .tool-title {
-      font-size: var(--text-2xl);
+      font-size: var(--text-3xl);
     }
+  }
+
+  .tool-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
     .tool-subtitle {
-      font-size: var(--text-sm);
+      font-size: var(--text-base);
     }
   }
 </style>

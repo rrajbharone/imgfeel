@@ -85,5 +85,9 @@
   "tools.pptResizer.title": "Ubah Ukuran PowerPoint",
   "tools.pptResizer.description": "Ganti ukuran dimensi dan rasio aspek slide PowerPoint secara online (16:9, 4:3, A4, Letter).",
   "tools.batchRenameImages.title": "Ubah Nama Gambar Masal Online",
-  "tools.batchRenameImages.description": "Ganti nama banyak gambar secara online dan gratis dengan privasi 100% di browser."
+  "tools.batchRenameImages.description": "Ganti nama banyak gambar secara online dan gratis dengan privasi 100% di browser.",
+  "tools.imageSplitter.title": "Pemotong Gambar (Bagi Foto Menjadi Kisi, Baris & Kolom)",
+  "tools.imageSplitter.description": "Bagi gambar menjadi bagian yang sama, baris, kolom, atau kisi online untuk postingan Instagram 3x3, korsel, dan banner dengan privasi 100% di browser.",
+  "tools.pixelCounter.title": "Penghitung Piksel (Hitung Piksel & Dimensi Gambar)",
+  "tools.pixelCounter.description": "Periksa dimensi piksel, hitung total piksel, megapiksel, rasio aspek, dan format file secara instan dengan privasi 100% di browser."
 }

@@ -57,15 +57,29 @@ const toolUrl = getToolUrl('image-srcset-generator', locale);
     margin-inline: auto;
     margin-top: var(--space-6);
     margin-bottom: var(--space-8);
+    width: 100%;
+    box-sizing: border-box;
   }
   .tool-title {
     font-size: var(--text-3xl);
     font-weight: 800;
     color: var(--color-text);
     margin-bottom: var(--space-2);
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .tool-subtitle {
     font-size: var(--text-base);
     color: var(--color-text-secondary);
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  @media (max-width: 640px) {
+    .tool-title {
+      font-size: var(--text-2xl);
+    }
+    .tool-subtitle {
+      font-size: var(--text-sm);
+    }
   }
 </style>

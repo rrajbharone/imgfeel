@@ -81,6 +81,10 @@ import ImageNoiseReducer from '@/components/ImageNoiseReducer.astro';
 import ImageNoiseReducerContent from '@/components/ImageNoiseReducerContent.astro';
 import ProductWhiteBackground from '@/components/ProductWhiteBackground.astro';
 import ProductWhiteBackgroundContent from '@/components/ProductWhiteBackgroundContent.astro';
+import ImageSplitter from '@/components/ImageSplitter.astro';
+import ImageSplitterContent from '@/components/ImageSplitterContent.astro';
+import PixelCounter from '@/components/PixelCounter.astro';
+import PixelCounterContent from '@/components/PixelCounterContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -144,6 +148,8 @@ const toolPrefixMap: Record<string, string> = {
   'freeform-image-cropper': 'freeformCrop',
   'image-noise-reducer': 'noiseReducer',
   'product-image-white-background': 'productWhiteBg',
+  'image-splitter': 'splitter',
+  'pixel-counter': 'pixelcounter',
   'video-trimmer': 'vidtrim',
   'video-rotator': 'vidrot',
 };
@@ -225,6 +231,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'freeform-image-cropper' && <FreeformCropTool locale={locale} />}
       {toolId === 'image-noise-reducer' && <ImageNoiseReducer locale={locale} />}
       {toolId === 'product-image-white-background' && <ProductWhiteBackground locale={locale} />}
+      {toolId === 'image-splitter' && <ImageSplitter locale={locale} />}
+      {toolId === 'pixel-counter' && <PixelCounter locale={locale} />}
       {toolId === 'video-trimmer' && <VideoTrimmer locale={locale} />}
       {toolId === 'video-rotator' && <VideoRotator locale={locale} />}
     </div>
@@ -268,6 +276,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'freeform-image-cropper' && <FreeformCropContent locale={locale} />}
   {toolId === 'image-noise-reducer' && <ImageNoiseReducerContent locale={locale} />}
   {toolId === 'product-image-white-background' && <ProductWhiteBackgroundContent locale={locale} />}
+  {toolId === 'image-splitter' && <ImageSplitterContent locale={locale} />}
+  {toolId === 'pixel-counter' && <PixelCounterContent locale={locale} />}
   {toolId === 'video-trimmer' && <VideoTrimmerContent locale={locale} />}
   {toolId === 'video-rotator' && <VideoRotatorContent locale={locale} />}
 </MainLayout>

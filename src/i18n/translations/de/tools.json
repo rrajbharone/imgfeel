@@ -85,5 +85,9 @@
   "tools.pptResizer.title": "PowerPoint-Größe Ändern",
   "tools.pptResizer.description": "Passe PowerPoint-Folienmaße und Seitenverhältnisse online an (16:9, 4:3, A4, Letter, Benutzerdefiniert).",
   "tools.batchRenameImages.title": "Bilder im Batch Online Umbenennen",
-  "tools.batchRenameImages.description": "Benenne mehrere Bilder online kostenlos und privat im Browser um."
+  "tools.batchRenameImages.description": "Benenne mehrere Bilder online kostenlos und privat im Browser um.",
+  "tools.imageSplitter.title": "Bilder Teilen (Foto in Raster, Zeilen & Spalten Schneiden)",
+  "tools.imageSplitter.description": "Teilen Sie Bilder online kostenlos in gleiche Teile, Zeilen, Spalten oder Raster für Instagram 3x3 Posts, Karussells und Banner mit 100% Datenschutz.",
+  "tools.pixelCounter.title": "Pixel-Zähler (Bildpixel Zählen & Exakte Abmessungen)",
+  "tools.pixelCounter.description": "Berechnen Sie Pixelmaße, Gesamtpixel, Megapixel, Seitenverhältnis und Dateiformat sofort mit 100% Browser-Datenschutz."
 }

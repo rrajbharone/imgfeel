@@ -97,8 +97,10 @@ const faqSchema = {
     margin-top: var(--space-12);
   }
   .content-inner {
+    width: 100%;
     max-width: var(--container-narrow);
     margin-inline: auto;
+    box-sizing: border-box;
   }
   .tool-content h2 {
     font-size: var(--text-xl);
@@ -106,12 +108,16 @@ const faqSchema = {
     color: var(--color-text);
     margin-top: var(--space-8);
     margin-bottom: var(--space-3);
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .tool-content p {
     font-size: var(--text-base);
     color: var(--color-text-secondary);
     line-height: 1.7;
     margin-bottom: var(--space-4);
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .code-example {
     background: #1e1e1e;
@@ -119,12 +125,20 @@ const faqSchema = {
     border-radius: var(--radius-md);
     margin-bottom: var(--space-4);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .code-example code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: var(--text-xs);
     color: #ce9178;
     word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    display: block;
+    max-width: 100%;
   }
   .code-snippets {
     list-style: none;
@@ -133,6 +147,14 @@ const faqSchema = {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .code-snippets li {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
   .code-snippets code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -143,6 +165,10 @@ const faqSchema = {
     border-radius: var(--radius-md);
     display: block;
     word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .req-list,
   .step-list {
@@ -151,24 +177,37 @@ const faqSchema = {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .req-list li,
   .step-list li {
     font-size: var(--text-base);
     color: var(--color-text-secondary);
     line-height: 1.6;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .content-faq {
     margin-top: var(--space-10);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .faq-list {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    width: 100%;
+    max-width: 100%;
   }
   .faq-item {
     border-bottom: 1px solid var(--color-border);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .faq-question {
     padding: var(--space-4) 0;
@@ -177,11 +216,13 @@ const faqSchema = {
     color: var(--color-text);
     cursor: pointer;
     list-style: none;
+    word-break: break-word;
   }
   .faq-answer {
     padding-bottom: var(--space-4);
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
     line-height: 1.6;
+    word-break: break-word;
   }
 </style>

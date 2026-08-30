@@ -85,5 +85,9 @@
   "tools.pptResizer.title": "Redimensionner PowerPoint",
   "tools.pptResizer.description": "Changez les dimensions et le format des diapositives PowerPoint en ligne (16:9, 4:3, A4, Lettre).",
   "tools.batchRenameImages.title": "Renommer des Images en Masse en Ligne",
-  "tools.batchRenameImages.description": "Renommez plusieurs images individuellement en ligne et gratuitement en toute confidentialité."
+  "tools.batchRenameImages.description": "Renommez plusieurs images individuellement en ligne et gratuitement en toute confidentialité.",
+  "tools.imageSplitter.title": "Diviseur d'Image (Découper une Photo en Grille, Lignes et Colonnes)",
+  "tools.imageSplitter.description": "Divisez des images en parties égales, lignes, colonnes ou grille en ligne pour Instagram 3x3, carrousels et bannières avec 100% de confidentialité.",
+  "tools.pixelCounter.title": "Compteur de Pixels (Compter les Pixels et Dimensions Exactes)",
+  "tools.pixelCounter.description": "Vérifiez instantanément les dimensions en pixels, le nombre total de pixels, les mégapixels, le ratio et le format avec 100% de confidentialité."
 }

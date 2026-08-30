@@ -85,5 +85,9 @@
   "tools.pptResizer.title": "Redimensionar PowerPoint",
   "tools.pptResizer.description": "Altere as dimensões e proporção de slides PowerPoint online (16:9, 4:3, A4, Carta).",
   "tools.batchRenameImages.title": "Renomear Imagens em Lote Online",
-  "tools.batchRenameImages.description": "Renomeie várias fotos individualmente online e grátis com total privacidade no navegador."
+  "tools.batchRenameImages.description": "Renomeie várias fotos individualmente online e grátis com total privacidade no navegador.",
+  "tools.imageSplitter.title": "Divisor de Imagens (Dividir Fotos em Grade, Linhas e Colunas)",
+  "tools.imageSplitter.description": "Divida imagens em partes iguais, linhas, colunas ou grades online para posts 3x3 no Instagram, carrosséis e banners com 100% de privacidade no navegador.",
+  "tools.pixelCounter.title": "Contador de Pixels (Contar Pixels e Dimensões Exatas)",
+  "tools.pixelCounter.description": "Calcule instantaneamente dimensões em pixels, total de pixels, megapixels, proporção e formato de arquivo com 100% de privacidade no navegador."
 }
