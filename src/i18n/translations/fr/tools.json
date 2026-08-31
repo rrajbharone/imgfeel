@@ -89,5 +89,9 @@
   "tools.imageSplitter.title": "Diviseur d'Image (Découper une Photo en Grille, Lignes et Colonnes)",
   "tools.imageSplitter.description": "Divisez des images en parties égales, lignes, colonnes ou grille en ligne pour Instagram 3x3, carrousels et bannières avec 100% de confidentialité.",
   "tools.pixelCounter.title": "Compteur de Pixels (Compter les Pixels et Dimensions Exactes)",
-  "tools.pixelCounter.description": "Vérifiez instantanément les dimensions en pixels, le nombre total de pixels, les mégapixels, le ratio et le format avec 100% de confidentialité."
+  "tools.pixelCounter.description": "Vérifiez instantanément les dimensions en pixels, le total de pixels, les mégapixels, le format et les proportions sans aucun téléversement.",
+  "tools.batchResizer.title": "Redimensionner Plusieurs Images à la Fois",
+  "tools.batchResizer.description": "Redimensionnez plusieurs photos simultanément en ligne avec verrouillage du ratio et téléchargement ZIP instantané.",
+  "tools.imageStretcher.title": "Étirer Image en Ligne (Étirer Largeur et Hauteur de Photo)",
+  "tools.imageStretcher.description": "Étirez ou déformez la largeur et la hauteur d'une image de façon indépendante avec aperçu en direct et confidentialité totale."
 }

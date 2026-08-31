@@ -89,5 +89,9 @@
   "tools.imageSplitter.title": "Divisor de Imágenes (Dividir Fotos en Cuadrícula, Filas y Columnas)",
   "tools.imageSplitter.description": "Divide imágenes en partes iguales, filas, columnas o cuadrícula online para Instagram 3x3, carruseles y banners con 100% de privacidad en el navegador.",
   "tools.pixelCounter.title": "Contador de Píxeles (Contar Píxeles y Dimensiones Exactas)",
-  "tools.pixelCounter.description": "Calcula al instante dimensiones en píxeles, cuenta píxeles totales, megapíxeles, relación de aspecto y formato con 100% de privacidad en el navegador."
+  "tools.pixelCounter.description": "Comprueba al instante las dimensiones en píxeles, megapíxeles, relación de aspecto y formato con total privacidad en el navegador.",
+  "tools.batchResizer.title": "Redimensionar Varias Imágenes a la Vez",
+  "tools.batchResizer.description": "Redimensiona múltiples fotos simultáneamente con bloqueo de proporción, escala porcentual y descarga en ZIP.",
+  "tools.imageStretcher.title": "Estirar Imagen Online (Estirar Ancho y Alto de Foto)",
+  "tools.imageStretcher.description": "Estira o distorsiona el ancho y alto de una imagen de forma independiente con vista previa en tiempo real y privacidad local."
 }

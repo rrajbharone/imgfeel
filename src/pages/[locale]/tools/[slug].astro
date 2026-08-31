@@ -85,6 +85,10 @@ import ImageSplitter from '@/components/ImageSplitter.astro';
 import ImageSplitterContent from '@/components/ImageSplitterContent.astro';
 import PixelCounter from '@/components/PixelCounter.astro';
 import PixelCounterContent from '@/components/PixelCounterContent.astro';
+import BatchImageResizer from '@/components/BatchImageResizer.astro';
+import BatchImageResizerContent from '@/components/BatchImageResizerContent.astro';
+import ImageStretcher from '@/components/ImageStretcher.astro';
+import ImageStretcherContent from '@/components/ImageStretcherContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -150,6 +154,8 @@ const toolPrefixMap: Record<string, string> = {
   'product-image-white-background': 'productWhiteBg',
   'image-splitter': 'splitter',
   'pixel-counter': 'pixelcounter',
+  'resize-multiple-images': 'batchResizer',
+  'image-stretcher': 'imageStretcher',
   'video-trimmer': 'vidtrim',
   'video-rotator': 'vidrot',
 };
@@ -233,6 +239,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'product-image-white-background' && <ProductWhiteBackground locale={locale} />}
       {toolId === 'image-splitter' && <ImageSplitter locale={locale} />}
       {toolId === 'pixel-counter' && <PixelCounter locale={locale} />}
+      {toolId === 'resize-multiple-images' && <BatchImageResizer locale={locale} />}
+      {toolId === 'image-stretcher' && <ImageStretcher locale={locale} />}
       {toolId === 'video-trimmer' && <VideoTrimmer locale={locale} />}
       {toolId === 'video-rotator' && <VideoRotator locale={locale} />}
     </div>
@@ -278,6 +286,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'product-image-white-background' && <ProductWhiteBackgroundContent locale={locale} />}
   {toolId === 'image-splitter' && <ImageSplitterContent locale={locale} />}
   {toolId === 'pixel-counter' && <PixelCounterContent locale={locale} />}
+  {toolId === 'resize-multiple-images' && <BatchImageResizerContent locale={locale} />}
+  {toolId === 'image-stretcher' && <ImageStretcherContent locale={locale} />}
   {toolId === 'video-trimmer' && <VideoTrimmerContent locale={locale} />}
   {toolId === 'video-rotator' && <VideoRotatorContent locale={locale} />}
 </MainLayout>

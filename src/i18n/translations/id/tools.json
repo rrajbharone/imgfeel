@@ -89,5 +89,9 @@
   "tools.imageSplitter.title": "Pemotong Gambar (Bagi Foto Menjadi Kisi, Baris & Kolom)",
   "tools.imageSplitter.description": "Bagi gambar menjadi bagian yang sama, baris, kolom, atau kisi online untuk postingan Instagram 3x3, korsel, dan banner dengan privasi 100% di browser.",
   "tools.pixelCounter.title": "Penghitung Piksel (Hitung Piksel & Dimensi Gambar)",
-  "tools.pixelCounter.description": "Periksa dimensi piksel, hitung total piksel, megapiksel, rasio aspek, dan format file secara instan dengan privasi 100% di browser."
+  "tools.pixelCounter.description": "Periksa dimensi piksel, hitung total piksel, megapiksel, rasio aspek, dan format file secara instan dengan privasi 100% di browser.",
+  "tools.batchResizer.title": "Ubah Ukuran Banyak Gambar Sekaligus",
+  "tools.batchResizer.description": "Ubah ukuran banyak foto sekaligus online dengan kunci rasio aspek, skala persentase, dan unduhan ZIP instan.",
+  "tools.imageStretcher.title": "Merentangkan Gambar Online (Tarik Lebar & Tinggi Foto)",
+  "tools.imageStretcher.description": "Rentangkan atau distorsi lebar dan tinggi gambar secara terpisah dengan pratinjau langsung waktu nyata dan 100% privasi browser."
 }

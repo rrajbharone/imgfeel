@@ -89,5 +89,9 @@
   "tools.imageSplitter.title": "Divisor de Imagens (Dividir Fotos em Grade, Linhas e Colunas)",
   "tools.imageSplitter.description": "Divida imagens em partes iguais, linhas, colunas ou grades online para posts 3x3 no Instagram, carrosséis e banners com 100% de privacidade no navegador.",
   "tools.pixelCounter.title": "Contador de Pixels (Contar Pixels e Dimensões Exatas)",
-  "tools.pixelCounter.description": "Calcule instantaneamente dimensões em pixels, total de pixels, megapixels, proporção e formato de arquivo com 100% de privacidade no navegador."
+  "tools.pixelCounter.description": "Verifique instantaneamente dimensões de pixels, megapixels, proporção e formato com 100% de privacidade no navegador.",
+  "tools.batchResizer.title": "Redimensionar Várias Imagens de Uma Vez",
+  "tools.batchResizer.description": "Redimensione várias fotos e imagens simultaneamente online com bloqueio de proporção e download em ZIP.",
+  "tools.imageStretcher.title": "Esticar Imagem Online (Esticar Largura e Altura de Fotos)",
+  "tools.imageStretcher.description": "Estique ou distorça a largura e altura de qualquer foto de forma independente com pré-visualização em tempo real e privacidade total."
 }

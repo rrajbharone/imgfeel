@@ -14,7 +14,8 @@ interface Props {
 const { title, description, href, id = '', icon, badge } = Astro.props;
 
 // Determine icon type from icon prop or id
-const iconType = icon || (
+const iconType = (
+  icon === 'maximize' || icon === 'stretch' || id.includes('stretcher') || id.includes('stretch') ? 'maximize' :
   id.includes('ppt') || icon === 'presentation' ? 'presentation' :
   id.includes('rename') || icon === 'edit' ? 'edit' :
   id.includes('srcset') || icon === 'code' ? 'code' :
@@ -52,13 +53,22 @@ const iconType = icon || (
   id.includes('resolution') ? 'resolution' :
   id.includes('aspect-ratio') ? 'aspectRatio' :
   id.includes('trimmer') ? 'scissors' :
-  id.includes('rotator') ? 'rotate' : 'resize'
+  id.includes('rotator') ? 'rotate' :
+  (icon || 'resize')
 );
 ---
 
 <a href={href} class="compact-tool-card" data-tool-id={id}>
   <div class="card-top">
     <div class="tool-icon-box">
+      {(iconType === 'maximize' || iconType === 'stretch') && (
+        <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <polyline points="9 21 3 21 3 15"></polyline>
+          <line x1="21" y1="3" x2="14" y2="10"></line>
+          <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+      )}
       {(iconType === 'userCheck' || iconType === 'user-check') && (
         <svg class="tool-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>

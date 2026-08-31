@@ -89,5 +89,9 @@
   "tools.imageSplitter.title": "Divisore di Immagini (Dividi Foto in Griglia, Righe e Colonne)",
   "tools.imageSplitter.description": "Dividi immagini in parti uguali, righe, colonne o griglie online per post 3x3 Instagram, caroselli e banner con privacy al 100% nel browser.",
   "tools.pixelCounter.title": "Contatore di Pixel (Conta Pixel e Dimensioni Esatte)",
-  "tools.pixelCounter.description": "Verifica all'istante dimensioni in pixel, numero totale di pixel, megapixel, proporzioni e formato con privacy al 100% nel browser."
+  "tools.pixelCounter.description": "Verifica all'istante dimensioni in pixel, numero totale di pixel, megapixel, proporzioni e formato con privacy al 100% nel browser.",
+  "tools.batchResizer.title": "Ridimensionare Più Immagini Contemporaneamente",
+  "tools.batchResizer.description": "Ridimensiona più foto contemporaneamente online con blocco proporzioni, scala percentuale e download in ZIP.",
+  "tools.imageStretcher.title": "Allungare Immagine Online (Allunga Larghezza e Altezza Foto)",
+  "tools.imageStretcher.description": "Allunga o distorci larghezza e altezza dell'immagine in modo indipendente con anteprima in tempo reale e privacy al 100% nel browser."
 }

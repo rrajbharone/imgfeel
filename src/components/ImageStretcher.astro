@@ -1,0 +1,1078 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const i18nDict = {
+  statusReady: t(locale, 'imageStretcher.status.ready'),
+  statusProcessing: t(locale, 'imageStretcher.status.processing'),
+  statusLoading: t(locale, 'imageStretcher.status.loading'),
+  statusSampleGenerating: t(locale, 'imageStretcher.status.sampleGenerating'),
+  actionDownload: t(locale, 'imageStretcher.action.download'),
+  actionReset: t(locale, 'imageStretcher.action.reset'),
+  previewOriginal: t(locale, 'imageStretcher.preview.original'),
+  previewStretched: t(locale, 'imageStretcher.preview.stretched'),
+  previewStretchRatio: t(locale, 'imageStretcher.preview.stretchRatio'),
+  errorLoad: t(locale, 'imageStretcher.error.load'),
+  errorExport: t(locale, 'imageStretcher.error.export'),
+};
+---
+
+<div class="stretcher-app-container" id="stretcherApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone Card (Visible when 0 images loaded) -->
+  <div class="stretcher-dropzone-card" id="stretcherDropzone">
+    <div class="stretcher-dropzone-content">
+      <div class="stretcher-icon-circle">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <polyline points="9 21 3 21 3 15"></polyline>
+          <line x1="21" y1="3" x2="14" y2="10"></line>
+          <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+      </div>
+
+      <h2 class="stretcher-drop-title">{t(locale, 'imageStretcher.dropzone.title')}</h2>
+      <p class="stretcher-drop-subtitle">{t(locale, 'imageStretcher.dropzone.subtitle')}</p>
+
+      <div class="stretcher-btn-row">
+        <label class="btn btn-primary stretcher-btn-primary" for="stretcherFileInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'imageStretcher.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="stretcherFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary stretcher-sample-btn" id="stretcherSampleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span>{t(locale, 'imageStretcher.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="stretcher-formats-hint">{t(locale, 'imageStretcher.dropzone.formats')}</p>
+
+      <div class="stretcher-privacy-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'imageStretcher.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State Card -->
+  <div class="stretcher-loading-card" id="stretcherLoadingCard" style="display: none;">
+    <div class="stretcher-spinner"></div>
+    <p class="stretcher-loading-text" id="stretcherLoadingText">{t(locale, 'imageStretcher.status.loading')}</p>
+  </div>
+
+  <!-- Main Stretcher Workspace (Visible after upload) -->
+  <div class="stretcher-workspace-grid" id="stretcherWorkspace" style="display: none;">
+    <!-- Left Column: Live Real-Time Stretched Preview -->
+    <div class="stretcher-preview-card">
+      <div class="preview-header-bar">
+        <div class="preview-badge-group">
+          <span class="preview-dot"></span>
+          <span class="preview-dim-text" id="previewDimBadge">1200 × 800 px</span>
+        </div>
+
+        <div class="preview-factor-badge" id="previewFactorBadge">
+          +0% W • +0% H
+        </div>
+      </div>
+
+      <div class="preview-viewport-container" id="previewViewport">
+        <div class="preview-canvas-wrapper" id="previewCanvasWrapper">
+          <img id="livePreviewImg" src="" alt="Stretched Live Preview" class="live-stretched-img" />
+        </div>
+      </div>
+
+      <div class="preview-footer-bar">
+        <span class="original-info-text" id="originalMetaText">
+          {t(locale, 'imageStretcher.preview.original')} 1200 × 800 px
+        </span>
+      </div>
+    </div>
+
+    <!-- Right Column: Stretch Controls & Presets -->
+    <div class="stretcher-controls-card">
+      <div class="controls-top-header">
+        <div class="source-file-info">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span id="sourceFileName" class="source-file-name">image.jpg</span>
+        </div>
+
+        <label for="changeFileInput" class="btn btn-secondary btn-xs change-img-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          <span>{t(locale, 'imageStretcher.action.changeImage')}</span>
+        </label>
+        <input type="file" id="changeFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.bmp" class="sr-only" />
+      </div>
+
+      <!-- Width Control -->
+      <div class="stretch-control-group">
+        <div class="control-label-row">
+          <label class="control-label" for="stretchWidthInput">
+            {t(locale, 'imageStretcher.controls.width')}
+          </label>
+          <span class="control-value-display" id="widthDisplay">1200 px</span>
+        </div>
+
+        <div class="input-slider-combo">
+          <input type="number" id="stretchWidthInput" min="1" max="15000" value="1200" class="stretch-number-input" />
+          <input type="range" id="stretchWidthSlider" min="100" max="3600" value="1200" step="1" class="stretch-slider" />
+        </div>
+      </div>
+
+      <!-- Height Control -->
+      <div class="stretch-control-group">
+        <div class="control-label-row">
+          <label class="control-label" for="stretchHeightInput">
+            {t(locale, 'imageStretcher.controls.height')}
+          </label>
+          <span class="control-value-display" id="heightDisplay">800 px</span>
+        </div>
+
+        <div class="input-slider-combo">
+          <input type="number" id="stretchHeightInput" min="1" max="15000" value="800" class="stretch-number-input" />
+          <input type="range" id="stretchHeightSlider" min="100" max="2400" value="800" step="1" class="stretch-slider" />
+        </div>
+      </div>
+
+      <!-- Quick Stretch Multipliers -->
+      <div class="presets-section-group">
+        <span class="section-sublabel">{t(locale, 'imageStretcher.controls.quickStretch')}:</span>
+        <div class="chips-flex-row">
+          <button type="button" class="preset-pill-chip" data-action="w-1.5">1.5× W</button>
+          <button type="button" class="preset-pill-chip" data-action="w-2.0">2× W</button>
+          <button type="button" class="preset-pill-chip" data-action="h-1.5">1.5× H</button>
+          <button type="button" class="preset-pill-chip" data-action="h-2.0">2× H</button>
+          <button type="button" class="preset-pill-chip" data-action="square">1:1</button>
+          <button type="button" class="preset-pill-chip chip-reset" data-action="orig">1× Orig</button>
+        </div>
+      </div>
+
+      <!-- Aspect Ratio Target Presets -->
+      <div class="presets-section-group">
+        <span class="section-sublabel">{t(locale, 'imageStretcher.controls.ratios')}:</span>
+        <div class="chips-flex-row">
+          <button type="button" class="preset-pill-chip" data-ratio="16:9">16:9</button>
+          <button type="button" class="preset-pill-chip" data-ratio="4:5">4:5</button>
+          <button type="button" class="preset-pill-chip" data-ratio="9:16">9:16</button>
+          <button type="button" class="preset-pill-chip" data-ratio="4:3">4:3</button>
+          <button type="button" class="preset-pill-chip" data-ratio="3:2">3:2</button>
+          <button type="button" class="preset-pill-chip" data-ratio="2:1">2:1</button>
+        </div>
+      </div>
+
+      <!-- Lock Aspect Ratio Toggle (OFF by default) -->
+      <div class="toggle-row-box">
+        <label class="checkbox-container" for="lockRatioCheckbox">
+          <input type="checkbox" id="lockRatioCheckbox" />
+          <span class="custom-checkmark"></span>
+          <div class="checkbox-label-col">
+            <span class="checkbox-label-title">{t(locale, 'imageStretcher.controls.lockRatio')}</span>
+            <span class="checkbox-label-subtitle">{t(locale, 'imageStretcher.controls.lockRatioHint')}</span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Format Selection -->
+      <div class="format-select-row">
+        <label class="control-label" for="outputFormatSelect">{t(locale, 'imageStretcher.controls.format')}:</label>
+        <select id="outputFormatSelect" class="format-select">
+          <option value="original" selected>Original</option>
+          <option value="image/jpeg">JPG</option>
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WebP</option>
+        </select>
+      </div>
+
+      <!-- Primary Action Buttons -->
+      <div class="action-buttons-box">
+        <button type="button" class="btn btn-primary btn-lg stretcher-download-btn" id="stretcherDownloadBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span id="downloadBtnText">{t(locale, 'imageStretcher.action.download')}</span>
+        </button>
+
+        <button type="button" class="btn btn-secondary stretcher-reset-btn" id="stretcherResetBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          <span>{t(locale, 'imageStretcher.action.reset')}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { ImageStretcherEngine, type StretcherState } from '@/scripts/image-stretcher';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const appEl = document.getElementById('stretcherApp');
+    if (!appEl) return;
+
+    let i18n = {
+      statusReady: 'Ready to Download',
+      statusProcessing: 'Rendering Stretched Image...',
+      statusLoading: 'Loading image...',
+      statusSampleGenerating: 'Generating sample image...',
+      actionDownload: 'Download Stretched Image',
+      actionReset: 'Reset / Start Again',
+      previewOriginal: 'Original:',
+      previewStretched: 'Stretched:',
+      previewStretchRatio: 'Stretch Factor:',
+      errorLoad: 'Failed to load image.',
+      errorExport: 'Failed to generate stretched image.',
+    };
+
+    try {
+      if (appEl.dataset.i18n) {
+        i18n = { ...i18n, ...JSON.parse(appEl.dataset.i18n) };
+      }
+    } catch (e) {
+      console.warn('Failed to parse i18n data', e);
+    }
+
+    // DOM Elements
+    const dropzone = document.getElementById('stretcherDropzone')!;
+    const fileInput = document.getElementById('stretcherFileInput') as HTMLInputElement;
+    const changeFileInput = document.getElementById('changeFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('stretcherSampleBtn')!;
+    const loadingCard = document.getElementById('stretcherLoadingCard')!;
+    const loadingText = document.getElementById('stretcherLoadingText')!;
+    const workspace = document.getElementById('stretcherWorkspace')!;
+
+    const livePreviewImg = document.getElementById('livePreviewImg') as HTMLImageElement;
+    const previewCanvasWrapper = document.getElementById('previewCanvasWrapper')!;
+    const previewDimBadge = document.getElementById('previewDimBadge')!;
+    const previewFactorBadge = document.getElementById('previewFactorBadge')!;
+    const originalMetaText = document.getElementById('originalMetaText')!;
+    const sourceFileName = document.getElementById('sourceFileName')!;
+
+    const widthInput = document.getElementById('stretchWidthInput') as HTMLInputElement;
+    const widthSlider = document.getElementById('stretchWidthSlider') as HTMLInputElement;
+    const widthDisplay = document.getElementById('widthDisplay')!;
+
+    const heightInput = document.getElementById('stretchHeightInput') as HTMLInputElement;
+    const heightSlider = document.getElementById('stretchHeightSlider') as HTMLInputElement;
+    const heightDisplay = document.getElementById('heightDisplay')!;
+
+    const lockRatioCheckbox = document.getElementById('lockRatioCheckbox') as HTMLInputElement;
+    const outputFormatSelect = document.getElementById('outputFormatSelect') as HTMLSelectElement;
+    const downloadBtn = document.getElementById('stretcherDownloadBtn')!;
+    const downloadBtnText = document.getElementById('downloadBtnText')!;
+    const resetBtn = document.getElementById('stretcherResetBtn')!;
+    const presetPills = document.querySelectorAll('.preset-pill-chip');
+
+    // State
+    let state: StretcherState | null = null;
+    let initialRatio: number = 1.5;
+
+    function updatePreviewTransform() {
+      if (!state) return;
+
+      const currentW = Math.max(1, parseInt(widthInput.value) || state.originalWidth);
+      const currentH = Math.max(1, parseInt(heightInput.value) || state.originalHeight);
+
+      state.currentWidth = currentW;
+      state.currentHeight = currentH;
+
+      // Update text displays
+      widthDisplay.textContent = `${currentW} px`;
+      heightDisplay.textContent = `${currentH} px`;
+      previewDimBadge.textContent = `${currentW} × ${currentH} px`;
+
+      const wFactor = Math.round(((currentW - state.originalWidth) / state.originalWidth) * 100);
+      const hFactor = Math.round(((currentH - state.originalHeight) / state.originalHeight) * 100);
+
+      const wSign = wFactor >= 0 ? `+${wFactor}%` : `${wFactor}%`;
+      const hSign = hFactor >= 0 ? `+${hFactor}%` : `${hFactor}%`;
+
+      previewFactorBadge.textContent = `${wSign} W • ${hSign} H`;
+
+      // Set aspect ratio of preview container
+      previewCanvasWrapper.style.aspectRatio = `${currentW} / ${currentH}`;
+    }
+
+    function syncInputs(newW: number, newH: number) {
+      if (!state) return;
+
+      const roundedW = Math.max(1, Math.round(newW));
+      const roundedH = Math.max(1, Math.round(newH));
+
+      widthInput.value = roundedW.toString();
+      widthSlider.value = roundedW.toString();
+
+      heightInput.value = roundedH.toString();
+      heightSlider.value = roundedH.toString();
+
+      updatePreviewTransform();
+    }
+
+    function initWorkspace(newState: StretcherState) {
+      if (state && state.previewUrl && state.previewUrl !== newState.previewUrl) {
+        URL.revokeObjectURL(state.previewUrl);
+      }
+
+      state = newState;
+      initialRatio = state.originalWidth / state.originalHeight;
+
+      sourceFileName.textContent = `${state.name}.${state.extension}`;
+      originalMetaText.textContent = `${i18n.previewOriginal} ${state.originalWidth} × ${state.originalHeight} px (${state.formattedOriginalSize})`;
+
+      // Configure sliders range
+      const minW = Math.max(10, Math.round(state.originalWidth * 0.1));
+      const maxW = Math.round(state.originalWidth * 3.0);
+      widthSlider.min = minW.toString();
+      widthSlider.max = maxW.toString();
+
+      const minH = Math.max(10, Math.round(state.originalHeight * 0.1));
+      const maxH = Math.round(state.originalHeight * 3.0);
+      heightSlider.min = minH.toString();
+      heightSlider.max = maxH.toString();
+
+      livePreviewImg.src = state.previewUrl!;
+
+      // Initial dimension setup
+      syncInputs(state.originalWidth, state.originalHeight);
+
+      dropzone.style.display = 'none';
+      loadingCard.style.display = 'none';
+      workspace.style.display = 'grid';
+    }
+
+    async function handleFile(file: File) {
+      try {
+        loadingCard.style.display = 'flex';
+        loadingText.textContent = i18n.statusLoading;
+        const newState = await ImageStretcherEngine.loadFile(file);
+        initWorkspace(newState);
+      } catch (err) {
+        console.error(err);
+        alert(i18n.errorLoad);
+        loadingCard.style.display = 'none';
+      }
+    }
+
+    // Width input listeners
+    widthInput.addEventListener('input', () => {
+      if (!state) return;
+      let val = parseInt(widthInput.value);
+      if (isNaN(val) || val < 1) val = 1;
+      widthSlider.value = val.toString();
+
+      if (lockRatioCheckbox.checked) {
+        const correspondingH = Math.round(val / initialRatio);
+        heightInput.value = correspondingH.toString();
+        heightSlider.value = correspondingH.toString();
+      }
+
+      updatePreviewTransform();
+    });
+
+    widthSlider.addEventListener('input', () => {
+      if (!state) return;
+      const val = parseInt(widthSlider.value);
+      widthInput.value = val.toString();
+
+      if (lockRatioCheckbox.checked) {
+        const correspondingH = Math.round(val / initialRatio);
+        heightInput.value = correspondingH.toString();
+        heightSlider.value = correspondingH.toString();
+      }
+
+      updatePreviewTransform();
+    });
+
+    // Height input listeners
+    heightInput.addEventListener('input', () => {
+      if (!state) return;
+      let val = parseInt(heightInput.value);
+      if (isNaN(val) || val < 1) val = 1;
+      heightSlider.value = val.toString();
+
+      if (lockRatioCheckbox.checked) {
+        const correspondingW = Math.round(val * initialRatio);
+        widthInput.value = correspondingW.toString();
+        widthSlider.value = correspondingW.toString();
+      }
+
+      updatePreviewTransform();
+    });
+
+    heightSlider.addEventListener('input', () => {
+      if (!state) return;
+      const val = parseInt(heightSlider.value);
+      heightInput.value = val.toString();
+
+      if (lockRatioCheckbox.checked) {
+        const correspondingW = Math.round(val * initialRatio);
+        widthInput.value = correspondingW.toString();
+        widthSlider.value = correspondingW.toString();
+      }
+
+      updatePreviewTransform();
+    });
+
+    // Lock aspect ratio checkbox
+    lockRatioCheckbox.addEventListener('change', () => {
+      if (!state) return;
+      if (lockRatioCheckbox.checked) {
+        initialRatio = state.currentWidth / state.currentHeight;
+      }
+    });
+
+    // Presets & Multipliers
+    presetPills.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        if (!state) return;
+        const action = chip.getAttribute('data-action');
+        const ratio = chip.getAttribute('data-ratio');
+
+        if (action) {
+          switch (action) {
+            case 'w-1.5':
+              syncInputs(state.originalWidth * 1.5, state.originalHeight);
+              break;
+            case 'w-2.0':
+              syncInputs(state.originalWidth * 2.0, state.originalHeight);
+              break;
+            case 'h-1.5':
+              syncInputs(state.originalWidth, state.originalHeight * 1.5);
+              break;
+            case 'h-2.0':
+              syncInputs(state.originalWidth, state.originalHeight * 2.0);
+              break;
+            case 'square': {
+              const maxDim = Math.max(state.originalWidth, state.originalHeight);
+              syncInputs(maxDim, maxDim);
+              break;
+            }
+            case 'orig':
+              syncInputs(state.originalWidth, state.originalHeight);
+              break;
+          }
+        } else if (ratio) {
+          const parts = ratio.split(':').map(Number);
+          if (parts.length === 2 && parts[0] > 0 && parts[1] > 0) {
+            const targetRatio = parts[0] / parts[1];
+            // Adjust width based on original height or vice-versa
+            const newW = Math.round(state.originalHeight * targetRatio);
+            syncInputs(newW, state.originalHeight);
+          }
+        }
+      });
+    });
+
+    // Download stretched image
+    downloadBtn.addEventListener('click', async () => {
+      if (!state || !state.img) return;
+
+      try {
+        downloadBtn.setAttribute('disabled', 'true');
+        downloadBtnText.textContent = i18n.statusProcessing;
+
+        let targetMime = state.mimeType;
+        let ext = state.extension;
+        const selectedFmt = outputFormatSelect.value;
+
+        if (selectedFmt !== 'original') {
+          targetMime = selectedFmt;
+          if (targetMime === 'image/jpeg') ext = 'jpg';
+          else if (targetMime === 'image/png') ext = 'png';
+          else if (targetMime === 'image/webp') ext = 'webp';
+        }
+
+        const result = await ImageStretcherEngine.exportStretchedImage(
+          state.img,
+          state.currentWidth,
+          state.currentHeight,
+          targetMime,
+          0.92
+        );
+
+        const outFilename = `${state.name}_stretched_${state.currentWidth}x${state.currentHeight}.${ext}`;
+        ImageStretcherEngine.downloadBlob(result.blob, outFilename);
+      } catch (err) {
+        console.error(err);
+        alert(i18n.errorExport);
+      } finally {
+        downloadBtn.removeAttribute('disabled');
+        downloadBtnText.textContent = i18n.actionDownload;
+      }
+    });
+
+    // Reset button
+    resetBtn.addEventListener('click', () => {
+      if (state) {
+        syncInputs(state.originalWidth, state.originalHeight);
+      }
+    });
+
+    // File Picker Listeners
+    fileInput.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        handleFile(target.files[0]);
+        fileInput.value = '';
+      }
+    });
+
+    changeFileInput.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        handleFile(target.files[0]);
+        changeFileInput.value = '';
+      }
+    });
+
+    // Sample Image Button
+    sampleBtn.addEventListener('click', async () => {
+      try {
+        loadingCard.style.display = 'flex';
+        loadingText.textContent = i18n.statusSampleGenerating;
+        const sample = await ImageStretcherEngine.generateSampleImage();
+        await handleFile(sample);
+      } catch (e) {
+        console.error(e);
+        loadingCard.style.display = 'none';
+      }
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('is-dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('is-dragover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files[0]) {
+        handleFile(dt.files[0]);
+      }
+    });
+
+    // Clipboard Paste Support
+    window.addEventListener('paste', (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleFile(file);
+            break;
+          }
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .stretcher-app-container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  /* Dropzone Card */
+  .stretcher-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    transition: all var(--transition-normal);
+  }
+
+  .stretcher-dropzone-card:hover,
+  .stretcher-dropzone-card.is-dragover {
+    border-color: var(--color-accent);
+    background: var(--color-surface-subtle);
+  }
+
+  .stretcher-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .stretcher-icon-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .stretcher-drop-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .stretcher-drop-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .stretcher-btn-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .stretcher-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    padding: var(--space-3) var(--space-5);
+  }
+
+  .stretcher-sample-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .stretcher-formats-hint {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 0;
+  }
+
+  .stretcher-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-success);
+    background: var(--color-success-light, rgba(16, 185, 129, 0.1));
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    margin-top: var(--space-2);
+  }
+
+  /* Loading State */
+  .stretcher-loading-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .stretcher-spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .stretcher-loading-text {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* Workspace 2-Column Grid */
+  .stretcher-workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 900px) {
+    .stretcher-workspace-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: start;
+    }
+  }
+
+  /* Left Column: Live Preview Card */
+  .stretcher-preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .preview-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .preview-badge-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .preview-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .preview-dim-text {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .preview-factor-badge {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+  }
+
+  .preview-viewport-container {
+    width: 100%;
+    height: 380px;
+    background: 
+      linear-gradient(45deg, rgba(0,0,0,0.04) 25%, transparent 25%), 
+      linear-gradient(-45deg, rgba(0,0,0,0.04) 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.04) 75%), 
+      linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.04) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .preview-viewport-container {
+      height: 460px;
+    }
+  }
+
+  .preview-canvas-wrapper {
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: aspect-ratio 0.05s ease-out;
+  }
+
+  .live-stretched-img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+  }
+
+  .preview-footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+  }
+
+  /* Right Column: Controls Card */
+  .stretcher-controls-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .controls-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .source-file-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+  }
+
+  .change-img-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  /* Slider & Input Group */
+  .stretch-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .control-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .control-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .control-value-display {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .input-slider-combo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .stretch-number-input {
+    width: 100px;
+    height: 38px;
+    padding: 0 var(--space-2-5);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+
+  .stretch-number-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .stretch-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-border);
+    accent-color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  /* Presets */
+  .presets-section-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .section-sublabel {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .chips-flex-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    flex-wrap: wrap;
+  }
+
+  .preset-pill-chip {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .preset-pill-chip:hover {
+    border-color: var(--color-border-hover);
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .chip-reset {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  /* Toggle Row */
+  .toggle-row-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2-5);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checkbox-container input {
+    margin-top: 3px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  .checkbox-label-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .checkbox-label-title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .checkbox-label-subtitle {
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+
+  /* Format Select */
+  .format-select-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .format-select {
+    height: 36px;
+    padding: 0 var(--space-3);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+
+  /* Action Buttons */
+  .action-buttons-box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+    margin-top: var(--space-2);
+  }
+
+  .stretcher-download-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .stretcher-reset-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+</style>

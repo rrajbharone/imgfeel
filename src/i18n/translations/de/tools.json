@@ -88,6 +88,10 @@
   "tools.batchRenameImages.description": "Benenne mehrere Bilder online kostenlos und privat im Browser um.",
   "tools.imageSplitter.title": "Bilder Teilen (Foto in Raster, Zeilen & Spalten Schneiden)",
   "tools.imageSplitter.description": "Teilen Sie Bilder online kostenlos in gleiche Teile, Zeilen, Spalten oder Raster für Instagram 3x3 Posts, Karussells und Banner mit 100% Datenschutz.",
-  "tools.pixelCounter.title": "Pixel-Zähler (Bildpixel Zählen & Exakte Abmessungen)",
-  "tools.pixelCounter.description": "Berechnen Sie Pixelmaße, Gesamtpixel, Megapixel, Seitenverhältnis und Dateiformat sofort mit 100% Browser-Datenschutz."
+  "tools.pixelCounter.title": "Pixel-Zähler (Pixel & Exakte Bildabmessungen Zählen)",
+  "tools.pixelCounter.description": "Überprüfen Sie Bildpixel, Gesamtzahl der Pixel, Megapixel, Seitenverhältnis und Dateiformat sofort mit 100% Datenschutz.",
+  "tools.batchResizer.title": "Mehrere Bilder Gleichzeitig Verkleinern",
+  "tools.batchResizer.description": "Mehrere Fotos und Bilder gleichzeitig online verkleinern mit Verhältnissperre, Skalierung und ZIP-Download.",
+  "tools.imageStretcher.title": "Bild Strecken Online (Breite & Höhe von Fotos Verzerren)",
+  "tools.imageStretcher.description": "Strecken oder verzerren Sie Bildbreite und Bildhöhe unabhängig voneinander mit sofortiger Live-Vorschau und 100% lokaler Privatsphäre."
 }

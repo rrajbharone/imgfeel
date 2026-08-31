@@ -2,6 +2,16 @@ import type { Locale } from '@/i18n/config';
 import { t } from '@/i18n/utils';
 
 export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
+  'resize-multiple-images': {
+    en: 'resize-multiple-images-at-once',
+    es: 'redimensionar-varias-imagenes-a-la-vez',
+    pt: 'redimensionar-varias-imagens-de-uma-vez',
+    fr: 'redimensionner-plusieurs-images-a-la-fois',
+    de: 'mehrere-bilder-gleichzeitig-verkleinern',
+    id: 'ubah-ukuran-banyak-gambar-sekaligus',
+    tr: 'ayni-anda-birden-fazla-resim-boyutlandirma',
+    it: 'ridimensionare-piu-immagini-contemporaneamente',
+  },
   'pixel-counter': {
     en: 'pixel-counter',
     es: 'contador-de-pixeles',
@@ -421,6 +431,16 @@ export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
     id: 'latar-belakang-putih-gambar-produk',
     tr: 'urun-resmi-beyaz-arka-plan',
     it: 'sfondo-bianco-immagine-prodotto',
+  },
+  'image-stretcher': {
+    en: 'image-stretcher-online',
+    es: 'estirar-imagen-online',
+    pt: 'esticar-imagem-online',
+    fr: 'etirer-image-en-ligne',
+    de: 'bild-strecken-online',
+    id: 'merentangkan-gambar-online',
+    tr: 'resim-esnetme-online',
+    it: 'allungare-immagine-online',
   },
 };
 
@@ -864,7 +884,27 @@ export const tools: ToolDefinition[] = [
     category: 'inspect',
     titleKey: 'tools.pixelCounter.title',
     descKey: 'tools.pixelCounter.description',
-    keywords: ['pixel counter', 'image pixel counter', 'count image pixels', 'image dimensions checker', 'photo pixel size checker', 'pixels in image', 'check image resolution', 'total pixels calculator', 'megapixels calculator', 'how many pixels in photo'],
+    keywords: ['image pixel counter', 'count image pixels', 'exact image dimensions', 'calculate megapixels', 'image size in pixels', 'picture pixel size', 'photo resolution checker', 'count pixels online', 'how many pixels in image', 'image dimensions calculator'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
+    id: 'resize-multiple-images',
+    icon: 'resize',
+    category: 'resize',
+    titleKey: 'tools.batchResizer.title',
+    descKey: 'tools.batchResizer.description',
+    keywords: ['resize multiple images at once', 'resize multiple images', 'bulk image resizer', 'resize multiple photos', 'resize multiple images online', 'batch image resize', 'batch photo resizer', 'resize photos in bulk'],
+    badge: 'NEW',
+    isActive: true,
+  },
+  {
+    id: 'image-stretcher',
+    icon: 'maximize',
+    category: 'resize',
+    titleKey: 'tools.imageStretcher.title',
+    descKey: 'tools.imageStretcher.description',
+    keywords: ['image stretcher online', 'stretch image online', 'stretch photo online', 'stretch image horizontally', 'stretch image vertically', 'change image width and height', 'distort image online', 'photo stretch online', 'widen image online', 'elongate photo'],
     badge: 'NEW',
     isActive: true,
   },
@@ -926,5 +966,6 @@ export function getSearchableTools(locale: Locale): SearchableTool[] {
         icon: tool.icon,
         badge: tool.badge,
       };
-    });
+    })
+    .sort((a, b) => a.title.localeCompare(b.title, locale, { sensitivity: 'base' }));
 }

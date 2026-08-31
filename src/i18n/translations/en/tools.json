@@ -89,5 +89,9 @@
   "tools.imageSplitter.title": "Image Splitter (Split Photo into Grid, Rows & Columns)",
   "tools.imageSplitter.description": "Split images into equal parts, rows, columns, or grids online for Instagram 3x3 posts, carousels, and banners with 100% in-browser privacy.",
   "tools.pixelCounter.title": "Pixel Counter (Count Image Pixels & Exact Dimensions)",
-  "tools.pixelCounter.description": "Instantly check image pixel dimensions, count total pixels, calculate megapixels, aspect ratio, and file format with 100% in-browser privacy."
+  "tools.pixelCounter.description": "Instantly check image pixel dimensions, count total pixels, calculate megapixels, aspect ratio, and file format with 100% in-browser privacy.",
+  "tools.batchResizer.title": "Resize Multiple Images at Once (Bulk Image Resizer)",
+  "tools.batchResizer.description": "Resize multiple photos and images simultaneously online with aspect ratio lock, percentage scale, and instant ZIP download.",
+  "tools.imageStretcher.title": "Image Stretcher Online (Stretch Photo Width & Height)",
+  "tools.imageStretcher.description": "Stretch or distort image width and height independently with instant real-time live preview and 100% in-browser privacy."
 }
