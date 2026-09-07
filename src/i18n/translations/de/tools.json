@@ -93,5 +93,9 @@
   "tools.batchResizer.title": "Mehrere Bilder Gleichzeitig Verkleinern",
   "tools.batchResizer.description": "Mehrere Fotos und Bilder gleichzeitig online verkleinern mit Verhältnissperre, Skalierung und ZIP-Download.",
   "tools.imageStretcher.title": "Bild Strecken Online (Breite & Höhe von Fotos Verzerren)",
-  "tools.imageStretcher.description": "Strecken oder verzerren Sie Bildbreite und Bildhöhe unabhängig voneinander mit sofortiger Live-Vorschau und 100% lokaler Privatsphäre."
+  "tools.imageStretcher.description": "Strecken oder verzerren Sie Bildbreite und Bildhöhe unabhängig voneinander mit sofortiger Live-Vorschau und 100% lokaler Privatsphäre.",
+  "tools.seoFilenameGenerator.title": "SEO Bild-Dateinamen-Generator",
+  "tools.seoFilenameGenerator.description": "Erstellen Sie beschreibende, SEO-optimierte Dateinamen für Bilder automatisch und laden Sie die umbenannte Datei mit einem Klick herunter.",
+  "tools.whatsappCompressor.title": "WhatsApp Foto-Komprimierer (Bilder für WhatsApp komprimieren)",
+  "tools.whatsappCompressor.description": "Komprimieren Sie Fotos auf Zielgrößen (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) für schnellen WhatsApp-Versand bei bester Bildqualität."
 }

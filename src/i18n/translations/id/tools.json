@@ -93,5 +93,9 @@
   "tools.batchResizer.title": "Ubah Ukuran Banyak Gambar Sekaligus",
   "tools.batchResizer.description": "Ubah ukuran banyak foto sekaligus online dengan kunci rasio aspek, skala persentase, dan unduhan ZIP instan.",
   "tools.imageStretcher.title": "Merentangkan Gambar Online (Tarik Lebar & Tinggi Foto)",
-  "tools.imageStretcher.description": "Rentangkan atau distorsi lebar dan tinggi gambar secara terpisah dengan pratinjau langsung waktu nyata dan 100% privasi browser."
+  "tools.imageStretcher.description": "Rentangkan atau distorsi lebar dan tinggi gambar secara terpisah dengan pratinjau langsung waktu nyata dan 100% privasi browser.",
+  "tools.seoFilenameGenerator.title": "Generator Nama File Gambar SEO",
+  "tools.seoFilenameGenerator.description": "Buat nama file gambar yang deskriptif dan ramah SEO secara otomatis serta unduh gambar yang diganti namanya dalam satu klik.",
+  "tools.whatsappCompressor.title": "Kompres Foto WhatsApp (Kompres Gambar untuk WhatsApp)",
+  "tools.whatsappCompressor.description": "Kompres foto dan gambar ke ukuran target (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) untuk berbagi WhatsApp dengan lancar tanpa kehilangan kualitas visual."
 }

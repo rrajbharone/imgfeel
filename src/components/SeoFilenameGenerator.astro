@@ -1,0 +1,1097 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const i18nDict = {
+  statusAnalyzing: t(locale, 'seoFilename.status.analyzing'),
+  statusLoadingModel: t(locale, 'seoFilename.status.loadingModel'),
+  statusAnalyzingAi: t(locale, 'seoFilename.status.analyzingAi'),
+  statusCopied: t(locale, 'seoFilename.status.copied'),
+  statusDownloading: t(locale, 'seoFilename.status.downloading'),
+  actionDownload: t(locale, 'seoFilename.action.download'),
+  actionCopy: t(locale, 'seoFilename.action.copy'),
+  errorLoad: t(locale, 'seoFilename.error.load'),
+  errorCopy: t(locale, 'seoFilename.error.copy'),
+  aiBadge: t(locale, 'seoFilename.results.aiBadge'),
+  aiDetected: t(locale, 'seoFilename.results.aiDetected'),
+};
+---
+
+<div class="seo-generator-container" id="seoGeneratorApp" data-i18n={JSON.stringify(i18nDict)}>
+  <!-- Dropzone Card (Visible initially) -->
+  <div class="seo-dropzone-card" id="seoDropzone">
+    <div class="seo-dropzone-content">
+      <div class="seo-icon-circle">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+        </svg>
+      </div>
+
+      <h2 class="seo-drop-title">{t(locale, 'seoFilename.dropzone.title')}</h2>
+      <p class="seo-drop-subtitle">{t(locale, 'seoFilename.dropzone.subtitle')}</p>
+
+      <div class="seo-btn-row">
+        <label class="btn btn-primary seo-btn-primary" for="seoFileInput">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>{t(locale, 'seoFilename.dropzone.browse')}</span>
+        </label>
+        <input type="file" id="seoFileInput" accept="image/*,.jpg,.jpeg,.png,.webp,.avif,.gif,.bmp" class="sr-only" />
+
+        <button type="button" class="btn btn-secondary seo-sample-btn" id="seoSampleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span>{t(locale, 'seoFilename.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <p class="seo-formats-hint">{t(locale, 'seoFilename.dropzone.formats')}</p>
+
+      <div class="seo-privacy-badge">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{t(locale, 'seoFilename.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analyzing State Card -->
+  <div class="seo-analyzing-card" id="seoAnalyzingCard" style="display: none;">
+    <div class="seo-spinner"></div>
+    <div class="seo-analyzing-info">
+      <p class="seo-analyzing-text" id="seoAnalyzingStatus">{t(locale, 'seoFilename.status.analyzing')}</p>
+      <div class="seo-progress-bar-container">
+        <div class="seo-progress-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results View Card (Visible after analysis) -->
+  <div class="seo-results-card" id="seoResultsCard" style="display: none;">
+    <!-- Top Row: Thumbnail + File Metadata & AI Detection -->
+    <div class="results-preview-section">
+      <div class="thumb-container">
+        <img id="seoImageThumb" src="" alt="Analyzed Media Thumbnail" class="thumb-img" />
+      </div>
+
+      <div class="metadata-col">
+        <div class="meta-header-row">
+          <div class="meta-item">
+            <span class="meta-label">{t(locale, 'seoFilename.results.originalFile')}</span>
+            <span class="meta-value original-name-highlight" id="resOriginalName">IMG_982341.jpg</span>
+          </div>
+
+          <!-- AI Recognition Badge -->
+          <div class="ai-recognition-badge" id="aiBadgeContainer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span id="aiBadgeText">{t(locale, 'seoFilename.results.aiBadge')}</span>
+          </div>
+        </div>
+
+        <div class="ai-detected-subject-row" id="aiDetectedRow">
+          <span class="ai-detected-label">{t(locale, 'seoFilename.results.aiDetected')}</span>
+          <span class="ai-detected-tag" id="resAiSubject">Espresso Coffee Cup</span>
+        </div>
+
+        <div class="meta-chips-row">
+          <span class="meta-chip" id="resDimensions">1200 × 800 px</span>
+          <span class="meta-chip" id="resFileSize">245 KB</span>
+          <span class="meta-chip" id="resAspectRatio">16:9 Landscape</span>
+          <span class="meta-chip chip-tone" id="resDominantTone">Warm Tone</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Output: Generated Filename Box -->
+    <div class="seo-output-section">
+      <div class="output-header-row">
+        <label class="output-label" for="generatedFilenameInput">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+          </svg>
+          <span>{t(locale, 'seoFilename.results.labelGenerated')}</span>
+        </label>
+
+        <button type="button" class="btn btn-secondary copy-btn" id="copyFilenameBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span id="copyBtnText">{t(locale, 'seoFilename.action.copy')}</span>
+        </button>
+      </div>
+
+      <div class="filename-input-wrapper">
+        <input
+          type="text"
+          id="generatedFilenameInput"
+          class="seo-filename-input"
+          value="espresso-coffee-cup.jpg"
+          spellcheck="false"
+          autocomplete="off"
+        />
+      </div>
+
+      <p class="edit-hint-text">{t(locale, 'seoFilename.results.editHint')}</p>
+    </div>
+
+    <!-- Variant Selector Pills -->
+    <div class="variants-section">
+      <span class="variants-title">{t(locale, 'seoFilename.variants.heading')}</span>
+      <div class="variants-pills-row">
+        <button type="button" class="variant-pill active" id="pillStandard" data-variant="standard">
+          <div class="pill-header">
+            <span class="pill-dot"></span>
+            <span class="pill-title">{t(locale, 'seoFilename.variants.standard')}</span>
+          </div>
+          <span class="pill-preview" id="previewStandardText">filename.jpg</span>
+        </button>
+
+        <button type="button" class="variant-pill" id="pillConcise" data-variant="concise">
+          <div class="pill-header">
+            <span class="pill-dot"></span>
+            <span class="pill-title">{t(locale, 'seoFilename.variants.concise')}</span>
+          </div>
+          <span class="pill-preview" id="previewConciseText">filename.jpg</span>
+        </button>
+
+        <button type="button" class="variant-pill" id="pillDescriptive" data-variant="descriptive">
+          <div class="pill-header">
+            <span class="pill-dot"></span>
+            <span class="pill-title">{t(locale, 'seoFilename.variants.descriptive')}</span>
+          </div>
+          <span class="pill-preview" id="previewDescriptiveText">filename.jpg</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Primary Action Buttons -->
+    <div class="seo-actions-row">
+      <button type="button" class="btn btn-primary download-seo-btn" id="downloadSeoBtn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span id="downloadBtnText">{t(locale, 'seoFilename.action.download')}</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary reset-btn" id="seoResetBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+        <span>{t(locale, 'seoFilename.action.another')}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { SeoFilenameGeneratorEngine, type AnalysisResult } from '@/scripts/seo-filename-generator';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const appEl = document.getElementById('seoGeneratorApp');
+    if (!appEl) return;
+
+    let i18n = {
+      statusAnalyzing: 'Analyzing image content and generating SEO filename...',
+      statusLoadingModel: 'Loading AI visual recognition model...',
+      statusAnalyzingAi: 'Analyzing visual content and recognizing objects...',
+      statusCopied: 'Copied to clipboard!',
+      statusDownloading: 'Downloading with SEO filename...',
+      actionDownload: 'Download Image with SEO Filename',
+      actionCopy: 'Copy Filename',
+      errorLoad: 'Failed to load or analyze the image. Please try another file.',
+      errorCopy: 'Failed to copy to clipboard.',
+      aiBadge: 'AI Visual Recognition',
+      aiDetected: 'AI Detected Subject:',
+    };
+
+    try {
+      if (appEl.dataset.i18n) {
+        i18n = { ...i18n, ...JSON.parse(appEl.dataset.i18n) };
+      }
+    } catch (e) {
+      console.warn('Failed to parse i18n data', e);
+    }
+
+    // Preload model in background with low priority so it is ready instantly on upload
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => {
+        SeoFilenameGeneratorEngine.loadAiModel().catch(() => {});
+      });
+    } else {
+      setTimeout(() => {
+        SeoFilenameGeneratorEngine.loadAiModel().catch(() => {});
+      }, 1500);
+    }
+
+    // DOM Elements
+    const dropzone = document.getElementById('seoDropzone')!;
+    const fileInput = document.getElementById('seoFileInput') as HTMLInputElement;
+    const sampleBtn = document.getElementById('seoSampleBtn')!;
+    const analyzingCard = document.getElementById('seoAnalyzingCard')!;
+    const analyzingStatus = document.getElementById('seoAnalyzingStatus')!;
+    const resultsCard = document.getElementById('seoResultsCard')!;
+
+    const thumbImg = document.getElementById('seoImageThumb') as HTMLImageElement;
+    const resOriginalName = document.getElementById('resOriginalName')!;
+    const resAiSubject = document.getElementById('resAiSubject')!;
+    const resDimensions = document.getElementById('resDimensions')!;
+    const resFileSize = document.getElementById('resFileSize')!;
+    const resAspectRatio = document.getElementById('resAspectRatio')!;
+    const resDominantTone = document.getElementById('resDominantTone')!;
+
+    const filenameInput = document.getElementById('generatedFilenameInput') as HTMLInputElement;
+    const copyBtn = document.getElementById('copyFilenameBtn')!;
+    const copyBtnText = document.getElementById('copyBtnText')!;
+
+    const pillStandard = document.getElementById('pillStandard')!;
+    const pillConcise = document.getElementById('pillConcise')!;
+    const pillDescriptive = document.getElementById('pillDescriptive')!;
+    const previewStandardText = document.getElementById('previewStandardText')!;
+    const previewConciseText = document.getElementById('previewConciseText')!;
+    const previewDescriptiveText = document.getElementById('previewDescriptiveText')!;
+
+    const downloadBtn = document.getElementById('downloadSeoBtn')!;
+    const downloadBtnText = document.getElementById('downloadBtnText')!;
+    const resetBtn = document.getElementById('seoResetBtn')!;
+
+    let currentResult: AnalysisResult | null = null;
+    let currentVariant: 'standard' | 'concise' | 'descriptive' = 'standard';
+
+    function setResults(result: AnalysisResult) {
+      if (currentResult && currentResult.previewUrl && currentResult.previewUrl !== result.previewUrl) {
+        URL.revokeObjectURL(currentResult.previewUrl);
+      }
+
+      currentResult = result;
+      currentVariant = 'standard';
+
+      thumbImg.src = result.previewUrl;
+      resOriginalName.textContent = result.originalName;
+      resAiSubject.textContent = result.aiDetectedSubject;
+      resDimensions.textContent = `${result.width} × ${result.height} px`;
+      resFileSize.textContent = result.formattedSize;
+      resAspectRatio.textContent = result.aspectRatio;
+      resDominantTone.textContent = result.dominantTone.replace(/-/g, ' ');
+
+      previewStandardText.textContent = result.variants.standard;
+      previewConciseText.textContent = result.variants.concise;
+      previewDescriptiveText.textContent = result.variants.descriptive;
+
+      filenameInput.value = result.variants.standard;
+
+      // Update variant pill active state
+      updateActiveVariantPill();
+
+      dropzone.style.display = 'none';
+      analyzingCard.style.display = 'none';
+      resultsCard.style.display = 'flex';
+    }
+
+    function updateActiveVariantPill() {
+      [pillStandard, pillConcise, pillDescriptive].forEach((pill) => pill.classList.remove('active'));
+      if (currentVariant === 'standard') pillStandard.classList.add('active');
+      else if (currentVariant === 'concise') pillConcise.classList.add('active');
+      else if (currentVariant === 'descriptive') pillDescriptive.classList.add('active');
+    }
+
+    async function handleFile(file: File) {
+      try {
+        dropzone.style.display = 'none';
+        resultsCard.style.display = 'none';
+        analyzingCard.style.display = 'flex';
+        analyzingStatus.textContent = i18n.statusAnalyzing;
+
+        const result = await SeoFilenameGeneratorEngine.analyzeImage(file, (msg) => {
+          if (msg.includes('AI') || msg.includes('object')) {
+            analyzingStatus.textContent = i18n.statusAnalyzingAi;
+          } else if (msg.includes('model') || msg.includes('vision')) {
+            analyzingStatus.textContent = i18n.statusLoadingModel;
+          } else {
+            analyzingStatus.textContent = i18n.statusAnalyzing;
+          }
+        });
+
+        setResults(result);
+      } catch (err) {
+        console.error(err);
+        alert(i18n.errorLoad);
+        analyzingCard.style.display = 'none';
+        dropzone.style.display = 'flex';
+      }
+    }
+
+    // Variant pills listeners
+    pillStandard.addEventListener('click', () => {
+      if (!currentResult) return;
+      currentVariant = 'standard';
+      filenameInput.value = currentResult.variants.standard;
+      updateActiveVariantPill();
+    });
+
+    pillConcise.addEventListener('click', () => {
+      if (!currentResult) return;
+      currentVariant = 'concise';
+      filenameInput.value = currentResult.variants.concise;
+      updateActiveVariantPill();
+    });
+
+    pillDescriptive.addEventListener('click', () => {
+      if (!currentResult) return;
+      currentVariant = 'descriptive';
+      filenameInput.value = currentResult.variants.descriptive;
+      updateActiveVariantPill();
+    });
+
+    // Copy Filename button
+    copyBtn.addEventListener('click', async () => {
+      const name = filenameInput.value.trim();
+      if (!name) return;
+      try {
+        await navigator.clipboard.writeText(name);
+        copyBtnText.textContent = i18n.statusCopied;
+        setTimeout(() => {
+          copyBtnText.textContent = i18n.actionCopy;
+        }, 2000);
+      } catch (e) {
+        console.error(e);
+        filenameInput.select();
+        document.execCommand('copy');
+        copyBtnText.textContent = i18n.statusCopied;
+        setTimeout(() => {
+          copyBtnText.textContent = i18n.actionCopy;
+        }, 2000);
+      }
+    });
+
+    // Download Button with exact SEO filename
+    downloadBtn.addEventListener('click', () => {
+      if (!currentResult || !currentResult.originalFile) return;
+
+      let chosenName = filenameInput.value.trim();
+      if (!chosenName) {
+        chosenName = currentResult.recommendedFilename;
+      }
+
+      // Ensure extension is preserved if user accidentally stripped it
+      if (!chosenName.includes('.')) {
+        chosenName += `.${currentResult.extension}`;
+      }
+
+      // Format safely
+      const lastDot = chosenName.lastIndexOf('.');
+      const base = SeoFilenameGeneratorEngine.slugify(chosenName.substring(0, lastDot));
+      const ext = chosenName.substring(lastDot + 1).toLowerCase();
+      const finalCleanName = `${base}.${ext}`;
+
+      downloadBtnText.textContent = i18n.statusDownloading;
+      downloadBtn.setAttribute('disabled', 'true');
+
+      SeoFilenameGeneratorEngine.downloadFileWithSeoName(currentResult.originalFile, finalCleanName);
+
+      setTimeout(() => {
+        downloadBtnText.textContent = i18n.actionDownload;
+        downloadBtn.removeAttribute('disabled');
+      }, 1000);
+    });
+
+    // Reset button
+    resetBtn.addEventListener('click', () => {
+      resultsCard.style.display = 'none';
+      dropzone.style.display = 'flex';
+      fileInput.value = '';
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        handleFile(target.files[0]);
+      }
+    });
+
+    // Sample button
+    sampleBtn.addEventListener('click', async () => {
+      try {
+        dropzone.style.display = 'none';
+        analyzingCard.style.display = 'flex';
+        analyzingStatus.textContent = i18n.statusAnalyzing;
+        const sampleFile = await SeoFilenameGeneratorEngine.generateSampleImage();
+        await handleFile(sampleFile);
+      } catch (err) {
+        console.error(err);
+        analyzingCard.style.display = 'none';
+        dropzone.style.display = 'flex';
+      }
+    });
+
+    // Drag and drop listeners
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('is-dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('is-dragover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files[0]) {
+        handleFile(dt.files[0]);
+      }
+    });
+
+    // Clipboard Paste support
+    window.addEventListener('paste', (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleFile(file);
+            break;
+          }
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .seo-generator-container {
+    width: 100%;
+    max-width: 840px;
+    margin: 0 auto;
+  }
+
+  /* Dropzone Card */
+  .seo-dropzone-card {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10) var(--space-6);
+    text-align: center;
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .seo-dropzone-card:hover,
+  .seo-dropzone-card.is-dragover {
+    border-color: var(--color-accent);
+    background: var(--color-surface-subtle);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.08);
+  }
+
+  .seo-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: 540px;
+    width: 100%;
+  }
+
+  .seo-icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.15);
+  }
+
+  .seo-drop-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .seo-drop-subtitle {
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .seo-btn-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-1);
+    width: 100%;
+  }
+
+  .seo-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    min-height: 48px;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.25), 0 6px 16px -2px rgba(99, 102, 241, 0.2);
+    transition: all 0.15s ease;
+  }
+
+  .seo-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35), 0 8px 20px -2px rgba(99, 102, 241, 0.25);
+  }
+
+  .seo-sample-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 13px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+  }
+
+  .seo-sample-btn:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-surface-subtle);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .seo-formats-hint {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 0;
+    line-height: 1.4;
+  }
+
+  .seo-privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-success);
+    background: var(--color-success-light, rgba(16, 185, 129, 0.1));
+    border: 1px solid var(--color-success-border, rgba(16, 185, 129, 0.2));
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    margin-top: var(--space-2);
+  }
+
+  /* Analyzing State */
+  .seo-analyzing-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .seo-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3.5px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .seo-analyzing-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .seo-analyzing-text {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .seo-progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .seo-progress-bar-fill {
+    width: 100%;
+    height: 100%;
+    background: var(--color-accent);
+    border-radius: var(--radius-full);
+    animation: progressShimmer 1.5s ease-in-out infinite;
+    transform-origin: 0% 50%;
+  }
+
+  @keyframes progressShimmer {
+    0% { transform: scaleX(0.1); }
+    50% { transform: scaleX(0.8); }
+    100% { transform: scaleX(1); }
+  }
+
+  /* Results Card */
+  .seo-results-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  @media (max-width: 640px) {
+    .seo-results-card {
+      padding: var(--space-4);
+      gap: var(--space-4);
+    }
+  }
+
+  /* Preview Section */
+  .results-preview-section {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+
+  @media (max-width: 560px) {
+    .results-preview-section {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-3);
+    }
+  }
+
+  .thumb-container {
+    width: 96px;
+    height: 76px;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 560px) {
+    .thumb-container {
+      width: 100%;
+      height: 140px;
+    }
+  }
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .metadata-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .meta-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    min-width: 0;
+  }
+
+  .meta-label {
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .original-name-highlight {
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ai-recognition-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4338ca;
+    background: #e0e7ff;
+    border: 1px solid #c7d2fe;
+    padding: 2.5px 9px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .ai-detected-subject-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .ai-detected-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .ai-detected-tag {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    padding: 2.5px 12px;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .meta-chips-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 2.5px 9px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .chip-tone {
+    text-transform: capitalize;
+    color: var(--color-accent);
+    border-color: rgba(99, 102, 241, 0.25);
+    background: var(--color-surface);
+  }
+
+  /* SEO Output Section */
+  .seo-output-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2-5);
+  }
+
+  .output-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .output-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    min-height: 36px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+  }
+
+  .filename-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .seo-filename-input {
+    width: 100%;
+    height: 52px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-base);
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--color-accent);
+    background: var(--color-surface-subtle);
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+  }
+
+  .seo-filename-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--color-accent-light);
+    background: var(--color-surface);
+  }
+
+  .edit-hint-text {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Variants Section */
+  .variants-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .variants-title {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .variants-pills-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 640px) {
+    .variants-pills-row {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+  }
+
+  .variant-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition-fast);
+    position: relative;
+    min-height: 72px;
+  }
+
+  .variant-pill:hover {
+    border-color: var(--color-accent);
+    background: var(--color-surface-subtle);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.06);
+  }
+
+  .variant-pill.active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .pill-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border);
+    flex-shrink: 0;
+    transition: background var(--transition-fast);
+  }
+
+  .variant-pill.active .pill-dot {
+    background: var(--color-accent);
+  }
+
+  .pill-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .pill-preview {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-family: monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding-left: 16px;
+  }
+
+  /* Actions Row */
+  .seo-actions-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: var(--space-4);
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .seo-actions-row {
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+
+  .download-seo-btn {
+    flex: 1 1 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    min-height: 52px;
+    padding: 14px 28px;
+    font-size: 15.5px;
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.25), 0 8px 18px -2px rgba(99, 102, 241, 0.2);
+    transition: all 0.15s ease;
+  }
+
+  .download-seo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35), 0 12px 24px -2px rgba(99, 102, 241, 0.28);
+  }
+
+  .reset-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    min-height: 52px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-surface-subtle);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+</style>

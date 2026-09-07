@@ -93,5 +93,9 @@
   "tools.batchResizer.title": "Ridimensionare Più Immagini Contemporaneamente",
   "tools.batchResizer.description": "Ridimensiona più foto contemporaneamente online con blocco proporzioni, scala percentuale e download in ZIP.",
   "tools.imageStretcher.title": "Allungare Immagine Online (Allunga Larghezza e Altezza Foto)",
-  "tools.imageStretcher.description": "Allunga o distorci larghezza e altezza dell'immagine in modo indipendente con anteprima in tempo reale e privacy al 100% nel browser."
+  "tools.imageStretcher.description": "Allunga o distorci larghezza e altezza dell'immagine in modo indipendente con anteprima in tempo reale e privacy al 100% nel browser.",
+  "tools.seoFilenameGenerator.title": "Generatore Nomi File SEO per Immagini",
+  "tools.seoFilenameGenerator.description": "Genera automaticamente nomi di file descrittivi e ottimizzati per la SEO e scarica l'immagine rinominata in un clic.",
+  "tools.whatsappCompressor.title": "Comprimi Foto WhatsApp (Comprimi Immagini per WhatsApp)",
+  "tools.whatsappCompressor.description": "Comprimi foto e immagini a dimensioni target (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) per una condivisione rapida su WhatsApp senza perdere qualità visiva."
 }

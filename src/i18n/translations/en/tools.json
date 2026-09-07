@@ -93,5 +93,9 @@
   "tools.batchResizer.title": "Resize Multiple Images at Once (Bulk Image Resizer)",
   "tools.batchResizer.description": "Resize multiple photos and images simultaneously online with aspect ratio lock, percentage scale, and instant ZIP download.",
   "tools.imageStretcher.title": "Image Stretcher Online (Stretch Photo Width & Height)",
-  "tools.imageStretcher.description": "Stretch or distort image width and height independently with instant real-time live preview and 100% in-browser privacy."
+  "tools.imageStretcher.description": "Stretch or distort image width and height independently with instant real-time live preview and 100% in-browser privacy.",
+  "tools.seoFilenameGenerator.title": "SEO Image Filename Generator (Rename Image for SEO)",
+  "tools.seoFilenameGenerator.description": "Automatically generate clean, descriptive, and SEO-friendly image filenames and download renamed images in one click.",
+  "tools.whatsappCompressor.title": "WhatsApp Photo Compressor (Compress Images for WhatsApp)",
+  "tools.whatsappCompressor.description": "Compress photos and images to target sizes (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) for seamless WhatsApp sharing without losing visual quality."
 }

@@ -51,6 +51,8 @@ import enImageSplitter from './translations/en/image-splitter.json';
 import enPixelCounter from './translations/en/pixel-counter.json';
 import enBatchResizer from './translations/en/resize-multiple-images.json';
 import enImageStretcher from './translations/en/image-stretcher.json';
+import enSeoFilename from './translations/en/seo-image-filename-generator.json';
+import enWhatsAppComp from './translations/en/whatsapp-photo-compressor.json';
 
 import esCommon from './translations/es/common.json';
 import esHome from './translations/es/home.json';
@@ -101,6 +103,8 @@ import esImageSplitter from './translations/es/image-splitter.json';
 import esPixelCounter from './translations/es/pixel-counter.json';
 import esBatchResizer from './translations/es/resize-multiple-images.json';
 import esImageStretcher from './translations/es/image-stretcher.json';
+import esSeoFilename from './translations/es/seo-image-filename-generator.json';
+import esWhatsAppComp from './translations/es/whatsapp-photo-compressor.json';
 
 import ptCommon from './translations/pt/common.json';
 import ptHome from './translations/pt/home.json';
@@ -151,6 +155,8 @@ import ptImageSplitter from './translations/pt/image-splitter.json';
 import ptPixelCounter from './translations/pt/pixel-counter.json';
 import ptBatchResizer from './translations/pt/resize-multiple-images.json';
 import ptImageStretcher from './translations/pt/image-stretcher.json';
+import ptSeoFilename from './translations/pt/seo-image-filename-generator.json';
+import ptWhatsAppComp from './translations/pt/whatsapp-photo-compressor.json';
 
 import frCommon from './translations/fr/common.json';
 import frHome from './translations/fr/home.json';
@@ -201,6 +207,8 @@ import frImageSplitter from './translations/fr/image-splitter.json';
 import frPixelCounter from './translations/fr/pixel-counter.json';
 import frBatchResizer from './translations/fr/resize-multiple-images.json';
 import frImageStretcher from './translations/fr/image-stretcher.json';
+import frSeoFilename from './translations/fr/seo-image-filename-generator.json';
+import frWhatsAppComp from './translations/fr/whatsapp-photo-compressor.json';
 
 import deCommon from './translations/de/common.json';
 import deHome from './translations/de/home.json';
@@ -251,6 +259,8 @@ import deImageSplitter from './translations/de/image-splitter.json';
 import dePixelCounter from './translations/de/pixel-counter.json';
 import deBatchResizer from './translations/de/resize-multiple-images.json';
 import deImageStretcher from './translations/de/image-stretcher.json';
+import deSeoFilename from './translations/de/seo-image-filename-generator.json';
+import deWhatsAppComp from './translations/de/whatsapp-photo-compressor.json';
 
 import idCommon from './translations/id/common.json';
 import idHome from './translations/id/home.json';
@@ -301,6 +311,8 @@ import idImageSplitter from './translations/id/image-splitter.json';
 import idPixelCounter from './translations/id/pixel-counter.json';
 import idBatchResizer from './translations/id/resize-multiple-images.json';
 import idImageStretcher from './translations/id/image-stretcher.json';
+import idSeoFilename from './translations/id/seo-image-filename-generator.json';
+import idWhatsAppComp from './translations/id/whatsapp-photo-compressor.json';
 
 import trCommon from './translations/tr/common.json';
 import trHome from './translations/tr/home.json';
@@ -351,6 +363,8 @@ import trImageSplitter from './translations/tr/image-splitter.json';
 import trPixelCounter from './translations/tr/pixel-counter.json';
 import trBatchResizer from './translations/tr/resize-multiple-images.json';
 import trImageStretcher from './translations/tr/image-stretcher.json';
+import trSeoFilename from './translations/tr/seo-image-filename-generator.json';
+import trWhatsAppComp from './translations/tr/whatsapp-photo-compressor.json';
 
 import itCommon from './translations/it/common.json';
 import itHome from './translations/it/home.json';
@@ -401,27 +415,29 @@ import itImageSplitter from './translations/it/image-splitter.json';
 import itPixelCounter from './translations/it/pixel-counter.json';
 import itBatchResizer from './translations/it/resize-multiple-images.json';
 import itImageStretcher from './translations/it/image-stretcher.json';
+import itSeoFilename from './translations/it/seo-image-filename-generator.json';
+import itWhatsAppComp from './translations/it/whatsapp-photo-compressor.json';
 
 type TranslationMap = Record<string, string>;
 
 /** All translations indexed by locale, with all namespaces merged into a flat map */
 const translations: Record<Locale, TranslationMap> = {
   en: { ...enCommon, ...enHome, ...enTools,
-    ...enRenamer, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enProductWhiteBg, ...enVidTrim, ...enVidRotate, ...enYtThumbnail, ...enFbCover, ...enSvgResizer, ...enDpiConv, ...enImgToText, ...enGifExt, ...enPassport, ...enSrcset,  ...enPpt, ...enImageSplitter, ...enPixelCounter, ...enBatchResizer, ...enImageStretcher },
+    ...enRenamer, ...enResizer, ...enExact, ...enWebpComp, ...enCmMm, ...enPan, ...enWa, ...enSsc, ...enYt, ...enB64, ...enDataUri, ...enDimCheck, ...enSizeCheck, ...enResCheck, ...enRatioCheck, ...enDpiCheck, ...enFmtCheck, ...enSquareResizer, ...enCircleCropper, ...enGrayscaleConverter, ...enImageInverter, ...enImageBlur, ...enImageStitcher, ...enScreenshotBeautifier, ...enPlaceholderGenerator, ...enImageOverlay, ...enImageMosaic, ...enFreeformCrop, ...enNoiseReducer, ...enProductWhiteBg, ...enVidTrim, ...enVidRotate, ...enYtThumbnail, ...enFbCover, ...enSvgResizer, ...enDpiConv, ...enImgToText, ...enGifExt, ...enPassport, ...enSrcset,  ...enPpt, ...enImageSplitter, ...enPixelCounter, ...enBatchResizer, ...enImageStretcher, ...enSeoFilename, ...enWhatsAppComp },
   es: { ...esCommon, ...esHome, ...esTools,
-    ...esRenamer, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esProductWhiteBg, ...esVidTrim, ...esVidRotate, ...esYtThumbnail, ...esFbCover, ...esSvgResizer, ...esDpiConv, ...esImgToText, ...esGifExt, ...esPassport, ...esSrcset,  ...esPpt, ...esImageSplitter, ...esPixelCounter, ...esBatchResizer, ...esImageStretcher },
+    ...esRenamer, ...esResizer, ...esExact, ...esWebpComp, ...esCmMm, ...esPan, ...esWa, ...esSsc, ...esYt, ...esB64, ...esDataUri, ...esDimCheck, ...esSizeCheck, ...esResCheck, ...esRatioCheck, ...esDpiCheck, ...esFmtCheck, ...esSquareResizer, ...esCircleCropper, ...esGrayscaleConverter, ...esImageInverter, ...esImageBlur, ...esImageStitcher, ...esScreenshotBeautifier, ...esPlaceholderGenerator, ...esImageOverlay, ...esImageMosaic, ...esFreeformCrop, ...esNoiseReducer, ...esProductWhiteBg, ...esVidTrim, ...esVidRotate, ...esYtThumbnail, ...esFbCover, ...esSvgResizer, ...esDpiConv, ...esImgToText, ...esGifExt, ...esPassport, ...esSrcset,  ...esPpt, ...esImageSplitter, ...esPixelCounter, ...esBatchResizer, ...esImageStretcher, ...esSeoFilename, ...esWhatsAppComp },
   pt: { ...ptCommon, ...ptHome, ...ptTools,
-    ...ptRenamer, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptProductWhiteBg, ...ptVidTrim, ...ptVidRotate, ...ptYtThumbnail, ...ptFbCover, ...ptSvgResizer, ...ptDpiConv, ...ptImgToText, ...ptGifExt, ...ptPassport, ...ptSrcset,  ...ptPpt, ...ptImageSplitter, ...ptPixelCounter, ...ptBatchResizer, ...ptImageStretcher },
+    ...ptRenamer, ...ptResizer, ...ptExact, ...ptWebpComp, ...ptCmMm, ...ptPan, ...ptWa, ...ptSsc, ...ptYt, ...ptB64, ...ptDataUri, ...ptDimCheck, ...ptSizeCheck, ...ptResCheck, ...ptRatioCheck, ...ptDpiCheck, ...ptFmtCheck, ...ptSquareResizer, ...ptCircleCropper, ...ptGrayscaleConverter, ...ptImageInverter, ...ptImageBlur, ...ptImageStitcher, ...ptScreenshotBeautifier, ...ptPlaceholderGenerator, ...ptImageOverlay, ...ptImageMosaic, ...ptFreeformCrop, ...ptNoiseReducer, ...ptProductWhiteBg, ...ptVidTrim, ...ptVidRotate, ...ptYtThumbnail, ...ptFbCover, ...ptSvgResizer, ...ptDpiConv, ...ptImgToText, ...ptGifExt, ...ptPassport, ...ptSrcset,  ...ptPpt, ...ptImageSplitter, ...ptPixelCounter, ...ptBatchResizer, ...ptImageStretcher, ...ptSeoFilename, ...ptWhatsAppComp },
   fr: { ...frCommon, ...frHome, ...frTools,
-    ...frRenamer, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frProductWhiteBg, ...frVidTrim, ...frVidRotate, ...frYtThumbnail, ...frFbCover, ...frSvgResizer, ...frDpiConv, ...frImgToText, ...frGifExt, ...frPassport, ...frSrcset,  ...frPpt, ...frImageSplitter, ...frPixelCounter, ...frBatchResizer, ...frImageStretcher },
+    ...frRenamer, ...frResizer, ...frExact, ...frWebpComp, ...frCmMm, ...frPan, ...frWa, ...frSsc, ...frYt, ...frB64, ...frDataUri, ...frDimCheck, ...frSizeCheck, ...frResCheck, ...frRatioCheck, ...frDpiCheck, ...frFmtCheck, ...frSquareResizer, ...frCircleCropper, ...frGrayscaleConverter, ...frImageInverter, ...frImageBlur, ...frImageStitcher, ...frScreenshotBeautifier, ...frPlaceholderGenerator, ...frImageOverlay, ...frImageMosaic, ...frFreeformCrop, ...frNoiseReducer, ...frProductWhiteBg, ...frVidTrim, ...frVidRotate, ...frYtThumbnail, ...frFbCover, ...frSvgResizer, ...frDpiConv, ...frImgToText, ...frGifExt, ...frPassport, ...frSrcset,  ...frPpt, ...frImageSplitter, ...frPixelCounter, ...frBatchResizer, ...frImageStretcher, ...frSeoFilename, ...frWhatsAppComp },
   de: { ...deCommon, ...deHome, ...deTools,
-    ...deRenamer, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deProductWhiteBg, ...deVidTrim, ...deVidRotate, ...deYtThumbnail, ...deFbCover, ...deSvgResizer, ...deDpiConv, ...deImgToText, ...deGifExt, ...dePassport, ...deSrcset,  ...dePpt, ...deImageSplitter, ...dePixelCounter, ...deBatchResizer, ...deImageStretcher },
+    ...deRenamer, ...deResizer, ...deExact, ...deWebpComp, ...deCmMm, ...dePan, ...deWa, ...deSsc, ...deYt, ...deB64, ...deDataUri, ...deDimCheck, ...deSizeCheck, ...deResCheck, ...deRatioCheck, ...deDpiCheck, ...deFmtCheck, ...deSquareResizer, ...deCircleCropper, ...deGrayscaleConverter, ...deImageInverter, ...deImageBlur, ...deImageStitcher, ...deScreenshotBeautifier, ...dePlaceholderGenerator, ...deImageOverlay, ...deImageMosaic, ...deFreeformCrop, ...deNoiseReducer, ...deProductWhiteBg, ...deVidTrim, ...deVidRotate, ...deYtThumbnail, ...deFbCover, ...deSvgResizer, ...deDpiConv, ...deImgToText, ...deGifExt, ...dePassport, ...deSrcset,  ...dePpt, ...deImageSplitter, ...dePixelCounter, ...deBatchResizer, ...deImageStretcher, ...deSeoFilename, ...deWhatsAppComp },
   id: { ...idCommon, ...idHome, ...idTools,
-    ...idRenamer, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idProductWhiteBg, ...idVidTrim, ...idVidRotate, ...idYtThumbnail, ...idFbCover, ...idSvgResizer, ...idDpiConv, ...idImgToText, ...idGifExt, ...idPassport, ...idSrcset,  ...idPpt, ...idImageSplitter, ...idPixelCounter, ...idBatchResizer, ...idImageStretcher },
+    ...idRenamer, ...idResizer, ...idExact, ...idWebpComp, ...idCmMm, ...idPan, ...idWa, ...idSsc, ...idYt, ...idB64, ...idDataUri, ...idDimCheck, ...idSizeCheck, ...idResCheck, ...idRatioCheck, ...idDpiCheck, ...idFmtCheck, ...idSquareResizer, ...idCircleCropper, ...idGrayscaleConverter, ...idImageInverter, ...idImageBlur, ...idImageStitcher, ...idScreenshotBeautifier, ...idPlaceholderGenerator, ...idImageOverlay, ...idImageMosaic, ...idFreeformCrop, ...idNoiseReducer, ...idProductWhiteBg, ...idVidTrim, ...idVidRotate, ...idYtThumbnail, ...idFbCover, ...idSvgResizer, ...idDpiConv, ...idImgToText, ...idGifExt, ...idPassport, ...idSrcset,  ...idPpt, ...idImageSplitter, ...idPixelCounter, ...idBatchResizer, ...idImageStretcher, ...idSeoFilename, ...idWhatsAppComp },
   tr: { ...trCommon, ...trHome, ...trTools,
-    ...trRenamer, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trProductWhiteBg, ...trVidTrim, ...trVidRotate, ...trYtThumbnail, ...trFbCover, ...trSvgResizer, ...trDpiConv, ...trImgToText, ...trGifExt, ...trPassport, ...trSrcset,  ...trPpt, ...trImageSplitter, ...trPixelCounter, ...trBatchResizer, ...trImageStretcher },
+    ...trRenamer, ...trResizer, ...trExact, ...trWebpComp, ...trCmMm, ...trPan, ...trWa, ...trSsc, ...trYt, ...trB64, ...trDataUri, ...trDimCheck, ...trSizeCheck, ...trResCheck, ...trRatioCheck, ...trDpiCheck, ...trFmtCheck, ...trSquareResizer, ...trCircleCropper, ...trGrayscaleConverter, ...trImageInverter, ...trImageBlur, ...trImageStitcher, ...trScreenshotBeautifier, ...trPlaceholderGenerator, ...trImageOverlay, ...trImageMosaic, ...trFreeformCrop, ...trNoiseReducer, ...trProductWhiteBg, ...trVidTrim, ...trVidRotate, ...trYtThumbnail, ...trFbCover, ...trSvgResizer, ...trDpiConv, ...trImgToText, ...trGifExt, ...trPassport, ...trSrcset,  ...trPpt, ...trImageSplitter, ...trPixelCounter, ...trBatchResizer, ...trImageStretcher, ...trSeoFilename, ...trWhatsAppComp },
   it: { ...itCommon, ...itHome, ...itTools,
-    ...itRenamer, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itProductWhiteBg, ...itVidTrim, ...itVidRotate, ...itYtThumbnail, ...itFbCover, ...itSvgResizer, ...itDpiConv, ...itImgToText, ...itGifExt, ...itPassport, ...itSrcset,  ...itPpt, ...itImageSplitter, ...itPixelCounter, ...itBatchResizer, ...itImageStretcher },
+    ...itRenamer, ...itResizer, ...itExact, ...itWebpComp, ...itCmMm, ...itPan, ...itWa, ...itSsc, ...itYt, ...itB64, ...itDataUri, ...itDimCheck, ...itSizeCheck, ...itResCheck, ...itRatioCheck, ...itDpiCheck, ...itFmtCheck, ...itSquareResizer, ...itCircleCropper, ...itGrayscaleConverter, ...itImageInverter, ...itImageBlur, ...itImageStitcher, ...itScreenshotBeautifier, ...itPlaceholderGenerator, ...itImageOverlay, ...itImageMosaic, ...itFreeformCrop, ...itNoiseReducer, ...itProductWhiteBg, ...itVidTrim, ...itVidRotate, ...itYtThumbnail, ...itFbCover, ...itSvgResizer, ...itDpiConv, ...itImgToText, ...itGifExt, ...itPassport, ...itSrcset,  ...itPpt, ...itImageSplitter, ...itPixelCounter, ...itBatchResizer, ...itImageStretcher, ...itSeoFilename, ...itWhatsAppComp },
 };
 
 /**

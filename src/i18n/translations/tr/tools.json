@@ -93,5 +93,9 @@
   "tools.batchResizer.title": "Aynı Anda Birden Fazla Resim Boyutlandırma",
   "tools.batchResizer.description": "Birden fazla fotoğrafı en-boy oranı kilidi, yüzde ölçeklendirme ve anında ZIP indirme ile aynı anda yeniden boyutlandırın.",
   "tools.imageStretcher.title": "Resim Esnetme Online (Fotoğraf Genişliği ve Yüksekliği Esnet)",
-  "tools.imageStretcher.description": "Resim genişliği ve yüksekliğini canlı gerçek zamanlı önizleme ve %100 tarayıcı gizliliğiyle bağımsız olarak esnetin veya çarpıtın."
+  "tools.imageStretcher.description": "Resim genişliği ve yüksekliğini canlı gerçek zamanlı önizleme ve %100 tarayıcı gizliliğiyle bağımsız olarak esnetin veya çarpıtın.",
+  "tools.seoFilenameGenerator.title": "SEO Resim Dosya Adı Oluşturucu (SEO için Yeniden Adlandır)",
+  "tools.seoFilenameGenerator.description": "Görseller için SEO uyumlu, açıklayıcı dosya adlarını otomatik oluşturun ve yeniden adlandırılmış görseli tek tıkla indirin.",
+  "tools.whatsappCompressor.title": "WhatsApp Fotoğraf Sıkıştırma (WhatsApp için Resim Küçültme)",
+  "tools.whatsappCompressor.description": "Görsel kalitesinden ödün vermeden hızlı WhatsApp paylaşımı için fotoğrafları hedef boyutlara (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) sıkıştırın."
 }

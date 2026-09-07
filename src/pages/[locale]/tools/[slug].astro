@@ -89,6 +89,10 @@ import BatchImageResizer from '@/components/BatchImageResizer.astro';
 import BatchImageResizerContent from '@/components/BatchImageResizerContent.astro';
 import ImageStretcher from '@/components/ImageStretcher.astro';
 import ImageStretcherContent from '@/components/ImageStretcherContent.astro';
+import SeoFilenameGenerator from '@/components/SeoFilenameGenerator.astro';
+import SeoFilenameGeneratorContent from '@/components/SeoFilenameGeneratorContent.astro';
+import WhatsAppPhotoCompressor from '@/components/WhatsAppPhotoCompressor.astro';
+import WhatsAppPhotoCompressorContent from '@/components/WhatsAppPhotoCompressorContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -156,6 +160,8 @@ const toolPrefixMap: Record<string, string> = {
   'pixel-counter': 'pixelcounter',
   'resize-multiple-images': 'batchResizer',
   'image-stretcher': 'imageStretcher',
+  'seo-image-filename-generator': 'seoFilename',
+  'whatsapp-photo-compressor': 'whatsappComp',
   'video-trimmer': 'vidtrim',
   'video-rotator': 'vidrot',
 };
@@ -241,6 +247,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'pixel-counter' && <PixelCounter locale={locale} />}
       {toolId === 'resize-multiple-images' && <BatchImageResizer locale={locale} />}
       {toolId === 'image-stretcher' && <ImageStretcher locale={locale} />}
+      {toolId === 'seo-image-filename-generator' && <SeoFilenameGenerator locale={locale} />}
+      {toolId === 'whatsapp-photo-compressor' && <WhatsAppPhotoCompressor locale={locale} />}
       {toolId === 'video-trimmer' && <VideoTrimmer locale={locale} />}
       {toolId === 'video-rotator' && <VideoRotator locale={locale} />}
     </div>
@@ -288,6 +296,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'pixel-counter' && <PixelCounterContent locale={locale} />}
   {toolId === 'resize-multiple-images' && <BatchImageResizerContent locale={locale} />}
   {toolId === 'image-stretcher' && <ImageStretcherContent locale={locale} />}
+  {toolId === 'seo-image-filename-generator' && <SeoFilenameGeneratorContent locale={locale} />}
+  {toolId === 'whatsapp-photo-compressor' && <WhatsAppPhotoCompressorContent locale={locale} />}
   {toolId === 'video-trimmer' && <VideoTrimmerContent locale={locale} />}
   {toolId === 'video-rotator' && <VideoRotatorContent locale={locale} />}
 </MainLayout>

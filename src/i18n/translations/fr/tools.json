@@ -93,5 +93,9 @@
   "tools.batchResizer.title": "Redimensionner Plusieurs Images à la Fois",
   "tools.batchResizer.description": "Redimensionnez plusieurs photos simultanément en ligne avec verrouillage du ratio et téléchargement ZIP instantané.",
   "tools.imageStretcher.title": "Étirer Image en Ligne (Étirer Largeur et Hauteur de Photo)",
-  "tools.imageStretcher.description": "Étirez ou déformez la largeur et la hauteur d'une image de façon indépendante avec aperçu en direct et confidentialité totale."
+  "tools.imageStretcher.description": "Étirez ou déformez la largeur et la hauteur d'une image de façon indépendante avec aperçu en direct et confidentialité totale.",
+  "tools.seoFilenameGenerator.title": "Générateur de Noms de Fichiers SEO pour Images",
+  "tools.seoFilenameGenerator.description": "Générez des noms de fichiers descriptifs et optimisés pour le référencement SEO automatiquement et téléchargez l'image en un clic.",
+  "tools.whatsappCompressor.title": "Compresseur de Photos WhatsApp (Compresser une Image pour WhatsApp)",
+  "tools.whatsappCompressor.description": "Compressez vos photos et images vers des tailles cibles (20 Ko, 50 Ko, 100 Ko, 200 Ko, 500 Ko, 1 Mo) pour un partage WhatsApp rapide sans perte de qualité visuelle."
 }

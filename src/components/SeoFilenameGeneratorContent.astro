@@ -1,0 +1,777 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const batchUrl = getToolUrl('resize-multiple-images', locale);
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const compressUrl = getToolUrl('webp-compressor', locale);
+const stretcherUrl = getToolUrl('image-stretcher', locale);
+const cropperUrl = getToolUrl('freeform-image-cropper', locale);
+const splitterUrl = getToolUrl('image-splitter', locale);
+
+const faqItems = [
+  { q: t(locale, 'seoFilename.faq.q1'), a: t(locale, 'seoFilename.faq.a1') },
+  { q: t(locale, 'seoFilename.faq.q2'), a: t(locale, 'seoFilename.faq.a2') },
+  { q: t(locale, 'seoFilename.faq.q3'), a: t(locale, 'seoFilename.faq.a3') },
+  { q: t(locale, 'seoFilename.faq.q4'), a: t(locale, 'seoFilename.faq.a4') },
+  { q: t(locale, 'seoFilename.faq.q5'), a: t(locale, 'seoFilename.faq.a5') },
+  { q: t(locale, 'seoFilename.faq.q6'), a: t(locale, 'seoFilename.faq.a6') },
+  { q: t(locale, 'seoFilename.faq.q7'), a: t(locale, 'seoFilename.faq.a7') },
+  { q: t(locale, 'seoFilename.faq.q8'), a: t(locale, 'seoFilename.faq.a8') },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": t(locale, 'seoFilename.hero.title'),
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Why SEO Image Filenames Matter -->
+      <h2>{t(locale, 'seoFilename.content.h1')}</h2>
+      <p>{t(locale, 'seoFilename.content.p1a')}</p>
+      <p>{t(locale, 'seoFilename.content.p1b')}</p>
+
+      <!-- Key Benefits Grid -->
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3>{t(locale, 'seoFilename.content.feat1Title')}</h3>
+          <p>{t(locale, 'seoFilename.content.feat1Desc')}</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'seoFilename.content.feat2Title')}</h3>
+          <p>{t(locale, 'seoFilename.content.feat2Desc')}</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>{t(locale, 'seoFilename.content.feat3Title')}</h3>
+          <p>{t(locale, 'seoFilename.content.feat3Desc')}</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3>{t(locale, 'seoFilename.content.feat4Title')}</h3>
+          <p>{t(locale, 'seoFilename.content.feat4Desc')}</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Best Practices for SEO Image Naming -->
+      <h2>{t(locale, 'seoFilename.content.h2')}</h2>
+      <p>{t(locale, 'seoFilename.content.p2a')}</p>
+      <p>{t(locale, 'seoFilename.content.p2b')}</p>
+
+      <!-- Section 3: Comparison Table (Polished Desktop & Mobile) -->
+      <h2>{t(locale, 'seoFilename.content.h3')}</h2>
+      <p>{t(locale, 'seoFilename.content.p3a')}</p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-original">{t(locale, 'seoFilename.table.thOriginal')}</th>
+              <th class="col-seo">{t(locale, 'seoFilename.table.thSeo')}</th>
+              <th class="col-impact">{t(locale, 'seoFilename.table.thImpact')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="raw-filename-chip">{t(locale, 'seoFilename.table.row1Original')}</span>
+              </td>
+              <td>
+                <span class="seo-filename-chip">{t(locale, 'seoFilename.table.row1Seo')}</span>
+              </td>
+              <td class="impact-cell">{t(locale, 'seoFilename.table.row1Impact')}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="raw-filename-chip">{t(locale, 'seoFilename.table.row2Original')}</span>
+              </td>
+              <td>
+                <span class="seo-filename-chip">{t(locale, 'seoFilename.table.row2Seo')}</span>
+              </td>
+              <td class="impact-cell">{t(locale, 'seoFilename.table.row2Impact')}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="raw-filename-chip">{t(locale, 'seoFilename.table.row3Original')}</span>
+              </td>
+              <td>
+                <span class="seo-filename-chip">{t(locale, 'seoFilename.table.row3Seo')}</span>
+              </td>
+              <td class="impact-cell">{t(locale, 'seoFilename.table.row3Impact')}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="raw-filename-chip">{t(locale, 'seoFilename.table.row4Original')}</span>
+              </td>
+              <td>
+                <span class="seo-filename-chip">{t(locale, 'seoFilename.table.row4Seo')}</span>
+              </td>
+              <td class="impact-cell">{t(locale, 'seoFilename.table.row4Impact')}</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="raw-filename-chip">{t(locale, 'seoFilename.table.row5Original')}</span>
+              </td>
+              <td>
+                <span class="seo-filename-chip">{t(locale, 'seoFilename.table.row5Seo')}</span>
+              </td>
+              <td class="impact-cell">{t(locale, 'seoFilename.table.row5Impact')}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Step-by-Step Guide -->
+      <h2>{t(locale, 'seoFilename.content.h4')}</h2>
+      <p>{t(locale, 'seoFilename.content.p4Intro')}</p>
+
+      <ol class="steps-ordered-list">
+        <li>
+          <strong>{t(locale, 'seoFilename.steps.s1Title')}</strong> — {t(locale, 'seoFilename.steps.s1Desc')}
+        </li>
+        <li>
+          <strong>{t(locale, 'seoFilename.steps.s2Title')}</strong> — {t(locale, 'seoFilename.steps.s2Desc')}
+        </li>
+        <li>
+          <strong>{t(locale, 'seoFilename.steps.s3Title')}</strong> — {t(locale, 'seoFilename.steps.s3Desc')}
+        </li>
+        <li>
+          <strong>{t(locale, 'seoFilename.steps.s4Title')}</strong> — {t(locale, 'seoFilename.steps.s4Desc')}
+        </li>
+      </ol>
+
+      <!-- Related Tools Cross Links (Polished 6-Card Grid) -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>{t(locale, 'seoFilename.cross.heading')}</h3>
+        </div>
+        
+        <div class="cross-tools-grid">
+          <a href={batchUrl} class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">{t(locale, 'seoFilename.cross.batch')}</h4>
+              <p class="cross-tool-desc">{t(locale, 'seoFilename.cross.batchDesc')}</p>
+            </div>
+          </a>
+
+          <a href={exactUrl} class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">{t(locale, 'seoFilename.cross.exact')}</h4>
+              <p class="cross-tool-desc">{t(locale, 'seoFilename.cross.exactDesc')}</p>
+            </div>
+          </a>
+
+          <a href={compressUrl} class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">{t(locale, 'seoFilename.cross.compress')}</h4>
+              <p class="cross-tool-desc">{t(locale, 'seoFilename.cross.compressDesc')}</p>
+            </div>
+          </a>
+
+          <a href={stretcherUrl} class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">{t(locale, 'seoFilename.cross.stretcher')}</h4>
+              <p class="cross-tool-desc">{t(locale, 'seoFilename.cross.stretcherDesc')}</p>
+            </div>
+          </a>
+
+          <a href={cropperUrl} class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+                  <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">{t(locale, 'seoFilename.cross.cropper')}</h4>
+              <p class="cross-tool-desc">{t(locale, 'seoFilename.cross.cropperDesc')}</p>
+            </div>
+          </a>
+
+          <a href={splitterUrl} class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <line x1="12" y1="3" x2="12" y2="21"></line>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">{t(locale, 'seoFilename.cross.splitter')}</h4>
+              <p class="cross-tool-desc">{t(locale, 'seoFilename.cross.splitterDesc')}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-container">
+        <h2>{t(locale, 'seoFilename.faq.heading')}</h2>
+        
+        <div class="faq-accordion">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span class="faq-q-text">{item.q}</span>
+                <span class="faq-chevron-box">
+                  <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .content-body {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: var(--space-12) 0 var(--space-4);
+    line-height: 1.3;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .content-body h2:first-of-type {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-base);
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+  }
+
+  /* Benefits Grid */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    margin: var(--space-6) 0 var(--space-10);
+  }
+
+  @media (min-width: 640px) {
+    .benefits-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition: all var(--transition-normal);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .benefit-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.08);
+  }
+
+  .benefit-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3-5);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Data Table (Polished Desktop & Mobile) */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: var(--space-6) 0 var(--space-12);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--color-border-light, #f1f5f9);
+    vertical-align: middle;
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--color-text);
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  .data-table th.col-original {
+    width: 28%;
+    min-width: 200px;
+  }
+
+  .data-table th.col-seo {
+    width: 34%;
+    min-width: 250px;
+  }
+
+  .data-table th.col-impact {
+    width: 38%;
+    min-width: 270px;
+  }
+
+  .raw-filename-chip {
+    display: inline-block;
+    white-space: nowrap;
+    font-family: monospace;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+  }
+
+  .seo-filename-chip {
+    display: inline-block;
+    white-space: nowrap;
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: var(--color-accent-light);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    color: var(--color-accent);
+  }
+
+  .impact-cell {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tbody tr:hover td {
+    background: rgba(99, 102, 241, 0.025);
+  }
+
+  /* Steps List */
+  .steps-ordered-list {
+    margin: var(--space-5) 0 var(--space-10);
+    padding-left: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .steps-ordered-list li {
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--color-text-secondary);
+  }
+
+  .steps-ordered-list strong {
+    color: var(--color-text);
+  }
+
+  /* Related Tools Cross Links Section */
+  .cross-tools-container {
+    margin: var(--space-14) 0 var(--space-16);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .cross-tools-container {
+      padding: var(--space-6) var(--space-4);
+      margin: var(--space-10) 0 var(--space-12);
+    }
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    min-height: 160px;
+  }
+
+  .cross-tool-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .cross-tool-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .cross-tool-card:hover .cross-tool-icon {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    color: var(--color-accent);
+    transform: translateX(4px);
+  }
+
+  .cross-tool-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.35;
+    margin: 0;
+    transition: color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-title {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-desc {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* FAQ Accordion */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-container h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6) 0;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3-5);
+    margin-top: 0;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: 18px 22px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: color var(--transition-fast);
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-q-text {
+    flex: 1;
+    line-height: 1.45;
+  }
+
+  .faq-chevron-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--color-surface-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .faq-item[open] .faq-chevron-box {
+    transform: rotate(180deg);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+
+  .faq-chevron {
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-answer {
+    padding: 0 22px 20px 22px;
+  }
+
+  .faq-answer p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+</style>

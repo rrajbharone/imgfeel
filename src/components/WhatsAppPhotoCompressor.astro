@@ -1,0 +1,726 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div
+  class="wa-compressor-app"
+  id="whatsapp-compressor-app"
+  data-i18n-invalid={t(locale, 'whatsappComp.error.invalidFile')}
+  data-i18n-load-failed={t(locale, 'whatsappComp.error.loadFailed')}
+  data-i18n-process-failed={t(locale, 'whatsappComp.error.processFailed')}
+  data-i18n-processing={t(locale, 'whatsappComp.status.processing')}
+  data-i18n-compress={t(locale, 'whatsappComp.action.compress')}
+>
+  <!-- Dropzone (Initial State) -->
+  <div class="wa-dropzone" id="wa-dropzone">
+    <input
+      type="file"
+      id="wa-file-input"
+      accept="image/jpeg,image/png,image/webp,image/jpg"
+      hidden
+    />
+    <div class="wa-dropzone-content">
+      <div class="wa-dropzone-icon">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+      </div>
+      <p class="wa-dropzone-title">{t(locale, 'whatsappComp.dropzone.title')}</p>
+      <p class="wa-dropzone-subtitle">{t(locale, 'whatsappComp.dropzone.subtitle')}</p>
+      <button type="button" class="btn btn-primary btn-browse" id="wa-btn-browse">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <span>{t(locale, 'whatsappComp.dropzone.browse')}</span>
+      </button>
+      <span class="wa-dropzone-formats">{t(locale, 'whatsappComp.dropzone.formats')}</span>
+    </div>
+  </div>
+
+  <!-- Editor & Controls Area (Shown after upload) -->
+  <div class="wa-editor-area" id="wa-editor-area" hidden>
+    <!-- Source Image Info Card -->
+    <div class="wa-source-card">
+      <div class="wa-source-thumb-wrap">
+        <img id="wa-preview-thumb" class="wa-source-thumb" alt="Original Image" />
+      </div>
+      <div class="wa-source-details">
+        <h4 class="wa-source-filename" id="wa-orig-filename">-</h4>
+        <div class="wa-source-meta-row">
+          <span class="wa-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            </svg>
+            <span id="wa-orig-dim">-</span>
+          </span>
+          <span class="wa-meta-dot">•</span>
+          <span class="wa-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            <span id="wa-orig-size">-</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Card -->
+    <div class="wa-controls-card">
+      <div class="wa-controls-header">
+        <h3 class="wa-controls-title">{t(locale, 'whatsappComp.label.targetSizeHeading')}</h3>
+      </div>
+
+      <!-- Presets Grid -->
+      <div class="wa-presets-grid">
+        <button type="button" class="wa-preset-pill" data-preset="20kb">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.20kb')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.20kbDesc')}</span>
+        </button>
+        <button type="button" class="wa-preset-pill" data-preset="50kb">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.50kb')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.50kbDesc')}</span>
+        </button>
+        <button type="button" class="wa-preset-pill active" data-preset="100kb">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.100kb')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.100kbDesc')}</span>
+        </button>
+        <button type="button" class="wa-preset-pill" data-preset="200kb">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.200kb')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.200kbDesc')}</span>
+        </button>
+        <button type="button" class="wa-preset-pill" data-preset="500kb">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.500kb')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.500kbDesc')}</span>
+        </button>
+        <button type="button" class="wa-preset-pill" data-preset="1mb">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.1mb')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.1mbDesc')}</span>
+        </button>
+        <button type="button" class="wa-preset-pill wa-preset-custom-pill" data-preset="custom">
+          <span class="preset-name">{t(locale, 'whatsappComp.preset.custom')}</span>
+          <span class="preset-desc">{t(locale, 'whatsappComp.preset.customDesc')}</span>
+        </button>
+      </div>
+
+      <!-- Custom Target Size Input (Hidden by default) -->
+      <div class="wa-custom-group" id="wa-custom-group" hidden>
+        <label for="wa-custom-value" class="wa-custom-label">{t(locale, 'whatsappComp.label.customLabel')}</label>
+        <div class="wa-custom-input-wrap">
+          <input
+            type="number"
+            id="wa-custom-value"
+            min="5"
+            max="10000"
+            value="150"
+            class="wa-custom-number-input"
+          />
+          <select id="wa-custom-unit" class="wa-custom-unit-select">
+            <option value="KB">{t(locale, 'whatsappComp.unit.kb')}</option>
+            <option value="MB">{t(locale, 'whatsappComp.unit.mb')}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Format Option Row -->
+      <div class="wa-format-row">
+        <label for="wa-format-select" class="wa-format-label">{t(locale, 'whatsappComp.label.outputFormat')}</label>
+        <select id="wa-format-select" class="wa-format-select">
+          <option value="auto">{t(locale, 'whatsappComp.format.jpg')}</option>
+          <option value="webp">{t(locale, 'whatsappComp.format.webp')}</option>
+          <option value="original">{t(locale, 'whatsappComp.format.original')}</option>
+        </select>
+      </div>
+
+      <!-- Action Button -->
+      <div class="wa-action-row">
+        <button type="button" class="btn btn-primary btn-lg wa-compress-btn" id="wa-btn-compress">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>{t(locale, 'whatsappComp.action.compress')}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Area -->
+    <div class="wa-result-area" id="wa-result-area" hidden>
+      <div class="wa-result-card">
+        <div class="wa-result-header">
+          <div class="wa-result-title-row">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <h4 class="wa-result-title">{t(locale, 'whatsappComp.result.successTitle')}</h4>
+          </div>
+        </div>
+
+        <div class="wa-stats-grid">
+          <div class="wa-stat-box">
+            <span class="wa-stat-label">{t(locale, 'whatsappComp.result.origSizeLabel')}</span>
+            <span class="wa-stat-value" id="wa-res-orig-size">-</span>
+          </div>
+          <div class="wa-stat-box">
+            <span class="wa-stat-label">{t(locale, 'whatsappComp.result.compSizeLabel')}</span>
+            <span class="wa-stat-value highlight" id="wa-res-comp-size">-</span>
+          </div>
+          <div class="wa-stat-box">
+            <span class="wa-stat-label">{t(locale, 'whatsappComp.result.outputDimLabel')}</span>
+            <span class="wa-stat-value" id="wa-res-dim">-</span>
+          </div>
+          <div class="wa-stat-box">
+            <span class="wa-stat-label">{t(locale, 'whatsappComp.result.outputFormatLabel')}</span>
+            <span class="wa-stat-value" id="wa-res-format">-</span>
+          </div>
+          <div class="wa-stat-box full-width">
+            <span class="wa-stat-label">{t(locale, 'whatsappComp.result.savedLabel')}</span>
+            <span class="saved-badge positive" id="wa-res-saved-badge">-</span>
+          </div>
+        </div>
+
+        <div class="wa-preview-container">
+          <img id="wa-result-preview-img" alt="Compressed WhatsApp Photo Preview" />
+        </div>
+
+        <!-- Action Buttons with guaranteed separation -->
+        <div class="wa-result-actions">
+          <button type="button" class="btn btn-primary btn-lg wa-btn-download" id="wa-btn-download">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>{t(locale, 'whatsappComp.result.downloadBtn')}</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-lg wa-btn-reset" id="wa-btn-reset">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span>{t(locale, 'whatsappComp.result.resetBtn')}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="wa-error-area" id="wa-error-area" hidden>
+    <p id="wa-error-message"></p>
+  </div>
+</div>
+
+<script>
+  import '@/scripts/whatsapp-photo-compressor';
+</script>
+
+<style>
+  .wa-compressor-app {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+
+  /* Dropzone */
+  .wa-dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10) var(--space-6);
+    text-align: center;
+    background: var(--color-surface);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .wa-dropzone:hover,
+  .wa-dropzone.drag-over {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .wa-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .wa-dropzone-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+  }
+
+  .wa-dropzone-title {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .wa-dropzone-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .btn-browse {
+    min-height: 48px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: var(--space-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .wa-dropzone-formats {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+  }
+
+  /* Editor Area */
+  .wa-editor-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  /* Source Info Card */
+  .wa-source-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .wa-source-thumb-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wa-source-thumb {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
+  .wa-source-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .wa-source-filename {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wa-source-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .wa-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .wa-meta-dot {
+    color: var(--color-text-muted);
+  }
+
+  /* Controls Card */
+  .wa-controls-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .wa-controls-header {
+    margin-bottom: var(--space-1);
+  }
+
+  .wa-controls-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Presets Grid */
+  .wa-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 600px) {
+    .wa-presets-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .wa-preset-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    padding: 14px 16px;
+    min-height: 72px;
+    background: var(--color-surface-subtle);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition-fast);
+  }
+
+  .wa-preset-pill:hover {
+    border-color: var(--color-accent);
+    background: var(--color-surface);
+    transform: translateY(-1px);
+  }
+
+  .wa-preset-pill.active {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .wa-preset-pill .preset-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1.2;
+  }
+
+  .wa-preset-pill.active .preset-name {
+    color: var(--color-accent);
+  }
+
+  .wa-preset-pill .preset-desc {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.35;
+  }
+
+  .wa-preset-custom-pill {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 600px) {
+    .wa-preset-custom-pill {
+      grid-column: span 3;
+    }
+  }
+
+  /* Custom Target Group */
+  .wa-custom-group {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .wa-custom-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .wa-custom-input-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .wa-custom-number-input {
+    flex: 1;
+    max-width: 180px;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 700;
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .wa-custom-unit-select {
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  /* Format Row */
+  .wa-format-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .wa-format-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .wa-format-select {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  /* Compress Button */
+  .wa-action-row {
+    margin-top: var(--space-2);
+  }
+
+  .wa-compress-btn {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Result Area */
+  .wa-result-area {
+    scroll-margin-top: var(--space-8);
+  }
+
+  .wa-result-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .wa-result-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wa-result-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .wa-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 540px) {
+    .wa-stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .wa-stat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+  }
+
+  .wa-stat-box.full-width {
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+  }
+
+  .wa-stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+  }
+
+  .wa-stat-value {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--color-text);
+  }
+
+  .wa-stat-value.highlight {
+    color: #10b981;
+  }
+
+  .saved-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .saved-badge.positive {
+    background: #dcfce7;
+    color: #15803d;
+  }
+
+  .saved-badge.neutral {
+    background: #f1f5f9;
+    color: #475569;
+  }
+
+  .wa-preview-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b132b;
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    min-height: 200px;
+    max-height: 380px;
+    overflow: hidden;
+  }
+
+  .wa-preview-container img {
+    max-width: 100%;
+    max-height: 340px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Result Actions - Strict separation & prominent buttons */
+  .wa-result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: var(--space-2);
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .wa-result-actions {
+      flex-direction: row;
+      gap: 16px;
+    }
+  }
+
+  .wa-btn-download {
+    flex: 1.4;
+    min-height: 52px;
+    padding: 14px 28px;
+    font-size: 15.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: var(--radius-lg);
+  }
+
+  .wa-btn-reset {
+    flex: 1;
+    min-height: 52px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Error Area */
+  .wa-error-area {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+</style>
