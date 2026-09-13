@@ -22,6 +22,8 @@ export interface BatchImageItem {
   resizedUrl?: string;
   resizedSizeBytes?: number;
   formattedResizedSize?: string;
+  outputExtension?: string;
+  outputMimeType?: string;
 }
 
 export interface BatchResizeOptions {
@@ -33,6 +35,7 @@ export interface BatchResizeOptions {
   quality: number; // 0.1 - 1.0
   targetSizeValue?: number; // e.g. 500
   targetSizeUnit?: 'KB' | 'MB'; // 'KB' | 'MB'
+  outputFormat?: 'original' | 'jpg' | 'png' | 'webp';
 }
 
 export class BatchResizerEngine {
@@ -277,6 +280,19 @@ export class BatchResizerEngine {
     const { width: initialW, height: initialH } = this.calculateTargetDimensions(item, options);
 
     let targetMime = item.mimeType;
+    let targetExt = item.extension;
+
+    if (options.outputFormat === 'jpg') {
+      targetMime = 'image/jpeg';
+      targetExt = 'jpg';
+    } else if (options.outputFormat === 'png') {
+      targetMime = 'image/png';
+      targetExt = 'png';
+    } else if (options.outputFormat === 'webp') {
+      targetMime = 'image/webp';
+      targetExt = 'webp';
+    }
+
     let finalW = initialW;
     let finalH = initialH;
     let blob: Blob;
@@ -319,7 +335,7 @@ export class BatchResizerEngine {
             else reject(new Error('Failed to generate resized blob'));
           },
           targetMime,
-          options.quality || 0.92
+          targetMime === 'image/png' ? undefined : (options.quality || 0.92)
         );
       });
     }
@@ -339,6 +355,8 @@ export class BatchResizerEngine {
       resizedUrl,
       resizedSizeBytes: blob.size,
       formattedResizedSize: this.formatBytes(blob.size),
+      outputExtension: targetExt,
+      outputMimeType: targetMime,
     };
   }
 
@@ -380,7 +398,8 @@ export class BatchResizerEngine {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const blob = item.resizedBlob || item.file;
-      const fileName = item.name.replace(/\.[^/.]+$/, '') + `_resized_${item.targetWidth}x${item.targetHeight}.${item.extension}`;
+      const ext = item.outputExtension || item.extension;
+      const fileName = item.name.replace(/\.[^/.]+$/, '') + `_resized_${item.targetWidth}x${item.targetHeight}.${ext}`;
       filesToZip.push({ name: fileName, blob });
     }
 

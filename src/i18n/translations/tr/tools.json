@@ -90,7 +90,7 @@
   "tools.imageSplitter.description": "Resimleri eşit parçalara, satırlara, sütunlara veya ızgaraya online olarak Instagram 3x3 gönderileri, kaydırmalı postlar ve afişler için tarayıcıda %100 gizlilikle bölün.",
   "tools.pixelCounter.title": "Piksel Sayacı (Resim Piksellerini Sayma & Boyut Kontrolü)",
   "tools.pixelCounter.description": "Resim piksel boyutlarını, toplam piksel sayısını, megapikseli, en boy oranını ve formatı tarayıcıda %100 gizlilikle anında kontrol edin.",
-  "tools.batchResizer.title": "Aynı Anda Birden Fazla Resim Boyutlandırma",
+  "tools.batchResizer.title": "Aynı Anda Birden Fazla Resim Boyutlandırma (Bulk Image Resizer)",
   "tools.batchResizer.description": "Birden fazla fotoğrafı en-boy oranı kilidi, yüzde ölçeklendirme ve anında ZIP indirme ile aynı anda yeniden boyutlandırın.",
   "tools.imageStretcher.title": "Resim Esnetme Online (Fotoğraf Genişliği ve Yüksekliği Esnet)",
   "tools.imageStretcher.description": "Resim genişliği ve yüksekliğini canlı gerçek zamanlı önizleme ve %100 tarayıcı gizliliğiyle bağımsız olarak esnetin veya çarpıtın.",
