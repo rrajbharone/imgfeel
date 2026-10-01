@@ -81,6 +81,8 @@ const { locale, searchableTools } = Astro.props;
 
       if (!query) {
         toolCards.forEach((card) => (card.style.display = ''));
+        const sections = document.querySelectorAll<HTMLElement>('.tools-section');
+        sections.forEach((sec) => (sec.style.display = ''));
         if (noResults) noResults.hidden = true;
         return;
       }
@@ -106,6 +108,12 @@ const { locale, searchableTools } = Astro.props;
         } else {
           card.style.display = 'none';
         }
+      });
+
+      const sections = document.querySelectorAll<HTMLElement>('.tools-section');
+      sections.forEach((sec) => {
+        const visibleCards = sec.querySelectorAll<HTMLElement>('[data-tool-id]:not([style*="display: none"])');
+        sec.style.display = visibleCards.length > 0 ? '' : 'none';
       });
 
       if (noResults) {

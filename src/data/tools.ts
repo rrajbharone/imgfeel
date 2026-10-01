@@ -162,16 +162,6 @@ export const TOOL_SLUGS: Record<string, Record<Locale, string>> = {
     tr: 'whatsapp-profil-resmi-boyutlandirma',
     it: 'ridimensiona-foto-profilo-whatsapp',
   },
-  'ssc-photo-signature-resizer': {
-    en: 'ssc-photo-signature-resizer',
-    es: 'redimensionar-foto-firma-ssc',
-    pt: 'redimensionar-foto-assinatura-ssc',
-    fr: 'redimensionner-photo-signature-ssc',
-    de: 'ssc-foto-unterschrift-verkleinern',
-    id: 'ubah-ukuran-foto-tanda-tangan-ssc',
-    tr: 'ssc-fotograf-imza-boyutlandirma',
-    it: 'ridimensiona-foto-firma-ssc',
-  },
   'facebook-cover-resizer': {
     en: 'facebook-cover-resizer',
     es: 'redimensionar-portada-facebook',
@@ -546,16 +536,6 @@ export const tools: ToolDefinition[] = [
     titleKey: 'tools.whatsappDpResizer.title',
     descKey: 'tools.whatsappDpResizer.description',
     keywords: ['whatsapp', 'dp', 'profile picture', 'circle crop', '1:1', 'square', 'blur'],
-    badge: 'POPULAR',
-    isActive: true,
-  },
-  {
-    id: 'ssc-photo-signature-resizer',
-    icon: 'fileCheck',
-    category: 'resize',
-    titleKey: 'tools.sscResizer.title',
-    descKey: 'tools.sscResizer.description',
-    keywords: ['ssc', 'cgl', 'chsl', 'mts', 'gd', 'cpo', 'photo', 'signature', 'passport'],
     badge: 'POPULAR',
     isActive: true,
   },
@@ -953,6 +933,16 @@ export const tools: ToolDefinition[] = [
 export type Tool = (typeof tools)[number];
 
 export function getToolUrl(toolId: string, locale: Locale): string {
+  if (toolId === 'upsc-photo-signature-resizer') {
+    return '/tools/upsc-photo-signature-resizer/';
+  }
+  if (toolId === 'ssc-photo-signature-resizer') {
+    return '/tools/ssc-photo-signature-resizer/';
+  }
+  if (toolId === 'ibps-photo-signature-resizer') {
+    return '/tools/ibps-photo-signature-resizer/';
+  }
+
   const slugs = TOOL_SLUGS[toolId];
   if (!slugs) {
     if (toolId === 'image-resizer') {
@@ -966,6 +956,16 @@ export function getToolUrl(toolId: string, locale: Locale): string {
 }
 
 export function getToolIdFromSlug(slug: string): string | null {
+  if (slug === 'upsc-photo-signature-resizer') {
+    return 'upsc-photo-signature-resizer';
+  }
+  if (slug === 'ssc-photo-signature-resizer') {
+    return 'ssc-photo-signature-resizer';
+  }
+  if (slug === 'ibps-photo-signature-resizer') {
+    return 'ibps-photo-signature-resizer';
+  }
+
   for (const [toolId, slugs] of Object.entries(TOOL_SLUGS)) {
     for (const localeSlug of Object.values(slugs)) {
       if (localeSlug === slug) {
@@ -984,6 +984,7 @@ export interface SearchableTool {
   keywords: string[];
   icon: string;
   badge?: 'POPULAR' | 'NEW';
+  category?: string;
 }
 
 /**
@@ -991,7 +992,7 @@ export interface SearchableTool {
  * Automatically stays up to date whenever new tools are added to `tools`.
  */
 export function getSearchableTools(locale: Locale): SearchableTool[] {
-  return tools
+  const list: SearchableTool[] = tools
     .filter((tool) => tool.isActive)
     .map((tool) => {
       const title = t(locale, tool.titleKey);
@@ -1005,7 +1006,115 @@ export function getSearchableTools(locale: Locale): SearchableTool[] {
         keywords: tool.keywords,
         icon: tool.icon,
         badge: tool.badge,
+        category: tool.category,
       };
-    })
-    .sort((a, b) => a.title.localeCompare(b.title, locale, { sensitivity: 'base' }));
+    });
+
+  if (locale === 'en') {
+    list.push({
+      id: 'upsc-photo-signature-resizer',
+      title: 'UPSC Photo & Signature Resizer',
+      description: 'Resize and compress photo (20–300 KB) and signature (20–100 KB) to official UPSC 2026 specifications (350–1000 px JPG).',
+      href: '/tools/upsc-photo-signature-resizer/',
+      keywords: [
+        'upsc',
+        'upsc photo resizer',
+        'upsc signature resizer',
+        'upsc photo & signature resizer',
+        'upsc photo resize',
+        'upsc photo size',
+        'upsc signature size',
+        'upsc photo and signature resize',
+        'upsc application photo resizer',
+        'upsc photo compressor',
+        'civil services',
+        'cse',
+        'otr',
+        'nda',
+        'cds',
+        'triple signature',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'ssc-photo-signature-resizer',
+      title: 'SSC Photo & Signature Resizer',
+      description: 'Resize photo (20–50 KB) and signature (10–20 KB) for SSC CGL, CHSL, MTS, GD, CPO, JE, Stenographer & JHT per official 2026 specs.',
+      href: '/tools/ssc-photo-signature-resizer/',
+      keywords: [
+        'ssc',
+        'ssc photo resizer',
+        'ssc signature resizer',
+        'ssc photo & signature resizer',
+        'ssc photo resizer 2026',
+        'ssc signature resizer 2026',
+        'ssc photo size',
+        'ssc signature size',
+        'ssc photo and signature size',
+        'ssc application photo resizer',
+        'ssc application signature resizer',
+        'ssc cgl photo resizer',
+        'ssc cgl signature resizer',
+        'ssc chsl photo resizer',
+        'ssc chsl signature resizer',
+        'ssc mts photo resizer',
+        'ssc mts signature resizer',
+        'ssc gd photo resizer',
+        'ssc gd signature resizer',
+        'ssc cpo photo resizer',
+        'ssc cpo signature resizer',
+        'ssc je photo resizer',
+        'ssc je signature resizer',
+        'ssc stenographer photo resizer',
+        'ssc stenographer signature resizer',
+        'ssc jht photo resizer',
+        'ssc jht signature resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'POPULAR',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'ibps-photo-signature-resizer',
+      title: 'IBPS Photo & Signature Resizer',
+      description: 'Resize photo (20–50 KB) and signature (10–20 KB) for IBPS PO, Clerk, SO, RRB PO & RRB Clerk per official 2026 specs.',
+      href: '/tools/ibps-photo-signature-resizer/',
+      keywords: [
+        'ibps',
+        'ibps photo resizer',
+        'ibps signature resizer',
+        'ibps photo & signature resizer',
+        'ibps photo resizer 2026',
+        'ibps signature resizer 2026',
+        'ibps photo size',
+        'ibps signature size',
+        'ibps photo and signature size',
+        'ibps po photo resizer',
+        'ibps po signature resizer',
+        'ibps clerk photo resizer',
+        'ibps clerk signature resizer',
+        'ibps so photo resizer',
+        'ibps so signature resizer',
+        'ibps rrb photo resizer',
+        'ibps rrb signature resizer',
+        'ibps rrb po photo resizer',
+        'ibps rrb clerk photo resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+  }
+
+  return list.sort((a, b) => a.title.localeCompare(b.title, locale, { sensitivity: 'base' }));
 }

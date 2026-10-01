@@ -1,23 +1,23 @@
 ---
 /**
- * SSC Photo & Signature Resizer
- * Dedicated India-specific tool for SSC CGL, CHSL, MTS, GD, CPO, JE, Stenographer, and JHT.
+ * UPSC Photo & Signature Resizer
+ * Dedicated India-specific tool for UPSC CSE, OTR, NDA, CDS, CMS, and CAPF applications.
  * English-only tool with language switcher disabled.
  */
 import MainLayout from '@/layouts/MainLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import SscResizer from '@/components/SscResizer.astro';
-import SscContent from '@/components/SscContent.astro';
+import UpscResizer from '@/components/UpscResizer.astro';
+import UpscContent from '@/components/UpscContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 
 const locale = 'en';
-const toolUrl = '/tools/ssc-photo-signature-resizer/';
+const toolUrl = '/tools/upsc-photo-signature-resizer/';
 ---
 
 <MainLayout
   locale={locale}
-  title="SSC Photo & Signature Resizer 2026 | CGL, CHSL, MTS, GD, JE (10–20 KB)"
-  description="Resize and compress signature (10–20 KB) and photograph (20–50 KB) to official SSC 2026 specifications for CGL, CHSL, MTS, GD, CPO, JE & Stenographer. 100% client-side & private."
+  title="UPSC Photo & Signature Resizer 2026 | Resize to 350–1000 px (Photo 20–300 KB, Sig 20–100 KB)"
+  description="Resize and compress photograph (20–300 KB) and signature (20–100 KB) to official UPSC 2026 specifications for Civil Services, OTR, NDA & CDS. Auto-resizes to 350–1000 px JPG with white background."
   canonicalUrl={`https://imgfeel.com${toolUrl}`}
   basePath={toolUrl}
   showLanguageSwitcher={false}
@@ -26,12 +26,12 @@ const toolUrl = '/tools/ssc-photo-signature-resizer/';
     <SEOHead schema={{
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "SSC Photo & Signature Resizer",
+      "name": "UPSC Photo & Signature Resizer",
       "url": `https://imgfeel.com${toolUrl}`,
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Any",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": "Free client-side tool to resize, crop, and compress signature (10–20 KB) and photograph (20–50 KB) for SSC online applications."
+      "description": "Free client-side tool to resize, crop, and compress photographs and signatures for UPSC online applications."
     }} />
   </Fragment>
 
@@ -40,19 +40,19 @@ const toolUrl = '/tools/ssc-photo-signature-resizer/';
       <Breadcrumbs locale={locale} items={[
         { label: 'Home', href: '/' },
         { label: 'Tools', href: '/tools/' },
-        { label: 'SSC Photo & Signature Resizer' }
+        { label: 'UPSC Photo & Signature Resizer' }
       ]} />
 
       <div class="tool-header">
-        <h1 class="tool-title">SSC Photo &amp; Signature Resizer</h1>
-        <p class="tool-subtitle">Automatically resize and compress signature (strictly 10–20 KB) and admit card photo (20–50 KB) to latest official SSC 2026 requirements across CGL, CHSL, MTS, GD, CPO, JE, and Stenographer.</p>
+        <h1 class="tool-title">UPSC Photo &amp; Signature Resizer</h1>
+        <p class="tool-subtitle">Automatically resize, crop, and compress photo (20–300 KB) and signature (20–100 KB) to latest official UPSC 2026 requirements (350–1000 px JPG, pure white background).</p>
       </div>
 
-      <SscResizer />
+      <UpscResizer />
     </div>
   </div>
 
-  <SscContent />
+  <UpscContent />
 </MainLayout>
 
 <style>

@@ -1,66 +1,52 @@
 ---
 /**
- * SSC Photo & Signature Resizer Interactive Component
+ * IBPS Photo & Signature Resizer Interactive Component
  * Strict compliance with ImgFeel UI/UX Design System Standards
  */
 ---
 
-<div id="ssc-resizer-container" class="ssc-tool-card">
+<div id="ibps-resizer-container" class="ibps-tool-card">
   <!-- Exam Selector Dropdown -->
   <div class="control-group exam-selector-group">
-    <label for="ssc-exam-select" class="control-label">Select SSC Examination Preset</label>
+    <label for="ibps-exam-select" class="control-label">Select IBPS Examination Preset</label>
     <div class="select-wrapper">
-      <select id="ssc-exam-select" class="ssc-select" aria-label="Select SSC Exam">
-        <option value="general" selected>General SSC Resize (Universal Standard)</option>
-        <option value="cgl">SSC CGL (Combined Graduate Level)</option>
-        <option value="chsl">SSC CHSL (10+2 Combined Higher Secondary Level)</option>
-        <option value="mts">SSC MTS &amp; Havaldar (Non-Technical Staff)</option>
-        <option value="gd">SSC Constable GD (CAPFs, SSF &amp; Assam Rifles)</option>
-        <option value="cpo">SSC CPO (Sub-Inspector in Delhi Police &amp; CAPFs)</option>
-        <option value="je">SSC JE (Junior Engineer - 4.0 × 2.0 cm Signature)</option>
-        <option value="steno">SSC Stenographer (Grade C &amp; D)</option>
-        <option value="jht">SSC JHT (Junior Hindi Translator)</option>
+      <select id="ibps-exam-select" class="ibps-select" aria-label="Select IBPS Exam">
+        <option value="general" selected>General IBPS (Universal Standard)</option>
+        <option value="po">IBPS PO (Probationary Officers / Management Trainees)</option>
+        <option value="clerk">IBPS Clerk (Customer Support &amp; Sales)</option>
+        <option value="so">IBPS SO (Specialist Officers)</option>
+        <option value="rrb-po">IBPS RRB PO (Officer Scale I, II &amp; III)</option>
+        <option value="rrb-clerk">IBPS RRB Clerk (Office Assistant Multipurpose)</option>
       </select>
       <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
     </div>
-    <p class="control-hint">Selecting an exam is optional. Select a specific exam above to automatically apply its verified specifications, or keep <em>General SSC Resize</em>.</p>
+    <p class="control-hint">Selecting an exam is optional. Keep <em>General IBPS</em> for the universal standard, or select a specific exam to automatically apply verified presets.</p>
   </div>
 
-  <!-- Primary Document Mode Switcher: Signature vs Photograph -->
+  <!-- Primary Document Mode Switcher: Photograph vs Signature -->
   <div class="mode-nav-container">
     <div class="mode-tabs">
-      <button type="button" id="ssc-tab-sig" class="tab-btn active" aria-label="Resize SSC Signature">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-        </svg>
-        <span>Signature (Upload Mandatory)</span>
-      </button>
-      <button type="button" id="ssc-tab-photo" class="tab-btn" aria-label="Resize SSC Photograph">
+      <button type="button" id="ibps-tab-photo" class="tab-btn active" aria-label="Resize IBPS Photograph">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
         </svg>
-        <span>Photograph (Admit Card / DV)</span>
+        <span>Photograph (20–50 KB)</span>
+      </button>
+      <button type="button" id="ibps-tab-sig" class="tab-btn" aria-label="Resize IBPS Signature">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+        </svg>
+        <span>Signature (10–20 KB)</span>
       </button>
     </div>
   </div>
 
-  <!-- Official Notice Banners -->
-  <div id="ssc-sig-notice" class="ssc-notice-banner sig-banner">
+  <!-- Official IBPS Notice Banners -->
+  <div id="ibps-live-photo-notice" class="ibps-notice-banner photo-banner">
     <div class="banner-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      </svg>
-    </div>
-    <div class="banner-text">
-      <strong>Official SSC Signature Requirement:</strong> Digital signature file must be strictly between <strong>10 KB and 20 KB JPG</strong> on unruled white paper with black ink. Files under 10 KB or over 20 KB are automatically rejected by ssc.gov.in.
-    </div>
-  </div>
-
-  <div id="ssc-live-photo-notice" class="ssc-notice-banner photo-banner" hidden>
-    <div class="banner-icon alert-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -68,7 +54,18 @@
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Official SSC Live Photo Advisory:</strong> Under current SSC portal guidelines (ssc.gov.in / mySSC app), the online application form requires a <em>Live Photograph</em> captured via webcam/phone camera. Use this tool if you need a compliant <strong>3.5 × 4.5 cm (20–50 KB JPG)</strong> photo for your <strong>Admit Card affixation, physical Document Verification (DV), PET/PST records, or departmental exams</strong>.
+      <strong>Official IBPS Photograph Guideline:</strong> Candidates must upload a scanned passport color photograph (<strong>200 × 230 px, 20 KB – 50 KB JPG</strong>). In addition, recent IBPS portals require capturing a <em>Live Photo</em> via webcam or mobile phone during registration. This tool formats your uploaded file to pass document validation; it does not replace the portal's live webcam check.
+    </div>
+  </div>
+
+  <div id="ibps-sig-notice" class="ibps-notice-banner sig-banner" hidden>
+    <div class="banner-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <div class="banner-text">
+      <strong>Official IBPS Signature Requirement:</strong> Digital signature must be strictly between <strong>10 KB and 20 KB JPG</strong>, <strong>140 × 60 pixels</strong>, signed with a <strong>dark black ink pen</strong> on white paper in running handwriting. Signatures in CAPITAL / BLOCK letters are strictly rejected.
     </div>
   </div>
 
@@ -81,15 +78,15 @@
     <div class="spec-grid">
       <div class="spec-item">
         <span class="spec-label">Target Dimensions:</span>
-        <strong id="ssc-spec-dim" class="spec-val">6.0 × 2.0 cm (240 × 80 px)</strong>
+        <strong id="ibps-spec-dim" class="spec-val">200 × 230 px (4.5 × 3.5 cm)</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">Allowed File Size:</span>
-        <strong id="ssc-spec-size" class="spec-val">10 KB – 20 KB</strong>
+        <strong id="ibps-spec-size" class="spec-val">20 KB – 50 KB</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">File Format:</span>
-        <strong id="ssc-spec-format" class="spec-val">JPG / JPEG</strong>
+        <strong id="ibps-spec-format" class="spec-val">JPG / JPEG</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">Background:</span>
@@ -99,13 +96,13 @@
   </div>
 
   <!-- Hidden File Input -->
-  <input type="file" id="ssc-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-hidden="true" />
+  <input type="file" id="ibps-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-hidden="true" />
 
   <!-- Error Alert Container -->
-  <div id="ssc-error-message" class="error-banner" hidden></div>
+  <div id="ibps-error-message" class="error-banner" hidden></div>
 
   <!-- Upload Dropzone Area -->
-  <div id="ssc-dropzone" class="ssc-dropzone" role="button" tabindex="0" aria-label="Upload photo or signature for SSC resizing">
+  <div id="ibps-dropzone" class="ibps-dropzone" role="button" tabindex="0" aria-label="Upload photo or signature for IBPS resizing">
     <div class="dropzone-icon">
       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -113,13 +110,13 @@
         <line x1="12" y1="3" x2="12" y2="15"></line>
       </svg>
     </div>
-    <h3 id="ssc-dropzone-title" class="dropzone-title">Upload Candidate Signature</h3>
-    <p id="ssc-dropzone-subtitle" class="dropzone-subtitle">Drag &amp; drop JPG, PNG, or WebP. Auto-resizes to 6.0×2.0 cm (240×80 px), strictly 10–20 KB JPG on white background.</p>
+    <h3 id="ibps-dropzone-title" class="dropzone-title">Upload Candidate Photograph</h3>
+    <p id="ibps-dropzone-subtitle" class="dropzone-subtitle">Drag &amp; drop JPG, PNG, or WebP. Auto-resizes to 200×230 px, strictly 20–50 KB JPG with pure white background.</p>
     <button type="button" class="btn-choose">Choose File From Device</button>
   </div>
 
   <!-- Editor & Live Canvas Preview (Hidden until file selected) -->
-  <div id="ssc-editor-area" class="ssc-editor-area" hidden>
+  <div id="ibps-editor-area" class="ibps-editor-area" hidden>
     <div class="editor-layout">
       <!-- Live Canvas Preview Box -->
       <div class="preview-card">
@@ -128,7 +125,7 @@
           <span class="preview-chip">100% Client-Side</span>
         </div>
         <div class="canvas-wrapper">
-          <canvas id="ssc-main-canvas" width="240" height="80"></canvas>
+          <canvas id="ibps-main-canvas" width="200" height="230"></canvas>
         </div>
       </div>
 
@@ -138,46 +135,46 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <h4 class="compliance-title">Official SSC Portal Compliance Checklist</h4>
+          <h4 class="compliance-title">Official IBPS Portal Compliance Checklist</h4>
         </div>
 
         <div class="checklist-body">
           <div class="check-item">
             <span class="check-label">Dimensions:</span>
-            <span id="ssc-val-dim-text" class="check-value">240 × 80 px (6.0 × 2.0 cm)</span>
-            <span id="ssc-val-dim-status" class="val-badge pass">PASS</span>
+            <span id="ibps-val-dim-text" class="check-value">200 × 230 px (4.5 × 3.5 cm)</span>
+            <span id="ibps-val-dim-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">File Size:</span>
-            <span id="ssc-val-size-text" class="check-value">Allowed: 10–20 KB</span>
-            <span id="ssc-val-size-status" class="val-badge pass">PASS</span>
+            <span id="ibps-val-size-text" class="check-value">Allowed: 20–50 KB</span>
+            <span id="ibps-val-size-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">File Format:</span>
             <span class="check-value">JPG / JPEG</span>
-            <span id="ssc-val-format-status" class="val-badge pass">PASS</span>
+            <span id="ibps-val-format-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">Background:</span>
             <span class="check-value">Pure White (#FFFFFF)</span>
-            <span id="ssc-val-bg-status" class="val-badge pass">PASS</span>
+            <span id="ibps-val-bg-status" class="val-badge pass">PASS</span>
           </div>
         </div>
 
         <!-- Action Buttons (Strictly adhering to >= 48px height, >= 14px gap) -->
         <div class="actions-group">
-          <button type="button" id="ssc-download-btn" class="btn-action btn-primary">
+          <button type="button" id="ibps-download-btn" class="btn-action btn-primary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span id="ssc-download-btn-text">Download Compliant Signature (JPG)</span>
+            <span id="ibps-download-btn-text">Download Compliant Photo (JPG)</span>
           </button>
-          <button type="button" id="ssc-change-img-btn" class="btn-action btn-secondary">
+          <button type="button" id="ibps-change-img-btn" class="btn-action btn-secondary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
               <line x1="16" y1="5" x2="22" y2="5"></line>
@@ -192,12 +189,12 @@
 </div>
 
 <script>
-  import '@/scripts/ssc-resizer';
+  import '@/scripts/ibps-resizer';
 </script>
 
 <style>
   /* --- Main Container Card --- */
-  .ssc-tool-card {
+  .ibps-tool-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -208,7 +205,7 @@
   }
 
   @media (min-width: 640px) {
-    .ssc-tool-card {
+    .ibps-tool-card {
       padding: var(--space-8);
     }
   }
@@ -231,7 +228,7 @@
     width: 100%;
   }
 
-  .ssc-select {
+  .ibps-select {
     width: 100%;
     min-height: 48px;
     padding: 12px 40px 12px 16px;
@@ -246,7 +243,7 @@
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   }
 
-  .ssc-select:focus {
+  .ibps-select:focus {
     outline: none;
     border-color: var(--color-accent);
     box-shadow: 0 0 0 3px var(--color-accent-light);
@@ -324,7 +321,7 @@
   }
 
   /* --- Notice Banners --- */
-  .ssc-notice-banner {
+  .ibps-notice-banner {
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -333,6 +330,28 @@
     margin-bottom: var(--space-5);
     line-height: 1.55;
     font-size: var(--text-xs);
+  }
+
+  .photo-banner {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+  }
+
+  :global([data-theme='dark']) .photo-banner {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #bfdbfe;
+  }
+
+  .photo-banner .banner-icon {
+    color: #2563eb;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  :global([data-theme='dark']) .photo-banner .banner-icon {
+    color: #60a5fa;
   }
 
   .sig-banner {
@@ -345,28 +364,6 @@
     color: var(--color-accent);
     flex-shrink: 0;
     margin-top: 2px;
-  }
-
-  .photo-banner {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
-  }
-
-  :global([data-theme='dark']) .photo-banner {
-    background: rgba(245, 158, 11, 0.12);
-    border-color: rgba(245, 158, 11, 0.3);
-    color: #fef3c7;
-  }
-
-  .alert-icon {
-    color: #d97706;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  :global([data-theme='dark']) .alert-icon {
-    color: #fbbf24;
   }
 
   .banner-text strong {
@@ -455,7 +452,7 @@
   }
 
   /* --- Upload Dropzone --- */
-  .ssc-dropzone {
+  .ibps-dropzone {
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-xl);
     padding: var(--space-10) var(--space-6);
@@ -466,9 +463,9 @@
     outline: none;
   }
 
-  .ssc-dropzone:hover,
-  .ssc-dropzone:focus-visible,
-  .ssc-dropzone.drag-over {
+  .ibps-dropzone:hover,
+  .ibps-dropzone:focus-visible,
+  .ibps-dropzone.drag-over {
     border-color: var(--color-accent);
     background: var(--color-accent-light);
   }
@@ -519,7 +516,7 @@
   }
 
   /* --- Editor & Live Preview Area --- */
-  .ssc-editor-area {
+  .ibps-editor-area {
     margin-top: var(--space-4);
   }
 

@@ -8,6 +8,24 @@ import { getSearchableTools } from '@/data/tools';
 
 const locale = 'en';
 const searchableTools = getSearchableTools(locale);
+
+/**
+ * Scalable Exam Tools registry
+ * Any tool ID listed here or with category === 'exam' is automatically grouped into the Exam Tools section.
+ */
+export const EXAM_TOOL_IDS = new Set<string>([
+  'upsc-photo-signature-resizer',
+  'ssc-photo-signature-resizer',
+  'ibps-photo-signature-resizer',
+]);
+
+const examTools = searchableTools.filter(
+  (tool) => EXAM_TOOL_IDS.has(tool.id) || tool.category === 'exam'
+);
+
+const generalTools = searchableTools.filter(
+  (tool) => !EXAM_TOOL_IDS.has(tool.id) && tool.category !== 'exam'
+);
 ---
 
 <MainLayout
@@ -32,20 +50,55 @@ const searchableTools = getSearchableTools(locale);
       <!-- Dynamic Search Bar consuming single source of truth -->
       <ToolSearch locale={locale} searchableTools={searchableTools} />
 
-      <!-- Compact 2-Column Mobile & Multi-Column Desktop Tools Grid -->
-      <div class="tools-grid">
-        {searchableTools.map((tool) => (
-          <ToolCard
-            locale={locale}
-            id={tool.id}
-            title={tool.title}
-            description={tool.description}
-            href={tool.href}
-            icon={tool.icon}
-            badge={tool.badge}
-          />
-        ))}
-      </div>
+      <!-- All Tools / General Tools Section -->
+      <section class="tools-section general-tools-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title">All Image Tools</h2>
+            <span class="section-count">{generalTools.length} Tools</span>
+          </div>
+          <p class="section-subtitle">Browse all image resizing, conversion, cropping, and compression tools.</p>
+        </div>
+        <div class="tools-grid">
+          {generalTools.map((tool) => (
+            <ToolCard
+              locale={locale}
+              id={tool.id}
+              title={tool.title}
+              description={tool.description}
+              href={tool.href}
+              icon={tool.icon}
+              badge={tool.badge}
+            />
+          ))}
+        </div>
+      </section>
+
+      <!-- Dedicated Exam Tools Section (Positioned at the very bottom of the page) -->
+      {examTools.length > 0 && (
+        <section class="tools-section exam-tools-section">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2 class="section-title">Exam Tools</h2>
+              <span class="section-count">{examTools.length} {examTools.length === 1 ? 'Tool' : 'Tools'}</span>
+            </div>
+            <p class="section-subtitle">Dedicated photo and signature resizers compliant with recruitment and competitive exam specifications.</p>
+          </div>
+          <div class="tools-grid">
+            {examTools.map((tool) => (
+              <ToolCard
+                locale={locale}
+                id={tool.id}
+                title={tool.title}
+                description={tool.description}
+                href={tool.href}
+                icon={tool.icon}
+                badge={tool.badge}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   </div>
 </MainLayout>
@@ -71,6 +124,89 @@ const searchableTools = getSearchableTools(locale);
     color: var(--color-text-secondary);
     max-width: 600px;
     line-height: 1.5;
+  }
+
+  /* Section Spacing & Hierarchy */
+  .tools-section {
+    margin-top: var(--space-8);
+  }
+
+  /* General Tools Section directly under search */
+  .general-tools-section {
+    margin-top: var(--space-8);
+  }
+
+  /* Exam Tools Section placed at the very bottom */
+  .exam-tools-section {
+    margin-top: var(--space-12);
+    padding-top: var(--space-10);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 640px) {
+    .exam-tools-section {
+      margin-top: var(--space-14);
+      padding-top: var(--space-12);
+    }
+  }
+
+  /* Section Header & Subtitle Spacing (Fixes cramped/touching description) */
+  .section-header {
+    margin-bottom: var(--space-6);
+  }
+
+  @media (min-width: 640px) {
+    .section-header {
+      margin-bottom: 28px;
+    }
+  }
+
+  .section-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .section-count {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+    max-width: 720px;
+  }
+
+  @media (min-width: 740px) {
+    .page-title {
+      font-size: var(--text-3xl);
+    }
+    .section-title {
+      font-size: var(--text-2xl);
+    }
+    .section-subtitle {
+      font-size: 15px;
+    }
   }
 
   /* 2-column mobile grid by default */
@@ -99,9 +235,6 @@ const searchableTools = getSearchableTools(locale);
     .tools-grid {
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-    }
-    .page-title {
-      font-size: var(--text-3xl);
     }
   }
 

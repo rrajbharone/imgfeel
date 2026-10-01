@@ -1,41 +1,41 @@
 ---
 /**
- * SSC Photo & Signature Resizer SEO Content & FAQ Component
+ * IBPS Photo & Signature Resizer SEO Content & FAQ Component
  * Strict compliance with ImgFeel UI/UX Design System Standards
  */
 
 const faqItems = [
   {
-    q: 'Can I upload a pre-existing photograph for SSC 2026 online applications?',
-    a: 'No. On the official SSC portal (ssc.gov.in) and the mySSC mobile app, candidates are required to capture a LIVE photograph in real-time using their device webcam or phone camera. Uploading a photograph of an existing physical photo or uploading a saved photo file will lead to immediate rejection. However, resized physical passport photographs (3.5 × 4.5 cm, 20–50 KB JPG) are still required for your Admit Card printout, physical examination entry, and Document Verification (DV).',
+    q: 'What are the official IBPS photo and signature dimensions for 2026 applications?',
+    a: 'For all IBPS online applications (including IBPS PO, Clerk, SO, RRB PO, and RRB Clerk), the official photograph dimensions are preferred at 200 × 230 pixels (standard 4.5 cm × 3.5 cm passport size). The official signature dimensions are preferred at 140 × 60 pixels (roughly 3.5 cm × 1.5 cm).',
   },
   {
-    q: 'What are the official file size and dimension requirements for SSC signatures?',
-    a: 'For all SSC online applications (including SSC CGL, CHSL, MTS, GD, CPO, Stenographer, and JHT), your scanned signature must have a file size strictly between 10 KB and 20 KB in JPG or JPEG format. The standard dimensions are approximately 6.0 cm in width by 2.0 cm in height (roughly 240 × 80 px). For SSC JE, the notification specifies 4.0 cm × 2.0 cm (roughly 160 × 80 px). Both formats are supported in this tool.',
+    q: 'What are the required file size limits for IBPS photograph and signature uploads?',
+    a: 'The photograph file size must be strictly between 20 KB and 50 KB in JPG or JPEG format. The scanned signature file size must be strictly between 10 KB and 20 KB in JPG or JPEG format. Files smaller than the minimum or exceeding the maximum limit are automatically rejected by the IBPS application server.',
   },
   {
-    q: 'What ink color and paper should I use to sign for SSC applications?',
-    a: 'You must sign on a plain, unruled white sheet of printer paper using a dark black ink pen. Avoid blue ink, pencils, gel pens that bleed, or paper with lines or grids. Ensure the signature is written in running handwriting—signatures written in full capital or block letters are strictly rejected by SSC.',
+    q: 'Does this resizer replace the Live Photograph requirement on the IBPS portal?',
+    a: 'No. The IBPS online registration portal requires BOTH: (1) uploading a scanned color passport photograph file (200 × 230 px, 20–50 KB JPG) in the document upload section, and (2) capturing a real-time Live Photo via webcam or mobile QR-code scanning during the registration steps. This tool formats your uploaded photo file to satisfy portal criteria, but you must still complete the live camera capture on ibps.in.',
   },
   {
-    q: 'Why does the SSC portal reject my signature as "miniature" or "blurred"?',
-    a: 'A "miniature signature" error occurs when the scanned signature occupies only a small fraction of the image box, surrounded by excessive white margins. To prevent this, crop tightly around your signature so it occupies at least 80% of the canvas area. Our resizer automatically centers and optimizes your signature with clear contrast so it passes SSC portal validation.',
+    q: 'Can I sign using blue ink or capital letters for IBPS examinations?',
+    a: 'No. IBPS guidelines strictly mandate that signatures must be done in dark black ink pen on a clean, unruled white sheet of paper. Signatures signed in blue ink, pencils, or written in CAPITAL / BLOCK LETTERS will not be accepted and will lead to application cancellation.',
   },
   {
-    q: 'What is the required photo size for SSC Admit Cards and Document Verification?',
-    a: 'For Admit Card affixation and Document Verification (DV), SSC requires standard Indian passport-size photographs measuring 3.5 cm in width by 4.5 cm in height (approximately 200 × 230 px at standard resolution). The file size must be between 20 KB and 50 KB in JPG format with a clean white or light-colored background.',
+    q: 'Are requirements different for IBPS RRB compared to IBPS PO or Clerk?',
+    a: 'Both IBPS Common Recruitment Process (CRP PO, Clerk, SO) and IBPS Regional Rural Banks (RRB PO Scale I/II/III and RRB Clerk Office Assistant) share the exact same technical image upload specifications: 200 × 230 px (20–50 KB) for photographs and 140 × 60 px (10–20 KB) for signatures. Selecting your specific exam in our dropdown confirms compliance with your notification.',
   },
   {
-    q: 'Can I upload a signature in PNG or PDF format on ssc.gov.in?',
-    a: 'No. The SSC online application portal strictly accepts image files in JPG or JPEG format only. Uploading PNG, WebP, GIF, or PDF files will trigger an upload error. Our resizer converts any uploaded image into a fully compliant JPG file.',
+    q: 'Can I upload my photo or signature in PNG, WebP, or PDF format?',
+    a: 'No. The IBPS portal validator strictly accepts files in .jpg or .jpeg format only. Uploading PNG, WebP, or PDF files will trigger an upload error. Our tool automatically converts any uploaded image into a fully compliant JPG file.',
   },
   {
-    q: 'Does selecting a specific SSC exam change the output specifications?',
-    a: 'Yes. Selecting an exam automatically applies that exam’s official notification specifications. For instance, selecting SSC JE sets the signature format to 4.0 × 2.0 cm (10–20 KB), while SSC CGL, CHSL, MTS, GD, CPO, and Stenographer use the standard 6.0 × 2.0 cm format (10–20 KB). If you do not wish to select a specific exam, the General SSC Resize preset applies universally compliant standards.',
+    q: 'Why does the IBPS portal say "File size must be between 10 KB and 20 KB" for my signature?',
+    a: 'Clean signatures on plain white paper compress very efficiently, often resulting in file sizes under 10 KB. The IBPS server enforces a strict 10.0 KB minimum floor. Our resizer uses an intelligent multi-stage compression engine that safely keeps your signature between 13 KB and 17 KB so it passes portal validation without errors.',
   },
   {
-    q: 'Are my personal signature and photographs uploaded to your server?',
-    a: 'No. ImgFeel processes 100% of your images locally inside your web browser using HTML5 Canvas. Your signature, photograph, and document files are never transmitted to any external server or saved in any database, ensuring complete candidate privacy.',
+    q: 'Are my uploaded documents or signatures stored on your servers?',
+    a: 'No. ImgFeel processes 100% of your images locally in your web browser using HTML5 Canvas. Your photograph, signature, and personal documents never leave your computer or smartphone, ensuring complete privacy and security.',
   },
 ];
 
@@ -55,7 +55,7 @@ const faqSchema = {
 const appSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'SSC Photo & Signature Resizer',
+  name: 'IBPS Photo & Signature Resizer',
   applicationCategory: 'MultimediaApplication',
   operatingSystem: 'All',
   browserRequirements: 'Requires JavaScript. Requires HTML5 Canvas.',
@@ -73,48 +73,48 @@ const appSchema = {
 <section class="section content-section">
   <div class="container">
     <div class="content-body">
-      <!-- Section 1: Introduction to SSC Guidelines -->
-      <h2>Official SSC Photo &amp; Signature Guidelines (2026 Examination Standards)</h2>
+      <!-- Section 1: Introduction to IBPS Guidelines -->
+      <h2>Official IBPS Photo &amp; Signature Guidelines (2026 Examination Standards)</h2>
       <p>
-        The Staff Selection Commission (SSC) conducts national recruitment examinations including the <strong>Combined Graduate Level (CGL)</strong>, <strong>Combined Higher Secondary Level (CHSL)</strong>, <strong>Multi-Tasking Staff (MTS &amp; Havaldar)</strong>, <strong>Constable GD (CAPFs &amp; SSF)</strong>, <strong>Sub-Inspector in Delhi Police &amp; CAPFs (CPO)</strong>, <strong>Junior Engineer (JE)</strong>, <strong>Stenographer (Grade C &amp; D)</strong>, and <strong>Junior Hindi Translator (JHT)</strong> via its centralized portal (<strong>ssc.gov.in</strong>).
+        The Institute of Banking Personnel Selection (IBPS) administers recruitment across participating public sector banks and Regional Rural Banks throughout India. Whether submitting an application for <strong>IBPS PO (Probationary Officers / Management Trainees)</strong>, <strong>IBPS Clerk (Customer Support &amp; Sales)</strong>, <strong>IBPS SO (Specialist Officers)</strong>, <strong>IBPS RRB Officer Scale I / II / III (RRB PO)</strong>, or <strong>IBPS RRB Office Assistant (RRB Clerk)</strong>, strict digital specifications are enforced on the official application portal (<strong>ibps.in</strong>).
       </p>
       <p>
-        Non-compliant signatures or improperly formatted admit card photographs are among the leading causes of application rejection across SSC recruitment drives. This free, client-side <strong>SSC Photo &amp; Signature Resizer</strong> automatically configures exact pixel dimensions, enforces the mandatory pure white background, enhances black pen contrast, and compresses files strictly within official byte-size limits (<strong>10 KB – 20 KB for signatures</strong> and <strong>20 KB – 50 KB for photos</strong>) with zero server uploads.
+        Incorrect image dimensions, file sizes outside the mandatory brackets, or signatures in block letters trigger immediate upload failure or application rejection. This free, client-side <strong>IBPS Photo &amp; Signature Resizer</strong> automatically formats your files to official dimensions (<strong>200 × 230 px for photos</strong> and <strong>140 × 60 px for signatures</strong>), whitens backgrounds, improves ink contrast, and compresses files strictly within required limits (<strong>20 KB – 50 KB for photos</strong> and <strong>10 KB – 20 KB for signatures</strong>) with zero server uploads.
       </p>
 
-      <!-- Section 2: Live Photograph vs Uploaded Signature Distinction -->
-      <h2>Important Notice: Live Photo Capture vs. Signature File Upload</h2>
+      <!-- Section 2: Uploaded Scanned Photo vs Live Webcam Capture Distinction -->
+      <h2>Understanding IBPS Photo Requirements: Uploaded File vs. Live Photo Capture</h2>
       <p>
-        Under the revised application workflow introduced on <strong>ssc.gov.in</strong> and the official <strong>mySSC mobile application</strong>, candidate photograph and signature submissions follow two completely distinct procedures:
+        In recent recruitment cycles, IBPS implemented a dual-photo verification mechanism to combat impersonation and biometric fraud:
       </p>
       <div class="notice-comparison-box">
-        <div class="notice-card live-card">
-          <div class="card-badge live-badge">Online Form Rule</div>
-          <h3>Candidate Photograph (Live Webcam Capture)</h3>
+        <div class="notice-card upload-card">
+          <div class="card-badge upload-badge">Step 1: File Upload</div>
+          <h3>Scanned Photograph File (200 × 230 px • 20–50 KB)</h3>
           <p>
-            During online form submission on ssc.gov.in, candidates <strong>cannot upload a pre-existing photograph file</strong>. The SSC module captures your live face photo directly using your webcam or phone camera. Capturing a photo of an existing printed photograph will cause permanent application cancellation.
+            Candidates must upload a recent, high-quality scanned color passport-style photograph file in the document upload section. The file must be strictly between <strong>20 KB and 50 KB</strong> in JPG format with a clear, light-colored or pure white background.
           </p>
           <p class="card-usage">
-            <strong>When to use this tool for photos:</strong> Use our Photo mode to produce compliant <strong>3.5 × 4.5 cm (20–50 KB JPG)</strong> passport photos for your <strong>Admit Card affixation, physical Document Verification (DV), PET/PST identification, and departmental dossier files</strong>.
+            <strong>What this tool does:</strong> Resizes, crops, and compresses your photo snapshot to exact 200 × 230 px and 20–50 KB specifications ready for direct portal upload.
           </p>
         </div>
 
-        <div class="notice-card upload-card">
-          <div class="card-badge upload-badge">Online Form Upload</div>
-          <h3>Candidate Signature (Scanned Digital File Upload)</h3>
+        <div class="notice-card live-card">
+          <div class="card-badge live-badge">Step 2: Real-Time Capture</div>
+          <h3>Live Photograph Capture (Webcam / Mobile QR)</h3>
           <p>
-            Unlike the photograph, candidate signatures <strong>must be scanned, resized, and uploaded as an image file</strong> into the SSC application form. The SSC portal system validator strictly checks that the signature file is between <strong>10.0 KB and 20.0 KB</strong> in JPG format.
+            In addition to the uploaded file, the IBPS portal prompts you to capture a real-time live picture using your computer's webcam or by scanning a QR code with your mobile phone camera. The portal's facial recognition software compares this live capture against your uploaded photograph.
           </p>
           <p class="card-usage">
-            <strong>When to use this tool for signatures:</strong> Upload your raw camera snapshot or scanned signature here to automatically crop, whiten background, and compress to strictly 10–20 KB JPG ready for direct upload to ssc.gov.in.
+            <strong>Important note:</strong> This tool prepares your compliant digital upload file; it does not replace or bypass the portal's live webcam verification step on ibps.in.
           </p>
         </div>
       </div>
 
       <!-- Section 3: Official Specifications Comparison Table -->
-      <h2>Official SSC 2026 Examination Specifications Summary</h2>
+      <h2>Official IBPS 2026 Examination Specifications Summary</h2>
       <p>
-        Review the mandatory dimensions, file sizes, and formats enforced across major SSC examinations before submitting your application:
+        Review the mandatory dimensions, file sizes, and formats enforced across all major IBPS banking examinations:
       </p>
 
       <div class="table-responsive">
@@ -123,83 +123,69 @@ const appSchema = {
             <tr>
               <th>Examination</th>
               <th>Document Type</th>
-              <th>Dimensions (cm &amp; px)</th>
+              <th>Pixel Dimensions</th>
               <th>File Size Limit</th>
               <th>Format &amp; Background</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>General SSC Standard</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; White Paper, Black Ink</td>
-            </tr>
-            <tr>
-              <td><strong>SSC CGL (Grad Level)</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Horizontal alignment</td>
-            </tr>
-            <tr>
-              <td><strong>SSC CHSL (10+2 Level)</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Running handwriting</td>
-            </tr>
-            <tr>
-              <td><strong>SSC MTS &amp; Havaldar</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Black ink strictly</td>
-            </tr>
-            <tr>
-              <td><strong>SSC Constable GD</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Clear, unblurred</td>
-            </tr>
-            <tr>
-              <td><strong>SSC CPO (SI in Delhi Police)</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Plain white background</td>
-            </tr>
-            <tr>
-              <td><strong>SSC JE (Junior Engineer)</strong></td>
-              <td>Signature</td>
-              <td>4.0 × 2.0 cm (approx 160 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Compact rectangular format</td>
-            </tr>
-            <tr>
-              <td><strong>SSC Stenographer &amp; JHT</strong></td>
-              <td>Signature</td>
-              <td>6.0 × 2.0 cm (approx 240 × 80 px)</td>
-              <td><strong>10 KB – 20 KB</strong></td>
-              <td>JPG / JPEG &bull; Black ink pen</td>
-            </tr>
-            <tr>
-              <td><strong>All SSC Exams (Admit Card / DV)</strong></td>
+              <td><strong>General IBPS Standard</strong></td>
               <td>Photograph</td>
-              <td>3.5 × 4.5 cm (approx 200 × 230 px)</td>
+              <td>200 × 230 px (4.5 × 3.5 cm)</td>
               <td><strong>20 KB – 50 KB</strong></td>
-              <td>JPG / JPEG &bull; Plain white / light backdrop</td>
+              <td>JPG / JPEG &bull; Pure White / Light background</td>
+            </tr>
+            <tr>
+              <td><strong>General IBPS Standard</strong></td>
+              <td>Signature</td>
+              <td>140 × 60 px (3.5 × 1.5 cm)</td>
+              <td><strong>10 KB – 20 KB</strong></td>
+              <td>JPG / JPEG &bull; Black ink on white paper</td>
+            </tr>
+            <tr>
+              <td><strong>IBPS PO (CRP PO/MT)</strong></td>
+              <td>Photograph &amp; Signature</td>
+              <td>Photo: 200×230 px &bull; Sig: 140×60 px</td>
+              <td>Photo: 20–50 KB &bull; Sig: 10–20 KB</td>
+              <td>JPG / JPEG &bull; Running hand signature</td>
+            </tr>
+            <tr>
+              <td><strong>IBPS Clerk (CRP Clerical)</strong></td>
+              <td>Photograph &amp; Signature</td>
+              <td>Photo: 200×230 px &bull; Sig: 140×60 px</td>
+              <td>Photo: 20–50 KB &bull; Sig: 10–20 KB</td>
+              <td>JPG / JPEG &bull; Black ink pen strictly</td>
+            </tr>
+            <tr>
+              <td><strong>IBPS SO (Specialist Officers)</strong></td>
+              <td>Photograph &amp; Signature</td>
+              <td>Photo: 200×230 px &bull; Sig: 140×60 px</td>
+              <td>Photo: 20–50 KB &bull; Sig: 10–20 KB</td>
+              <td>JPG / JPEG &bull; Clear facial visibility</td>
+            </tr>
+            <tr>
+              <td><strong>IBPS RRB PO (Officer Scale I/II/III)</strong></td>
+              <td>Photograph &amp; Signature</td>
+              <td>Photo: 200×230 px &bull; Sig: 140×60 px</td>
+              <td>Photo: 20–50 KB &bull; Sig: 10–20 KB</td>
+              <td>JPG / JPEG &bull; White background</td>
+            </tr>
+            <tr>
+              <td><strong>IBPS RRB Clerk (Office Assistant)</strong></td>
+              <td>Photograph &amp; Signature</td>
+              <td>Photo: 200×230 px &bull; Sig: 140×60 px</td>
+              <td>Photo: 20–50 KB &bull; Sig: 10–20 KB</td>
+              <td>JPG / JPEG &bull; No capital letter signatures</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <!-- Section 4: Signature Technical Requirements -->
-      <h2>Essential Rules for SSC Signature Uploads</h2>
+      <h2>Essential Rules for IBPS Signature Uploads</h2>
       <p>
-        The SSC digital validator automatically scans uploaded signature files. Ensure your signature satisfies every criterion below:
+        The IBPS digital validator automatically inspects uploaded signature images. Ensure your file satisfies all official rules below:
       </p>
       <div class="benefits-grid">
         <div class="benefit-card">
@@ -210,7 +196,18 @@ const appSchema = {
             </svg>
           </div>
           <h3>Black Ink Pen Only</h3>
-          <p>Sign strictly with a dark black ballpoint or gel pen. Signatures in blue, green, or red ink, or those signed in pencil, will be rejected.</p>
+          <p>Sign strictly with a dark black ink pen on clean unruled white printer paper. Blue ink, gel pens that smudge, or pencils are strictly prohibited by IBPS.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <h3>No Capital / Block Letters</h3>
+          <p>Signatures written in full CAPITAL / BLOCK LETTERS will NOT be accepted. The signature must be in your natural running handwriting.</p>
         </div>
 
         <div class="benefit-card">
@@ -221,19 +218,8 @@ const appSchema = {
               <line x1="3" y1="15" x2="21" y2="15"></line>
             </svg>
           </div>
-          <h3>Unruled Plain White Paper</h3>
-          <p>Sign on a clean sheet of unruled white printer paper. Avoid lined notebooks, graph sheets, or textured stationery that introduce background artifacts.</p>
-        </div>
-
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-            </svg>
-          </div>
-          <h3>Running Handwriting Only</h3>
-          <p>Your signature must be written in your natural cursive or running handwriting. Signatures written in full CAPITAL BLOCK letters are strictly invalid.</p>
+          <h3>140 × 60 Pixel Aspect Ratio</h3>
+          <p>The standard rectangular ratio is 7:3 (140 × 60 px). Cropping too wide or too narrow causes distortion during portal rendering.</p>
         </div>
 
         <div class="benefit-card">
@@ -243,50 +229,50 @@ const appSchema = {
             </svg>
           </div>
           <h3>Strict 10 KB – 20 KB Range</h3>
-          <p>The SSC portal validator has hard thresholds. Files under 10.0 KB or exceeding 20.0 KB trigger error messages and block form submission.</p>
+          <p>The portal validator has hard byte thresholds. Files under 10.0 KB or over 20.0 KB are immediately blocked by the upload module.</p>
         </div>
       </div>
 
       <!-- Section 5: Step-by-Step Instructions -->
-      <h2>How to Resize SSC Photo and Signature in 4 Easy Steps</h2>
+      <h2>How to Resize IBPS Photo and Signature in 4 Easy Steps</h2>
       <ol class="steps-ordered-list">
         <li>
-          <strong>Select Your Exam (Optional):</strong> Choose your specific recruitment exam (such as SSC CGL, CHSL, MTS, GD, or JE) from the top dropdown, or keep <em>General SSC Resize</em>.
+          <strong>Select Your Exam (Optional):</strong> Choose your recruitment exam (IBPS PO, Clerk, SO, RRB PO, or RRB Clerk) from the dropdown, or keep <em>General IBPS</em>.
         </li>
         <li>
-          <strong>Choose Document Mode:</strong> Toggle between the <em>Signature</em> (for online portal upload) and <em>Photograph</em> (for admit card &amp; DV printout) tabs.
+          <strong>Choose Document Mode:</strong> Toggle between the <em>Photograph (20–50 KB)</em> and <em>Signature (10–20 KB)</em> tabs.
         </li>
         <li>
-          <strong>Upload Your Image:</strong> Drag and drop your camera photo or scanned file (JPG, PNG, or WebP). The tool instantly cleans paper background shadows, aligns your image, and applies the exact dimensions.
+          <strong>Upload Your Image:</strong> Drag and drop your photo or signature file (JPG, PNG, or WebP). The tool automatically whitens paper background shadows, centers your document, and applies exact pixel dimensions.
         </li>
         <li>
-          <strong>Review &amp; Download:</strong> Check the green compliance badges confirming dimensions, format (JPG), and file size (strictly 10–20 KB for signature, 20–50 KB for photo). Click <strong>Download Compliant Image</strong> to save your file.
+          <strong>Review &amp; Download:</strong> Verify the live green compliance badges confirming dimensions, format (JPG), and file size. Click <strong>Download Compliant Image</strong> to save your ready-to-upload file.
         </li>
       </ol>
 
-      <!-- Section 6: Common SSC Portal Rejection Reasons -->
-      <h2>Common Reasons SSC Portal Rejects Signatures &amp; How to Avoid Them</h2>
+      <!-- Section 6: Common IBPS Portal Rejection Reasons -->
+      <h2>Common Reasons IBPS Portal Rejects Uploads &amp; How to Avoid Them</h2>
       <ul class="mistakes-list">
         <li>
-          <strong>File Size Below 10.0 KB:</strong> Clean digital signatures on white backgrounds often compress to 4–7 KB. The SSC portal validator triggers an error if the file is under 10.0 KB. Our engine automatically pads JPEG comment bytes to guarantee file sizes stay safely at 13–16 KB.
+          <strong>Signature File Size Under 10.0 KB:</strong> High-compression scans of signatures on white paper often drop below 10 KB. Our tool automatically pads JPEG comment bytes to safely maintain file size at 13–17 KB.
         </li>
         <li>
-          <strong>File Size Exceeding 20.0 KB:</strong> Mobile camera snapshots often measure 2–4 MB. Our compression engine automatically reduces file size into the safe 10–20 KB bracket without blurring the ink lines.
+          <strong>Photo File Size Exceeding 50.0 KB:</strong> High-resolution phone camera photos usually measure 2–4 MB. Our engine compresses images down to ~30–40 KB without blurring facial details.
         </li>
         <li>
-          <strong>Miniature Signature Error:</strong> Leaving excessive blank margins around your signature makes the text illegible when scaled by the portal. Always crop close to the ink before uploading.
+          <strong>Signatures Signed in Blue Ink:</strong> IBPS notifications explicitly require dark black ink pen. Avoid blue or colored inks.
         </li>
         <li>
-          <strong>Vertical / Inverted Orientation:</strong> Taking phone photos in portrait mode can rotate signatures 90 degrees. Ensure your signature is horizontally aligned before saving.
+          <strong>Signature in Full Capital Letters:</strong> Signing in block letters violates IBPS identification rules and leads to candidate disqualification.
         </li>
         <li>
-          <strong>Attempting to Upload a Pre-Existing Photo to the Online Form:</strong> Remember that ssc.gov.in requires live webcam photo capture during the online application. Do not try to bypass the live capture interface with saved files.
+          <strong>Heavy Shadows or Patterned Background:</strong> Photos taken against colorful walls, doorframes, or with harsh flash reflections on spectacles are disqualified. Always use a pure white or very light background.
         </li>
       </ul>
 
       <!-- Section 7: FAQ Accordion Section -->
       <div class="faq-container">
-        <h2 class="faq-section-title">Frequently Asked Questions (SSC Photo &amp; Signature)</h2>
+        <h2 class="faq-section-title">Frequently Asked Questions (IBPS Photo &amp; Signature)</h2>
         <div class="faq-list">
           {faqItems.map((item) => (
             <details class="faq-item">
@@ -336,7 +322,28 @@ const appSchema = {
             </div>
           </a>
 
-          <!-- Card 2: PAN Card Resizer -->
+          <!-- Card 2: SSC Resizer -->
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <polyline points="9 15 11 17 15 13"></polyline>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">SSC Photo &amp; Signature Resizer</h4>
+              <p class="cross-tool-desc">Resize signature (10–20 KB) and admit card photo (20–50 KB) for SSC CGL, CHSL, MTS &amp; GD.</p>
+            </div>
+          </a>
+
+          <!-- Card 3: PAN Card Resizer -->
           <a href="/tools/pan-card-image-resizer/" class="cross-tool-card">
             <div class="cross-tool-top">
               <div class="cross-tool-icon">
@@ -359,7 +366,7 @@ const appSchema = {
             </div>
           </a>
 
-          <!-- Card 3: Passport Photo Maker -->
+          <!-- Card 4: Passport Photo Maker -->
           <a href="/tools/passport-photo-maker/" class="cross-tool-card">
             <div class="cross-tool-top">
               <div class="cross-tool-icon">
@@ -376,26 +383,6 @@ const appSchema = {
             <div class="cross-tool-content">
               <h4 class="cross-tool-title">Passport Photo Maker</h4>
               <p class="cross-tool-desc">Crop and convert photos to official 2×2 inch or 35×45 mm biometric passport standards.</p>
-            </div>
-          </a>
-
-          <!-- Card 4: WhatsApp DP Resizer -->
-          <a href="/tools/whatsapp-dp-resizer/" class="cross-tool-card">
-            <div class="cross-tool-top">
-              <div class="cross-tool-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <path d="M8 12a4 4 0 0 1 8 0"></path>
-                </svg>
-              </div>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </div>
-            <div class="cross-tool-content">
-              <h4 class="cross-tool-title">WhatsApp DP Resizer</h4>
-              <p class="cross-tool-desc">Fit full square images for WhatsApp profile pictures without cropping.</p>
             </div>
           </a>
 
@@ -507,20 +494,20 @@ const appSchema = {
     position: relative;
   }
 
-  .live-card {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-  }
-
-  :global([data-theme='dark']) .live-card {
-    background: rgba(245, 158, 11, 0.1);
-    border-color: rgba(245, 158, 11, 0.25);
-  }
-
   .upload-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
+  }
+
+  .live-card {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+  }
+
+  :global([data-theme='dark']) .live-card {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.25);
   }
 
   .card-badge {
@@ -535,22 +522,22 @@ const appSchema = {
     margin-bottom: var(--space-3);
   }
 
-  .live-badge {
-    background: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fcd34d;
-  }
-
-  :global([data-theme='dark']) .live-badge {
-    background: rgba(245, 158, 11, 0.25);
-    color: #fde68a;
-    border-color: rgba(245, 158, 11, 0.4);
-  }
-
   .upload-badge {
     background: var(--color-accent-light);
     color: var(--color-accent);
     border: 1px solid var(--color-accent-border);
+  }
+
+  .live-badge {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+  }
+
+  :global([data-theme='dark']) .live-badge {
+    background: rgba(59, 130, 246, 0.25);
+    color: #bfdbfe;
+    border-color: rgba(59, 130, 246, 0.4);
   }
 
   .notice-card h3 {
@@ -671,7 +658,7 @@ const appSchema = {
 
   /* --- Ordered Steps List --- */
   .steps-ordered-list {
-    counter-reset: ssc-step;
+    counter-reset: ibps-step;
     list-style: none;
     padding: 0;
     margin-block: var(--space-6);
@@ -689,8 +676,8 @@ const appSchema = {
   }
 
   .steps-ordered-list li::before {
-    counter-increment: ssc-step;
-    content: counter(ssc-step);
+    counter-increment: ibps-step;
+    content: counter(ibps-step);
     position: absolute;
     left: 0;
     top: 2px;

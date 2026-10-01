@@ -13,8 +13,6 @@ import PanResizer from '@/components/PanResizer.astro';
 import PanContent from '@/components/PanContent.astro';
 import WhatsAppResizer from '@/components/WhatsAppResizer.astro';
 import WhatsAppContent from '@/components/WhatsAppContent.astro';
-import SscResizer from '@/components/SscResizer.astro';
-import SscContent from '@/components/SscContent.astro';
 import YouTubeResizer from '@/components/YouTubeResizer.astro';
 import YouTubeContent from '@/components/YouTubeContent.astro';
 import YouTubeThumbnailResizer from '@/components/YouTubeThumbnailResizer.astro';
@@ -124,7 +122,6 @@ const toolPrefixMap: Record<string, string> = {
   'cm-mm-resizer': 'cmresizer',
   'pan-card-resizer': 'panresizer',
   'whatsapp-dp-resizer': 'waresizer',
-  'ssc-photo-signature-resizer': 'sscresizer',
   'youtube-banner-resizer': 'ytresizer',
   'ppt-resizer': 'pptresize',
   'image-srcset-generator': 'srcset',
@@ -211,7 +208,6 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'cm-mm-resizer' && <CmMmResizer locale={locale} />}
       {toolId === 'pan-card-resizer' && <PanResizer locale={locale} />}
       {toolId === 'whatsapp-dp-resizer' && <WhatsAppResizer locale={locale} />}
-      {toolId === 'ssc-photo-signature-resizer' && <SscResizer locale={locale} />}
       {toolId === 'youtube-banner-resizer' && <YouTubeResizer locale={locale} />}
       {toolId === 'ppt-resizer' && <PptResizer locale={locale} />}
       {toolId === 'image-srcset-generator' && <SrcsetGenerator locale={locale} />}
@@ -260,7 +256,6 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'cm-mm-resizer' && <CmMmContent locale={locale} />}
   {toolId === 'pan-card-resizer' && <PanContent locale={locale} />}
   {toolId === 'whatsapp-dp-resizer' && <WhatsAppContent locale={locale} />}
-  {toolId === 'ssc-photo-signature-resizer' && <SscContent locale={locale} />}
   {toolId === 'youtube-banner-resizer' && <YouTubeContent locale={locale} />}
   {toolId === 'ppt-resizer' && <PptResizerContent locale={locale} />}
   {toolId === 'image-srcset-generator' && <SrcsetGeneratorContent locale={locale} />}

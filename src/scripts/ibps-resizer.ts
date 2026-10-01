@@ -1,10 +1,10 @@
 /**
- * SSC Photo & Signature Resizer Engine
- * 100% Client-Side Canvas Processing & Official SSC 2026 Compliance Engine
+ * IBPS Photo & Signature Resizer Engine
+ * 100% Client-Side Canvas Processing & Official IBPS 2026 Compliance Engine
  * Zero external dependencies.
  */
 
-export interface SscExamConfig {
+export interface IbpsExamConfig {
   id: string;
   name: string;
   shortName: string;
@@ -26,255 +26,192 @@ export interface SscExamConfig {
   };
 }
 
-export const SSC_EXAM_PRESETS: Record<string, SscExamConfig> = {
+export const IBPS_EXAM_PRESETS: Record<string, IbpsExamConfig> = {
   general: {
     id: 'general',
-    name: 'General SSC Resize (Universal)',
-    shortName: 'General SSC',
+    name: 'General IBPS (Universal Standard)',
+    shortName: 'General IBPS',
     photo: {
       targetW: 200,
       targetH: 230,
       minKb: 20,
       maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: 'Universal 3.5 × 4.5 cm (20–50 KB JPG) for offline forms, admit cards & DV',
+      displayCm: '4.5 × 3.5 cm (200 × 230 px)',
+      description: 'Universal 200 × 230 px (20–50 KB JPG) color passport photo on white background',
     },
     signature: {
-      targetW: 240,
-      targetH: 80,
+      targetW: 140,
+      targetH: 60,
       minKb: 10,
       maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Standard horizontal signature (10–20 KB JPG) on pure white background',
+      displayCm: '3.5 × 1.5 cm (140 × 60 px)',
+      description: 'Standard 140 × 60 px (10–20 KB JPG) in dark black ink on white paper',
     },
   },
-  cgl: {
-    id: 'cgl',
-    name: 'SSC CGL (Combined Graduate Level)',
-    shortName: 'SSC CGL',
+  po: {
+    id: 'po',
+    name: 'IBPS PO (Probationary Officers / Management Trainees)',
+    shortName: 'IBPS PO',
     photo: {
       targetW: 200,
       targetH: 230,
       minKb: 20,
       maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for CGL admit card & physical verification',
+      displayCm: '4.5 × 3.5 cm (200 × 230 px)',
+      description: 'Official 200 × 230 px (20–50 KB JPG) for IBPS PO online registration',
     },
     signature: {
-      targetW: 240,
-      targetH: 80,
+      targetW: 140,
+      targetH: 60,
       minKb: 10,
       maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
+      displayCm: '3.5 × 1.5 cm (140 × 60 px)',
+      description: 'Official 140 × 60 px (10–20 KB JPG) running hand signature in black ink',
     },
   },
-  chsl: {
-    id: 'chsl',
-    name: 'SSC CHSL (10+2 Higher Secondary)',
-    shortName: 'SSC CHSL',
+  clerk: {
+    id: 'clerk',
+    name: 'IBPS Clerk (Customer Support & Sales)',
+    shortName: 'IBPS Clerk',
     photo: {
       targetW: 200,
       targetH: 230,
       minKb: 20,
       maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for CHSL admit card & physical verification',
+      displayCm: '4.5 × 3.5 cm (200 × 230 px)',
+      description: 'Official 200 × 230 px (20–50 KB JPG) for IBPS Clerk online registration',
     },
     signature: {
-      targetW: 240,
-      targetH: 80,
+      targetW: 140,
+      targetH: 60,
       minKb: 10,
       maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
+      displayCm: '3.5 × 1.5 cm (140 × 60 px)',
+      description: 'Official 140 × 60 px (10–20 KB JPG) running hand signature in black ink',
     },
   },
-  mts: {
-    id: 'mts',
-    name: 'SSC MTS & Havaldar',
-    shortName: 'SSC MTS',
+  so: {
+    id: 'so',
+    name: 'IBPS SO (Specialist Officers - IT, Law, Rajbhasha, HR)',
+    shortName: 'IBPS SO',
     photo: {
       targetW: 200,
       targetH: 230,
       minKb: 20,
       maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for MTS admit card & physical verification',
+      displayCm: '4.5 × 3.5 cm (200 × 230 px)',
+      description: 'Official 200 × 230 px (20–50 KB JPG) for IBPS SO online registration',
     },
     signature: {
-      targetW: 240,
-      targetH: 80,
+      targetW: 140,
+      targetH: 60,
       minKb: 10,
       maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
+      displayCm: '3.5 × 1.5 cm (140 × 60 px)',
+      description: 'Official 140 × 60 px (10–20 KB JPG) running hand signature in black ink',
     },
   },
-  gd: {
-    id: 'gd',
-    name: 'SSC Constable GD (CAPFs & Rifleman)',
-    shortName: 'SSC GD',
+  'rrb-po': {
+    id: 'rrb-po',
+    name: 'IBPS RRB PO (Officer Scale I, II & III)',
+    shortName: 'IBPS RRB PO',
     photo: {
       targetW: 200,
       targetH: 230,
       minKb: 20,
       maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for GD physical test, admit card & DV',
+      displayCm: '4.5 × 3.5 cm (200 × 230 px)',
+      description: 'Official 200 × 230 px (20–50 KB JPG) for RRB Officer Scale I/II/III',
     },
     signature: {
-      targetW: 240,
-      targetH: 80,
+      targetW: 140,
+      targetH: 60,
       minKb: 10,
       maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
+      displayCm: '3.5 × 1.5 cm (140 × 60 px)',
+      description: 'Official 140 × 60 px (10–20 KB JPG) running hand signature in black ink',
     },
   },
-  cpo: {
-    id: 'cpo',
-    name: 'SSC CPO (SI in Delhi Police & CAPFs)',
-    shortName: 'SSC CPO',
+  'rrb-clerk': {
+    id: 'rrb-clerk',
+    name: 'IBPS RRB Clerk (Office Assistant Multipurpose)',
+    shortName: 'IBPS RRB Clerk',
     photo: {
       targetW: 200,
       targetH: 230,
       minKb: 20,
       maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for CPO PET/PST & admit card verification',
+      displayCm: '4.5 × 3.5 cm (200 × 230 px)',
+      description: 'Official 200 × 230 px (20–50 KB JPG) for RRB Office Assistant',
     },
     signature: {
-      targetW: 240,
-      targetH: 80,
+      targetW: 140,
+      targetH: 60,
       minKb: 10,
       maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
-    },
-  },
-  je: {
-    id: 'je',
-    name: 'SSC JE (Junior Engineer - Civil, Mech, Elec)',
-    shortName: 'SSC JE',
-    photo: {
-      targetW: 200,
-      targetH: 230,
-      minKb: 20,
-      maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for JE admit card & document verification',
-    },
-    signature: {
-      targetW: 160,
-      targetH: 80,
-      minKb: 10,
-      maxKb: 20,
-      displayCm: '4.0 × 2.0 cm',
-      description: 'Official 4.0 × 2.0 cm format (10–20 KB JPG) specified in JE notification',
-    },
-  },
-  steno: {
-    id: 'steno',
-    name: 'SSC Stenographer (Grade C & D)',
-    shortName: 'SSC Stenographer',
-    photo: {
-      targetW: 200,
-      targetH: 230,
-      minKb: 20,
-      maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for Stenographer skill test & admit card',
-    },
-    signature: {
-      targetW: 240,
-      targetH: 80,
-      minKb: 10,
-      maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
-    },
-  },
-  jht: {
-    id: 'jht',
-    name: 'SSC JHT (Junior Hindi Translator)',
-    shortName: 'SSC JHT',
-    photo: {
-      targetW: 200,
-      targetH: 230,
-      minKb: 20,
-      maxKb: 50,
-      displayCm: '3.5 × 4.5 cm',
-      description: '3.5 × 4.5 cm (20–50 KB JPG) for JHT admit card & document verification',
-    },
-    signature: {
-      targetW: 240,
-      targetH: 80,
-      minKb: 10,
-      maxKb: 20,
-      displayCm: '6.0 × 2.0 cm',
-      description: 'Official 6.0 × 2.0 cm horizontal format (10–20 KB JPG) with black ink',
+      displayCm: '3.5 × 1.5 cm (140 × 60 px)',
+      description: 'Official 140 × 60 px (10–20 KB JPG) running hand signature in black ink',
     },
   },
 };
 
-export function initSscResizer() {
-  const container = document.getElementById('ssc-resizer-container');
+export function initIbpsResizer() {
+  const container = document.getElementById('ibps-resizer-container');
   if (!container) return;
 
   // DOM Elements
-  const examSelect = document.getElementById('ssc-exam-select') as HTMLSelectElement | null;
-  const tabPhotoBtn = document.getElementById('ssc-tab-photo') as HTMLButtonElement | null;
-  const tabSigBtn = document.getElementById('ssc-tab-sig') as HTMLButtonElement | null;
+  const examSelect = document.getElementById('ibps-exam-select') as HTMLSelectElement | null;
+  const tabPhotoBtn = document.getElementById('ibps-tab-photo') as HTMLButtonElement | null;
+  const tabSigBtn = document.getElementById('ibps-tab-sig') as HTMLButtonElement | null;
 
-  const livePhotoNotice = document.getElementById('ssc-live-photo-notice') as HTMLElement | null;
-  const sigNotice = document.getElementById('ssc-sig-notice') as HTMLElement | null;
+  const livePhotoNotice = document.getElementById('ibps-live-photo-notice') as HTMLElement | null;
+  const sigNotice = document.getElementById('ibps-sig-notice') as HTMLElement | null;
 
-  const specDimensions = document.getElementById('ssc-spec-dim') as HTMLElement | null;
-  const specFileSize = document.getElementById('ssc-spec-size') as HTMLElement | null;
-  const specFormat = document.getElementById('ssc-spec-format') as HTMLElement | null;
+  const specDimensions = document.getElementById('ibps-spec-dim') as HTMLElement | null;
+  const specFileSize = document.getElementById('ibps-spec-size') as HTMLElement | null;
+  const specFormat = document.getElementById('ibps-spec-format') as HTMLElement | null;
 
-  const fileInput = document.getElementById('ssc-file-input') as HTMLInputElement | null;
-  const dropzone = document.getElementById('ssc-dropzone') as HTMLElement | null;
-  const dropzoneTitle = document.getElementById('ssc-dropzone-title') as HTMLElement | null;
-  const dropzoneSubtitle = document.getElementById('ssc-dropzone-subtitle') as HTMLElement | null;
-  const editorArea = document.getElementById('ssc-editor-area') as HTMLElement | null;
+  const fileInput = document.getElementById('ibps-file-input') as HTMLInputElement | null;
+  const dropzone = document.getElementById('ibps-dropzone') as HTMLElement | null;
+  const dropzoneTitle = document.getElementById('ibps-dropzone-title') as HTMLElement | null;
+  const dropzoneSubtitle = document.getElementById('ibps-dropzone-subtitle') as HTMLElement | null;
+  const editorArea = document.getElementById('ibps-editor-area') as HTMLElement | null;
 
-  const mainCanvas = document.getElementById('ssc-main-canvas') as HTMLCanvasElement | null;
+  const mainCanvas = document.getElementById('ibps-main-canvas') as HTMLCanvasElement | null;
   const ctx = mainCanvas ? mainCanvas.getContext('2d') : null;
 
-  const valDimText = document.getElementById('ssc-val-dim-text') as HTMLElement | null;
-  const valDimStatus = document.getElementById('ssc-val-dim-status') as HTMLElement | null;
-  const valSizeText = document.getElementById('ssc-val-size-text') as HTMLElement | null;
-  const valSizeStatus = document.getElementById('ssc-val-size-status') as HTMLElement | null;
-  const valFormatStatus = document.getElementById('ssc-val-format-status') as HTMLElement | null;
-  const valBgStatus = document.getElementById('ssc-val-bg-status') as HTMLElement | null;
+  const valDimText = document.getElementById('ibps-val-dim-text') as HTMLElement | null;
+  const valDimStatus = document.getElementById('ibps-val-dim-status') as HTMLElement | null;
+  const valSizeText = document.getElementById('ibps-val-size-text') as HTMLElement | null;
+  const valSizeStatus = document.getElementById('ibps-val-size-status') as HTMLElement | null;
+  const valFormatStatus = document.getElementById('ibps-val-format-status') as HTMLElement | null;
+  const valBgStatus = document.getElementById('ibps-val-bg-status') as HTMLElement | null;
 
-  const downloadBtn = document.getElementById('ssc-download-btn') as HTMLButtonElement | null;
-  const downloadBtnText = document.getElementById('ssc-download-btn-text') as HTMLElement | null;
-  const changeImgBtn = document.getElementById('ssc-change-img-btn') as HTMLButtonElement | null;
-  const errorMessage = document.getElementById('ssc-error-message') as HTMLElement | null;
+  const downloadBtn = document.getElementById('ibps-download-btn') as HTMLButtonElement | null;
+  const downloadBtnText = document.getElementById('ibps-download-btn-text') as HTMLElement | null;
+  const changeImgBtn = document.getElementById('ibps-change-img-btn') as HTMLButtonElement | null;
+  const errorMessage = document.getElementById('ibps-error-message') as HTMLElement | null;
 
   if (!fileInput || !dropzone || !editorArea || !mainCanvas || !ctx) return;
 
   // Internal State
   let currentExam = 'general';
-  let currentMode: 'photo' | 'signature' = 'signature'; // Default to signature as SSC applications actively require signature upload
+  let currentMode: 'photo' | 'signature' = 'photo'; // Default to photo
   let loadedImage: HTMLImageElement | null = null;
   let activeBlob: Blob | null = null;
   let activeFileSizeKb = 0;
 
   function getActiveConfig() {
-    const examConfig = SSC_EXAM_PRESETS[currentExam] || SSC_EXAM_PRESETS.general;
+    const examConfig = IBPS_EXAM_PRESETS[currentExam] || IBPS_EXAM_PRESETS.general;
     return currentMode === 'photo' ? examConfig.photo : examConfig.signature;
   }
 
   function updateSpecSummary() {
     const config = getActiveConfig();
-    const examConfig = SSC_EXAM_PRESETS[currentExam] || SSC_EXAM_PRESETS.general;
+    const examConfig = IBPS_EXAM_PRESETS[currentExam] || IBPS_EXAM_PRESETS.general;
 
     if (specDimensions) {
-      specDimensions.textContent = `${config.displayCm} (${config.targetW} × ${config.targetH} px)`;
+      specDimensions.textContent = `${config.targetW} × ${config.targetH} px (${config.displayCm})`;
     }
     if (specFileSize) {
       specFileSize.textContent = `${config.minKb} KB – ${config.maxKb} KB`;
@@ -288,7 +225,7 @@ export function initSscResizer() {
       if (sigNotice) sigNotice.hidden = true;
       if (dropzoneTitle) dropzoneTitle.textContent = `Upload ${examConfig.shortName} Photograph`;
       if (dropzoneSubtitle) {
-        dropzoneSubtitle.textContent = `Auto-resizes to ${config.displayCm} (${config.targetW}×${config.targetH} px), ${config.minKb}–${config.maxKb} KB JPG with pure white background.`;
+        dropzoneSubtitle.textContent = `Auto-resizes to ${config.targetW}×${config.targetH} px, strictly ${config.minKb}–${config.maxKb} KB JPG with pure white background.`;
       }
       if (downloadBtnText) {
         downloadBtnText.textContent = `Download ${examConfig.shortName} Photo (JPG)`;
@@ -298,7 +235,7 @@ export function initSscResizer() {
       if (sigNotice) sigNotice.hidden = false;
       if (dropzoneTitle) dropzoneTitle.textContent = `Upload ${examConfig.shortName} Signature`;
       if (dropzoneSubtitle) {
-        dropzoneSubtitle.textContent = `Auto-resizes to ${config.displayCm} (${config.targetW}×${config.targetH} px), strictly ${config.minKb}–${config.maxKb} KB JPG on white background.`;
+        dropzoneSubtitle.textContent = `Auto-resizes to ${config.targetW}×${config.targetH} px, strictly ${config.minKb}–${config.maxKb} KB JPG in black ink on white paper.`;
       }
       if (downloadBtnText) {
         downloadBtnText.textContent = `Download ${examConfig.shortName} Signature (JPG)`;
@@ -331,7 +268,7 @@ export function initSscResizer() {
 
   // Switch Exam
   function switchExam(newExam: string) {
-    if (SSC_EXAM_PRESETS[newExam]) {
+    if (IBPS_EXAM_PRESETS[newExam]) {
       currentExam = newExam;
     } else {
       currentExam = 'general';
@@ -350,7 +287,7 @@ export function initSscResizer() {
   tabSigBtn?.addEventListener('click', () => switchMode('signature'));
 
   // Upload Handlers
-  dropzone?.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('click', () => fileInput.click());
   changeImgBtn?.addEventListener('click', () => fileInput.click());
 
   fileInput.addEventListener('change', (e) => {
@@ -397,7 +334,7 @@ export function initSscResizer() {
 
     const reader = new FileReader();
     reader.onerror = () => {
-      showError('Could not read the selected file. Please try another image.');
+      showError('Could not read the selected image file. Please try another image.');
     };
     reader.onload = (event) => {
       const img = new Image();
@@ -406,8 +343,8 @@ export function initSscResizer() {
       };
       img.onload = () => {
         loadedImage = img;
-        dropzone!.hidden = true;
-        editorArea!.hidden = false;
+        dropzone.hidden = true;
+        editorArea.hidden = false;
         processAndRender();
       };
       img.src = event.target?.result as string;
@@ -430,13 +367,11 @@ export function initSscResizer() {
         const b = data[i + 2];
         const brightness = r * 0.299 + g * 0.587 + b * 0.114;
 
-        if (brightness > 195) {
-          // Off-white / paper shadow -> boost to pure white
+        if (brightness > 190) {
           data[i] = 255;
           data[i + 1] = 255;
           data[i + 2] = 255;
         } else if (brightness < 125) {
-          // Dark ink -> deepen
           data[i] = Math.max(0, r - 35);
           data[i + 1] = Math.max(0, g - 35);
           data[i + 2] = Math.max(0, b - 35);
@@ -489,7 +424,7 @@ export function initSscResizer() {
       ctx.drawImage(loadedImage, drawX, drawY, drawW, drawH);
     } else {
       // Signature mode: Proportional contain with comfortable padding
-      const padding = Math.round(Math.min(targetW, targetH) * 0.1);
+      const padding = Math.round(Math.min(targetW, targetH) * 0.08);
       const availW = targetW - padding * 2;
       const availH = targetH - padding * 2;
 
@@ -513,8 +448,8 @@ export function initSscResizer() {
       enhanceSignatureContrast(ctx, targetW, targetH);
     }
 
-    // Compress to strictly meet SSC KB bounds
-    await compressToSscSpecs(mainCanvas, config.minKb, config.maxKb, config.displayCm);
+    // Compress to strictly meet IBPS KB bounds
+    await compressToIbpsSpecs(mainCanvas, config.minKb, config.maxKb, config.displayCm);
   }
 
   function canvasToBlobAsync(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob> {
@@ -542,7 +477,7 @@ export function initSscResizer() {
    * Multi-stage compression algorithm guaranteeing output file size strictly within [minKb, maxKb]
    * (e.g. 10.0 to 20.0 KB for signature, 20.0 to 50.0 KB for photo)
    */
-  async function compressToSscSpecs(
+  async function compressToIbpsSpecs(
     canvas: HTMLCanvasElement,
     minKb: number,
     maxKb: number,
@@ -584,7 +519,7 @@ export function initSscResizer() {
     }
 
     // If under minKb (very common for clean black pen signatures on white background),
-    // pad benign JPEG comment metadata to safely reach compliant zone (e.g. 13-16 KB)
+    // pad benign JPEG comment metadata to safely reach compliant zone (e.g. 13-16 KB for sig, 25-35 KB for photo)
     if (bestKb < minKb && bestBlob) {
       const targetBytes = Math.min(
         Math.ceil((minKb + 2.5) * 1024),
@@ -646,8 +581,8 @@ export function initSscResizer() {
     if (!activeBlob) return;
     const url = URL.createObjectURL(activeBlob);
     const link = document.createElement('a');
-    const examConfig = SSC_EXAM_PRESETS[currentExam] || SSC_EXAM_PRESETS.general;
-    link.download = `ssc-${examConfig.id}-${currentMode}.jpg`;
+    const examConfig = IBPS_EXAM_PRESETS[currentExam] || IBPS_EXAM_PRESETS.general;
+    link.download = `ibps-${examConfig.id}-${currentMode}.jpg`;
     link.href = url;
     document.body.appendChild(link);
     link.click();
@@ -661,7 +596,7 @@ export function initSscResizer() {
 
 // Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initSscResizer);
+  document.addEventListener('DOMContentLoaded', initIbpsResizer);
 } else {
-  initSscResizer();
+  initIbpsResizer();
 }

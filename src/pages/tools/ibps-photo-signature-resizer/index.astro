@@ -1,23 +1,23 @@
 ---
 /**
- * SSC Photo & Signature Resizer
- * Dedicated India-specific tool for SSC CGL, CHSL, MTS, GD, CPO, JE, Stenographer, and JHT.
+ * IBPS Photo & Signature Resizer
+ * Dedicated India-specific tool for IBPS PO, Clerk, SO, RRB PO, and RRB Clerk.
  * English-only tool with language switcher disabled.
  */
 import MainLayout from '@/layouts/MainLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import SscResizer from '@/components/SscResizer.astro';
-import SscContent from '@/components/SscContent.astro';
+import IbpsResizer from '@/components/IbpsResizer.astro';
+import IbpsContent from '@/components/IbpsContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 
 const locale = 'en';
-const toolUrl = '/tools/ssc-photo-signature-resizer/';
+const toolUrl = '/tools/ibps-photo-signature-resizer/';
 ---
 
 <MainLayout
   locale={locale}
-  title="SSC Photo & Signature Resizer 2026 | CGL, CHSL, MTS, GD, JE (10–20 KB)"
-  description="Resize and compress signature (10–20 KB) and photograph (20–50 KB) to official SSC 2026 specifications for CGL, CHSL, MTS, GD, CPO, JE & Stenographer. 100% client-side & private."
+  title="IBPS Photo & Signature Resizer 2026 | PO, Clerk, SO, RRB (10–20 KB)"
+  description="Resize and compress photograph (20–50 KB) and signature (10–20 KB) to official IBPS 2026 specifications for PO, Clerk, SO & RRB exams. 100% client-side & private."
   canonicalUrl={`https://imgfeel.com${toolUrl}`}
   basePath={toolUrl}
   showLanguageSwitcher={false}
@@ -26,12 +26,12 @@ const toolUrl = '/tools/ssc-photo-signature-resizer/';
     <SEOHead schema={{
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "SSC Photo & Signature Resizer",
+      "name": "IBPS Photo & Signature Resizer",
       "url": `https://imgfeel.com${toolUrl}`,
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Any",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": "Free client-side tool to resize, crop, and compress signature (10–20 KB) and photograph (20–50 KB) for SSC online applications."
+      "description": "Free client-side tool to resize, crop, and compress photograph (20–50 KB) and signature (10–20 KB) for IBPS online applications."
     }} />
   </Fragment>
 
@@ -40,19 +40,19 @@ const toolUrl = '/tools/ssc-photo-signature-resizer/';
       <Breadcrumbs locale={locale} items={[
         { label: 'Home', href: '/' },
         { label: 'Tools', href: '/tools/' },
-        { label: 'SSC Photo & Signature Resizer' }
+        { label: 'IBPS Photo & Signature Resizer' }
       ]} />
 
       <div class="tool-header">
-        <h1 class="tool-title">SSC Photo &amp; Signature Resizer</h1>
-        <p class="tool-subtitle">Automatically resize and compress signature (strictly 10–20 KB) and admit card photo (20–50 KB) to latest official SSC 2026 requirements across CGL, CHSL, MTS, GD, CPO, JE, and Stenographer.</p>
+        <h1 class="tool-title">IBPS Photo &amp; Signature Resizer</h1>
+        <p class="tool-subtitle">Automatically resize, crop, and compress photograph (strictly 20–50 KB) and signature (strictly 10–20 KB) to official IBPS 2026 specifications for PO, Clerk, SO, and RRB.</p>
       </div>
 
-      <SscResizer />
+      <IbpsResizer />
     </div>
   </div>
 
-  <SscContent />
+  <IbpsContent />
 </MainLayout>
 
 <style>

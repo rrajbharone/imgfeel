@@ -1,0 +1,782 @@
+---
+/**
+ * UPSC Photo & Signature Resizer SEO Content & FAQ Component
+ * Strict compliance with ImgFeel UI/UX Design System Standards
+ */
+
+const faqItems = [
+  {
+    q: 'What are the official UPSC photo and signature dimensions for 2026 applications?',
+    a: 'For UPSC online applications (including Civil Services IAS/IPS, CDS, NDA, CMS, and OTR), both photograph and signature images must have pixel dimensions between 350 × 350 pixels (minimum) and 1000 × 1000 pixels (maximum). The UPSC portal validator strictly checks that both width and height fall within this 350–1000 pixel range.',
+  },
+  {
+    q: 'What is the required file size for UPSC photograph and signature?',
+    a: 'For UPSC online applications, the photograph file size must be strictly between 20 KB and 300 KB, while the signature file size must be strictly between 20 KB and 100 KB. Files outside these limits are automatically rejected by the upsconline.nic.in portal. Our tool automatically compresses your files within these exact required limits.',
+  },
+  {
+    q: 'Why does the UPSC portal reject my signature with a dimension error?',
+    a: 'The UPSC server checks that both width AND height are at least 350 pixels. If you upload a standard wide rectangular signature (such as 350 × 150 px or 400 × 200 px), the portal rejects it because the height is under 350 px. Our tool automatically centers your signature onto a clean white square canvas (e.g., 550 × 550 px) so both dimensions satisfy the rule and upload seamlessly.',
+  },
+  {
+    q: 'What is the UPSC "Triple Signature" requirement?',
+    a: 'For examinations like the Civil Services Examination, UPSC instructions require candidates to sign three times vertically (one below the other) on a single sheet of plain white paper using a black ink pen, and scan all three signatures together as a single image file. Our tool supports both Triple Signature and Single Signature formats.',
+  },
+  {
+    q: 'Is candidate name and date of photo mandatory on UPSC photograph?',
+    a: 'UPSC Civil Services Examination guidelines mandate that the photograph must be recent (taken within 10 days of the start of the online application process) and must clearly display the candidate’s name and date on which the photo was taken inscribed at the bottom. Our tool provides a dedicated one-click option to inscribe your name and date cleanly per UPSC notice standards.',
+  },
+  {
+    q: 'Can I upload a PNG or PDF photo to the UPSC application portal?',
+    a: 'No. The UPSC portal strictly accepts JPG / JPEG files only. PNG, WebP, TIFF, or PDF uploads will be rejected. Our resizer automatically converts any uploaded PNG, JPG, or WebP photo into a compliant JPG file.',
+  },
+  {
+    q: 'What background color is required for UPSC photograph?',
+    a: 'UPSC requires a plain white or very light off-white background. Colored, dark, scenic, or patterned backgrounds will lead to application rejection. Your face must be clearly visible, centered, and occupy approximately 75% (3/4th) of the photograph area with both ears visible.',
+  },
+  {
+    q: 'Are my uploaded photographs and signatures stored on your server?',
+    a: 'No. ImgFeel processes 100% of your images locally in your web browser using client-side HTML5 Canvas. Your photograph, signature, and personal details are never uploaded to any server, database, or external service, ensuring complete privacy.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'UPSC Photo & Signature Resizer',
+  applicationCategory: 'MultimediaApplication',
+  operatingSystem: 'All',
+  browserRequirements: 'Requires JavaScript. Requires HTML5 Canvas.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to UPSC Guidelines -->
+      <h2>Official UPSC Photo & Signature Guidelines (2026 Examination Standards)</h2>
+      <p>
+        The Union Public Service Commission (UPSC) enforces strict digital file validation on its official application portal (<strong>upsconline.nic.in</strong>). Whether submitting the Common Application Form for the <strong>Civil Services Examination (CSE / IAS / IPS / IFS)</strong>, NDA, CDS, CAPF, Combined Medical Services (CMS), Engineering Services (ESE), or completing your <strong>One Time Registration (OTR)</strong>, non-compliant photographs and signatures trigger immediate portal rejection or application cancellation.
+      </p>
+      <p>
+        This free, client-side UPSC Photo & Signature Resizer automatically adjusts your image dimensions, enforces the mandatory pure white background, checks 75% facial composition, and compresses the final JPG strictly within the required file size limits (<strong>20 KB to 300 KB</strong> for photos and <strong>20 KB to 100 KB</strong> for signatures) with zero loss in visual clarity.
+      </p>
+
+      <!-- Section 2: Official Specification Comparison Table -->
+      <h2>Official UPSC 2026 Image Specifications Summary</h2>
+      <p>
+        Review the mandatory specifications enforced by the UPSC online application validator before uploading:
+      </p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>UPSC Photograph Requirements</th>
+              <th>UPSC Signature Requirements</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Allowed Dimensions</strong></td>
+              <td>Minimum 350 × 350 px &bull; Maximum 1000 × 1000 px</td>
+              <td>Minimum 350 × 350 px &bull; Maximum 1000 × 1000 px</td>
+            </tr>
+            <tr>
+              <td><strong>Aspect Ratio</strong></td>
+              <td>Square (1:1 aspect ratio)</td>
+              <td>Square (1:1) or Rectangular (both sides &ge; 350 px)</td>
+            </tr>
+            <tr>
+              <td><strong>File Size Limits</strong></td>
+              <td>Strictly between <strong>20 KB and 300 KB</strong></td>
+              <td>Strictly between <strong>20 KB and 100 KB</strong></td>
+            </tr>
+            <tr>
+              <td><strong>File Format</strong></td>
+              <td>JPG / JPEG only (no PNG or PDF)</td>
+              <td>JPG / JPEG only</td>
+            </tr>
+            <tr>
+              <td><strong>Background Color</strong></td>
+              <td>Plain White (#FFFFFF)</td>
+              <td>Plain White paper (no lines or grid)</td>
+            </tr>
+            <tr>
+              <td><strong>Pen / Ink Type</strong></td>
+              <td>N/A</td>
+              <td><strong>Black Ink Pen</strong> strictly required</td>
+            </tr>
+            <tr>
+              <td><strong>Special Rules</strong></td>
+              <td>Face 75% of frame, name &amp; DOP printed within 10 days</td>
+              <td>Triple signature rule for CSE, running handwriting only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 3: In-Depth UPSC Photograph Rules -->
+      <h2>UPSC Photograph Requirements: Composition, Recency, & Name/Date Stamp</h2>
+      <p>
+        To ensure biometric accuracy and prevent identity discrepancies during the examination and personality test stages, UPSC mandates specific photographic parameters:
+      </p>
+      <ul class="guidelines-list">
+        <li>
+          <strong>75% Face Coverage:</strong> The candidate's face must occupy approximately three-fourths (75%) of the photograph space, framed from the crown of the head to the shoulders.
+        </li>
+        <li>
+          <strong>Frontal Angle & Eye Contact:</strong> Face must directly front the camera with a neutral facial expression, closed mouth, and both ears clearly visible. Tilting, profile shots, or casual selfies are disqualified.
+        </li>
+        <li>
+          <strong>10-Day Recency Mandate:</strong> The photograph must be recent, taken not more than 10 days before the commencement of the online application form filling.
+        </li>
+        <li>
+          <strong>Name and Date Inscription (DOP):</strong> UPSC exam notifications stipulate that the candidate's full name in capital letters along with the date on which the photograph was taken (DOP) must be legibly inscribed at the bottom. Our tool enables you to automatically add this formatted banner with one click.
+        </li>
+        <li>
+          <strong>No Accessories:</strong> Caps, hats, tinted glasses, sunglasses, heavy shadows across the face, and facial coverings are prohibited. Clear prescription spectacles are permissible only if lenses do not produce flash reflections.
+        </li>
+      </ul>
+
+      <!-- Section 4: UPSC Signature & "Triple Signature" Guidelines -->
+      <h2>UPSC Signature Rules & Resolving the "350 Pixels" Upload Error</h2>
+      <p>
+        Many UPSC candidates face persistent frustration when uploading signatures:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <h3>Black Ink Pen Only</h3>
+          <p>Sign strictly with a black ink pen on clean unruled white printer paper. Blue ink, pencils, gel smudges, or colored inks are strictly prohibited.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="3" y1="15" x2="21" y2="15"></line>
+            </svg>
+          </div>
+          <h3>The Triple Signature Rule</h3>
+          <p>For UPSC CSE, sign three times vertically (one under the other) on one sheet of paper and scan as one file so invigilators can verify consistency.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <h3>Solving the 350px Portal Error</h3>
+          <p>Standard cropped signatures are wide and short (e.g., 300 × 120 px). The portal rejects any image under 350 px height. We center it on a 550 × 550 px canvas to pass.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>Running Handwriting Only</h3>
+          <p>Signatures must be in running hand. Signatures in full capital block letters or initials only are invalid and will cause immediate disqualification.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Step-by-Step Instructions -->
+      <h2>How to Resize UPSC Photo and Signature in 4 Easy Steps</h2>
+      <ol class="steps-ordered-list">
+        <li>
+          <strong>Select Document Type:</strong> Switch between the <em>Photograph</em> and <em>Signature</em> tabs at the top of the resizer tool.
+        </li>
+        <li>
+          <strong>Choose Official Preset:</strong> Keep the default recommended preset (<em>UPSC Online Portal Standard 550 × 550 px</em>) which universally satisfies all UPSC examinations.
+        </li>
+        <li>
+          <strong>Upload Your Image:</strong> Drag and drop your photo or signature file (JPG, PNG, or WebP). The tool instantly centers your file on a pure white background. If uploading a photo for Civil Services, check <em>Inscribe Name &amp; Date</em> and enter your details.
+        </li>
+        <li>
+          <strong>Verify &amp; Download:</strong> Check the live green compliance badges confirming dimensions (350–1000 px), format (JPG), and file size (20–300 KB for photo, 20–100 KB for signature). Click <strong>Download Compliant Image</strong> to save your ready-to-upload file.
+        </li>
+      </ol>
+
+      <!-- Section 6: Common UPSC Portal Rejection Reasons -->
+      <h2>Common Reasons UPSC Portal Rejects Uploads & How to Avoid Them</h2>
+      <ul class="mistakes-list">
+        <li>
+          <strong>File Size Below 20 KB:</strong> The upsconline portal server has a hard floor of 20.0 KB. Overly compressed files trigger the error <em>"File size must be greater than 20 KB"</em>. Our intelligent compression engine guarantees file size stays safely above 25 KB.
+        </li>
+        <li>
+          <strong>File Size Exceeding Maximum Limit:</strong> Files exceeding 300 KB for photos or 100 KB for signatures will trigger portal rejection errors. Our engine automatically compresses your image to optimal size (~35–60 KB) without visible pixelation.
+        </li>
+        <li>
+          <strong>Wrong Aspect Ratio or Dimension Under 350 px:</strong> Rectangular images under 350 px trigger validation errors. Our tool pads the canvas with pure white to maintain the compliant square ratio.
+        </li>
+        <li>
+          <strong>Non-White Background:</strong> Blue, red, or natural outdoor backgrounds violate UPSC guidelines. Always upload photos taken against a clean white wall or backdrop.
+        </li>
+      </ul>
+
+      <!-- Related Tools Section (Mandatory 6-Card Grid per UI Standards) -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>Related Document & Image Resizing Tools</h3>
+        </div>
+
+        <div class="cross-tools-grid">
+          <!-- Card 1: SSC Resizer -->
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">SSC Photo &amp; Signature Resizer</h4>
+              <p class="cross-tool-desc">Resize photo (20–50 KB) and signature (10–20 KB) for SSC CGL, CHSL, MTS, and GD.</p>
+            </div>
+          </a>
+
+          <!-- Card 2: PAN Card Resizer -->
+          <a href="/tools/pan-card-image-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                  <circle cx="9" cy="10" r="2"></circle>
+                  <line x1="15" y1="8" x2="17" y2="8"></line>
+                  <line x1="15" y1="12" x2="17" y2="12"></line>
+                  <line x1="7" y1="16" x2="17" y2="16"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">PAN Card Document Resizer</h4>
+              <p class="cross-tool-desc">Resize photo (3.5 × 2.5 cm) and signature (2 × 4.5 cm) for NSDL and UTIITSL portals.</p>
+            </div>
+          </a>
+
+          <!-- Card 3: Passport Photo Maker -->
+          <a href="/tools/passport-photo-maker/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">Passport Photo Maker</h4>
+              <p class="cross-tool-desc">Generate official standard 3.5 × 4.5 cm and 2 × 2 inch passport photographs.</p>
+            </div>
+          </a>
+
+          <!-- Card 4: File Size Checker -->
+          <a href="/tools/image-file-size-checker/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">Image File Size Checker</h4>
+              <p class="cross-tool-desc">Instantly verify accurate image size in KB, MB, and bytes before portal submission.</p>
+            </div>
+          </a>
+
+          <!-- Card 5: Dimensions Checker -->
+          <a href="/tools/image-dimensions-checker/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                  <line x1="15" y1="3" x2="15" y2="21"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">Image Dimensions Checker</h4>
+              <p class="cross-tool-desc">Check exact pixel width, height, aspect ratio, and orientation of any image file.</p>
+            </div>
+          </a>
+
+          <!-- Card 6: Exact Dimension Resizer -->
+          <a href="/tools/resize-image-to-exact-dimensions/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">Exact Dimension Resizer</h4>
+              <p class="cross-tool-desc">Set custom pixel width and height with fit, fill, or stretch canvas scaling options.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ Section (Polished Accordion with Top Margin Separation per UI Standards) -->
+      <div class="faq-container">
+        <h2>Frequently Asked Questions (UPSC Photo &amp; Signature)</h2>
+
+        <div class="faq-accordion">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span class="faq-q-text">{item.q}</span>
+                <span class="faq-chevron-box">
+                  <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- Content Section Architecture --- */
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .content-body {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: var(--space-12) 0 var(--space-4);
+    line-height: 1.3;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .content-body h2:first-of-type {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-base);
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Responsive Tables --- */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: var(--space-6) 0 var(--space-12);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    text-align: left;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border-light);
+    vertical-align: middle;
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 800;
+    color: var(--color-text);
+    font-size: 13.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tbody tr:hover td {
+    background: rgba(99, 102, 241, 0.02);
+  }
+
+  /* --- Benefits / Features Grid --- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    margin: var(--space-6) 0 var(--space-10);
+  }
+
+  @media (min-width: 640px) {
+    .benefits-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition: all var(--transition-normal);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .benefit-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.08);
+  }
+
+  .benefit-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3-5);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* --- Lists --- */
+  .guidelines-list,
+  .mistakes-list,
+  .steps-ordered-list {
+    margin: var(--space-5) 0 var(--space-10);
+    padding-left: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .guidelines-list li,
+  .mistakes-list li,
+  .steps-ordered-list li {
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--color-text-secondary);
+  }
+
+  .guidelines-list strong,
+  .mistakes-list strong,
+  .steps-ordered-list strong {
+    color: var(--color-text);
+  }
+
+  /* --- Related Tools Cross Links Section --- */
+  .cross-tools-container {
+    margin: var(--space-14) 0 var(--space-16);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .cross-tools-container {
+      padding: var(--space-6) var(--space-4);
+      margin: var(--space-10) 0 var(--space-12);
+    }
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    min-height: 160px;
+    transition: all var(--transition-fast);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .cross-tool-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.09);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-tool-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    color: var(--color-accent);
+    transform: translateX(4px);
+  }
+
+  .cross-tool-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.35;
+    margin: 0;
+    transition: color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-title {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-desc {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* --- FAQ Accordion --- */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-container h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6) 0;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3-5);
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: 18px 22px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--color-text);
+    list-style: none;
+    transition: color var(--transition-fast);
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question:hover {
+    color: var(--color-accent);
+  }
+
+  .faq-chevron-box {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background var(--transition-fast);
+  }
+
+  .faq-item[open] .faq-chevron-box {
+    background: var(--color-accent-light);
+  }
+
+  .faq-chevron {
+    color: var(--color-text-secondary);
+    transition: transform var(--transition-normal), color var(--transition-fast);
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 22px 18px 22px;
+    border-top: 1px solid var(--color-border-light);
+    margin-top: 2px;
+  }
+
+  .faq-answer p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: var(--space-3) 0 0 0;
+  }
+</style>
