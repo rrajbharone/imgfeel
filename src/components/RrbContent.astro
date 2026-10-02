@@ -1,0 +1,781 @@
+---
+/**
+ * RRB Photo & Signature Resizer SEO Content & FAQ Component
+ * Strict compliance with ImgFeel UI/UX Design System Standards
+ */
+
+const faqItems = [
+  {
+    q: 'What are the official Railway RRB photo and signature dimensions for 2026 recruitments?',
+    a: 'For Railway Recruitment Board (RRB) and Railway Recruitment Cell (RRC) examinations, standard passport photographs require dimensions of 35 mm × 45 mm (roughly 350 × 450 pixels or 320 × 400 pixels). Digital signatures must measure a minimum of 140 × 60 pixels (or preferred 240 × 80 pixels) centered within a 35 mm × 20 mm box.',
+  },
+  {
+    q: 'What is the required file size limit for RRB photograph and signature uploads?',
+    a: 'For most major recruitments on rrbapply.gov.in (including RRB ALP CEN 01/2024, Technician CEN 02/2024, JE CEN 03/2024, NTPC CEN 05/2024, and RPF Constable/SI), both photographs and signatures strictly require file sizes between 30 KB and 70 KB in JPG/JPEG format. For Railway Apprentice (RRC) portals, photos are typically 20 KB – 70 KB and signatures are 10 KB – 50 KB.',
+  },
+  {
+    q: 'Does this tool replace the Live Photo capture requirement on rrbapply.gov.in?',
+    a: 'No. Recent CEN recruitments on the unified rrbapply.gov.in portal mandate capturing a real-time Live Photograph through your smartphone or webcam during initial online registration. However, candidates must still prepare and carry identical 35 × 45 mm (30–70 KB) printed photos for affixing to the e-Call Letter / Admit Card counterfoil on examination day, and upload them during Document Verification (DV). For Railway Apprentice applications, direct photo upload is required.',
+  },
+  {
+    q: 'Can I sign using capital letters for RRB NTPC, Group D, or ALP exams?',
+    a: 'No. Railway Recruitment Boards strictly disqualify applications where signatures are written in CAPITAL or BLOCK letters or merely use initials. Your signature must be in your natural, continuous running handwriting using a black or dark blue ink ballpoint pen.',
+  },
+  {
+    q: 'What ink color is permitted for Railway signatures?',
+    a: 'Official Railway notifications permit dark black or dark blue ink pen. You must sign cleanly on an unruled, plain white sheet of paper. Pencils, sketch pens, or smudged gel pens are not accepted by RRB document verification examiners.',
+  },
+  {
+    q: 'Why does the RRB portal reject signatures under 30 KB?',
+    a: 'The rrbapply.gov.in upload module enforces a strict byte-level validator that checks both the minimum threshold (30.0 KB) and the maximum threshold (70.0 KB). Scanned black-and-white signatures often compress to 10–18 KB, triggering an automatic portal rejection. Our intelligent client-side resizer injects safe JPEG padding metadata to ensure your file stays perfectly within the 35–60 KB safe zone.',
+  },
+  {
+    q: 'What background color is mandatory for RRB candidate photos?',
+    a: 'Indian Railways strictly mandates a plain, light-colored or pure white background (#FFFFFF) with even lighting across the face. Photographs with dark backgrounds, patterned wallpapers, door frames, or outdoor scenery are rejected.',
+  },
+  {
+    q: 'Are requirements different for Railway Apprentice compared to RRB NTPC or Group D?',
+    a: 'Yes. Zonal Railway Recruitment Cells (RRC Eastern Railway, Western Railway, Northern Railway, etc.) for Act Apprentice training require direct file uploads (photographs between 20–70 KB and signatures between 10–50 KB) without a live webcam check. Selecting "Railway Apprentice" in our dropdown automatically applies these zonal parameters.',
+  },
+  {
+    q: 'How many copies of the formatted photograph should I keep for RRB recruitment?',
+    a: 'Official RRB notifications explicitly advise candidates to keep at least 12 identical copies of the passport photograph uploaded/formatted for their application. You will need the exact same photo for CBT Stage 1, CBT Stage 2, CBAT Aptitude test, Document Verification (DV), and Medical Fitness examinations.',
+  },
+  {
+    q: 'Are my railway documents or signatures uploaded to your server?',
+    a: 'Never. ImgFeel processes 100% of your images locally in your web browser using HTML5 Canvas APIs. Your confidential photographs, signatures, and personal credentials never leave your smartphone or computer, guaranteeing absolute privacy.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'RRB Photo & Signature Resizer',
+  operatingSystem: 'Any',
+  applicationCategory: 'MultimediaApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<!-- JSON-LD Structured Data Schemas -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to Official RRB Image Standards -->
+      <h2>Official Railway RRB Photo &amp; Signature Guidelines (2026 Examination Standards)</h2>
+      <p>
+        The Railway Recruitment Boards (RRB) and Railway Recruitment Cells (RRC) under the Ministry of Railways, Government of India, enforce rigorous digital image validation rules across their unified application portals (including <strong>rrbapply.gov.in</strong> and regional zonal portals). Whether applying for <strong>RRB NTPC (Non-Technical Popular Categories)</strong>, <strong>RRB Group D (Level 1)</strong>, <strong>RRB ALP (Assistant Loco Pilot)</strong>, <strong>RRB Technician</strong>, <strong>RRB JE (Junior Engineer)</strong>, <strong>RPF Constable / Sub-Inspector</strong>, or <strong>Railway Act Apprentice</strong>, non-compliant photo files or invalid signatures trigger immediate portal rejection or application cancellation.
+      </p>
+      <p>
+        This free, client-side <strong>RRB Photo &amp; Signature Resizer</strong> automatically formats your signature and admit card photographs to the official 2026 Railway standards. It enforces the exact <strong>30 KB – 70 KB</strong> file size range (or <strong>10–50 KB</strong> for Apprentice), scales images to the preferred <strong>350 × 450 px</strong> (photo) and <strong>240 × 80 px / 140 × 60 px</strong> (signature) dimensions, whitens dark paper backgrounds, and outputs clean JPG files with zero loss in visual clarity.
+      </p>
+
+      <!-- Section 2: Important Advisory: Live Capture vs Scanned Photo Upload -->
+      <h2>Understanding the Railway Application Process: Live Photo vs. Scanned Photograph</h2>
+      <p>
+        Candidates applying for Railway examinations frequently confuse the portal's live webcam check with the scanned photograph requirements. Here is how Indian Railways evaluates your images:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3>Registration on rrbapply.gov.in</h3>
+          <p>Recent Centralized Employment Notices (CENs) require capturing a <strong>Live Photograph</strong> via your mobile camera or webcam during online registration. This captures real-time biometric facial recognition.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <h3>e-Call Letter &amp; Admit Card Affixation</h3>
+          <p>You must bring identical printed copies of a standardized <strong>35 × 45 mm (30–70 KB JPG)</strong> color passport photo to paste on the candidate counterfoil of your Admit Card in the presence of the exam invigilator.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3>Document Verification (DV) Portal</h3>
+          <p>Shortlisted candidates are required to upload digital scanned copies of their photograph and signature to the Railway Document Verification portal (<strong>oirms-ir.gov.in/rrbdv</strong>) matching application records.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <h3>Railway Apprentice (Direct Upload)</h3>
+          <p>Unlike CEN exams, Zonal Railway Apprentice applications require <strong>direct file upload</strong> of your scanned photograph (20–70 KB) and signature (10–50 KB) directly into the portal form.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Official Specifications Comparison Table -->
+      <h2>Official Railway Examination Specification Comparison (2026 Matrix)</h2>
+      <p>
+        Below is the verified summary of photograph and signature requirements across all major Indian Railway recruitments:
+      </p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Railway Examination</th>
+              <th>Photo Dimensions</th>
+              <th>Photo File Size</th>
+              <th>Signature Dimensions</th>
+              <th>Signature File Size</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>General RRB / Railway</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RRB NTPC (CEN 05/2024 &amp; 06/2024)</strong></td>
+              <td>35 × 45 mm (320 × 400 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RRB Group D (Level 1)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RRB ALP (CEN 01/2024)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>35 × 20 mm box (≥140 × 60 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RRB Technician (CEN 02/2024)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RRB JE (CEN 03/2024)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RPF Constable (CEN RPF 02/2024)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>RPF SI (CEN RPF 01/2024)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>30 KB – 70 KB JPG</td>
+            </tr>
+            <tr>
+              <td><strong>Railway Apprentice (RRC Zonal)</strong></td>
+              <td>35 × 45 mm (350 × 450 px)</td>
+              <td>20 KB – 70 KB JPG</td>
+              <td>3.5 × 1.5 cm (240 × 80 px)</td>
+              <td>10 KB – 50 KB JPG</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Critical Rules for Railway Signatures -->
+      <h2>Essential Rules for Railway Signature Verification</h2>
+      <p>
+        The Railway Recruitment Boards conduct strict signature verification during Computer Based Tests (CBT), Physical Efficiency Tests (PET), and Document Verification (DV). Keep these rules in mind:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <h3>Running Handwriting Only</h3>
+          <p>Signatures written in <strong>CAPITAL / BLOCK LETTERS</strong> or using isolated initials are strictly prohibited and will lead to automatic application rejection.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+          </div>
+          <h3>Strict 30 KB – 70 KB Size Rule</h3>
+          <p>The rrbapply.gov.in portal has hard binary boundaries. Scans smaller than 30.0 KB or larger than 70.0 KB are blocked by the upload validator.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <h3>Black or Dark Blue Ink</h3>
+          <p>Sign with a dark black or blue ballpoint pen on clean unruled white printer paper. Avoid red, green, or faint pencil markings.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+            </svg>
+          </div>
+          <h3>Signature Uniformity</h3>
+          <p>Your signature must remain identical across all recruitment phases: online form, CBT attendance sheet, DV ledger, and appointment joining letter.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Step-by-Step Instructions -->
+      <h2>How to Resize Railway RRB Photos and Signatures in 4 Easy Steps</h2>
+      <ol class="steps-ordered-list">
+        <li>
+          <strong>Select Your Exam:</strong> Pick your target notification (RRB NTPC, Group D, ALP, Technician, JE, RPF, or Railway Apprentice) from the dropdown, or keep <em>General RRB / Railway</em>.
+        </li>
+        <li>
+          <strong>Choose Document Mode:</strong> Toggle between the <em>Photograph (Admit Card / DV)</em> and <em>Signature (Upload Mandatory)</em> tabs.
+        </li>
+        <li>
+          <strong>Upload Your Document:</strong> Drag and drop your image file (JPG, PNG, or WebP). The resizer automatically converts to JPG, cleans paper background shadows, centers the subject, and applies exact pixel constraints.
+        </li>
+        <li>
+          <strong>Check Compliance &amp; Download:</strong> Inspect the green compliance badges verifying dimensions, file size (30–70 KB), and JPG format. Click <strong>Download Compliant File</strong> to save your ready-to-use file.
+        </li>
+      </ol>
+
+      <!-- Section 6: Common Railway Portal Rejection Reasons -->
+      <h2>Top Reasons Railway Application Photos &amp; Signatures Get Rejected</h2>
+      <ul class="mistakes-list">
+        <li>
+          <strong>Signature File Size Below 30.0 KB:</strong> Because scanned signatures on plain white paper contain very little color data, standard JPEG compression drops them to 10–20 KB. The Railway portal requires &ge;30 KB. Our engine automatically pads JPEG comment bytes to safely keep file size between 35 KB and 60 KB.
+        </li>
+        <li>
+          <strong>Signature in Capital Letters:</strong> Candidate signatures written in full block letters violate RRB verification norms and lead to immediate cancellation.
+        </li>
+        <li>
+          <strong>Dark or Textured Background on Photograph:</strong> Photos captured against colorful bedroom walls, outdoor trees, or with heavy shadow gradients behind the ears fail biometric inspection. Always use a pure white background.
+        </li>
+        <li>
+          <strong>Wearing Caps, Hats, or Tinted Sunglasses:</strong> Dark spectacles or headwear covering the forehead and ears are strictly forbidden by RRB instructions. Religious turbans are permitted provided full facial features are clearly visible.
+        </li>
+        <li>
+          <strong>Selfies and Distorted Mobile Angles:</strong> High-angle selfies captured with wide-angle smartphone lenses distort facial ratios. Use a studio passport portrait taken straight at eye level.
+        </li>
+      </ul>
+
+      <!-- Section 7: FAQ Accordion Section -->
+      <div class="faq-container">
+        <h2 class="faq-section-title">Frequently Asked Questions (Railway RRB Photo &amp; Signature)</h2>
+        <div class="faq-list">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span class="faq-q-text">{item.q}</span>
+                <span class="faq-chevron-box">
+                  <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 8: Related Tools Section (Mandatory 6-Card Grid) -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>Related Document &amp; Image Resizing Tools</h3>
+        </div>
+
+        <div class="cross-tools-grid">
+          <!-- Card 1: UPSC Resizer -->
+          <a href="/tools/upsc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">UPSC Photo &amp; Signature Resizer</h4>
+              <p class="cross-tool-desc">Resize photo (20–300 KB) and signature (20–100 KB) for UPSC Civil Services, OTR, NDA &amp; CDS.</p>
+            </div>
+          </a>
+
+          <!-- Card 2: SSC Resizer -->
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <polyline points="9 15 11 17 15 13"></polyline>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">SSC Photo &amp; Signature Resizer</h4>
+              <p class="cross-tool-desc">Resize signature (10–20 KB) and admit card photo (20–50 KB) for SSC CGL, CHSL, MTS &amp; GD.</p>
+            </div>
+          </a>
+
+          <!-- Card 3: IBPS Resizer -->
+          <a href="/tools/ibps-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">IBPS Photo &amp; Signature Resizer</h4>
+              <p class="cross-tool-desc">Resize photo (20–50 KB) and signature (10–20 KB) for IBPS PO, Clerk, SO, and RRB banking exams.</p>
+            </div>
+          </a>
+
+          <!-- Card 4: PAN Card Resizer -->
+          <a href="/tools/pan-card-image-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                  <circle cx="9" cy="10" r="2"></circle>
+                  <line x1="15" y1="8" x2="17" y2="8"></line>
+                  <line x1="15" y1="12" x2="17" y2="12"></line>
+                  <line x1="7" y1="16" x2="17" y2="16"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">PAN Card Document Resizer</h4>
+              <p class="cross-tool-desc">Resize photo (3.5 × 2.5 cm) and signature (2 × 4.5 cm) for NSDL and UTIITSL portals.</p>
+            </div>
+          </a>
+
+          <!-- Card 5: Passport Photo Maker -->
+          <a href="/tools/passport-photo-maker/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">Passport Photo Maker</h4>
+              <p class="cross-tool-desc">Crop and convert photos to official 2×2 inch or 35×45 mm biometric passport standards.</p>
+            </div>
+          </a>
+
+          <!-- Card 6: Exact Dimension Resizer -->
+          <a href="/tools/exact-dimension-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="cross-tool-arrow">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+            <div class="cross-tool-content">
+              <h4 class="cross-tool-title">Exact Dimension Resizer</h4>
+              <p class="cross-tool-desc">Resize any image to exact pixel dimensions with stretch or pad options.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+
+  .content-body h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  .content-body h2:first-of-type {
+    margin-top: 0;
+  }
+
+  .content-body p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Benefits 4-Card Grid --- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .benefit-icon {
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  /* --- Table Responsive Wrapper (Strict UI Standard) --- */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .data-table th {
+    background: var(--color-surface-subtle);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table td {
+    color: var(--color-text-secondary);
+  }
+
+  .data-table td strong {
+    color: var(--color-text);
+  }
+
+  /* --- Steps & Mistakes Lists --- */
+  .steps-ordered-list,
+  .mistakes-list {
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  .steps-ordered-list li,
+  .mistakes-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-3);
+  }
+
+  .steps-ordered-list li strong,
+  .mistakes-list li strong {
+    color: var(--color-text);
+  }
+
+  /* --- FAQ Accordion Section (Strict UI Standard) --- */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-section-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron-box {
+    color: var(--color-text-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .faq-item[open] .faq-chevron-box {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 22px 18px 22px;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    line-height: 1.65;
+  }
+
+  .faq-answer p {
+    margin: 0;
+  }
+
+  /* --- Related Tools 6-Card Grid (Strict UI Standard) --- */
+  .cross-tools-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-5);
+    min-height: 160px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .cross-tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-tool-icon {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1-5);
+    line-height: 1.35;
+  }
+
+  .cross-tool-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

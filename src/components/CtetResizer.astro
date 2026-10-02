@@ -1,53 +1,49 @@
 ---
 /**
- * SSC Photo & Signature Resizer Interactive Component
+ * CTET Photo & Signature Resizer Interactive Component
  * Strict compliance with ImgFeel UI/UX Design System Standards
+ * DOM Order: Active Target Specifications -> Upload Boxes -> Image Upload Guidelines -> Advisory
  */
 ---
 
-<div id="ssc-resizer-container" class="ssc-tool-card">
-  <!-- Exam Selector Dropdown -->
+<div id="ctet-resizer-container" class="ctet-tool-card">
+  <!-- Exam / Paper Selection Dropdown -->
   <div class="control-group exam-selector-group">
-    <label for="ssc-exam-select" class="control-label">Select SSC Examination Preset</label>
+    <label for="ctet-exam-select" class="control-label">Select CTET Examination Category</label>
     <div class="select-wrapper">
-      <select id="ssc-exam-select" class="ssc-select" aria-label="Select SSC Exam">
-        <option value="general" selected>General SSC Resize (Universal Standard)</option>
-        <option value="cgl">SSC CGL (Combined Graduate Level)</option>
-        <option value="chsl">SSC CHSL (10+2 Combined Higher Secondary Level)</option>
-        <option value="mts">SSC MTS &amp; Havaldar (Non-Technical Staff)</option>
-        <option value="gd">SSC Constable GD (CAPFs, SSF &amp; Assam Rifles)</option>
-        <option value="cpo">SSC CPO (Sub-Inspector in Delhi Police &amp; CAPFs)</option>
-        <option value="je">SSC JE (Junior Engineer - 4.0 × 2.0 cm Signature)</option>
-        <option value="steno">SSC Stenographer (Grade C &amp; D)</option>
-        <option value="jht">SSC JHT (Junior Hindi Translator)</option>
+      <select id="ctet-exam-select" class="ctet-select" aria-label="Select CTET Category Preset">
+        <option value="general" selected>General CTET (Universal Standard)</option>
+        <option value="paper1">CTET Paper 1 (Classes I to V)</option>
+        <option value="paper2">CTET Paper 2 (Classes VI to VIII)</option>
+        <option value="both">CTET Both Papers (Paper 1 &amp; 2)</option>
       </select>
       <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
     </div>
-    <p class="control-hint">Selecting an exam is optional. Select a specific exam above to automatically apply its verified specifications, or keep <em>General SSC Resize</em>.</p>
+    <p class="control-hint">Keep <em>General CTET</em> for universal CBSE compliance, or select your target paper to automatically apply verified official parameters.</p>
   </div>
 
-  <!-- Primary Document Mode Switcher: Signature vs Photograph -->
+  <!-- Primary Document Mode Switcher: Photograph vs Signature -->
   <div class="mode-nav-container">
     <div class="mode-tabs">
-      <button type="button" id="ssc-tab-sig" class="tab-btn active" aria-label="Resize SSC Signature">
+      <button type="button" id="ctet-tab-photo" class="tab-btn active" aria-label="Resize CTET Photograph">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Photograph (Admit Card / CBSE)</span>
+      </button>
+      <button type="button" id="ctet-tab-sig" class="tab-btn" aria-label="Resize CTET Signature">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
         </svg>
         <span>Signature (Upload Mandatory)</span>
       </button>
-      <button type="button" id="ssc-tab-photo" class="tab-btn" aria-label="Resize SSC Photograph">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Photograph (Admit Card / DV)</span>
-      </button>
     </div>
   </div>
 
-  <!-- Dynamic Active Specification Summary Card -->
+  <!-- Dynamic Active Specification Summary Card (1. Active Target Specifications) -->
   <div class="spec-summary-card">
     <div class="spec-summary-header">
       <span class="spec-title">Active Target Specifications</span>
@@ -56,31 +52,31 @@
     <div class="spec-grid">
       <div class="spec-item">
         <span class="spec-label">Target Dimensions:</span>
-        <strong id="ssc-spec-dim" class="spec-val">6.0 × 2.0 cm (240 × 80 px)</strong>
+        <strong id="ctet-spec-dim" class="spec-val">350 × 450 px (3.5 × 4.5 cm)</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">Allowed File Size:</span>
-        <strong id="ssc-spec-size" class="spec-val">10 KB – 20 KB</strong>
+        <strong id="ctet-spec-size" class="spec-val">10 KB – 100 KB</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">File Format:</span>
-        <strong id="ssc-spec-format" class="spec-val">JPG / JPEG</strong>
+        <strong id="ctet-spec-format" class="spec-val">JPG / JPEG</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">Background:</span>
-        <strong class="spec-val">Pure White (#FFFFFF)</strong>
+        <strong id="ctet-spec-bg" class="spec-val">Pure White (#FFFFFF)</strong>
       </div>
     </div>
   </div>
 
   <!-- Hidden File Input -->
-  <input type="file" id="ssc-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-hidden="true" />
+  <input type="file" id="ctet-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-hidden="true" />
 
   <!-- Error Alert Container -->
-  <div id="ssc-error-message" class="error-banner" hidden></div>
+  <div id="ctet-error-message" class="error-banner" hidden></div>
 
-  <!-- Upload Dropzone Area -->
-  <div id="ssc-dropzone" class="ssc-dropzone" role="button" tabindex="0" aria-label="Upload photo or signature for SSC resizing">
+  <!-- Upload Dropzone Area (2. Photo & Signature Upload Boxes: Initial State) -->
+  <div id="ctet-dropzone" class="ctet-dropzone" role="button" tabindex="0" aria-label="Upload photo or signature for CTET resizing">
     <div class="dropzone-icon">
       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -88,13 +84,13 @@
         <line x1="12" y1="3" x2="12" y2="15"></line>
       </svg>
     </div>
-    <h3 id="ssc-dropzone-title" class="dropzone-title">Upload Candidate Signature</h3>
-    <p id="ssc-dropzone-subtitle" class="dropzone-subtitle">Drag &amp; drop JPG, PNG, or WebP. Auto-resizes to 6.0×2.0 cm (240×80 px), strictly 10–20 KB JPG on white background.</p>
+    <h3 id="ctet-dropzone-title" class="dropzone-title">Upload Candidate Photograph</h3>
+    <p id="ctet-dropzone-subtitle" class="dropzone-subtitle">Drag &amp; drop JPG, PNG, or WebP. Auto-resizes to 350×450 px, strictly within official 10–100 KB range on pure white background.</p>
     <button type="button" class="btn-choose">Choose File From Device</button>
   </div>
 
-  <!-- Editor & Live Canvas Preview (Hidden until file selected) -->
-  <div id="ssc-editor-area" class="ssc-editor-area" hidden>
+  <!-- Editor & Live Canvas Preview (2. Photo & Signature Upload Boxes: Loaded Preview State) -->
+  <div id="ctet-editor-area" class="ctet-editor-area" hidden>
     <div class="editor-layout">
       <!-- Live Canvas Preview Box -->
       <div class="preview-card">
@@ -103,7 +99,7 @@
           <span class="preview-chip">100% Client-Side</span>
         </div>
         <div class="canvas-wrapper">
-          <canvas id="ssc-main-canvas" width="240" height="80"></canvas>
+          <canvas id="ctet-main-canvas" width="350" height="450"></canvas>
         </div>
       </div>
 
@@ -113,46 +109,46 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <h4 class="compliance-title">Official SSC Portal Compliance Checklist</h4>
+          <h4 class="compliance-title">Official CBSE CTET Compliance Checklist</h4>
         </div>
 
         <div class="checklist-body">
           <div class="check-item">
             <span class="check-label">Dimensions:</span>
-            <span id="ssc-val-dim-text" class="check-value">240 × 80 px (6.0 × 2.0 cm)</span>
-            <span id="ssc-val-dim-status" class="val-badge pass">PASS</span>
+            <span id="ctet-val-dim-text" class="check-value">350 × 450 px (3.5 × 4.5 cm)</span>
+            <span id="ctet-val-dim-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">File Size:</span>
-            <span id="ssc-val-size-text" class="check-value">Allowed: 10–20 KB</span>
-            <span id="ssc-val-size-status" class="val-badge pass">PASS</span>
+            <span id="ctet-val-size-text" class="check-value">Allowed: 10–100 KB</span>
+            <span id="ctet-val-size-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">File Format:</span>
             <span class="check-value">JPG / JPEG</span>
-            <span id="ssc-val-format-status" class="val-badge pass">PASS</span>
+            <span id="ctet-val-format-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">Background:</span>
             <span class="check-value">Pure White (#FFFFFF)</span>
-            <span id="ssc-val-bg-status" class="val-badge pass">PASS</span>
+            <span id="ctet-val-bg-status" class="val-badge pass">PASS</span>
           </div>
         </div>
 
         <!-- Action Buttons (Strictly adhering to >= 48px height, >= 14px gap) -->
         <div class="actions-group">
-          <button type="button" id="ssc-download-btn" class="btn-action btn-primary">
+          <button type="button" id="ctet-download-btn" class="btn-action btn-primary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span id="ssc-download-btn-text">Download Compliant Signature (JPG)</span>
+            <span id="ctet-download-btn-text">Download Compliant Photo (JPG)</span>
           </button>
-          <button type="button" id="ssc-change-img-btn" class="btn-action btn-secondary">
+          <button type="button" id="ctet-change-img-btn" class="btn-action btn-secondary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
               <line x1="16" y1="5" x2="22" y2="5"></line>
@@ -165,19 +161,20 @@
     </div>
   </div>
 
-  <!-- Official Notice Banners -->
-  <div id="ssc-sig-notice" class="ssc-notice-banner sig-banner">
+  <!-- 3. Image Upload Guidelines (Always below Upload Boxes) -->
+  <div id="ctet-sig-notice" class="ctet-notice-banner sig-banner" hidden>
     <div class="banner-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Official SSC Signature Requirement:</strong> Digital signature file must be strictly between <strong>10 KB and 20 KB JPG</strong> on unruled white paper with black ink. Files under 10 KB or over 20 KB are automatically rejected by ssc.gov.in.
+      <strong>Official CTET Signature Requirement:</strong> Scanned digital signature file must strictly be between <strong>3 KB and 30 KB JPG</strong>, measuring <strong>3.5 cm × 1.5 cm (350 × 150 px)</strong>, signed with a <strong>black or dark blue ink pen</strong> on clean, unruled white paper. Signatures must be in continuous <strong>running handwriting</strong>. Capital/block letters are strictly disqualified.
     </div>
   </div>
 
-  <div id="ssc-live-photo-notice" class="ssc-notice-banner photo-banner" hidden>
+  <!-- 4. Advisory (Always below Upload Boxes) -->
+  <div id="ctet-live-photo-notice" class="ctet-notice-banner photo-banner">
     <div class="banner-icon alert-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
@@ -186,18 +183,18 @@
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Official SSC Live Photo Advisory:</strong> Under current SSC portal guidelines (ssc.gov.in / mySSC app), the online application form requires a <em>Live Photograph</em> captured via webcam/phone camera. Use this tool if you need a compliant <strong>3.5 × 4.5 cm (20–50 KB JPG)</strong> photo for your <strong>Admit Card affixation, physical Document Verification (DV), PET/PST records, or departmental exams</strong>.
+      <strong>Official CBSE CTET Photograph Advisory:</strong> Upload your scanned passport color photograph (strictly <strong>10 KB – 100 KB JPG</strong>, 3.5 × 4.5 cm) with a plain white or light background and 70%–80% face coverage. Make sure to keep at least <strong>5 to 10 identical physical copies</strong> of this photo for the examination center attendance sheet and verification.
     </div>
   </div>
 </div>
 
 <script>
-  import '@/scripts/ssc-resizer';
+  import '@/scripts/ctet-resizer';
 </script>
 
 <style>
   /* --- Main Container Card --- */
-  .ssc-tool-card {
+  .ctet-tool-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -208,14 +205,14 @@
   }
 
   @media (min-width: 640px) {
-    .ssc-tool-card {
+    .ctet-tool-card {
       padding: var(--space-8);
     }
   }
 
-  /* --- Exam Selector Dropdown --- */
-  .exam-selector-group {
-    margin-bottom: var(--space-5);
+  /* --- Form Controls & Dropdown --- */
+  .control-group {
+    margin-bottom: var(--space-6);
   }
 
   .control-label {
@@ -228,25 +225,26 @@
 
   .select-wrapper {
     position: relative;
-    width: 100%;
+    display: flex;
+    align-items: center;
   }
 
-  .ssc-select {
+  .ctet-select {
     width: 100%;
     min-height: 48px;
-    padding: 12px 40px 12px 16px;
-    font-size: var(--text-base);
+    padding: 10px 40px 10px 14px;
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--color-text);
-    background: var(--color-surface-subtle);
-    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     appearance: none;
     cursor: pointer;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   }
 
-  .ssc-select:focus {
+  .ctet-select:focus {
     outline: none;
     border-color: var(--color-accent);
     box-shadow: 0 0 0 3px var(--color-accent-light);
@@ -255,8 +253,6 @@
   .select-chevron {
     position: absolute;
     right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
     pointer-events: none;
     color: var(--color-text-secondary);
   }
@@ -264,35 +260,41 @@
   .control-hint {
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    line-height: 1.5;
     margin-top: var(--space-2);
+    line-height: 1.5;
     margin-bottom: 0;
   }
 
-  /* --- Mode Navigation Tabs --- */
+  /* --- Mode Tabs --- */
   .mode-nav-container {
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-6);
   }
 
   .mode-tabs {
-    display: flex;
-    gap: var(--space-2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
     background: var(--color-surface-subtle);
     padding: 6px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
   }
 
+  @media (max-width: 500px) {
+    .mode-tabs {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .tab-btn {
-    flex: 1;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     min-height: 44px;
-    padding: 8px 14px;
+    padding: 8px 16px;
     font-size: var(--text-sm);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--color-text-secondary);
     background: transparent;
     border: none;
@@ -303,96 +305,35 @@
 
   .tab-btn:hover {
     color: var(--color-text);
-    background: rgba(0, 0, 0, 0.04);
-  }
-
-  :global([data-theme='dark']) .tab-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
   }
 
   .tab-btn.active {
+    color: var(--color-accent);
     background: var(--color-surface);
-    color: var(--color-accent);
-    font-weight: 700;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
   }
 
-  :global([data-theme='dark']) .tab-btn.active {
-    background: var(--color-surface-raised, #242938);
-    color: var(--color-accent);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  /* --- Notice Banners --- */
-  .ssc-notice-banner {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 18px;
-    border-radius: var(--radius-lg);
-    margin-top: var(--space-6);
-    margin-bottom: 0;
-    line-height: 1.55;
-    font-size: var(--text-xs);
-  }
-
-  .sig-banner {
-    background: var(--color-accent-light);
-    border: 1px solid var(--color-accent-border);
-    color: var(--color-text);
-  }
-
-  .sig-banner .banner-icon {
-    color: var(--color-accent);
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .photo-banner {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
-  }
-
-  :global([data-theme='dark']) .photo-banner {
-    background: rgba(245, 158, 11, 0.12);
-    border-color: rgba(245, 158, 11, 0.3);
-    color: #fef3c7;
-  }
-
-  .alert-icon {
-    color: #d97706;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  :global([data-theme='dark']) .alert-icon {
-    color: #fbbf24;
-  }
-
-  .banner-text strong {
-    font-weight: 700;
-  }
-
-  /* --- Active Specification Summary Card --- */
+  /* --- Specification Summary Card --- */
   .spec-summary-card {
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 14px 18px;
+    padding: var(--space-4) var(--space-5);
     margin-bottom: var(--space-6);
   }
 
   .spec-summary-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .spec-title {
     font-size: var(--text-xs);
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--color-text-secondary);
@@ -403,87 +344,71 @@
     font-weight: 700;
     color: var(--color-accent);
     background: var(--color-accent-light);
-    border: 1px solid var(--color-accent-border);
-    padding: 1px 7px;
+    padding: 2px 8px;
     border-radius: var(--radius-full);
   }
 
   .spec-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px 16px;
+    gap: var(--space-3) var(--space-4);
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     .spec-grid {
       grid-template-columns: 1fr;
     }
   }
 
   .spec-item {
-    font-size: var(--text-xs);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-block: 2px;
+    flex-direction: column;
+    gap: 2px;
   }
 
   .spec-label {
-    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
   }
 
   .spec-val {
-    color: var(--color-text);
-    font-weight: 700;
-  }
-
-  /* --- Error Banner --- */
-  .error-banner {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #b91c1c;
-    padding: 12px 16px;
-    border-radius: var(--radius-lg);
     font-size: var(--text-sm);
-    font-weight: 600;
-    margin-bottom: var(--space-4);
-  }
-
-  :global([data-theme='dark']) .error-banner {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
+    color: var(--color-text);
   }
 
   /* --- Upload Dropzone --- */
-  .ssc-dropzone {
+  .ctet-dropzone {
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-xl);
-    padding: var(--space-10) var(--space-6);
+    padding: var(--space-8) var(--space-4);
     text-align: center;
     cursor: pointer;
-    background: var(--color-surface-subtle);
-    transition: all var(--transition-fast);
-    outline: none;
+    background: var(--color-surface);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    margin-bottom: var(--space-6);
   }
 
-  .ssc-dropzone:hover,
-  .ssc-dropzone:focus-visible,
-  .ssc-dropzone.drag-over {
+  .ctet-dropzone:hover,
+  .ctet-dropzone.drag-active {
     border-color: var(--color-accent);
-    background: var(--color-accent-light);
+    background: var(--color-surface-subtle);
   }
 
   .dropzone-icon {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
+    align-items: center;
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-subtle);
     color: var(--color-accent);
     margin-bottom: var(--space-3);
   }
 
   .dropzone-title {
     font-size: var(--text-lg);
-    font-weight: 700;
+    font-weight: 800;
     color: var(--color-text);
     margin-bottom: var(--space-2);
   }
@@ -505,107 +430,108 @@
     padding: 12px 24px;
     font-size: var(--text-sm);
     font-weight: 700;
-    color: #ffffff;
-    background: var(--color-accent);
-    border: none;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-    transition: background var(--transition-fast), transform var(--transition-fast);
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
   }
 
   .btn-choose:hover {
-    background: var(--color-accent-hover, #0284c7);
-    transform: translateY(-1px);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 
-  /* --- Editor & Live Preview Area --- */
-  .ssc-editor-area {
-    margin-top: var(--space-4);
+  /* --- Editor & Live Canvas --- */
+  .ctet-editor-area {
+    margin-bottom: var(--space-6);
   }
 
   .editor-layout {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 280px 1fr;
     gap: var(--space-6);
+    align-items: start;
   }
 
-  /* Preview Card */
+  @media (max-width: 768px) {
+    .editor-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .preview-card {
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    text-align: center;
   }
 
   .preview-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--space-4);
+    align-items: center;
+    margin-bottom: var(--space-3);
   }
 
   .preview-title {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--color-text-secondary);
   }
 
   .preview-chip {
-    font-size: var(--text-xs);
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 600;
     color: #10b981;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
+    background: #ecfdf5;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
   }
 
   .canvas-wrapper {
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: var(--space-6);
+    align-items: center;
     background: #e2e8f0;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
+    padding: 8px;
     min-height: 220px;
     overflow: hidden;
   }
 
-  :global([data-theme='dark']) .canvas-wrapper {
-    background: #0f172a;
-  }
-
-  .canvas-wrapper canvas {
+  canvas {
     max-width: 100%;
-    max-height: 260px;
     height: auto;
-    border: 1px solid #cbd5e1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: block;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
     background: #ffffff;
   }
 
-  /* Compliance Verification Card */
+  /* --- Compliance Card --- */
   .compliance-card {
-    background: var(--color-surface-subtle);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     padding: var(--space-5);
   }
 
   .compliance-header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: var(--space-4);
     padding-bottom: var(--space-3);
     border-bottom: 1px solid var(--color-border);
   }
 
   .compliance-title {
-    font-size: var(--text-sm);
-    font-weight: 700;
+    font-size: var(--text-base);
+    font-weight: 800;
     color: var(--color-text);
     margin: 0;
   }
@@ -613,7 +539,7 @@
   .checklist-body {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-3);
     margin-bottom: var(--space-6);
   }
 
@@ -621,107 +547,142 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: var(--text-sm);
-    gap: 12px;
+    padding: 8px 12px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
   }
 
   .check-label {
     font-weight: 600;
     color: var(--color-text-secondary);
-    min-width: 100px;
   }
 
   .check-value {
     font-weight: 700;
     color: var(--color-text);
-    flex: 1;
-    text-align: right;
+    margin-left: auto;
+    margin-right: 12px;
   }
 
   .val-badge {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
-    padding: 3px 8px;
+    padding: 2px 8px;
     border-radius: var(--radius-full);
-    text-transform: uppercase;
     letter-spacing: 0.05em;
-    flex-shrink: 0;
   }
 
   .val-badge.pass {
-    background: rgba(16, 185, 129, 0.15);
-    color: #059669;
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #10b981;
+    background: #ecfdf5;
   }
 
-  :global([data-theme='dark']) .val-badge.pass {
-    color: #34d399;
+  .val-badge.warn {
+    color: #f59e0b;
+    background: #fef3c7;
   }
 
-  .val-badge.fail {
-    background: rgba(239, 68, 68, 0.15);
-    color: #dc2626;
-    border: 1px solid rgba(239, 68, 68, 0.35);
-  }
-
-  /* --- Action Buttons (Mandatory >= 48px height, >= 14px gap) --- */
+  /* --- Action Buttons (Strictly >= 48px height, >= 14px gap) --- */
   .actions-group {
     display: flex;
-    gap: 16px;
+    gap: 14px;
     align-items: center;
-    margin-top: var(--space-5);
-  }
-
-  .btn-action {
-    min-height: 50px;
-    padding: 13px 26px;
-    font-size: var(--text-base);
-    font-weight: 700;
-    border-radius: var(--radius-lg);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .btn-primary {
-    flex: 1.2;
-    background: var(--color-accent);
-    color: #ffffff;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  .btn-primary:hover {
-    background: var(--color-accent-hover, #0284c7);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .btn-secondary {
-    flex: 0.8;
-    background: var(--color-surface);
-    color: var(--color-text);
-    border: 1.5px solid var(--color-border);
-  }
-
-  .btn-secondary:hover {
-    background: var(--color-surface-subtle);
-    border-color: var(--color-text-secondary);
   }
 
   @media (max-width: 640px) {
     .actions-group {
       flex-direction: column;
-      gap: 12px;
+      width: 100%;
     }
+  }
+
+  .btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex: 1;
+    text-decoration: none;
+  }
+
+  @media (max-width: 640px) {
     .btn-action {
       width: 100%;
     }
   }
 
+  .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-white, #ffffff);
+    border: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* --- Notice Banners (Placed Strictly Below Upload Boxes) --- */
+  .ctet-notice-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    margin-top: var(--space-4);
+  }
+
+  .sig-banner {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+  }
+
+  .photo-banner {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+  }
+
+  .banner-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .error-banner {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Screen Reader Only Utility --- */
   .sr-only {
     position: absolute;
     width: 1px;

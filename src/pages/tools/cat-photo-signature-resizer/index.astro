@@ -1,0 +1,88 @@
+---
+/**
+ * CAT Photo & Signature Resizer
+ * Dedicated India-specific entrance exam tool for IIM CAT 2026.
+ * English-only tool with language switcher disabled.
+ */
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CatResizer from '@/components/CatResizer.astro';
+import CatContent from '@/components/CatContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+
+const locale = 'en';
+const toolUrl = '/tools/cat-photo-signature-resizer/';
+---
+
+<MainLayout
+  locale={locale}
+  title="CAT Photo & Signature Resizer 2026 | IIM CAT (Max 80 KB JPG)"
+  description="Resize and compress candidate photograph (30×45 mm, ≤80 KB) and signature (80×35 mm, ≤80 KB) to official IIM CAT 2026 specifications. 100% private."
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+  showLanguageSwitcher={false}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "CAT Photo & Signature Resizer",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free client-side tool to resize, crop, and compress photograph and signature (max 80 KB JPG) for IIM CAT online applications."
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: 'Home', href: '/' },
+        { label: 'Tools', href: '/tools/' },
+        { label: 'CAT Photo & Signature Resizer' }
+      ]} />
+
+      <div class="tool-header">
+        <h1 class="tool-title">CAT Photo &amp; Signature Resizer</h1>
+        <p class="tool-subtitle">Automatically resize, crop, and compress photograph (30 × 45 mm, &le;80 KB) and signature (80 × 35 mm, &le;80 KB) to official IIM CAT 2026 specifications.</p>
+      </div>
+
+      <CatResizer />
+    </div>
+  </div>
+
+  <CatContent />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.25;
+  }
+
+  @media (max-width: 640px) {
+    .tool-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

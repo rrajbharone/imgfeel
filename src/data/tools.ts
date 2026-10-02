@@ -942,6 +942,21 @@ export function getToolUrl(toolId: string, locale: Locale): string {
   if (toolId === 'ibps-photo-signature-resizer') {
     return '/tools/ibps-photo-signature-resizer/';
   }
+  if (toolId === 'rrb-photo-signature-resizer') {
+    return '/tools/rrb-photo-signature-resizer/';
+  }
+  if (toolId === 'neet-photo-signature-resizer') {
+    return '/tools/neet-photo-signature-resizer/';
+  }
+  if (toolId === 'indian-army-photo-signature-resizer') {
+    return '/tools/indian-army-photo-signature-resizer/';
+  }
+  if (toolId === 'ctet-photo-signature-resizer') {
+    return '/tools/ctet-photo-signature-resizer/';
+  }
+  if (toolId === 'cat-photo-signature-resizer') {
+    return '/tools/cat-photo-signature-resizer/';
+  }
 
   const slugs = TOOL_SLUGS[toolId];
   if (!slugs) {
@@ -964,6 +979,21 @@ export function getToolIdFromSlug(slug: string): string | null {
   }
   if (slug === 'ibps-photo-signature-resizer') {
     return 'ibps-photo-signature-resizer';
+  }
+  if (slug === 'rrb-photo-signature-resizer') {
+    return 'rrb-photo-signature-resizer';
+  }
+  if (slug === 'neet-photo-signature-resizer') {
+    return 'neet-photo-signature-resizer';
+  }
+  if (slug === 'indian-army-photo-signature-resizer') {
+    return 'indian-army-photo-signature-resizer';
+  }
+  if (slug === 'ctet-photo-signature-resizer') {
+    return 'ctet-photo-signature-resizer';
+  }
+  if (slug === 'cat-photo-signature-resizer') {
+    return 'cat-photo-signature-resizer';
   }
 
   for (const [toolId, slugs] of Object.entries(TOOL_SLUGS)) {
@@ -1107,6 +1137,194 @@ export function getSearchableTools(locale: Locale): SearchableTool[] {
         'ibps rrb signature resizer',
         'ibps rrb po photo resizer',
         'ibps rrb clerk photo resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'rrb-photo-signature-resizer',
+      title: 'RRB Photo & Signature Resizer',
+      description: 'Resize photo and signature (strictly 30–70 KB JPG, or 10–50 KB for Apprentice) for RRB NTPC, Group D, ALP, JE, RPF & Apprentice per 2026 specs.',
+      href: '/tools/rrb-photo-signature-resizer/',
+      keywords: [
+        'rrb',
+        'rrb photo resizer',
+        'rrb signature resizer',
+        'rrb photo & signature resizer',
+        'rrb photo resizer 2026',
+        'rrb signature resizer 2026',
+        'rrb photo size',
+        'rrb signature size',
+        'rrb photo and signature size',
+        'railway photo resizer',
+        'railway signature resizer',
+        'rrb ntpc photo resizer',
+        'rrb ntpc signature resizer',
+        'rrb group d photo resizer',
+        'rrb group d signature resizer',
+        'rrb alp photo resizer',
+        'rrb alp signature resizer',
+        'rrb technician photo resizer',
+        'rrb technician signature resizer',
+        'rrb je photo resizer',
+        'rrb je signature resizer',
+        'rpf constable photo resizer',
+        'rpf constable signature resizer',
+        'rpf si photo resizer',
+        'rpf si signature resizer',
+        'railway apprentice photo resizer',
+        'railway apprentice signature resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'neet-photo-signature-resizer',
+      title: 'NEET Photo & Signature Resizer',
+      description: 'Resize photo (10–200 KB) and signature (10–100 KB) for NEET UG, NEET PG, JEE Main & Advanced per official 2026 specs.',
+      href: '/tools/neet-photo-signature-resizer/',
+      keywords: [
+        'neet',
+        'neet photo resizer',
+        'neet signature resizer',
+        'neet photo & signature resizer',
+        'neet photo resizer 2026',
+        'neet signature resizer 2026',
+        'neet photo size',
+        'neet signature size',
+        'neet photo and signature size',
+        'neet application photo resizer',
+        'neet application signature resizer',
+        'neet ug photo resizer',
+        'neet ug signature resizer',
+        'neet pg photo resizer',
+        'neet pg signature resizer',
+        'jee main photo resizer',
+        'jee main signature resizer',
+        'jee advanced photo resizer',
+        'jee advanced signature resizer',
+        'jee main photo size',
+        'jee main signature size',
+        'jee advanced photo size',
+        'jee advanced signature size',
+        'entrance exam photo resizer',
+        'entrance exam signature resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'indian-army-photo-signature-resizer',
+      title: 'Indian Army Photo & Signature Resizer',
+      description: 'Resize photo (10–50 KB) and signature (5–20 KB) for Indian Army Agniveer, GD, Tech & Clerk per official 2026 specs.',
+      href: '/tools/indian-army-photo-signature-resizer/',
+      keywords: [
+        'indian army',
+        'indian army photo resizer',
+        'indian army signature resizer',
+        'indian army photo & signature resizer',
+        'indian army photo resizer 2026',
+        'indian army signature resizer 2026',
+        'army photo size',
+        'army signature size',
+        'indian army photo size',
+        'indian army signature size',
+        'army application photo resizer',
+        'army application signature resizer',
+        'agniveer photo resizer',
+        'agniveer signature resizer',
+        'agniveer photo size',
+        'agniveer signature size',
+        'army gd photo resizer',
+        'army gd signature resizer',
+        'army technical photo resizer',
+        'army technical signature resizer',
+        'army clerk photo resizer',
+        'army clerk signature resizer',
+        'join indian army photo resizer',
+        'join indian army signature resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'ctet-photo-signature-resizer',
+      title: 'CTET Photo & Signature Resizer',
+      description: 'Resize photo (10–100 KB) and signature (3–30 KB) for CBSE CTET Paper 1 & Paper 2 per official 2026 specs.',
+      href: '/tools/ctet-photo-signature-resizer/',
+      keywords: [
+        'ctet',
+        'ctet photo resizer',
+        'ctet signature resizer',
+        'ctet photo & signature resizer',
+        'ctet photo resizer 2026',
+        'ctet signature resizer 2026',
+        'ctet photo size',
+        'ctet signature size',
+        'ctet photo and signature size',
+        'ctet application photo resizer',
+        'ctet application signature resizer',
+        'ctet photo size 2026',
+        'ctet signature size 2026',
+        'ctet image resizer',
+        'ctet photo compressor',
+        'ctet signature compressor',
+        'cbse ctet photo resizer',
+        'cbse ctet signature resizer',
+        'ctet paper 1 photo resizer',
+        'ctet paper 2 photo resizer',
+        'photo',
+        'signature',
+      ],
+      icon: 'fileCheck',
+      badge: 'NEW',
+      category: 'exam',
+    });
+
+    list.push({
+      id: 'cat-photo-signature-resizer',
+      title: 'CAT Photo & Signature Resizer',
+      description: 'Resize photo (30×45 mm, 10–80 KB) and signature (80×35 mm, 5–80 KB) for IIM CAT 2026 per official portal specifications.',
+      href: '/tools/cat-photo-signature-resizer/',
+      keywords: [
+        'cat',
+        'cat photo resizer',
+        'cat signature resizer',
+        'cat photo & signature resizer',
+        'cat photo resizer 2026',
+        'cat signature resizer 2026',
+        'cat photo size',
+        'cat signature size',
+        'cat photo and signature size',
+        'iim cat photo resizer',
+        'iim cat signature resizer',
+        'cat application photo resizer',
+        'cat application signature resizer',
+        'cat photo size 2026',
+        'cat signature size 2026',
+        'cat image resizer',
+        'cat photo compressor',
+        'cat signature compressor',
+        'iim pgp photo resizer',
+        'iim pgp signature resizer',
+        'non-iim photo resizer',
+        'cat admit card photo size',
         'photo',
         'signature',
       ],

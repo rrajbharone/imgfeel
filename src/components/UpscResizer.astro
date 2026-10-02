@@ -6,18 +6,6 @@
 ---
 
 <div id="upsc-resizer-container" class="upsc-tool-card">
-  <!-- Privacy & Official 2026 Guidelines Notice Banner -->
-  <div class="upsc-info-banner">
-    <div class="banner-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      </svg>
-    </div>
-    <div class="banner-text">
-      <strong>Official UPSC 2026 Compliance:</strong> 100% Client-Side &amp; Private. Auto-resizes to 350–1000 px and compresses between 20 KB – 300 KB (Photo) / 20 KB – 100 KB (Signature) JPG. Your images never leave your browser.
-    </div>
-  </div>
-
   <!-- Primary Document Mode Switcher: Photograph vs Signature -->
   <div class="mode-nav-container">
     <div class="mode-tabs">
@@ -175,6 +163,18 @@
       </div>
     </div>
   </div>
+
+  <!-- Privacy & Official 2026 Guidelines Notice Banner -->
+  <div class="upsc-info-banner">
+    <div class="banner-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <div class="banner-text">
+      <strong>Official UPSC 2026 Compliance:</strong> 100% Client-Side &amp; Private. Auto-resizes to 350–1000 px and compresses between 20 KB – 300 KB (Photo) / 20 KB – 100 KB (Signature) JPG. Your images never leave your browser.
+    </div>
+  </div>
 </div>
 
 <script>
@@ -199,7 +199,7 @@
     }
   }
 
-  /* --- Top Notice Banner --- */
+  /* --- Guidelines Notice Banner --- */
   .upsc-info-banner {
     display: flex;
     align-items: flex-start;
@@ -208,7 +208,8 @@
     background: var(--color-accent-light);
     border: 1px solid var(--color-accent-border);
     border-radius: var(--radius-md);
-    margin-bottom: var(--space-6);
+    margin-top: var(--space-6);
+    margin-bottom: 0;
   }
 
   .banner-icon {

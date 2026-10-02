@@ -1,53 +1,54 @@
 ---
 /**
- * SSC Photo & Signature Resizer Interactive Component
+ * RRB Photo & Signature Resizer Interactive Component
  * Strict compliance with ImgFeel UI/UX Design System Standards
+ * DOM Order: Active Target Specifications -> Upload Boxes -> Image Upload Guidelines -> Advisory
  */
 ---
 
-<div id="ssc-resizer-container" class="ssc-tool-card">
+<div id="rrb-resizer-container" class="rrb-tool-card">
   <!-- Exam Selector Dropdown -->
   <div class="control-group exam-selector-group">
-    <label for="ssc-exam-select" class="control-label">Select SSC Examination Preset</label>
+    <label for="rrb-exam-select" class="control-label">Select Railway / RRB Examination Preset</label>
     <div class="select-wrapper">
-      <select id="ssc-exam-select" class="ssc-select" aria-label="Select SSC Exam">
-        <option value="general" selected>General SSC Resize (Universal Standard)</option>
-        <option value="cgl">SSC CGL (Combined Graduate Level)</option>
-        <option value="chsl">SSC CHSL (10+2 Combined Higher Secondary Level)</option>
-        <option value="mts">SSC MTS &amp; Havaldar (Non-Technical Staff)</option>
-        <option value="gd">SSC Constable GD (CAPFs, SSF &amp; Assam Rifles)</option>
-        <option value="cpo">SSC CPO (Sub-Inspector in Delhi Police &amp; CAPFs)</option>
-        <option value="je">SSC JE (Junior Engineer - 4.0 × 2.0 cm Signature)</option>
-        <option value="steno">SSC Stenographer (Grade C &amp; D)</option>
-        <option value="jht">SSC JHT (Junior Hindi Translator)</option>
+      <select id="rrb-exam-select" class="rrb-select" aria-label="Select Railway or RRB Exam">
+        <option value="general" selected>General RRB / Railway (Universal Standard)</option>
+        <option value="ntpc">RRB NTPC (Graduate &amp; Undergraduate - CEN 05/2024 &amp; 06/2024)</option>
+        <option value="groupd">RRB Group D (Level 1 - Track Maintainer, Pointsman, Assistant)</option>
+        <option value="alp">RRB ALP (Assistant Loco Pilot - CEN 01/2024)</option>
+        <option value="technician">RRB Technician (Grade I &amp; Grade III - CEN 02/2024)</option>
+        <option value="je">RRB JE (Junior Engineer, DMS &amp; CMA - CEN 03/2024)</option>
+        <option value="rpf_constable">RPF Constable (Railway Protection Force - CEN RPF 02/2024)</option>
+        <option value="rpf_si">RPF SI (Sub-Inspector - CEN RPF 01/2024)</option>
+        <option value="apprentice">Railway Apprentice (RRC Act Apprentice - ER, WR, NR, SR, CR)</option>
       </select>
       <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
     </div>
-    <p class="control-hint">Selecting an exam is optional. Select a specific exam above to automatically apply its verified specifications, or keep <em>General SSC Resize</em>.</p>
+    <p class="control-hint">Selecting an exam is optional. Keep <em>General RRB / Railway</em> for the universal standard, or select a specific exam to automatically apply verified presets.</p>
   </div>
 
-  <!-- Primary Document Mode Switcher: Signature vs Photograph -->
+  <!-- Primary Document Mode Switcher: Photograph vs Signature -->
   <div class="mode-nav-container">
     <div class="mode-tabs">
-      <button type="button" id="ssc-tab-sig" class="tab-btn active" aria-label="Resize SSC Signature">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-        </svg>
-        <span>Signature (Upload Mandatory)</span>
-      </button>
-      <button type="button" id="ssc-tab-photo" class="tab-btn" aria-label="Resize SSC Photograph">
+      <button type="button" id="rrb-tab-photo" class="tab-btn active" aria-label="Resize Railway Photograph">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
         </svg>
         <span>Photograph (Admit Card / DV)</span>
       </button>
+      <button type="button" id="rrb-tab-sig" class="tab-btn" aria-label="Resize Railway Signature">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+        </svg>
+        <span>Signature (Upload Mandatory)</span>
+      </button>
     </div>
   </div>
 
-  <!-- Dynamic Active Specification Summary Card -->
+  <!-- Dynamic Active Specification Summary Card (1. Active Target Specifications) -->
   <div class="spec-summary-card">
     <div class="spec-summary-header">
       <span class="spec-title">Active Target Specifications</span>
@@ -56,31 +57,31 @@
     <div class="spec-grid">
       <div class="spec-item">
         <span class="spec-label">Target Dimensions:</span>
-        <strong id="ssc-spec-dim" class="spec-val">6.0 × 2.0 cm (240 × 80 px)</strong>
+        <strong id="rrb-spec-dim" class="spec-val">350 × 450 px (3.5 × 4.5 cm)</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">Allowed File Size:</span>
-        <strong id="ssc-spec-size" class="spec-val">10 KB – 20 KB</strong>
+        <strong id="rrb-spec-size" class="spec-val">30 KB – 70 KB</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">File Format:</span>
-        <strong id="ssc-spec-format" class="spec-val">JPG / JPEG</strong>
+        <strong id="rrb-spec-format" class="spec-val">JPG / JPEG</strong>
       </div>
       <div class="spec-item">
         <span class="spec-label">Background:</span>
-        <strong class="spec-val">Pure White (#FFFFFF)</strong>
+        <strong id="rrb-spec-bg" class="spec-val">Pure White (#FFFFFF)</strong>
       </div>
     </div>
   </div>
 
   <!-- Hidden File Input -->
-  <input type="file" id="ssc-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-hidden="true" />
+  <input type="file" id="rrb-file-input" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-hidden="true" />
 
   <!-- Error Alert Container -->
-  <div id="ssc-error-message" class="error-banner" hidden></div>
+  <div id="rrb-error-message" class="error-banner" hidden></div>
 
-  <!-- Upload Dropzone Area -->
-  <div id="ssc-dropzone" class="ssc-dropzone" role="button" tabindex="0" aria-label="Upload photo or signature for SSC resizing">
+  <!-- Upload Dropzone Area (2. Photo & Signature Upload Boxes: Initial State) -->
+  <div id="rrb-dropzone" class="rrb-dropzone" role="button" tabindex="0" aria-label="Upload photo or signature for Railway RRB resizing">
     <div class="dropzone-icon">
       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -88,13 +89,13 @@
         <line x1="12" y1="3" x2="12" y2="15"></line>
       </svg>
     </div>
-    <h3 id="ssc-dropzone-title" class="dropzone-title">Upload Candidate Signature</h3>
-    <p id="ssc-dropzone-subtitle" class="dropzone-subtitle">Drag &amp; drop JPG, PNG, or WebP. Auto-resizes to 6.0×2.0 cm (240×80 px), strictly 10–20 KB JPG on white background.</p>
+    <h3 id="rrb-dropzone-title" class="dropzone-title">Upload Candidate Photograph</h3>
+    <p id="rrb-dropzone-subtitle" class="dropzone-subtitle">Drag &amp; drop JPG, PNG, or WebP. Auto-resizes to 350×450 px, strictly 30–70 KB JPG with pure white background.</p>
     <button type="button" class="btn-choose">Choose File From Device</button>
   </div>
 
-  <!-- Editor & Live Canvas Preview (Hidden until file selected) -->
-  <div id="ssc-editor-area" class="ssc-editor-area" hidden>
+  <!-- Editor & Live Canvas Preview (2. Photo & Signature Upload Boxes: Loaded Preview State) -->
+  <div id="rrb-editor-area" class="rrb-editor-area" hidden>
     <div class="editor-layout">
       <!-- Live Canvas Preview Box -->
       <div class="preview-card">
@@ -103,7 +104,7 @@
           <span class="preview-chip">100% Client-Side</span>
         </div>
         <div class="canvas-wrapper">
-          <canvas id="ssc-main-canvas" width="240" height="80"></canvas>
+          <canvas id="rrb-main-canvas" width="350" height="450"></canvas>
         </div>
       </div>
 
@@ -113,46 +114,46 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <h4 class="compliance-title">Official SSC Portal Compliance Checklist</h4>
+          <h4 class="compliance-title">Official Railway / RRB Compliance Checklist</h4>
         </div>
 
         <div class="checklist-body">
           <div class="check-item">
             <span class="check-label">Dimensions:</span>
-            <span id="ssc-val-dim-text" class="check-value">240 × 80 px (6.0 × 2.0 cm)</span>
-            <span id="ssc-val-dim-status" class="val-badge pass">PASS</span>
+            <span id="rrb-val-dim-text" class="check-value">350 × 450 px (3.5 × 4.5 cm)</span>
+            <span id="rrb-val-dim-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">File Size:</span>
-            <span id="ssc-val-size-text" class="check-value">Allowed: 10–20 KB</span>
-            <span id="ssc-val-size-status" class="val-badge pass">PASS</span>
+            <span id="rrb-val-size-text" class="check-value">Allowed: 30–70 KB</span>
+            <span id="rrb-val-size-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">File Format:</span>
             <span class="check-value">JPG / JPEG</span>
-            <span id="ssc-val-format-status" class="val-badge pass">PASS</span>
+            <span id="rrb-val-format-status" class="val-badge pass">PASS</span>
           </div>
 
           <div class="check-item">
             <span class="check-label">Background:</span>
             <span class="check-value">Pure White (#FFFFFF)</span>
-            <span id="ssc-val-bg-status" class="val-badge pass">PASS</span>
+            <span id="rrb-val-bg-status" class="val-badge pass">PASS</span>
           </div>
         </div>
 
         <!-- Action Buttons (Strictly adhering to >= 48px height, >= 14px gap) -->
         <div class="actions-group">
-          <button type="button" id="ssc-download-btn" class="btn-action btn-primary">
+          <button type="button" id="rrb-download-btn" class="btn-action btn-primary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span id="ssc-download-btn-text">Download Compliant Signature (JPG)</span>
+            <span id="rrb-download-btn-text">Download Compliant Photo (JPG)</span>
           </button>
-          <button type="button" id="ssc-change-img-btn" class="btn-action btn-secondary">
+          <button type="button" id="rrb-change-img-btn" class="btn-action btn-secondary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
               <line x1="16" y1="5" x2="22" y2="5"></line>
@@ -165,19 +166,20 @@
     </div>
   </div>
 
-  <!-- Official Notice Banners -->
-  <div id="ssc-sig-notice" class="ssc-notice-banner sig-banner">
+  <!-- 3. Image Upload Guidelines (Always below Upload Boxes) -->
+  <div id="rrb-sig-notice" class="rrb-notice-banner sig-banner" hidden>
     <div class="banner-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Official SSC Signature Requirement:</strong> Digital signature file must be strictly between <strong>10 KB and 20 KB JPG</strong> on unruled white paper with black ink. Files under 10 KB or over 20 KB are automatically rejected by ssc.gov.in.
+      <strong>Official Railway Signature Requirement:</strong> Digital signature file must be strictly between <strong>30 KB and 70 KB JPG</strong> (or 10–50 KB for Apprentice), signed with a <strong>black or dark blue ink pen</strong> on clean white paper in running handwriting. Signatures in CAPITAL / BLOCK letters or initials are strictly rejected.
     </div>
   </div>
 
-  <div id="ssc-live-photo-notice" class="ssc-notice-banner photo-banner" hidden>
+  <!-- 4. Advisory (Always below Upload Boxes) -->
+  <div id="rrb-live-photo-notice" class="rrb-notice-banner photo-banner">
     <div class="banner-icon alert-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
@@ -186,18 +188,18 @@
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Official SSC Live Photo Advisory:</strong> Under current SSC portal guidelines (ssc.gov.in / mySSC app), the online application form requires a <em>Live Photograph</em> captured via webcam/phone camera. Use this tool if you need a compliant <strong>3.5 × 4.5 cm (20–50 KB JPG)</strong> photo for your <strong>Admit Card affixation, physical Document Verification (DV), PET/PST records, or departmental exams</strong>.
+      <strong>Official Railway Application Advisory:</strong> Recent CEN recruitments on <em>rrbapply.gov.in</em> require capturing a <strong>Live Photograph</strong> via webcam or mobile phone during online registration. Use this tool to generate an official <strong>35 × 45 mm (30–70 KB JPG)</strong> photograph required for your <strong>e-Call Letter / Admit Card counterfoil, Document Verification (DV), and physical dossiers</strong>.
     </div>
   </div>
 </div>
 
 <script>
-  import '@/scripts/ssc-resizer';
+  import '@/scripts/rrb-resizer';
 </script>
 
 <style>
   /* --- Main Container Card --- */
-  .ssc-tool-card {
+  .rrb-tool-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -208,14 +210,14 @@
   }
 
   @media (min-width: 640px) {
-    .ssc-tool-card {
+    .rrb-tool-card {
       padding: var(--space-8);
     }
   }
 
-  /* --- Exam Selector Dropdown --- */
-  .exam-selector-group {
-    margin-bottom: var(--space-5);
+  /* --- Form Controls & Dropdown --- */
+  .control-group {
+    margin-bottom: var(--space-6);
   }
 
   .control-label {
@@ -228,93 +230,93 @@
 
   .select-wrapper {
     position: relative;
-    width: 100%;
+    display: flex;
+    align-items: center;
   }
 
-  .ssc-select {
+  .rrb-select {
     width: 100%;
     min-height: 48px;
-    padding: 12px 40px 12px 16px;
-    font-size: var(--text-base);
+    padding: 10px 40px 10px 14px;
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--color-text);
-    background: var(--color-surface-subtle);
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    appearance: none;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     cursor: pointer;
+    appearance: none;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   }
 
-  .ssc-select:focus {
+  .rrb-select:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px var(--color-accent-light);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
   }
 
   .select-chevron {
     position: absolute;
     right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
     pointer-events: none;
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
   }
 
   .control-hint {
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    line-height: 1.5;
     margin-top: var(--space-2);
     margin-bottom: 0;
+    line-height: 1.5;
   }
 
   /* --- Mode Navigation Tabs --- */
   .mode-nav-container {
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-6);
   }
 
   .mode-tabs {
-    display: flex;
-    gap: var(--space-2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     background: var(--color-surface-subtle);
     padding: 6px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
   }
 
+  @media (max-width: 500px) {
+    .mode-tabs {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .tab-btn {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 44px;
-    padding: 8px 14px;
+    min-height: 48px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
     font-size: var(--text-sm);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--color-text-secondary);
     background: transparent;
-    border: none;
-    border-radius: var(--radius-md);
+    border: 1px solid transparent;
     cursor: pointer;
     transition: all var(--transition-fast);
   }
 
   .tab-btn:hover {
     color: var(--color-text);
-    background: rgba(0, 0, 0, 0.04);
-  }
-
-  :global([data-theme='dark']) .tab-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
   }
 
   .tab-btn.active {
     background: var(--color-surface);
     color: var(--color-accent);
-    font-weight: 700;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
   }
 
   :global([data-theme='dark']) .tab-btn.active {
@@ -323,58 +325,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
-  /* --- Notice Banners --- */
-  .ssc-notice-banner {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 18px;
-    border-radius: var(--radius-lg);
-    margin-top: var(--space-6);
-    margin-bottom: 0;
-    line-height: 1.55;
-    font-size: var(--text-xs);
-  }
-
-  .sig-banner {
-    background: var(--color-accent-light);
-    border: 1px solid var(--color-accent-border);
-    color: var(--color-text);
-  }
-
-  .sig-banner .banner-icon {
-    color: var(--color-accent);
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .photo-banner {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
-  }
-
-  :global([data-theme='dark']) .photo-banner {
-    background: rgba(245, 158, 11, 0.12);
-    border-color: rgba(245, 158, 11, 0.3);
-    color: #fef3c7;
-  }
-
-  .alert-icon {
-    color: #d97706;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  :global([data-theme='dark']) .alert-icon {
-    color: #fbbf24;
-  }
-
-  .banner-text strong {
-    font-weight: 700;
-  }
-
-  /* --- Active Specification Summary Card --- */
+  /* --- Dynamic Active Specification Summary Card --- */
   .spec-summary-card {
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
@@ -456,7 +407,7 @@
   }
 
   /* --- Upload Dropzone --- */
-  .ssc-dropzone {
+  .rrb-dropzone {
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-xl);
     padding: var(--space-10) var(--space-6);
@@ -467,9 +418,9 @@
     outline: none;
   }
 
-  .ssc-dropzone:hover,
-  .ssc-dropzone:focus-visible,
-  .ssc-dropzone.drag-over {
+  .rrb-dropzone:hover,
+  .rrb-dropzone:focus-visible,
+  .rrb-dropzone.drag-over {
     border-color: var(--color-accent);
     background: var(--color-accent-light);
   }
@@ -520,7 +471,7 @@
   }
 
   /* --- Editor & Live Preview Area --- */
-  .ssc-editor-area {
+  .rrb-editor-area {
     margin-top: var(--space-4);
   }
 
@@ -552,10 +503,10 @@
   }
 
   .preview-chip {
-    font-size: var(--text-xs);
+    font-size: 11px;
     font-weight: 700;
     color: #10b981;
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(16, 185, 129, 0.12);
     border: 1px solid rgba(16, 185, 129, 0.3);
     padding: 2px 8px;
     border-radius: var(--radius-full);
@@ -563,32 +514,32 @@
 
   .canvas-wrapper {
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: var(--space-6);
+    align-items: center;
     background: #e2e8f0;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
+    padding: var(--space-4);
     min-height: 220px;
     overflow: hidden;
   }
 
   :global([data-theme='dark']) .canvas-wrapper {
-    background: #0f172a;
+    background: #1e293b;
   }
 
-  .canvas-wrapper canvas {
+  #rrb-main-canvas {
     max-width: 100%;
-    max-height: 260px;
-    height: auto;
-    border: 1px solid #cbd5e1;
+    max-height: 380px;
+    object-fit: contain;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
     background: #ffffff;
   }
 
   /* Compliance Verification Card */
   .compliance-card {
-    background: var(--color-surface-subtle);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     padding: var(--space-5);
@@ -597,10 +548,8 @@
   .compliance-header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
     margin-bottom: var(--space-4);
-    padding-bottom: var(--space-3);
-    border-bottom: 1px solid var(--color-border);
   }
 
   .compliance-title {
@@ -613,7 +562,7 @@
   .checklist-body {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-2);
     margin-bottom: var(--space-6);
   }
 
@@ -621,116 +570,149 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: var(--text-sm);
-    gap: 12px;
+    font-size: var(--text-xs);
+    padding: 8px 12px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-md);
   }
 
   .check-label {
-    font-weight: 600;
     color: var(--color-text-secondary);
-    min-width: 100px;
+    font-weight: 600;
   }
 
   .check-value {
-    font-weight: 700;
     color: var(--color-text);
-    flex: 1;
-    text-align: right;
+    font-weight: 700;
+    margin-inline: auto var(--space-3);
   }
 
   .val-badge {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
-    padding: 3px 8px;
-    border-radius: var(--radius-full);
+    padding: 2px 6px;
+    border-radius: 4px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    flex-shrink: 0;
   }
 
   .val-badge.pass {
     background: rgba(16, 185, 129, 0.15);
     color: #059669;
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    border: 1px solid rgba(16, 185, 129, 0.3);
   }
 
   :global([data-theme='dark']) .val-badge.pass {
+    background: rgba(16, 185, 129, 0.2);
     color: #34d399;
   }
 
-  .val-badge.fail {
-    background: rgba(239, 68, 68, 0.15);
-    color: #dc2626;
-    border: 1px solid rgba(239, 68, 68, 0.35);
-  }
-
-  /* --- Action Buttons (Mandatory >= 48px height, >= 14px gap) --- */
+  /* Action Buttons (Strictly >= 48px height, >= 14px gap) */
   .actions-group {
     display: flex;
     gap: 16px;
     align-items: center;
-    margin-top: var(--space-5);
-  }
-
-  .btn-action {
-    min-height: 50px;
-    padding: 13px 26px;
-    font-size: var(--text-base);
-    font-weight: 700;
-    border-radius: var(--radius-lg);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .btn-primary {
-    flex: 1.2;
-    background: var(--color-accent);
-    color: #ffffff;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  .btn-primary:hover {
-    background: var(--color-accent-hover, #0284c7);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .btn-secondary {
-    flex: 0.8;
-    background: var(--color-surface);
-    color: var(--color-text);
-    border: 1.5px solid var(--color-border);
-  }
-
-  .btn-secondary:hover {
-    background: var(--color-surface-subtle);
-    border-color: var(--color-text-secondary);
   }
 
   @media (max-width: 640px) {
     .actions-group {
       flex-direction: column;
-      gap: 12px;
+      width: 100%;
+      gap: 14px;
     }
+  }
+
+  .btn-action {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  @media (max-width: 640px) {
     .btn-action {
       width: 100%;
     }
   }
 
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  .btn-primary {
+    background: #10b981;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: #059669;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* --- Notice Banners: Image Upload Guidelines & Advisory (Always below upload boxes) --- */
+  .rrb-notice-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-6);
+    margin-bottom: 0;
+    line-height: 1.55;
+    font-size: var(--text-xs);
+  }
+
+  .sig-banner {
+    background: var(--color-accent-light);
+    border: 1px solid var(--color-accent-border);
+    color: var(--color-text);
+  }
+
+  .sig-banner .banner-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .photo-banner {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+  }
+
+  :global([data-theme='dark']) .photo-banner {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #fef3c7;
+  }
+
+  .alert-icon {
+    color: #d97706;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  :global([data-theme='dark']) .alert-icon {
+    color: #fbbf24;
+  }
+
+  .banner-text strong {
+    font-weight: 700;
   }
 </style>

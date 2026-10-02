@@ -1,0 +1,716 @@
+---
+/**
+ * CAT Photo & Signature Resizer SEO Content & FAQ Component
+ * Strict compliance with ImgFeel UI/UX Design System Standards
+ */
+
+const faqItems = [
+  {
+    q: 'What are the official photo and signature dimensions for CAT 2026 registration?',
+    a: 'According to the official IIM CAT Registration Guide, the candidate photograph must have dimensions of 30 mm × 45 mm (or 35 mm × 45 mm, roughly 350 × 450 pixels) with a resolution of at least 150 DPI. The digital signature must measure 80 mm × 35 mm (roughly 400 × 175 pixels) with at least 150 DPI.',
+  },
+  {
+    q: 'What is the maximum allowed file size for CAT photograph and signature uploads?',
+    a: 'Both the candidate photograph and the scanned signature must strictly have a maximum file size of 80 KB in JPG or JPEG format on iimcat.ac.in. Files exceeding 80 KB are rejected by the registration portal.',
+  },
+  {
+    q: 'What background color is mandatory for the IIM CAT photograph?',
+    a: 'A plain white background (#FFFFFF) is strictly mandatory for the CAT photograph. Photographs with colored, patterned, outdoor, or dark backgrounds are rejected by automated validation checks and testing center authorities.',
+  },
+  {
+    q: 'How recent should my photograph be for CAT application submission?',
+    a: 'The photograph must be recent and not older than 6 months from the date of online registration. It must feature a clear frontal view with a neutral expression, open eyes, and visible ears.',
+  },
+  {
+    q: 'Can I sign using CAPITAL / BLOCK letters for the CAT registration?',
+    a: 'No. The Indian Institutes of Management (IIMs) strictly disqualify applications where signatures are written in CAPITAL or BLOCK letters or merely use initials. Your signature must be executed in your natural, continuous running handwriting using a black or blue ink pen on clean white unruled paper.',
+  },
+  {
+    q: 'How many printed copies of the photograph should I retain for CAT exam day?',
+    a: 'Candidates must retain at least 4 to 8 identical physical copies of the photograph uploaded online. You are required to affix this identical physical photograph to the CAT Admit Card in the presence of the invigilator at the test center.',
+  },
+  {
+    q: 'Are spectacles allowed in the CAT passport photograph?',
+    a: 'Clear, regular prescription spectacles are allowed provided there is no flash reflection or glare on the lenses and the eyes remain completely visible. Sunglasses, dark goggles, or tinted lenses are strictly prohibited.',
+  },
+  {
+    q: 'Can I upload a smartphone selfie or cropped social media picture for CAT?',
+    a: 'No. Casual selfies, cropped photos, mobile snapshots with uneven lighting or shadows, and photos with caps or headwear (except mandatory religious headgear like turbans) are strictly disallowed.',
+  },
+  {
+    q: 'Is there a correction window for photo or signature errors in CAT?',
+    a: 'Yes. IIMs typically provide a limited CAT Application Correction Window shortly after registration closes, allowing candidates to re-upload their photograph and signature if initial uploads were blurry or flagged.',
+  },
+  {
+    q: 'Are my confidential application files uploaded to your web server for processing?',
+    a: 'Never. ImgFeel processes 100% of your images locally inside your web browser using HTML5 Canvas APIs. Your private photographs, signatures, and biometric identity documents never leave your computer or smartphone.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'CAT Photo & Signature Resizer',
+  operatingSystem: 'Any',
+  applicationCategory: 'MultimediaApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<!-- JSON-LD Structured Data Schemas -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to Official IIM CAT Standards -->
+      <h2>Official IIM CAT Photo &amp; Signature Guidelines (2026 Examination Standards)</h2>
+      <p>
+        The Common Admission Test (CAT) is India's premier national entrance examination conducted by the Indian Institutes of Management (IIMs) for admission to postgraduate management programmes (MBA/PGP) across 21 IIMs and hundreds of top associate business schools (such as FMS Delhi, SPJIMR, MDI Gurgaon, and IIT DMS). Candidates registering on the official portal, <strong>iimcat.ac.in</strong>, must strictly satisfy exact biometric upload requirements for their scanned passport photograph and digital signature.
+      </p>
+      <p>
+        This free, client-side <strong>CAT Photo &amp; Signature Resizer</strong> automatically formats candidate photographs to <strong>30 × 45 mm (350 × 450 px, strictly ≤ 80 KB JPG)</strong> and signatures to <strong>80 × 35 mm (400 × 175 px, strictly ≤ 80 KB JPG)</strong> with minimum 150 DPI resolution. It cleans grayish paper backgrounds, ensures pure white backdrop contrast, and guarantees 100% compliance with IIM portal upload limits.
+      </p>
+
+      <!-- Section 2: Important Guidelines Breakdown -->
+      <h2>Key Image Specifications Established by the IIM CAT Registration Guide</h2>
+      <p>
+        To avoid rejection during online submission or verification hurdles on examination day, adhere strictly to these official standards:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <h3>Photograph (Max 80 KB)</h3>
+          <p>
+            Recent color passport photograph (30 × 45 mm / 10–80 KB JPG) taken within the last 6 months against a plain white background (#FFFFFF) with min 150 DPI and full frontal view.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </div>
+          <h3>Signature (Max 80 KB)</h3>
+          <p>
+            Digital signature scan strictly between 5 KB and 80 KB JPG (80 × 35 mm / 400 × 175 px). Must be signed with a black or dark blue ink pen in continuous running handwriting on clean white paper.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>Test Day Admit Card Hard Copies</h3>
+          <p>
+            Candidates must print and carry identical physical copies of the uploaded photograph to paste onto the CAT Admit Card in the presence of the test room invigilator on exam day.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 3: Official Specifications Table -->
+      <h2>Official 2026 IIM CAT Image Specifications Summary Table</h2>
+      <p>
+        Review the officially verified dimensions, file sizes, and background criteria across CAT application categories:
+      </p>
+
+      <div class="table-responsive">
+        <table class="specs-table">
+          <thead>
+            <tr>
+              <th>Application Category</th>
+              <th>Document Type</th>
+              <th>Target Dimensions</th>
+              <th>Allowed File Size</th>
+              <th>Format &amp; Background</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>General CAT (Universal)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (30 × 45 mm)<br />400 × 175 px (80 × 35 mm)</td>
+              <td>10 KB – 80 KB (&le;80 KB)<br />5 KB – 80 KB (&le;80 KB)</td>
+              <td>JPG / Pure White BG (150+ DPI)<br />JPG / Running Handwriting</td>
+            </tr>
+            <tr>
+              <td><strong>IIM PGP / MBA Entrance</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (30 × 45 mm)<br />400 × 175 px (80 × 35 mm)</td>
+              <td>10 KB – 80 KB (&le;80 KB)<br />5 KB – 80 KB (&le;80 KB)</td>
+              <td>JPG / White (&lt;6 months old)<br />JPG / Black or Blue Ink</td>
+            </tr>
+            <tr>
+              <td><strong>Non-IIM Associate Institutes</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (30 × 45 mm)<br />400 × 175 px (80 × 35 mm)</td>
+              <td>10 KB – 80 KB (&le;80 KB)<br />5 KB – 80 KB (&le;80 KB)</td>
+              <td>JPG / White (Neutral Expression)<br />JPG / Clean White Paper</td>
+            </tr>
+            <tr>
+              <td><strong>CAT Admit Card Verification</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (30 × 45 mm)<br />400 × 175 px (80 × 35 mm)</td>
+              <td>10 KB – 80 KB (&le;80 KB)<br />5 KB – 80 KB (&le;80 KB)</td>
+              <td>Must match upload identically<br />Executed before Invigilator</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Step-by-Step Instructions -->
+      <h2>How to Resize Photos &amp; Signatures for CAT in 4 Easy Steps</h2>
+      <div class="steps-list">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Select Your CAT Category</h4>
+            <p>Select <strong>General CAT</strong>, <strong>IIM PGP / MBA Entrance</strong>, or <strong>Non-IIM Associate Institutes</strong> from the dropdown. Keep <em>General CAT</em> for universal official compliance.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Select Document Type (Photo or Signature)</h4>
+            <p>Toggle between the <strong>Photograph</strong> and <strong>Signature</strong> tabs. The Active Target Specifications immediately display the verified dimension and file size thresholds.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Upload Your Image</h4>
+            <p>Drop any JPG, PNG, or WebP file into the dropzone. The client-side engine automatically scales the image, whitens the background, and compresses the file into the exact allowed byte range (max 80 KB).</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Inspect Checklist &amp; Download</h4>
+            <p>Verify that all four official portal checks (Dimensions, File Size, Format, and Background) display <strong>PASS</strong>. Click <strong>Download Compliant File</strong> to save your application-ready JPG.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Common Rejection Causes -->
+      <h2>Common Reasons for Image Rejection on the IIM CAT Portal</h2>
+      <ul class="rejection-list">
+        <li><strong>File Size Exceeding 80 KB:</strong> The iimcat.ac.in portal enforces a strict binary upload ceiling of 80.0 KB. Any file of 81 KB or greater fails with an immediate portal error.</li>
+        <li><strong>Signatures in Capital / Block Letters:</strong> Submitting a signature written entirely in uppercase letters or initials is strictly prohibited. Always sign in continuous cursive running script.</li>
+        <li><strong>Colored or Dark Backgrounds:</strong> Backgrounds featuring blue curtains, household walls, or outdoor foliage are strictly rejected. Only pure white backgrounds (#FFFFFF) pass validation.</li>
+        <li><strong>Low Resolution under 150 DPI:</strong> Blurry or pixelated scans that look smudged fail identity scrutiny. Our engine ensures crisp reproduction with 150+ DPI calibration.</li>
+        <li><strong>Wearing Caps, Hats, or Dark Glasses:</strong> Headgear (except religious attire like Sikh turbans) and tinted spectacles are forbidden. Eyes, ears, and facial contours must be fully visible.</li>
+      </ul>
+
+      <!-- Section 6: Frequently Asked Questions (FAQ) -->
+      <div class="faq-container">
+        <div class="faq-header">
+          <h2>Frequently Asked Questions (CAT Photo &amp; Signature Specs)</h2>
+          <p>Get quick, verified answers to common candidate questions regarding IIM CAT application image uploads.</p>
+        </div>
+
+        <div class="faq-grid">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>{item.q}</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 7: Related Tools Grid -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>Explore Related Entrance &amp; Recruitment Image Tools</h3>
+        </div>
+        <div class="cross-tools-grid">
+          <a href="/tools/upsc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">UPSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos (20–300 KB) and signatures (20–100 KB) for UPSC Civil Services, NDA &amp; CDS.</p>
+          </a>
+
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <polyline points="17 11 19 13 23 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">SSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photo (20–50 KB) and signature (10–20 KB) for SSC CGL, CHSL, MTS &amp; GD recruitments.</p>
+          </a>
+
+          <a href="/tools/rrb-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+                  <path d="M4 11h16"></path>
+                  <path d="M12 3v8"></path>
+                  <path d="m8 19-2 3"></path>
+                  <path d="m16 19 2 3"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">RRB Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos and running signatures strictly to 30–70 KB for NTPC, Group D, ALP &amp; JE.</p>
+          </a>
+
+          <a href="/tools/neet-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">NEET Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photos (10–200 KB) and signatures (10–100 KB) for NEET UG, PG, JEE Main &amp; Advanced.</p>
+          </a>
+
+          <a href="/tools/ctet-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                  <path d="M6 6h10"></path>
+                  <path d="M6 10h10"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">CTET Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photo (10–100 KB) and signature (3–30 KB) for CBSE CTET Paper 1 &amp; Paper 2.</p>
+          </a>
+
+          <a href="/tools/indian-army-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">Indian Army Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photo (10–50 KB) and signature (5–20 KB) for Agniveer GD, Technical &amp; Clerk.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- Section Base & Typography --- */
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    background: var(--color-surface);
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Benefits Grid --- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  .benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+    border: 1px solid var(--color-border);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* --- Responsive Table --- */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-sm);
+  }
+
+  .specs-table th {
+    background: var(--color-surface-subtle);
+    color: var(--color-text);
+    font-weight: 700;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .specs-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* --- Steps List --- */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  .step-card {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    align-items: flex-start;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-accent);
+    color: var(--color-white, #ffffff);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+  }
+
+  .step-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* --- Rejection List --- */
+  .rejection-list {
+    margin-block: var(--space-4) var(--space-8);
+    padding-left: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rejection-list li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .rejection-list strong {
+    color: var(--color-text);
+  }
+
+  /* --- FAQ Section Standards --- */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-header {
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .faq-header h2 {
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+  }
+
+  .faq-header p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    padding: 18px 22px;
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 22px 18px 22px;
+    border-top: 1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.05));
+    padding-top: var(--space-3);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* --- Related Tools Section Standards (6 Cards) --- */
+  .cross-tools-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-5);
+    min-height: 160px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .cross-tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-tool-icon {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1-5);
+    line-height: 1.35;
+  }
+
+  .cross-tool-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

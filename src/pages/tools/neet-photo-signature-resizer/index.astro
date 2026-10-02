@@ -1,0 +1,88 @@
+---
+/**
+ * NEET & JEE Entrance Exam Photo & Signature Resizer
+ * Dedicated India-specific tool for NEET UG, NEET PG, JEE Main, and JEE Advanced.
+ * English-only tool with language switcher disabled.
+ */
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import NeetResizer from '@/components/NeetResizer.astro';
+import NeetContent from '@/components/NeetContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+
+const locale = 'en';
+const toolUrl = '/tools/neet-photo-signature-resizer/';
+---
+
+<MainLayout
+  locale={locale}
+  title="NEET Photo & Signature Resizer 2026 | NEET UG, PG, JEE Main & Advanced"
+  description="Resize and compress photograph (10–200 KB) and signature (10–100 KB) to official 2026 specifications for NEET UG, NEET PG, JEE Main & Advanced. 100% private."
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+  showLanguageSwitcher={false}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "NEET Photo & Signature Resizer",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free client-side tool to resize, crop, and compress photograph (10–200 KB) and signature (10–100 KB) for NEET UG, NEET PG, JEE Main, and JEE Advanced applications."
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: 'Home', href: '/' },
+        { label: 'Tools', href: '/tools/' },
+        { label: 'NEET Photo & Signature Resizer' }
+      ]} />
+
+      <div class="tool-header">
+        <h1 class="tool-title">NEET Photo &amp; Signature Resizer</h1>
+        <p class="tool-subtitle">Automatically resize, crop, and compress photograph (10–200 KB) and signature (10–100 KB) to official 2026 specifications for NEET UG, NEET PG, JEE Main, and JEE Advanced.</p>
+      </div>
+
+      <NeetResizer />
+    </div>
+  </div>
+
+  <NeetContent />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.25;
+  }
+
+  @media (max-width: 640px) {
+    .tool-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

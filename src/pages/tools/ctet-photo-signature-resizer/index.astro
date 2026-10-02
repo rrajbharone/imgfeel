@@ -1,0 +1,88 @@
+---
+/**
+ * CTET Photo & Signature Resizer
+ * Dedicated India-specific exam tool for CBSE CTET Paper 1 and Paper 2.
+ * English-only tool with language switcher disabled.
+ */
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtetResizer from '@/components/CtetResizer.astro';
+import CtetContent from '@/components/CtetContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+
+const locale = 'en';
+const toolUrl = '/tools/ctet-photo-signature-resizer/';
+---
+
+<MainLayout
+  locale={locale}
+  title="CTET Photo & Signature Resizer 2026 | Paper 1 & Paper 2 (CBSE Specs)"
+  description="Resize and compress photograph (10–100 KB) and signature (3–30 KB) to official CBSE CTET 2026 specifications for Paper 1 & Paper 2. 100% private."
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+  showLanguageSwitcher={false}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "CTET Photo & Signature Resizer",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free client-side tool to resize, crop, and compress photograph (10–100 KB) and signature (3–30 KB) for CBSE CTET online applications."
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: 'Home', href: '/' },
+        { label: 'Tools', href: '/tools/' },
+        { label: 'CTET Photo & Signature Resizer' }
+      ]} />
+
+      <div class="tool-header">
+        <h1 class="tool-title">CTET Photo &amp; Signature Resizer</h1>
+        <p class="tool-subtitle">Automatically resize, crop, and compress photograph (strictly 10–100 KB) and signature (strictly 3–30 KB) to official CBSE CTET 2026 specifications.</p>
+      </div>
+
+      <CtetResizer />
+    </div>
+  </div>
+
+  <CtetContent />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.25;
+  }
+
+  @media (max-width: 640px) {
+    .tool-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

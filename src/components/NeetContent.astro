@@ -1,0 +1,728 @@
+---
+/**
+ * NEET & JEE Entrance Exam Photo & Signature Resizer SEO Content & FAQ Component
+ * Strict compliance with ImgFeel UI/UX Design System Standards
+ */
+
+const faqItems = [
+  {
+    q: 'What are the official photo and signature dimensions for NEET UG 2026?',
+    a: 'For NEET UG (conducted by NTA), passport-size photographs must measure 3.5 cm × 4.5 cm (roughly 350 × 450 pixels) with a file size between 10 KB and 200 KB in JPG/JPEG format. Scanned signatures must be between 10 KB and 100 KB in JPG format, signed with black or blue ink on white paper in running handwriting.',
+  },
+  {
+    q: 'Does NEET UG require a live photo or an uploaded passport photograph?',
+    a: 'NTA mandates both. During online application registration on exams.nta.ac.in/NEET, candidates must capture a real-time Live Photograph through their webcam or smartphone camera. In addition, candidates must upload a scanned recent passport photograph (10–200 KB JPG) and keep identical printed copies (along with 4"×6" postcard-size photos) to affix to the Admit Card counterfoil and attendance sheet on exam day.',
+  },
+  {
+    q: 'What is the required file size limit for NEET PG photograph and signature uploads?',
+    a: 'According to the NBEMS (National Board of Examinations in Medical Sciences) guidelines, photographs and signatures for NEET PG must strictly be less than 80 KB (between 10 KB and 80 KB) in JPG/JPEG format. The photograph must be recent (taken within 3 months) on a plain white background with 75%–80% face coverage.',
+  },
+  {
+    q: 'What are the photo and signature requirements for JEE Main 2026?',
+    a: 'For JEE Main (NTA), candidate photographs must be in JPG/JPEG format with a file size strictly between 10 KB and 200 KB, featuring a plain white background with 80% face coverage (ears visible). Signatures must be between 10 KB and 100 KB in JPG/JPEG format, executed in running handwriting with blue or black ink on unruled white paper.',
+  },
+  {
+    q: 'Do I need to upload a fresh photo and signature for JEE Advanced 2026?',
+    a: 'For Indian nationals who qualified through JEE Main, photograph and signature records are automatically transferred from the JEE Main registration database to the JEE Advanced portal. Direct photograph and signature uploads (10–200 KB photo, 10–100 KB signature) are required for foreign nationals, specific special categories, or during designated portal correction windows.',
+  },
+  {
+    q: 'Can I sign using CAPITAL / BLOCK letters for NEET or JEE examinations?',
+    a: 'No. Both the National Testing Agency (NTA) and NBEMS explicitly disqualify applications containing signatures executed in CAPITAL / BLOCK letters or consisting solely of initials. Signatures must be in your natural, continuous running handwriting.',
+  },
+  {
+    q: 'What background color is mandatory for NEET and JEE candidate photographs?',
+    a: 'A plain white background (#FFFFFF) is mandatory for NEET UG, NEET PG, JEE Main, and JEE Advanced. Photographs with colored, patterned, outdoor, or dark backgrounds are rejected by automated validation systems and verification officers.',
+  },
+  {
+    q: 'Are spectacles allowed in NEET and JEE application photos?',
+    a: 'Spectacles are permitted only if worn regularly for vision correction. Tinted glasses, sunglasses, polaroids, or colored lenses are strictly prohibited. The eyes and ears must remain completely unobstructed without reflection or flash glare on the lenses.',
+  },
+  {
+    q: 'What is the difference between NEET UG passport photo and postcard photo?',
+    a: 'For NEET UG, candidates need two formats: (1) Standard passport photograph (3.5 × 4.5 cm / 10–200 KB JPG) for application upload, and (2) Postcard photograph (4" × 6" / 10 × 15 cm, also 10–200 KB JPG) with white background, which must be printed and pasted on the Proforma accompanying the Admit Card on the examination day.',
+  },
+  {
+    q: 'Are candidate photos or signatures uploaded to your servers for processing?',
+    a: 'Never. ImgFeel processes 100% of your images locally inside your web browser using HTML5 Canvas APIs. Your private photographs, signatures, and biometric identity files never leave your device, ensuring complete security and privacy.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'NEET & JEE Photo & Signature Resizer',
+  operatingSystem: 'Any',
+  applicationCategory: 'MultimediaApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<!-- JSON-LD Structured Data Schemas -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to Official NEET & JEE Standards -->
+      <h2>Official NEET &amp; JEE Entrance Exam Photo &amp; Signature Specifications (2026 Standards)</h2>
+      <p>
+        National entrance examinations in India—including <strong>NEET UG (Undergraduate)</strong>, <strong>NEET PG (Postgraduate)</strong>, <strong>JEE Main</strong>, and <strong>JEE Advanced</strong>—enforce stringent biometric image validation rules. The National Testing Agency (NTA), the National Board of Examinations in Medical Sciences (NBEMS), and the Joint Admission Board (JAB) utilize automated portal validators that immediately reject uploaded photographs or signatures with non-compliant dimensions, incorrect file sizes, or improper backgrounds.
+      </p>
+      <p>
+        This free, client-side <strong>NEET Photo &amp; Signature Resizer</strong> automatically formats your passport photo and digital signature to exact 2026 entrance exam requirements. It crops your image to standard <strong>3.5 × 4.5 cm (350 × 450 px)</strong> dimensions, whitens dark backgrounds, optimizes resolution, and compresses files strictly within official byte limits (<strong>10–200 KB</strong> for NTA, <strong>10–80 KB</strong> for NBEMS) without losing facial clarity.
+      </p>
+
+      <!-- Section 2: Important Advisory: Live Capture vs Scanned Photo Upload -->
+      <h2>Understanding Entrance Application Media: Live Webcam Photo vs. Scanned Upload</h2>
+      <p>
+        A frequent point of confusion among candidates is the introduction of real-time camera capture on newer application portals. Here is how testing agencies evaluate your application media:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <h3>Real-Time Live Photo Capture</h3>
+          <p>
+            On portals like <strong>exams.nta.ac.in</strong> (NEET UG / JEE Main) and <strong>natboard.edu.in</strong> (NEET PG), candidates are required to snap a live photo using their webcam or mobile browser. This serves as a live liveness verification during submission.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <h3>Uploaded Scanned Photograph</h3>
+          <p>
+            Candidates must separately upload a high-clarity 3.5 × 4.5 cm scanned passport photo (10–200 KB JPG). This high-resolution photo is printed on your official <strong>e-Admit Card</strong>, verification roll, and counselling records.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>Examination Hall Hard Copies</h3>
+          <p>
+            You must carry multiple identical physical copies of your uploaded photograph (and 4"×6" postcard photos for NEET UG) to affix to the attendance sheet before the exam invigilator.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 3: Official Specifications Table -->
+      <h2>Official 2026 Entrance Exam Image Specifications Summary</h2>
+      <p>
+        Review the officially verified dimension, file size, and background criteria across premier national entrance examinations:
+      </p>
+
+      <div class="table-responsive">
+        <table class="specs-table">
+          <thead>
+            <tr>
+              <th>Examination</th>
+              <th>Document Type</th>
+              <th>Target Dimensions</th>
+              <th>File Size Limit</th>
+              <th>Format &amp; Background</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>General Entrance Exam</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 100 KB<br />10 KB – 50 KB</td>
+              <td>JPG / Pure White<br />JPG / Running Script</td>
+            </tr>
+            <tr>
+              <td><strong>NEET UG (NTA)</strong></td>
+              <td>Passport Photo<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 200 KB<br />10 KB – 100 KB</td>
+              <td>JPG / White (80% Face)<br />JPG / Black or Blue Ink</td>
+            </tr>
+            <tr>
+              <td><strong>NEET PG (NBEMS)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 80 KB (&lt;80 KB)<br />10 KB – 80 KB (&lt;80 KB)</td>
+              <td>JPG / White (Recent &lt;3 mo)<br />JPG / Unlined Paper</td>
+            </tr>
+            <tr>
+              <td><strong>JEE Main (NTA)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 200 KB<br />10 KB – 100 KB</td>
+              <td>JPG / White (80% Face)<br />JPG / Blue or Black Ink</td>
+            </tr>
+            <tr>
+              <td><strong>JEE Advanced</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 200 KB<br />10 KB – 100 KB</td>
+              <td>Auto-Imported from JEE Main<br />JPG / Running Script</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Step-by-Step Instructions -->
+      <h2>How to Resize Photos &amp; Signatures for NEET &amp; JEE in 4 Easy Steps</h2>
+      <div class="steps-list">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Select Your Examination</h4>
+            <p>Choose <strong>NEET UG</strong>, <strong>NEET PG</strong>, <strong>JEE Main</strong>, or <strong>JEE Advanced</strong> from the dropdown. Keep <em>General Entrance Exam</em> for national multi-exam compliance.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Select Document Type (Photo or Signature)</h4>
+            <p>Toggle between the <strong>Photograph</strong> and <strong>Signature</strong> tabs. The Active Target Specifications immediately display the verified dimension and file size thresholds.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Upload Your Image</h4>
+            <p>Drop any JPG, PNG, or WebP file into the dropzone. The client-side engine automatically resizes, whiten backgrounds, enhances signature contrast, and compresses the file into the exact allowed byte range.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Inspect Checklist &amp; Download</h4>
+            <p>Verify that all four official portal checks (Dimensions, File Size, Format, and Background) display <strong>PASS</strong>. Click <strong>Download Compliant File</strong> to save your application-ready JPG.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Common Rejection Causes -->
+      <h2>Common Reasons for Image Rejection on NTA and NBEMS Portals</h2>
+      <ul class="rejection-list">
+        <li><strong>Face Coverage Less Than 80%:</strong> Taking photos from too far away where the head and shoulders occupy less than 80% of the frame is the #1 reason for NTA rejection.</li>
+        <li><strong>Signatures in Capital / Block Letters:</strong> Writing your name in uppercase letters or initials invalidates the signature according to official exam bulletins.</li>
+        <li><strong>Faint or Blurry Signatures:</strong> Scanned signatures on shadowed, wrinkled, or ruled notebook paper fail automatic contrast validation. Always sign with dark ink on plain white unruled paper.</li>
+        <li><strong>Colored or Outdoor Backgrounds:</strong> Backgrounds featuring blue curtains, trees, doors, or uneven shadows are strictly rejected. Only pure white backgrounds (#FFFFFF) are accepted.</li>
+        <li><strong>Caps, Hats, or Dark Sunglasses:</strong> Headgear (except for mandatory religious attire) and tinted lenses are not permitted. Eyes and ears must be fully visible.</li>
+      </ul>
+
+      <!-- Section 6: Frequently Asked Questions (FAQ) -->
+      <div class="faq-container">
+        <div class="faq-header">
+          <h2>Frequently Asked Questions (NEET &amp; JEE Photo &amp; Signature Specs)</h2>
+          <p>Get quick, verified answers to common candidate questions regarding entrance exam application uploads.</p>
+        </div>
+
+        <div class="faq-grid">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>{item.q}</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 7: Related Tools Grid -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>Explore Related Entrance &amp; Recruitment Image Tools</h3>
+        </div>
+        <div class="cross-tools-grid">
+          <a href="/tools/upsc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">UPSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos (20–300 KB) and signatures (20–100 KB) for UPSC Civil Services, NDA &amp; CDS.</p>
+          </a>
+
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <polyline points="17 11 19 13 23 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">SSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photo (20–50 KB) and signature (10–20 KB) for SSC CGL, CHSL, MTS &amp; GD recruitments.</p>
+          </a>
+
+          <a href="/tools/ibps-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">IBPS Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Auto-resize candidate photograph (20–50 KB) and signature (10–20 KB) for PO, Clerk &amp; SO.</p>
+          </a>
+
+          <a href="/tools/rrb-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+                  <path d="M4 11h16"></path>
+                  <path d="M12 3v8"></path>
+                  <path d="m8 19-2 3"></path>
+                  <path d="m16 19 2 3"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">RRB Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos and running signatures strictly to 30–70 KB for NTPC, Group D, ALP &amp; JE.</p>
+          </a>
+
+          <a href="/tools/pan-card-image-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                  <line x1="7" y1="8" x2="17" y2="8"></line>
+                  <line x1="7" y1="12" x2="13" y2="12"></line>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">PAN Card Image Resizer</div>
+            <p class="cross-tool-desc">Resize photo (213 × 213 px, &lt;30 KB) and signature for NSDL &amp; UTIITSL PAN applications.</p>
+          </a>
+
+          <a href="/tools/resize-image-in-cm-mm/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z"></path>
+                  <path d="m14.5 12.5 2-2"></path>
+                  <path d="m11.5 9.5 2-2"></path>
+                  <path d="m8.5 6.5 2-2"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">Resize Image in CM / MM</div>
+            <p class="cross-tool-desc">Set custom physical dimensions in centimeters or millimeters with precise DPI calibration.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- Section Base & Typography --- */
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    background: var(--color-surface);
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Benefits Grid --- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  .benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+    border: 1px solid var(--color-border);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* --- Responsive Table --- */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-sm);
+  }
+
+  .specs-table th {
+    background: var(--color-surface-subtle);
+    color: var(--color-text);
+    font-weight: 700;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .specs-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* --- Steps List --- */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  .step-card {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    align-items: flex-start;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-accent);
+    color: var(--color-white, #ffffff);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+  }
+
+  .step-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* --- Rejection List --- */
+  .rejection-list {
+    margin-block: var(--space-4) var(--space-8);
+    padding-left: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rejection-list li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .rejection-list strong {
+    color: var(--color-text);
+  }
+
+  /* --- FAQ Section Standards --- */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-header {
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .faq-header h2 {
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+  }
+
+  .faq-header p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    padding: 18px 22px;
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 22px 18px 22px;
+    border-top: 1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.05));
+    padding-top: var(--space-3);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* --- Related Tools Section Standards (6 Cards) --- */
+  .cross-tools-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-5);
+    min-height: 160px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .cross-tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-tool-icon {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1-5);
+    line-height: 1.35;
+  }
+
+  .cross-tool-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

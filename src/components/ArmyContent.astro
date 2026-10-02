@@ -1,0 +1,724 @@
+---
+/**
+ * Indian Army & Agniveer Photo & Signature Resizer SEO Content & FAQ Component
+ * Strict compliance with ImgFeel UI/UX Design System Standards
+ */
+
+const faqItems = [
+  {
+    q: 'What are the official photo and signature size limits for Indian Army Agniveer applications?',
+    a: 'For online registration on joinindianarmy.nic.in, candidate passport photographs must strictly be between 10 KB and 50 KB in JPG/JPEG format (recommended 350 × 450 pixels). Digital signatures must strictly be between 5 KB and 20 KB in JPG/JPEG format (recommended 350 × 150 pixels), signed with a black or dark blue ink pen on clean white unruled paper.',
+  },
+  {
+    q: 'What background color is required for Indian Army candidate photographs?',
+    a: 'The Indian Army strictly requires a plain white or very light-colored background. Photographs taken against colored walls, outdoor landscapes, curtains, or dark backgrounds are rejected by recruitment officers and document scanning software.',
+  },
+  {
+    q: 'How many physical copies of the photograph must I bring to the Army Recruitment Rally?',
+    a: 'Official Indian Army notifications mandate that candidates must bring at least 20 copies of identical, un-attested passport-size photographs to the recruitment rally ground. These must be printed on high-quality photographic paper and must match the digital photograph uploaded to joinindianarmy.nic.in.',
+  },
+  {
+    q: 'Can I wear a cap or sunglasses in my Indian Army recruitment photo?',
+    a: 'No. Photographs with caps, hats, dark goggles, or tinted spectacles are strictly rejected. Both ears, forehead, and the complete facial contour must be clearly visible. Only Sikh candidates are permitted to wear a turban, provided their face is unobstructed.',
+  },
+  {
+    q: 'Are the photo and signature specifications different for Army GD, Technical, and Clerk?',
+    a: 'No. The unified online application module on joinindianarmy.nic.in enforces identical digital upload standards across all Agniveer categories: 10 KB to 50 KB for photographs and 5 KB to 20 KB for signatures in JPG/JPEG format. Selecting your specific category in our tool applies verified parameters tailored to your application category.',
+  },
+  {
+    q: 'Can I sign using CAPITAL / BLOCK letters for Indian Army recruitment?',
+    a: 'No. Join Indian Army strictly invalidates signatures written in CAPITAL / BLOCK letters or consisting solely of initials. Your signature must be in your natural running handwriting using black or dark blue ink.',
+  },
+  {
+    q: 'Why does the Join Indian Army portal reject my signature file?',
+    a: 'The joinindianarmy.nic.in portal enforces a rigid byte validator with an upper ceiling of 20.0 KB and a lower limit of 5.0 KB. Scanned signatures that compress under 5 KB or exceed 20 KB will trigger an immediate upload error. Our smart resizer automatically calibrates file size so your signature lands safely within 8–15 KB.',
+  },
+  {
+    q: 'Do I need to hold a slate with name and date for the Indian Army photo?',
+    a: 'Certain rally notifications advise or mandate holding a black slate in front of the chest with the candidate’s name and date of photograph written clearly in white chalk. Check your specific Zone Recruitment Office (ZRO/ARO) notification PDF to confirm whether a slate photo is required for your rally.',
+  },
+  {
+    q: 'How recent should my Indian Army application photograph be?',
+    a: 'The photograph must be recent, taken within the last 3 months prior to the date of online registration. Using outdated photographs or appearing at the rally with a noticeably altered hairstyle, beard, or facial appearance can result in disqualification.',
+  },
+  {
+    q: 'Are my confidential Army application images uploaded to your web server?',
+    a: 'Never. ImgFeel performs 100% of image resizing, cropping, contrast adjustments, and compression locally in your browser using HTML5 Canvas APIs. Your personal photographs and signatures are never transmitted over the internet or saved to any server.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Indian Army Photo & Signature Resizer',
+  operatingSystem: 'Any',
+  applicationCategory: 'MultimediaApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<!-- JSON-LD Structured Data Schemas -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to Official Indian Army Standards -->
+      <h2>Official Indian Army Photo &amp; Signature Guidelines (2026 Recruitment Standards)</h2>
+      <p>
+        The Indian Army conducts nationwide recruitment through its unified official portal, <strong>joinindianarmy.nic.in</strong>. Whether you are applying for <strong>Agniveer General Duty (GD)</strong>, <strong>Agniveer Technical</strong>, <strong>Agniveer Clerk / Store Keeper Technical (SKT)</strong>, or <strong>Agniveer Tradesman</strong>, adhering strictly to the official digital image standards is essential. Uploading non-compliant image sizes, distorted aspect ratios, or low-contrast signatures will cause immediate registration failure or disqualification during rally verification.
+      </p>
+      <p>
+        This free, client-side <strong>Indian Army Photo &amp; Signature Resizer</strong> automatically formats candidate photographs to <strong>350 × 450 px (strictly 10 KB – 50 KB JPG)</strong> and signatures to <strong>350 × 150 px (strictly 5 KB – 20 KB JPG)</strong>. It cleans and whitens uneven paper backgrounds, preserves facial sharpness, and outputs fully compliant JPG files ready for immediate portal upload.
+      </p>
+
+      <!-- Section 2: Important Advisory: Online Upload vs Rally Ground Requirements -->
+      <h2>Understanding Indian Army Media: Online Portal Upload vs. Recruitment Rally Requirements</h2>
+      <p>
+        Candidates frequently experience confusion regarding the distinction between digital uploads and the physical documentation required on the rally ground. Here is what Join Indian Army guidelines specify:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <h3>Digital Portal Upload (10–50 KB)</h3>
+          <p>
+            You must upload a crisp, clear 3.5 × 4.5 cm color passport photograph (10 KB – 50 KB JPG) with a plain white background on <strong>joinindianarmy.nic.in</strong>. This photo is printed on your online Common Entrance Exam (CEE) Admit Card.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>20 Identical Physical Rally Photos</h3>
+          <p>
+            Candidates attending the Physical Fitness Test (PFT) rally must carry <strong>at least 20 identical copies</strong> of the exact photograph uploaded online, printed on high-quality photographic paper with plain white background.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </div>
+          <h3>Running Signature (5–20 KB)</h3>
+          <p>
+            Digital signatures must be between 5 KB and 20 KB JPG, written in continuous running handwriting with dark ink on unruled white paper. Signatures in block letters or initials are strictly rejected.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 3: Official Specifications Table -->
+      <h2>Official 2026 Indian Army Image Specifications Summary</h2>
+      <p>
+        Review the officially verified dimension, file size, and background criteria across Indian Army recruitment entries:
+      </p>
+
+      <div class="table-responsive">
+        <table class="specs-table">
+          <thead>
+            <tr>
+              <th>Recruitment Category</th>
+              <th>Document Type</th>
+              <th>Target Dimensions</th>
+              <th>Allowed File Size</th>
+              <th>Format &amp; Background</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>General Indian Army</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 50 KB<br />5 KB – 20 KB</td>
+              <td>JPG / White or Light BG<br />JPG / Black or Blue Ink</td>
+            </tr>
+            <tr>
+              <td><strong>Indian Army Agniveer</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 50 KB<br />5 KB – 20 KB</td>
+              <td>JPG / Pure White BG<br />JPG / Running Handwriting</td>
+            </tr>
+            <tr>
+              <td><strong>Army GD (General Duty)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 50 KB<br />5 KB – 20 KB</td>
+              <td>JPG / White (Carry 20 copies)<br />JPG / Clean White Paper</td>
+            </tr>
+            <tr>
+              <td><strong>Army Technical</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 50 KB<br />5 KB – 20 KB</td>
+              <td>JPG / Pure White BG<br />JPG / Natural Signature</td>
+            </tr>
+            <tr>
+              <td><strong>Army Clerk (SKT)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 50 KB<br />5 KB – 20 KB</td>
+              <td>JPG / White Background<br />JPG / Black Ink Pen</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Step-by-Step Instructions -->
+      <h2>How to Resize Photos &amp; Signatures for Indian Army in 4 Easy Steps</h2>
+      <div class="steps-list">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Select Your Recruitment Category</h4>
+            <p>Choose <strong>Indian Army Agniveer</strong>, <strong>Army GD</strong>, <strong>Army Technical</strong>, or <strong>Army Clerk</strong> from the dropdown. Keep <em>General Indian Army</em> for universal standard compliance.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Select Document Type (Photo or Signature)</h4>
+            <p>Switch between the <strong>Photograph</strong> and <strong>Signature</strong> tabs. The Active Target Specifications instantly update to display the verified dimension and file size thresholds.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Upload Your Image</h4>
+            <p>Drop any JPG, PNG, or WebP file into the dropzone. The client-side engine automatically scales the image, whitens the background, and compresses the file into the exact allowed byte range.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Verify Checklist &amp; Download</h4>
+            <p>Confirm that all four portal checklist items (Dimensions, File Size, Format, and Background) display <strong>PASS</strong>. Click <strong>Download Compliant File</strong> to save your application-ready JPG.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Common Rejection Causes -->
+      <h2>Common Reasons for Image Rejection on Join Indian Army Portal</h2>
+      <ul class="rejection-list">
+        <li><strong>Signatures in Capital / Block Letters:</strong> Writing your signature in uppercase letters or using initials causes immediate disqualification. Sign in natural continuous cursive script.</li>
+        <li><strong>Signature File Under 5 KB or Over 20 KB:</strong> The joinindianarmy.nic.in portal strictly rejects signatures outside the 5–20 KB boundary. Our engine automatically pads JPEG comment bytes if clean signatures drop below 5 KB.</li>
+        <li><strong>Colored or Shadowed Backgrounds:</strong> Backgrounds featuring household walls, outdoor scenery, or door frames are not accepted. Only plain white or light backgrounds pass validation.</li>
+        <li><strong>Wearing Caps, Hats, or Dark Glasses:</strong> Headgear (except traditional Sikh turbans) and tinted glasses are strictly forbidden. Eyes, ears, and full face must be clearly visible.</li>
+        <li><strong>Photo Not Matching Physical Appearance at Rally:</strong> Appearing at the recruitment rally ground with a drastically altered beard, mustache, or hairstyle compared to your application photograph leads to identity mismatch.</li>
+      </ul>
+
+      <!-- Section 6: Frequently Asked Questions (FAQ) -->
+      <div class="faq-container">
+        <div class="faq-header">
+          <h2>Frequently Asked Questions (Indian Army Photo &amp; Signature Specs)</h2>
+          <p>Get quick, verified answers to common candidate questions regarding Join Indian Army application uploads.</p>
+        </div>
+
+        <div class="faq-grid">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>{item.q}</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 7: Related Tools Grid -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>Explore Related Entrance &amp; Recruitment Image Tools</h3>
+        </div>
+        <div class="cross-tools-grid">
+          <a href="/tools/upsc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">UPSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos (20–300 KB) and signatures (20–100 KB) for UPSC Civil Services, NDA &amp; CDS.</p>
+          </a>
+
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <polyline points="17 11 19 13 23 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">SSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photo (20–50 KB) and signature (10–20 KB) for SSC CGL, CHSL, MTS &amp; GD recruitments.</p>
+          </a>
+
+          <a href="/tools/rrb-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+                  <path d="M4 11h16"></path>
+                  <path d="M12 3v8"></path>
+                  <path d="m8 19-2 3"></path>
+                  <path d="m16 19 2 3"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">RRB Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos and running signatures strictly to 30–70 KB for NTPC, Group D, ALP &amp; JE.</p>
+          </a>
+
+          <a href="/tools/neet-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">NEET Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photos (10–200 KB) and signatures (10–100 KB) for NEET UG, PG, JEE Main &amp; Advanced.</p>
+          </a>
+
+          <a href="/tools/ibps-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">IBPS Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Auto-resize candidate photograph (20–50 KB) and signature (10–20 KB) for PO, Clerk &amp; SO.</p>
+          </a>
+
+          <a href="/tools/pan-card-image-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                  <line x1="7" y1="8" x2="17" y2="8"></line>
+                  <line x1="7" y1="12" x2="13" y2="12"></line>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">PAN Card Image Resizer</div>
+            <p class="cross-tool-desc">Resize photo (213 × 213 px, &lt;30 KB) and signature for NSDL &amp; UTIITSL PAN applications.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- Section Base & Typography --- */
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    background: var(--color-surface);
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Benefits Grid --- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  .benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+    border: 1px solid var(--color-border);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* --- Responsive Table --- */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-sm);
+  }
+
+  .specs-table th {
+    background: var(--color-surface-subtle);
+    color: var(--color-text);
+    font-weight: 700;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .specs-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* --- Steps List --- */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  .step-card {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    align-items: flex-start;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-accent);
+    color: var(--color-white, #ffffff);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+  }
+
+  .step-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* --- Rejection List --- */
+  .rejection-list {
+    margin-block: var(--space-4) var(--space-8);
+    padding-left: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rejection-list li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .rejection-list strong {
+    color: var(--color-text);
+  }
+
+  /* --- FAQ Section Standards --- */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-header {
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .faq-header h2 {
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+  }
+
+  .faq-header p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    padding: 18px 22px;
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 22px 18px 22px;
+    border-top: 1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.05));
+    padding-top: var(--space-3);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* --- Related Tools Section Standards (6 Cards) --- */
+  .cross-tools-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-5);
+    min-height: 160px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .cross-tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-tool-icon {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1-5);
+    line-height: 1.35;
+  }
+
+  .cross-tool-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

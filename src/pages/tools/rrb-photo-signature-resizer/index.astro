@@ -1,0 +1,88 @@
+---
+/**
+ * RRB Photo & Signature Resizer
+ * Dedicated India-specific tool for Railway recruitments (NTPC, Group D, ALP, Technician, JE, RPF, Apprentice).
+ * English-only tool with language switcher disabled.
+ */
+import MainLayout from '@/layouts/MainLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import RrbResizer from '@/components/RrbResizer.astro';
+import RrbContent from '@/components/RrbContent.astro';
+import SEOHead from '@/components/SEOHead.astro';
+
+const locale = 'en';
+const toolUrl = '/tools/rrb-photo-signature-resizer/';
+---
+
+<MainLayout
+  locale={locale}
+  title="RRB Photo & Signature Resizer 2026 | NTPC, Group D, ALP, JE, RPF"
+  description="Resize and compress photograph (30–70 KB) and signature (30–70 KB) to official Railway RRB 2026 specifications for NTPC, Group D, ALP, JE, RPF & Apprentice. 100% private."
+  canonicalUrl={`https://imgfeel.com${toolUrl}`}
+  basePath={toolUrl}
+  showLanguageSwitcher={false}
+>
+  <Fragment slot="head">
+    <SEOHead schema={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "RRB Photo & Signature Resizer",
+      "url": `https://imgfeel.com${toolUrl}`,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free client-side tool to resize, crop, and compress photograph (30–70 KB) and signature (30–70 KB) for Railway RRB & RRC online applications."
+    }} />
+  </Fragment>
+
+  <div class="section">
+    <div class="container">
+      <Breadcrumbs locale={locale} items={[
+        { label: 'Home', href: '/' },
+        { label: 'Tools', href: '/tools/' },
+        { label: 'RRB Photo & Signature Resizer' }
+      ]} />
+
+      <div class="tool-header">
+        <h1 class="tool-title">RRB Photo &amp; Signature Resizer</h1>
+        <p class="tool-subtitle">Automatically resize, crop, and compress photograph and signature (strictly 30–70 KB JPG, or 10–50 KB for Apprentice) to official Railway RRB &amp; RRC 2026 specifications.</p>
+      </div>
+
+      <RrbResizer />
+    </div>
+  </div>
+
+  <RrbContent />
+</MainLayout>
+
+<style>
+  .tool-header {
+    text-align: center;
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .tool-title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.25;
+  }
+
+  @media (max-width: 640px) {
+    .tool-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  .tool-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

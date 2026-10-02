@@ -44,31 +44,6 @@
     </div>
   </div>
 
-  <!-- Official IBPS Notice Banners -->
-  <div id="ibps-live-photo-notice" class="ibps-notice-banner photo-banner">
-    <div class="banner-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="8" x2="12" y2="12"></line>
-        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-      </svg>
-    </div>
-    <div class="banner-text">
-      <strong>Official IBPS Photograph Guideline:</strong> Candidates must upload a scanned passport color photograph (<strong>200 × 230 px, 20 KB – 50 KB JPG</strong>). In addition, recent IBPS portals require capturing a <em>Live Photo</em> via webcam or mobile phone during registration. This tool formats your uploaded file to pass document validation; it does not replace the portal's live webcam check.
-    </div>
-  </div>
-
-  <div id="ibps-sig-notice" class="ibps-notice-banner sig-banner" hidden>
-    <div class="banner-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      </svg>
-    </div>
-    <div class="banner-text">
-      <strong>Official IBPS Signature Requirement:</strong> Digital signature must be strictly between <strong>10 KB and 20 KB JPG</strong>, <strong>140 × 60 pixels</strong>, signed with a <strong>dark black ink pen</strong> on white paper in running handwriting. Signatures in CAPITAL / BLOCK letters are strictly rejected.
-    </div>
-  </div>
-
   <!-- Dynamic Active Specification Summary Card -->
   <div class="spec-summary-card">
     <div class="spec-summary-header">
@@ -184,6 +159,31 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Official IBPS Notice Banners -->
+  <div id="ibps-sig-notice" class="ibps-notice-banner sig-banner" hidden>
+    <div class="banner-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <div class="banner-text">
+      <strong>Official IBPS Signature Requirement:</strong> Digital signature must be strictly between <strong>10 KB and 20 KB JPG</strong>, <strong>140 × 60 pixels</strong>, signed with a <strong>dark black ink pen</strong> on white paper in running handwriting. Signatures in CAPITAL / BLOCK letters are strictly rejected.
+    </div>
+  </div>
+
+  <div id="ibps-live-photo-notice" class="ibps-notice-banner photo-banner">
+    <div class="banner-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <div class="banner-text">
+      <strong>Official IBPS Photograph Guideline:</strong> Candidates must upload a scanned passport color photograph (<strong>200 × 230 px, 20 KB – 50 KB JPG</strong>). In addition, recent IBPS portals require capturing a <em>Live Photo</em> via webcam or mobile phone during registration. This tool formats your uploaded file to pass document validation; it does not replace the portal's live webcam check.
     </div>
   </div>
 </div>
@@ -327,7 +327,8 @@
     gap: 12px;
     padding: 14px 18px;
     border-radius: var(--radius-lg);
-    margin-bottom: var(--space-5);
+    margin-top: var(--space-6);
+    margin-bottom: 0;
     line-height: 1.55;
     font-size: var(--text-xs);
   }

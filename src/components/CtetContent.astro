@@ -1,0 +1,715 @@
+---
+/**
+ * CTET Photo & Signature Resizer SEO Content & FAQ Component
+ * Strict compliance with ImgFeel UI/UX Design System Standards
+ */
+
+const faqItems = [
+  {
+    q: 'What are the official photo and signature size limits for CTET 2026?',
+    a: 'According to the official CBSE CTET Information Bulletin, the scanned passport photograph must have a file size between 10 KB and 100 KB in JPG/JPEG format with dimensions of 3.5 cm × 4.5 cm (roughly 350 × 450 pixels). The scanned signature must have a file size strictly between 3 KB and 30 KB in JPG/JPEG format with dimensions of 3.5 cm × 1.5 cm (roughly 350 × 150 pixels).',
+  },
+  {
+    q: 'What background color is mandatory for CTET candidate photographs?',
+    a: 'A plain white or light-colored background is required for CTET candidate photographs. Photographs with dark, patterned, outdoor, or shadowed backgrounds are rejected by CBSE portal image scanners.',
+  },
+  {
+    q: 'What face coverage percentage is required for CTET photograph uploads?',
+    a: 'CBSE guidelines mandate that facial features must occupy 70% to 80% of the photograph area. The candidate must face straight towards the camera with a neutral expression, eyes open, and both ears clearly visible.',
+  },
+  {
+    q: 'Can I sign in CAPITAL or BLOCK letters for the CTET application?',
+    a: 'No. CBSE strictly disqualifies applications containing signatures written in CAPITAL or BLOCK letters or consisting solely of initials. Signatures must be in continuous running handwriting using a black or dark blue ink pen on clean unruled white paper.',
+  },
+  {
+    q: 'Why does the CTET portal reject signatures under 3 KB?',
+    a: 'The ctet.nic.in upload portal enforces a strict binary file-size validator with an absolute lower cutoff of 3.0 KB and an upper limit of 30.0 KB. Scanned black-and-white signatures that compress below 3 KB are automatically rejected. Our smart resizer injects safe JPEG padding metadata to keep your file safely within the 5–20 KB safe zone.',
+  },
+  {
+    q: 'Are the image requirements different for CTET Paper 1 and Paper 2?',
+    a: 'No. Whether you apply for CTET Paper 1 (Primary Stage, Classes I–V), Paper 2 (Elementary Stage, Classes VI–VIII), or Both Papers, the exact same digital image upload standards (10–100 KB for photo and 3–30 KB for signature) apply across all application categories.',
+  },
+  {
+    q: 'Are spectacles allowed in CTET passport photos?',
+    a: 'Clear, prescription spectacles worn regularly for vision correction are allowed. However, tinted glasses, sunglasses, polaroids, or heavy-framed spectacles that obscure the eyes or create flash reflections are strictly prohibited.',
+  },
+  {
+    q: 'Can I upload a selfie or mobile phone snapshot for CTET?',
+    a: 'Casual selfies, cropped social media pictures, low-resolution camera crops, or photos with uneven mobile flash shadows are not acceptable. You must upload a professional studio-style frontal passport photograph.',
+  },
+  {
+    q: 'How many physical copies of the photograph should I keep for CTET?',
+    a: 'Candidates are advised to retain at least 5 to 10 identical physical copies of the uploaded passport photograph. You will need to paste the exact same photograph on the Attendance Sheet in the presence of the examination invigilator on exam day.',
+  },
+  {
+    q: 'Are candidate photos or signatures uploaded to your server for resizing?',
+    a: 'Never. ImgFeel processes 100% of your images locally in your web browser using HTML5 Canvas APIs. Your confidential photographs, signatures, and personal biometric data never leave your computer or smartphone, guaranteeing complete privacy.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'CTET Photo & Signature Resizer',
+  operatingSystem: 'Any',
+  applicationCategory: 'MultimediaApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<!-- JSON-LD Structured Data Schemas -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Introduction to Official CBSE CTET Standards -->
+      <h2>Official CBSE CTET Photo &amp; Signature Guidelines (2026 Examination Standards)</h2>
+      <p>
+        The Central Board of Secondary Education (CBSE) conducts the Central Teacher Eligibility Test (CTET) twice annually across India through its dedicated portal, <strong>ctet.nic.in</strong>. Aspiring educators applying for <strong>CTET Paper 1 (Primary Stage for Classes I–V)</strong>, <strong>CTET Paper 2 (Elementary Stage for Classes VI–VIII)</strong>, or <strong>Both Papers</strong> must comply precisely with official digital image specifications during online registration. Uploading images with incorrect pixel dimensions, non-conforming file weights, or poor contrast causes immediate portal validation errors or application rejection.
+      </p>
+      <p>
+        This free, client-side <strong>CTET Photo &amp; Signature Resizer</strong> automatically formats candidate photographs to <strong>350 × 450 px (strictly 10 KB – 100 KB JPG)</strong> and signatures to <strong>350 × 150 px (strictly 3 KB – 30 KB JPG)</strong>. It crops photos to the exact 3.5 × 4.5 cm aspect ratio, whitens uneven backgrounds, boosts signature legibility, and generates high-clarity JPG files ready for instant CBSE submission.
+      </p>
+
+      <!-- Section 2: Important Guidelines Breakdown -->
+      <h2>Key Image Specifications Established by the CBSE Information Bulletin</h2>
+      <p>
+        To ensure your application passes automated portal checks and in-person exam hall scrutiny, observe these fundamental criteria:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <h3>Photograph (10 KB – 100 KB)</h3>
+          <p>
+            Scanned recent color passport photograph (3.5 × 4.5 cm / 10–100 KB JPG) on a clean white or light background. Facial features must occupy 70% to 80% of the image frame with ears clearly visible.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </div>
+          <h3>Signature (3 KB – 30 KB)</h3>
+          <p>
+            Digital signature scan strictly between 3 KB and 30 KB JPG (3.5 × 1.5 cm). Must be written in continuous running handwriting with black or dark blue ink on plain unruled white paper.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>Exam Hall Attendance Hard Copies</h3>
+          <p>
+            Candidates must carry printed copies of the exact uploaded photograph to affix to the CTET Attendance Sheet in the examination hall before the presiding invigilator.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 3: Official Specifications Table -->
+      <h2>Official 2026 CTET Image Specifications Summary Table</h2>
+      <p>
+        Review the officially verified dimensions, file sizes, and background requirements across CTET exam categories:
+      </p>
+
+      <div class="table-responsive">
+        <table class="specs-table">
+          <thead>
+            <tr>
+              <th>Examination Stage</th>
+              <th>Document Type</th>
+              <th>Target Dimensions</th>
+              <th>Allowed File Size</th>
+              <th>Format &amp; Background</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>General CTET (Universal)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 100 KB<br />3 KB – 30 KB</td>
+              <td>JPG / Pure White BG<br />JPG / Running Handwriting</td>
+            </tr>
+            <tr>
+              <td><strong>CTET Paper 1 (Classes I–V)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 100 KB<br />3 KB – 30 KB</td>
+              <td>JPG / White (70–80% Face)<br />JPG / Black or Blue Ink</td>
+            </tr>
+            <tr>
+              <td><strong>CTET Paper 2 (Classes VI–VIII)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 100 KB<br />3 KB – 30 KB</td>
+              <td>JPG / White (Neutral Expression)<br />JPG / Clean White Paper</td>
+            </tr>
+            <tr>
+              <td><strong>CTET Both Papers (1 &amp; 2)</strong></td>
+              <td>Photograph<br />Signature</td>
+              <td>350 × 450 px (3.5 × 4.5 cm)<br />350 × 150 px (3.5 × 1.5 cm)</td>
+              <td>10 KB – 100 KB<br />3 KB – 30 KB</td>
+              <td>JPG / White Background<br />JPG / Continuous Script</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Step-by-Step Instructions -->
+      <h2>How to Resize Photos &amp; Signatures for CTET in 4 Easy Steps</h2>
+      <div class="steps-list">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Select Your CTET Category</h4>
+            <p>Select <strong>General CTET</strong>, <strong>CTET Paper 1</strong>, <strong>CTET Paper 2</strong>, or <strong>CTET Both Papers</strong> from the dropdown. Keep <em>General CTET</em> for standard universal compliance.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Select Document Type (Photo or Signature)</h4>
+            <p>Toggle between the <strong>Photograph</strong> and <strong>Signature</strong> tabs. The Active Target Specifications immediately display the verified dimension and file size thresholds.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Upload Your Image</h4>
+            <p>Drop any JPG, PNG, or WebP file into the dropzone. The client-side engine automatically scales the image, whitens the background, and compresses the file into the exact allowed byte range.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Inspect Checklist &amp; Download</h4>
+            <p>Verify that all four official portal checks (Dimensions, File Size, Format, and Background) display <strong>PASS</strong>. Click <strong>Download Compliant File</strong> to save your application-ready JPG.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Common Rejection Causes -->
+      <h2>Common Reasons for Image Rejection on the CTET Portal</h2>
+      <ul class="rejection-list">
+        <li><strong>Signatures in Capital / Block Letters:</strong> Submitting a signature written entirely in uppercase letters or initials is strictly prohibited by CBSE guidelines. Always sign in continuous cursive running script.</li>
+        <li><strong>Signature File Under 3 KB or Over 30 KB:</strong> The ctet.nic.in portal strictly rejects signatures outside the 3–30 KB range. Our engine automatically injects safe JPEG padding if a clean scan compresses below 3 KB.</li>
+        <li><strong>Face Coverage Less Than 70%:</strong> Uploading photos taken from too far away where the head and shoulders occupy less than 70% of the image frame causes automatic rejection.</li>
+        <li><strong>Colored or Distracting Backgrounds:</strong> Backgrounds featuring patterned wallpaper, outdoor foliage, or door frames are rejected. Only plain white or light backgrounds pass validation.</li>
+        <li><strong>Tinted Glasses or Headgear:</strong> Wearing caps, hats, or dark sunglasses is not permitted. Only religious head coverings (such as Sikh turbans) are allowed, provided the face remains completely visible.</li>
+      </ul>
+
+      <!-- Section 6: Frequently Asked Questions (FAQ) -->
+      <div class="faq-container">
+        <div class="faq-header">
+          <h2>Frequently Asked Questions (CTET Photo &amp; Signature Specs)</h2>
+          <p>Get quick, verified answers to common candidate questions regarding CBSE CTET application image uploads.</p>
+        </div>
+
+        <div class="faq-grid">
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>{item.q}</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Section 7: Related Tools Grid -->
+      <div class="cross-tools-container">
+        <div class="cross-tools-header">
+          <h3>Explore Related Entrance &amp; Recruitment Image Tools</h3>
+        </div>
+        <div class="cross-tools-grid">
+          <a href="/tools/upsc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">UPSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos (20–300 KB) and signatures (20–100 KB) for UPSC Civil Services, NDA &amp; CDS.</p>
+          </a>
+
+          <a href="/tools/ssc-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <polyline points="17 11 19 13 23 9"></polyline>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">SSC Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photo (20–50 KB) and signature (10–20 KB) for SSC CGL, CHSL, MTS &amp; GD recruitments.</p>
+          </a>
+
+          <a href="/tools/rrb-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+                  <path d="M4 11h16"></path>
+                  <path d="M12 3v8"></path>
+                  <path d="m8 19-2 3"></path>
+                  <path d="m16 19 2 3"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">RRB Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photos and running signatures strictly to 30–70 KB for NTPC, Group D, ALP &amp; JE.</p>
+          </a>
+
+          <a href="/tools/neet-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">NEET Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Resize photos (10–200 KB) and signatures (10–100 KB) for NEET UG, PG, JEE Main &amp; Advanced.</p>
+          </a>
+
+          <a href="/tools/indian-army-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">Indian Army Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Format photo (10–50 KB) and signature (5–20 KB) for Agniveer GD, Technical &amp; Clerk.</p>
+          </a>
+
+          <a href="/tools/ibps-photo-signature-resizer/" class="cross-tool-card">
+            <div class="cross-tool-top">
+              <div class="cross-tool-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+              </div>
+              <span class="cross-tool-arrow">&rarr;</span>
+            </div>
+            <div class="cross-tool-title">IBPS Photo &amp; Signature Resizer</div>
+            <p class="cross-tool-desc">Auto-resize candidate photograph (20–50 KB) and signature (10–20 KB) for PO, Clerk &amp; SO.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- Section Base & Typography --- */
+  .content-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    background: var(--color-surface);
+  }
+
+  .content-body {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  /* --- Benefits Grid --- */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  .benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+    border: 1px solid var(--color-border);
+  }
+
+  .benefit-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .benefit-card p {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* --- Responsive Table --- */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-sm);
+  }
+
+  .specs-table th {
+    background: var(--color-surface-subtle);
+    color: var(--color-text);
+    font-weight: 700;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .specs-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* --- Steps List --- */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-block: var(--space-6);
+  }
+
+  .step-card {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    align-items: flex-start;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-accent);
+    color: var(--color-white, #ffffff);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+  }
+
+  .step-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* --- Rejection List --- */
+  .rejection-list {
+    margin-block: var(--space-4) var(--space-8);
+    padding-left: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rejection-list li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .rejection-list strong {
+    color: var(--color-text);
+  }
+
+  /* --- FAQ Section Standards --- */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-header {
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .faq-header h2 {
+    margin-top: 0;
+    margin-bottom: var(--space-2);
+  }
+
+  .faq-header p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    padding: 18px 22px;
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 22px 18px 22px;
+    border-top: 1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.05));
+    padding-top: var(--space-3);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* --- Related Tools Section Standards (6 Cards) --- */
+  .cross-tools-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .cross-tools-header h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cross-tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-5);
+    min-height: 160px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .cross-tool-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cross-tool-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-tool-icon {
+    color: var(--color-accent);
+  }
+
+  .cross-tool-arrow {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .cross-tool-card:hover .cross-tool-arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+
+  .cross-tool-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1-5);
+    line-height: 1.35;
+  }
+
+  .cross-tool-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>
