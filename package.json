@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "check-i18n": "node scripts/check-translations.mjs",
+    "generate-favicons": "node scripts/generate-favicons.mjs",
     "build": "node scripts/check-translations.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
