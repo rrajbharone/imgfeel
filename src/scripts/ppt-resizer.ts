@@ -1,6 +1,8 @@
 /**
  * ppt-resizer.ts
  * 100% Client-Side Pure TypeScript PowerPoint (.pptx) Slide Resizing & OpenXML Processing Engine.
+ * Supports standard PKZIP decompression (deflate-raw) via Web Streams API,
+ * OpenXML <p:sldSz> slide dimension editing, and shape coordinate scaling.
  */
 
 export interface SlideSizePreset {
@@ -127,6 +129,12 @@ export interface PresentationInfo {
   originalHeightInches: number;
   originalWidthCm: number;
   originalHeightCm: number;
+  originalWidthMm: number;
+  originalHeightMm: number;
+  originalWidthPt: number;
+  originalHeightPt: number;
+  originalWidthPx: number;
+  originalHeightPx: number;
   aspectRatioName: string;
   aspectRatioDecimal: number;
 }
@@ -140,15 +148,171 @@ export interface PptResizeOptions {
   typeAttr: string;
 }
 
+export interface PptxZipEntry {
+  name: string;
+  method: number; // 0 = stored, 8 = deflate
+  crc32: number;
+  compressedSize: number;
+  uncompressedSize: number;
+  compressedData: Uint8Array;
+  uncompressedData?: Uint8Array | null;
+}
+
 export class PptResizerEngine {
   public static readonly EMUS_PER_INCH = 914400;
   public static readonly EMUS_PER_CM = 360000;
+  public static readonly EMUS_PER_MM = 36000;
   public static readonly EMUS_PER_PT = 12700;
+  public static readonly EMUS_PER_PX = 9525; // 96 DPI standard
+
+  /**
+   * Decompress raw deflate stream using native browser Web Streams API.
+   */
+  public static async inflateRaw(data: Uint8Array): Promise<Uint8Array> {
+    const ds = new DecompressionStream('deflate-raw');
+    const stream = new Response(data).body!.pipeThrough(ds);
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+
+  /**
+   * Compress raw stream using native browser Web Streams API.
+   */
+  public static async deflateRaw(data: Uint8Array): Promise<Uint8Array> {
+    const cs = new CompressionStream('deflate-raw');
+    const stream = new Response(data).body!.pipeThrough(cs);
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+
+  /**
+   * Read uncompressed bytes of an entry on-demand.
+   */
+  public static async getEntryData(entry: PptxZipEntry): Promise<Uint8Array> {
+    if (entry.uncompressedData) {
+      return entry.uncompressedData;
+    }
+    if (entry.method === 0) {
+      entry.uncompressedData = entry.compressedData;
+    } else if (entry.method === 8) {
+      entry.uncompressedData = await PptResizerEngine.inflateRaw(entry.compressedData);
+    } else {
+      throw new Error(`Unsupported compression method ${entry.method} in entry ${entry.name}`);
+    }
+    return entry.uncompressedData;
+  }
+
+  /**
+   * Robust In-Memory PKZIP Archive Parser via Central Directory.
+   * Handles streamed files, data descriptors, and both stored & deflated entries.
+   */
+  public static unzip(data: Uint8Array): PptxZipEntry[] {
+    const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+
+    // 1. Locate End of Central Directory (EOCD) signature: 0x06054b50
+    let eocdOffset = -1;
+    for (let i = data.length - 22; i >= Math.max(0, data.length - 65557); i--) {
+      if (view.getUint32(i, true) === 0x06054b50) {
+        eocdOffset = i;
+        break;
+      }
+    }
+
+    if (eocdOffset === -1) {
+      // Fallback: simple sequential local file header scan if EOCD is absent
+      return PptResizerEngine.unzipFallback(data);
+    }
+
+    const totalEntries = view.getUint16(eocdOffset + 10, true);
+    const cdOffset = view.getUint32(eocdOffset + 16, true);
+
+    const entries: PptxZipEntry[] = [];
+    let cdPos = cdOffset;
+
+    for (let i = 0; i < totalEntries; i++) {
+      if (cdPos + 46 > data.length || view.getUint32(cdPos, true) !== 0x02014b50) {
+        break;
+      }
+
+      const method = view.getUint16(cdPos + 10, true);
+      const fileCrc = view.getUint32(cdPos + 16, true);
+      const compSize = view.getUint32(cdPos + 20, true);
+      const uncompSize = view.getUint32(cdPos + 24, true);
+      const nameLen = view.getUint16(cdPos + 28, true);
+      const extraLen = view.getUint16(cdPos + 30, true);
+      const commentLen = view.getUint16(cdPos + 32, true);
+      const localOffset = view.getUint32(cdPos + 42, true);
+
+      const nameBytes = data.subarray(cdPos + 46, cdPos + 46 + nameLen);
+      const name = new TextDecoder().decode(nameBytes);
+
+      // Locate actual compressed payload inside local header
+      if (localOffset + 30 <= data.length) {
+        const localNameLen = view.getUint16(localOffset + 26, true);
+        const localExtraLen = view.getUint16(localOffset + 28, true);
+        const dataStart = localOffset + 30 + localNameLen + localExtraLen;
+        const compressedData = data.subarray(dataStart, dataStart + compSize);
+
+        entries.push({
+          name,
+          method,
+          crc32: fileCrc,
+          compressedSize: compSize,
+          uncompressedSize: uncompSize,
+          compressedData,
+          uncompressedData: null,
+        });
+      }
+
+      cdPos += 46 + nameLen + extraLen + commentLen;
+    }
+
+    return entries;
+  }
+
+  /**
+   * Fallback sequential local header parser for non-standard ZIP archives.
+   */
+  private static unzipFallback(data: Uint8Array): PptxZipEntry[] {
+    const entries: PptxZipEntry[] = [];
+    let i = 0;
+    const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+
+    while (i < data.length - 30) {
+      const sig = view.getUint32(i, true);
+      if (sig !== 0x04034b50) break;
+
+      const method = view.getUint16(i + 8, true);
+      const fileCrc = view.getUint32(i + 14, true);
+      const compSize = view.getUint32(i + 18, true);
+      const uncompSize = view.getUint32(i + 22, true);
+      const nameLen = view.getUint16(i + 26, true);
+      const extraLen = view.getUint16(i + 28, true);
+
+      const nameBytes = data.subarray(i + 30, i + 30 + nameLen);
+      const name = new TextDecoder().decode(nameBytes);
+
+      const dataStart = i + 30 + nameLen + extraLen;
+      const compressedData = data.subarray(dataStart, dataStart + compSize);
+
+      entries.push({
+        name,
+        method,
+        crc32: fileCrc,
+        compressedSize: compSize,
+        uncompressedSize: uncompSize,
+        compressedData,
+        uncompressedData: null,
+      });
+
+      i = dataStart + compSize;
+    }
+
+    return entries;
+  }
 
   /**
    * Parse PPTX file in-memory and extract current presentation dimensions & metadata.
    */
-  public static async inspectPptx(file: File | Blob): Promise<{ info: PresentationInfo; zipEntries: { name: string; data: Uint8Array }[] }> {
+  public static async inspectPptx(file: File | Blob): Promise<{ info: PresentationInfo; zipEntries: PptxZipEntry[] }> {
     const arrayBuffer = await file.arrayBuffer();
     const bytes = new Uint8Array(arrayBuffer);
     const zipEntries = PptResizerEngine.unzip(bytes);
@@ -158,7 +322,8 @@ export class PptResizerEngine {
 
     for (const entry of zipEntries) {
       if (entry.name === 'ppt/presentation.xml') {
-        presentationXmlStr = new TextDecoder().decode(entry.data);
+        const rawXml = await PptResizerEngine.getEntryData(entry);
+        presentationXmlStr = new TextDecoder().decode(rawXml);
       } else if (entry.name.startsWith('ppt/slides/slide') && entry.name.endsWith('.xml')) {
         totalSlides++;
       }
@@ -184,6 +349,12 @@ export class PptResizerEngine {
     const heightInches = parseFloat((cy / PptResizerEngine.EMUS_PER_INCH).toFixed(2));
     const widthCm = parseFloat((cx / PptResizerEngine.EMUS_PER_CM).toFixed(2));
     const heightCm = parseFloat((cy / PptResizerEngine.EMUS_PER_CM).toFixed(2));
+    const widthMm = parseFloat((cx / PptResizerEngine.EMUS_PER_MM).toFixed(1));
+    const heightMm = parseFloat((cy / PptResizerEngine.EMUS_PER_MM).toFixed(1));
+    const widthPt = Math.round(cx / PptResizerEngine.EMUS_PER_PT);
+    const heightPt = Math.round(cy / PptResizerEngine.EMUS_PER_PT);
+    const widthPx = Math.round(cx / PptResizerEngine.EMUS_PER_PX);
+    const heightPx = Math.round(cy / PptResizerEngine.EMUS_PER_PX);
     const aspectRatioDecimal = cx / cy;
 
     // Detect friendly aspect ratio label
@@ -198,6 +369,10 @@ export class PptResizerEngine {
       aspectRatioName = 'A4 Landscape';
     } else if (Math.abs(aspectRatioDecimal - 1 / 1.414) < 0.05) {
       aspectRatioName = 'A4 Portrait';
+    } else if (Math.abs(aspectRatioDecimal - 1.294) < 0.05) {
+      aspectRatioName = 'Letter Landscape';
+    } else if (Math.abs(aspectRatioDecimal - 1 / 1.294) < 0.05) {
+      aspectRatioName = 'Letter Portrait';
     } else if (Math.abs(aspectRatioDecimal - 1.0) < 0.05) {
       aspectRatioName = '1:1 Square';
     }
@@ -215,6 +390,12 @@ export class PptResizerEngine {
         originalHeightInches: heightInches,
         originalWidthCm: widthCm,
         originalHeightCm: heightCm,
+        originalWidthMm: widthMm,
+        originalHeightMm: heightMm,
+        originalWidthPt: widthPt,
+        originalHeightPt: heightPt,
+        originalWidthPx: widthPx,
+        originalHeightPx: heightPx,
         aspectRatioName,
         aspectRatioDecimal,
       },
@@ -226,7 +407,7 @@ export class PptResizerEngine {
    * Resize PPTX by updating presentation.xml slide size and rebuilding the zip archive.
    */
   public static async resizePptx(
-    zipEntries: { name: string; data: Uint8Array }[],
+    zipEntries: PptxZipEntry[],
     options: PptResizeOptions,
     originalCx: number,
     originalCy: number,
@@ -235,14 +416,15 @@ export class PptResizerEngine {
     const scaleX = options.targetWidthEmus / originalCx;
     const scaleY = options.targetHeightEmus / originalCy;
 
-    const modifiedEntries: { name: string; data: Uint8Array }[] = [];
+    const modifiedEntries: PptxZipEntry[] = [];
     const total = zipEntries.length;
 
     for (let i = 0; i < total; i++) {
       const entry = zipEntries[i];
 
       if (entry.name === 'ppt/presentation.xml') {
-        let xml = new TextDecoder().decode(entry.data);
+        const rawXml = await PptResizerEngine.getEntryData(entry);
+        let xml = new TextDecoder().decode(rawXml);
 
         // Replace <p:sldSz .../> with updated cx, cy, type
         const newSldSz = `<p:sldSz cx="${options.targetWidthEmus}" cy="${options.targetHeightEmus}" type="${options.typeAttr}"/>`;
@@ -253,13 +435,12 @@ export class PptResizerEngine {
           xml = xml.replace('</p:presentation>', `${newSldSz}</p:presentation>`);
         }
 
-        modifiedEntries.push({
-          name: entry.name,
-          data: new TextEncoder().encode(xml),
-        });
+        entry.uncompressedData = new TextEncoder().encode(xml);
+        modifiedEntries.push(entry);
       } else if (options.scaleContent && entry.name.startsWith('ppt/slides/slide') && entry.name.endsWith('.xml')) {
-        // Optional proportional scaling of shape transforms (x, y, cx, cy)
-        let xml = new TextDecoder().decode(entry.data);
+        // Proportional scaling of slide shape transforms (x, y, cx, cy)
+        const rawXml = await PptResizerEngine.getEntryData(entry);
+        let xml = new TextDecoder().decode(rawXml);
 
         // Scale offsets: <a:off x="123" y="456"/>
         xml = xml.replace(/<a:off\s+x="(\d+)"\s+y="(\d+)"/gi, (_, xStr, yStr) => {
@@ -275,162 +456,139 @@ export class PptResizerEngine {
           return `<a:ext cx="${newCx}" cy="${newCy}"`;
         });
 
-        modifiedEntries.push({
-          name: entry.name,
-          data: new TextEncoder().encode(xml),
-        });
+        entry.uncompressedData = new TextEncoder().encode(xml);
+        modifiedEntries.push(entry);
       } else {
+        // Retain original compressed payload without recompressing
         modifiedEntries.push(entry);
       }
 
-      if (onProgress && i % 5 === 0) {
-        onProgress(Math.round((i / total) * 90));
+      if (onProgress && i % 4 === 0) {
+        onProgress(Math.round((i / total) * 75));
       }
     }
 
-    if (onProgress) onProgress(95);
+    if (onProgress) onProgress(80);
 
     // Build standard PPTX PKZIP archive
-    const resultBlob = PptResizerEngine.createZipArchive(modifiedEntries, 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+    const resultBlob = await PptResizerEngine.createZipArchive(
+      modifiedEntries,
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      (pct) => {
+        if (onProgress) onProgress(80 + Math.round(pct * 0.2));
+      }
+    );
+
     if (onProgress) onProgress(100);
     return resultBlob;
   }
 
   /**
-   * Fast In-Memory Unzip Engine.
+   * Fast In-Memory PKZIP Archive Builder.
+   * Compresses modified entries with DEFLATE while passing through untouched media streams.
    */
-  public static unzip(data: Uint8Array): { name: string; data: Uint8Array }[] {
-    const entries: { name: string; data: Uint8Array }[] = [];
-    let i = 0;
-    const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
-
-    while (i < data.length - 4) {
-      const sig = view.getUint32(i, true);
-      if (sig !== 0x04034b50) {
-        // End of local file headers or reached central directory
-        break;
-      }
-
-      const compressionMethod = view.getUint16(i + 8, true);
-      const compressedSize = view.getUint32(i + 18, true);
-      const uncompressedSize = view.getUint32(i + 22, true);
-      const nameLen = view.getUint16(i + 26, true);
-      const extraLen = view.getUint16(i + 28, true);
-
-      const nameBytes = data.subarray(i + 30, i + 30 + nameLen);
-      const name = new TextDecoder().decode(nameBytes);
-
-      const dataStart = i + 30 + nameLen + extraLen;
-      const rawData = data.subarray(dataStart, dataStart + compressedSize);
-
-      let fileData: Uint8Array;
-      if (compressionMethod === 0) {
-        fileData = rawData;
-      } else if (compressionMethod === 8) {
-        // DEFLATE compressed
-        fileData = PptResizerEngine.inflateRaw(rawData, uncompressedSize);
-      } else {
-        fileData = rawData;
-      }
-
-      entries.push({ name, data: fileData });
-      i = dataStart + compressedSize;
-    }
-
-    return entries;
-  }
-
-  /**
-   * Lightweight browser decompressor (using DecompressionStream or raw passthrough).
-   */
-  private static inflateRaw(compressedData: Uint8Array, expectedSize: number): Uint8Array {
-    try {
-      // In modern browsers, DecompressionStream handles raw deflate if prefixed with zlib header or raw
-      // For synchronous execution in client-side worker or fallback:
-      return compressedData;
-    } catch {
-      return compressedData;
-    }
-  }
-
-  /**
-   * In-Memory PKZIP Archive Builder.
-   */
-  public static createZipArchive(files: { name: string; data: Uint8Array }[], mimeType = 'application/zip'): Blob {
-    const fileEntries: {
+  public static async createZipArchive(
+    files: PptxZipEntry[],
+    mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    onZipProgress?: (pct: number) => void
+  ): Promise<Blob> {
+    interface PreparedFile {
+      name: string;
       nameBytes: Uint8Array;
-      data: Uint8Array;
+      method: number;
       crc: number;
-      offset: number;
-    }[] = [];
+      compSize: number;
+      uncompSize: number;
+      data: Uint8Array;
+    }
 
-    let currentOffset = 0;
-    const localHeaders: Uint8Array[] = [];
+    const prepared: PreparedFile[] = [];
+    const totalFiles = files.length;
 
-    for (const file of files) {
-      const nameBytes = new TextEncoder().encode(file.name);
-      const crc = PptResizerEngine.crc32(file.data);
+    for (let idx = 0; idx < totalFiles; idx++) {
+      const file = files[idx];
+      let compData = file.compressedData;
+      let method = file.method;
+      let fileCrc = file.crc32;
+      let uncompSize = file.uncompressedSize;
 
-      const localHeader = new Uint8Array(30 + nameBytes.length + file.data.length);
-      const view = new DataView(localHeader.buffer);
+      if (file.uncompressedData) {
+        // Content was modified -> compress with DEFLATE
+        uncompSize = file.uncompressedData.length;
+        fileCrc = PptResizerEngine.crc32(file.uncompressedData);
+        compData = await PptResizerEngine.deflateRaw(file.uncompressedData);
+        method = 8;
+      }
 
-      view.setUint32(0, 0x04034b50, true);
-      view.setUint16(4, 20, true);
-      view.setUint16(6, 0, true);
-      view.setUint16(8, 0, true); // Stored (no compression) for maximum browser speed & stability
-      view.setUint16(10, 0, true);
-      view.setUint16(12, 0, true);
-      view.setUint32(14, crc, true);
-      view.setUint32(18, file.data.length, true);
-      view.setUint32(22, file.data.length, true);
-      view.setUint16(26, nameBytes.length, true);
-      view.setUint16(28, 0, true);
-
-      localHeader.set(nameBytes, 30);
-      localHeader.set(file.data, 30 + nameBytes.length);
-
-      fileEntries.push({
-        nameBytes,
-        data: file.data,
-        crc,
-        offset: currentOffset,
+      prepared.push({
+        name: file.name,
+        nameBytes: new TextEncoder().encode(file.name),
+        method,
+        crc: fileCrc,
+        compSize: compData.length,
+        uncompSize,
+        data: compData,
       });
 
-      localHeaders.push(localHeader);
-      currentOffset += localHeader.length;
+      if (onZipProgress && idx % 5 === 0) {
+        onZipProgress(Math.round((idx / totalFiles) * 80));
+      }
     }
 
-    const centralDirectoryStart = currentOffset;
-    const centralDirectoryHeaders: Uint8Array[] = [];
+    const localHeaders: Uint8Array[] = [];
+    const cdHeaders: Uint8Array[] = [];
+    let currentOffset = 0;
 
-    for (const entry of fileEntries) {
-      const cdHeader = new Uint8Array(46 + entry.nameBytes.length);
-      const view = new DataView(cdHeader.buffer);
+    for (const file of prepared) {
+      const lh = new Uint8Array(30 + file.nameBytes.length + file.data.length);
+      const view = new DataView(lh.buffer);
 
-      view.setUint32(0, 0x02014b50, true);
-      view.setUint16(4, 20, true);
-      view.setUint16(6, 20, true);
-      view.setUint16(8, 0, true);
+      view.setUint32(0, 0x04034b50, true);
+      view.setUint16(4, 20, true); // version needed: 2.0
+      view.setUint16(6, 0, true); // flags
+      view.setUint16(8, file.method, true);
       view.setUint16(10, 0, true);
       view.setUint16(12, 0, true);
-      view.setUint16(14, 0, true);
-      view.setUint32(16, entry.crc, true);
-      view.setUint32(20, entry.data.length, true);
-      view.setUint32(24, entry.data.length, true);
-      view.setUint16(28, entry.nameBytes.length, true);
-      view.setUint16(30, 0, true);
-      view.setUint16(32, 0, true);
-      view.setUint16(34, 0, true);
-      view.setUint16(36, 0, true);
-      view.setUint32(38, 0, true);
-      view.setUint32(42, entry.offset, true);
+      view.setUint32(14, file.crc, true);
+      view.setUint32(18, file.compSize, true);
+      view.setUint32(22, file.uncompSize, true);
+      view.setUint16(26, file.nameBytes.length, true);
+      view.setUint16(28, 0, true);
 
-      cdHeader.set(entry.nameBytes, 46);
-      centralDirectoryHeaders.push(cdHeader);
-      currentOffset += cdHeader.length;
+      lh.set(file.nameBytes, 30);
+      lh.set(file.data, 30 + file.nameBytes.length);
+      localHeaders.push(lh);
+
+      const cdh = new Uint8Array(46 + file.nameBytes.length);
+      const cdView = new DataView(cdh.buffer);
+
+      cdView.setUint32(0, 0x02014b50, true);
+      cdView.setUint16(4, 20, true); // version made by
+      cdView.setUint16(6, 20, true); // version needed
+      cdView.setUint16(8, 0, true);
+      cdView.setUint16(10, file.method, true);
+      cdView.setUint16(12, 0, true);
+      cdView.setUint16(14, 0, true);
+      cdView.setUint32(16, file.crc, true);
+      cdView.setUint32(20, file.compSize, true);
+      cdView.setUint32(24, file.uncompSize, true);
+      cdView.setUint16(28, file.nameBytes.length, true);
+      cdView.setUint16(30, 0, true);
+      cdView.setUint16(32, 0, true);
+      cdView.setUint16(34, 0, true);
+      cdView.setUint16(36, 0, true);
+      cdView.setUint32(38, 0, true);
+      cdView.setUint32(42, currentOffset, true);
+
+      cdh.set(file.nameBytes, 46);
+      cdHeaders.push(cdh);
+
+      currentOffset += lh.length;
     }
 
-    const centralDirectorySize = currentOffset - centralDirectoryStart;
+    const cdStart = currentOffset;
+    let cdSize = 0;
+    for (const cdh of cdHeaders) cdSize += cdh.length;
 
     const eocd = new Uint8Array(22);
     const eocdView = new DataView(eocd.buffer);
@@ -438,13 +596,15 @@ export class PptResizerEngine {
     eocdView.setUint32(0, 0x06054b50, true);
     eocdView.setUint16(4, 0, true);
     eocdView.setUint16(6, 0, true);
-    eocdView.setUint16(8, files.length, true);
-    eocdView.setUint16(10, files.length, true);
-    eocdView.setUint32(12, centralDirectorySize, true);
-    eocdView.setUint32(16, centralDirectoryStart, true);
+    eocdView.setUint16(8, prepared.length, true);
+    eocdView.setUint16(10, prepared.length, true);
+    eocdView.setUint32(12, cdSize, true);
+    eocdView.setUint32(16, cdStart, true);
     eocdView.setUint16(20, 0, true);
 
-    return new Blob([...localHeaders, ...centralDirectoryHeaders, eocd], {
+    if (onZipProgress) onZipProgress(100);
+
+    return new Blob([...localHeaders, ...cdHeaders, eocd], {
       type: mimeType,
     });
   }
@@ -467,7 +627,8 @@ export class PptResizerEngine {
   }
 
   /**
-   * 1-Click Procedural Sample PPTX Presentation Generator (Valid 4:3 presentation to test resizing to 16:9 widescreen or A4).
+   * 1-Click Procedural Sample PPTX Presentation Generator.
+   * Generates a standard 4:3 PowerPoint presentation deck to test resizing.
    */
   public static async generateSamplePptx(): Promise<File> {
     const files: { name: string; data: Uint8Array }[] = [];
@@ -551,7 +712,24 @@ export class PptResizerEngine {
     files.push({ name: 'ppt/presentation.xml', data: new TextEncoder().encode(presentationXml) });
     files.push({ name: 'ppt/slides/slide1.xml', data: new TextEncoder().encode(slide1Xml) });
 
-    const zipBlob = PptResizerEngine.createZipArchive(files, 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+    const zipEntries: PptxZipEntry[] = [];
+    for (const f of files) {
+      zipEntries.push({
+        name: f.name,
+        method: 0,
+        crc32: PptResizerEngine.crc32(f.data),
+        compressedSize: f.data.length,
+        uncompressedSize: f.data.length,
+        compressedData: f.data,
+        uncompressedData: f.data,
+      });
+    }
+
+    const zipBlob = await PptResizerEngine.createZipArchive(
+      zipEntries,
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    );
+
     return new File([zipBlob], 'sample-quarterly-review-4x3.pptx', {
       type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     });

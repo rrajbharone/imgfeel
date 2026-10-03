@@ -1,7 +1,6 @@
 ---
 import type { Locale } from '@/i18n/config';
 import { t } from '@/i18n/utils';
-import { SLIDE_PRESETS } from '@/scripts/ppt-resizer';
 
 interface Props {
   locale: Locale;
@@ -10,11 +9,28 @@ interface Props {
 const { locale } = Astro.props;
 ---
 
-<div class="ppt-resizer-wrapper" data-locale={locale}>
+<div
+  id="pptResizerWrapper"
+  class="ppt-resizer-wrapper"
+  data-locale={locale}
+  data-str-download={t(locale, 'pptresize.action.download')}
+  data-str-processing={t(locale, 'pptresize.action.processing')}
+  data-str-complete={t(locale, 'pptresize.action.complete')}
+  data-str-error-inspect={t(locale, 'pptresize.error.inspect')}
+  data-str-error-resize={t(locale, 'pptresize.error.resize')}
+  data-str-slides-single={t(locale, 'pptresize.stat.slidesSingle')}
+  data-str-slides-plural={t(locale, 'pptresize.stat.slidesPlural')}
+  data-str-custom={t(locale, 'pptresize.preset.custom')}
+>
   <!-- Upload Dropzone (Initial State) -->
   <div id="dropzoneContainer" class="dropzone-container">
     <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label={t(locale, 'pptresize.dropzone.title')}>
-      <input type="file" id="fileInput" accept=".pptx,.ppt,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint" class="file-input" />
+      <input
+        type="file"
+        id="fileInput"
+        accept=".pptx,.ppt,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint"
+        class="file-input"
+      />
       <div class="dropzone-content">
         <div class="dropzone-icon">
           <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -28,21 +44,21 @@ const { locale } = Astro.props;
         <h2 class="dropzone-title">{t(locale, 'pptresize.dropzone.title')}</h2>
         <p class="dropzone-subtitle">{t(locale, 'pptresize.dropzone.subtitle')}</p>
         <div class="dropzone-actions">
-          <button type="button" id="browseBtn" class="btn btn-primary btn-lg">
+          <button type="button" id="browseBtn" class="btn btn-primary btn-action">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>
               <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            {t(locale, 'pptresize.dropzone.browse')}
+            <span>{t(locale, 'pptresize.dropzone.browse')}</span>
           </button>
-          <button type="button" id="sampleBtn" class="btn btn-secondary btn-lg">
+          <button type="button" id="sampleBtn" class="btn btn-secondary btn-action">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M12 16v-4"></path>
               <path d="M12 8h.01"></path>
             </svg>
-            {t(locale, 'pptresize.dropzone.sample')}
+            <span>{t(locale, 'pptresize.dropzone.sample')}</span>
           </button>
         </div>
         <div class="privacy-badge">
@@ -80,7 +96,7 @@ const { locale } = Astro.props;
           <polyline points="17 8 12 3 7 8"></polyline>
           <line x1="12" y1="3" x2="12" y2="15"></line>
         </svg>
-        {t(locale, 'pptresize.action.changeFile')}
+        <span>{t(locale, 'pptresize.action.changeFile')}</span>
       </button>
     </div>
 
@@ -98,27 +114,34 @@ const { locale } = Astro.props;
     <div class="workspace-grid">
       <!-- Settings Column -->
       <div class="settings-col">
-        <!-- Preset Card -->
+        <!-- Preset Selector Card -->
         <div class="control-group">
           <label for="presetSelect" class="field-label">{t(locale, 'pptresize.label.preset')}</label>
           <select id="presetSelect" class="form-select">
-            {SLIDE_PRESETS.map((p) => (
-              <option value={p.id}>{p.name}</option>
-            ))}
+            <option value="16-9">{t(locale, 'pptresize.preset.169')}</option>
+            <option value="4-3">{t(locale, 'pptresize.preset.43')}</option>
+            <option value="16-10">{t(locale, 'pptresize.preset.1610')}</option>
+            <option value="a4-landscape">{t(locale, 'pptresize.preset.a4Landscape')}</option>
+            <option value="a4-portrait">{t(locale, 'pptresize.preset.a4Portrait')}</option>
+            <option value="letter-landscape">{t(locale, 'pptresize.preset.letterLandscape')}</option>
+            <option value="letter-portrait">{t(locale, 'pptresize.preset.letterPortrait')}</option>
+            <option value="a3-poster">{t(locale, 'pptresize.preset.a3')}</option>
+            <option value="square">{t(locale, 'pptresize.preset.square')}</option>
+            <option value="custom">{t(locale, 'pptresize.preset.custom')}</option>
           </select>
 
           <!-- Orientation Toggle -->
-          <div class="field-row" style="margin-top: 4px;">
+          <div class="field-row">
             <label class="field-label-sm">{t(locale, 'pptresize.label.orientation')}</label>
             <div class="orientation-buttons">
               <button type="button" id="orientLandscapeBtn" class="orient-btn active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                 </svg>
                 <span>{t(locale, 'pptresize.orient.landscape')}</span>
               </button>
               <button type="button" id="orientPortraitBtn" class="orient-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <rect x="5" y="2" width="14" height="20" rx="2"></rect>
                 </svg>
                 <span>{t(locale, 'pptresize.orient.portrait')}</span>
@@ -134,22 +157,24 @@ const { locale } = Astro.props;
             <select id="unitSelect" class="form-select">
               <option value="in" selected>{t(locale, 'pptresize.unit.inches')}</option>
               <option value="cm">{t(locale, 'pptresize.unit.cm')}</option>
+              <option value="mm">{t(locale, 'pptresize.unit.mm')}</option>
               <option value="pt">{t(locale, 'pptresize.unit.pt')}</option>
+              <option value="px">{t(locale, 'pptresize.unit.px')}</option>
             </select>
           </div>
 
           <div class="two-cols-grid">
             <div class="field-row">
               <label for="widthInput" class="field-label-sm">{t(locale, 'pptresize.label.width')}</label>
-              <input type="number" id="widthInput" class="form-input" value="13.33" step="0.01" min="1" max="100" />
+              <input type="number" id="widthInput" class="form-input" value="13.33" step="0.01" min="0.1" max="500" />
             </div>
             <div class="field-row">
               <label for="heightInput" class="field-label-sm">{t(locale, 'pptresize.label.height')}</label>
-              <input type="number" id="heightInput" class="form-input" value="7.50" step="0.01" min="1" max="100" />
+              <input type="number" id="heightInput" class="form-input" value="7.50" step="0.01" min="0.1" max="500" />
             </div>
           </div>
 
-          <div class="checkbox-wrapper" style="margin-top: 4px;">
+          <div class="checkbox-wrapper">
             <label class="checkbox-inline">
               <input type="checkbox" id="scaleContentToggle" checked />
               <div class="checkbox-text-col">
@@ -190,7 +215,7 @@ const { locale } = Astro.props;
 
             <!-- Arrow Indicator -->
             <div class="comparison-arrow">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
@@ -215,16 +240,25 @@ const { locale } = Astro.props;
             </div>
           </div>
 
-          <!-- Download Action Area -->
-          <div class="download-action-box">
-            <button type="button" id="downloadBtn" class="btn btn-primary btn-xl">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span id="downloadBtnText">{t(locale, 'pptresize.action.download')}</span>
-            </button>
+          <!-- Action Buttons Area -->
+          <div class="action-buttons-box">
+            <div class="action-buttons-row">
+              <button type="button" id="downloadBtn" class="btn btn-primary btn-action-main">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="downloadBtnText">{t(locale, 'pptresize.action.download')}</span>
+              </button>
+              <button type="button" id="resetBtn" class="btn btn-secondary btn-action-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <span>{t(locale, 'pptresize.action.reset')}</span>
+              </button>
+            </div>
             <div id="progressBar" class="progress-bar-container" style="display: none;">
               <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
             </div>
@@ -241,10 +275,23 @@ const { locale } = Astro.props;
     SLIDE_PRESETS,
     type PresentationInfo,
     type PptResizeOptions,
-    type SlideSizePreset,
+    type PptxZipEntry,
   } from '@/scripts/ppt-resizer';
 
   document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('pptResizerWrapper');
+    if (!wrapper) return;
+
+    // Localized Strings from data attributes
+    const STR_DOWNLOAD = wrapper.dataset.strDownload || 'Download Resized Presentation (.PPTX)';
+    const STR_PROCESSING = wrapper.dataset.strProcessing || 'Resizing & Packaging PPTX...';
+    const STR_COMPLETE = wrapper.dataset.strComplete || 'Download Complete!';
+    const STR_ERROR_INSPECT = wrapper.dataset.strErrorInspect || 'Failed to inspect PowerPoint file. Please ensure it is a valid .pptx presentation.';
+    const STR_ERROR_RESIZE = wrapper.dataset.strErrorResize || 'Failed to resize PowerPoint presentation: ';
+    const STR_SLIDES_SINGLE = wrapper.dataset.strSlidesSingle || '1 Slide';
+    const STR_SLIDES_PLURAL = wrapper.dataset.strSlidesPlural || '{n} Slides';
+    const STR_CUSTOM = wrapper.dataset.strCustom || 'Custom';
+
     // Elements
     const dropzoneContainer = document.getElementById('dropzoneContainer')!;
     const dropzone = document.getElementById('dropzone')!;
@@ -253,6 +300,7 @@ const { locale } = Astro.props;
     const sampleBtn = document.getElementById('sampleBtn')!;
     const workspace = document.getElementById('workspace')!;
     const changeFileBtn = document.getElementById('changeFileBtn')!;
+    const resetBtn = document.getElementById('resetBtn')!;
     const fileNameDisplay = document.getElementById('fileNameDisplay')!;
     const statSlidesCount = document.getElementById('statSlidesCount')!;
     const statOriginalSize = document.getElementById('statOriginalSize')!;
@@ -282,10 +330,10 @@ const { locale } = Astro.props;
     const progressFill = document.getElementById('progressFill')!;
 
     // State
-    let currentZipEntries: { name: string; data: Uint8Array }[] = [];
+    let currentZipEntries: PptxZipEntry[] = [];
     let presentationInfo: PresentationInfo | null = null;
     let selectedOrientation: 'landscape' | 'portrait' = 'landscape';
-    let currentUnit: 'in' | 'cm' | 'pt' = 'in';
+    let currentUnit: 'in' | 'cm' | 'mm' | 'pt' | 'px' = 'in';
 
     const resizeOptions: PptResizeOptions = {
       presetId: '16-9',
@@ -324,12 +372,14 @@ const { locale } = Astro.props;
 
       // 2. Update Target Frame Aspect Ratio
       const targetAspect = resizeOptions.targetWidthEmus / resizeOptions.targetHeightEmus;
-      let targetRatioName = 'Custom';
+      let targetRatioName = STR_CUSTOM;
       if (Math.abs(targetAspect - 16 / 9) < 0.05) targetRatioName = '16:9';
       else if (Math.abs(targetAspect - 4 / 3) < 0.05) targetRatioName = '4:3';
       else if (Math.abs(targetAspect - 16 / 10) < 0.05) targetRatioName = '16:10';
       else if (Math.abs(targetAspect - 1.414) < 0.05) targetRatioName = 'A4 Landscape';
       else if (Math.abs(targetAspect - 1 / 1.414) < 0.05) targetRatioName = 'A4 Portrait';
+      else if (Math.abs(targetAspect - 1.294) < 0.05) targetRatioName = 'Letter Landscape';
+      else if (Math.abs(targetAspect - 1 / 1.294) < 0.05) targetRatioName = 'Letter Portrait';
       else if (Math.abs(targetAspect - 1.0) < 0.05) targetRatioName = '1:1 Square';
 
       targetRatioLabel.textContent = targetRatioName;
@@ -346,10 +396,18 @@ const { locale } = Astro.props;
         wVal = parseFloat((resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_CM).toFixed(2));
         hVal = parseFloat((resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_CM).toFixed(2));
         targetDimsLabel.textContent = `${wVal} × ${hVal} cm`;
-      } else {
+      } else if (currentUnit === 'mm') {
+        wVal = parseFloat((resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_MM).toFixed(1));
+        hVal = parseFloat((resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_MM).toFixed(1));
+        targetDimsLabel.textContent = `${wVal} × ${hVal} mm`;
+      } else if (currentUnit === 'pt') {
         wVal = Math.round(resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_PT);
         hVal = Math.round(resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_PT);
         targetDimsLabel.textContent = `${wVal} × ${hVal} pt`;
+      } else {
+        wVal = Math.round(resizeOptions.targetWidthEmus / PptResizerEngine.EMUS_PER_PX);
+        hVal = Math.round(resizeOptions.targetHeightEmus / PptResizerEngine.EMUS_PER_PX);
+        targetDimsLabel.textContent = `${wVal} × ${hVal} px`;
       }
 
       widthInput.value = wVal.toString();
@@ -390,11 +448,12 @@ const { locale } = Astro.props;
         currentZipEntries = zipEntries;
 
         fileNameDisplay.textContent = info.fileName;
-        statSlidesCount.textContent = `${info.totalSlides} Slide${info.totalSlides > 1 ? 's' : ''}`;
+        statSlidesCount.textContent =
+          info.totalSlides === 1 ? STR_SLIDES_SINGLE : STR_SLIDES_PLURAL.replace('{n}', info.totalSlides.toString());
         statOriginalSize.textContent = `${info.aspectRatioName} (${info.originalWidthInches} × ${info.originalHeightInches} in)`;
         statFileSize.textContent = `Size: ${formatBytes(info.fileSizeBytes)}`;
 
-        // Smart preset detection: if original is 4:3, recommend 16:9; if 16:9, default to A4 or 4:3
+        // Smart preset recommendation
         if (Math.abs(info.aspectRatioDecimal - 4 / 3) < 0.05) {
           presetSelect.value = '16-9';
           applyPreset('16-9');
@@ -406,7 +465,7 @@ const { locale } = Astro.props;
         dropzoneContainer.style.display = 'none';
         workspace.style.display = 'block';
       } catch (err: any) {
-        showError(err.message || 'Failed to inspect PowerPoint file. Please ensure it is a valid .pptx presentation.');
+        showError(err.message || STR_ERROR_INSPECT);
       }
     }
 
@@ -453,9 +512,15 @@ const { locale } = Astro.props;
       } else if (currentUnit === 'cm') {
         resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_CM);
         resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_CM);
-      } else {
+      } else if (currentUnit === 'mm') {
+        resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_MM);
+        resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_MM);
+      } else if (currentUnit === 'pt') {
         resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_PT);
         resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_PT);
+      } else {
+        resizeOptions.targetWidthEmus = Math.round(w * PptResizerEngine.EMUS_PER_PX);
+        resizeOptions.targetHeightEmus = Math.round(h * PptResizerEngine.EMUS_PER_PX);
       }
 
       const aspect = resizeOptions.targetWidthEmus / resizeOptions.targetHeightEmus;
@@ -477,7 +542,7 @@ const { locale } = Astro.props;
 
       try {
         downloadBtn.setAttribute('disabled', 'true');
-        downloadBtnText.textContent = 'Resizing & Packaging PPTX...';
+        downloadBtnText.textContent = STR_PROCESSING;
         progressBar.style.display = 'block';
         progressFill.style.width = '10%';
 
@@ -503,21 +568,30 @@ const { locale } = Astro.props;
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        downloadBtnText.textContent = 'Download Complete!';
+        downloadBtnText.textContent = STR_COMPLETE;
         setTimeout(() => {
           downloadBtn.removeAttribute('disabled');
-          downloadBtnText.textContent = 'Download Resized Presentation (.PPTX)';
+          downloadBtnText.textContent = STR_DOWNLOAD;
           progressBar.style.display = 'none';
-        }, 2000);
+        }, 2200);
       } catch (err: any) {
-        showError('Failed to resize PowerPoint: ' + err.message);
+        showError(STR_ERROR_RESIZE + (err.message || ''));
         downloadBtn.removeAttribute('disabled');
-        downloadBtnText.textContent = 'Download Resized Presentation (.PPTX)';
+        downloadBtnText.textContent = STR_DOWNLOAD;
         progressBar.style.display = 'none';
       }
     });
 
-    // Upload & Sample Handlers
+    // Reset / Change Handlers
+    function resetTool() {
+      fileInput.value = '';
+      currentZipEntries = [];
+      presentationInfo = null;
+      hideError();
+      workspace.style.display = 'none';
+      dropzoneContainer.style.display = 'block';
+    }
+
     browseBtn.addEventListener('click', () => fileInput.click());
     dropzone.addEventListener('click', (e) => {
       if (e.target === sampleBtn || sampleBtn.contains(e.target as Node)) return;
@@ -534,6 +608,8 @@ const { locale } = Astro.props;
       fileInput.value = '';
       fileInput.click();
     });
+
+    resetBtn.addEventListener('click', resetTool);
 
     fileInput.addEventListener('change', (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
@@ -634,16 +710,17 @@ const { locale } = Astro.props;
   .dropzone-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
+    gap: 14px 16px;
     justify-content: center;
     margin-top: var(--space-2);
+    width: 100%;
   }
 
   .privacy-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
+    gap: 8px;
+    font-size: 12.5px;
     color: var(--color-text-secondary);
     margin-top: var(--space-2);
     text-align: center;
@@ -661,19 +738,19 @@ const { locale } = Astro.props;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px 16px;
-    padding: 14px 18px;
+    gap: 14px 16px;
+    padding: 16px 20px;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-6);
     box-sizing: border-box;
   }
 
   .file-info-col {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     min-width: 0;
   }
 
@@ -683,19 +760,20 @@ const { locale } = Astro.props;
     gap: 8px;
     font-weight: 700;
     color: var(--color-text);
-    font-size: 14px;
+    font-size: 15px;
+    word-break: break-all;
   }
 
   .file-meta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
   }
 
   .badge {
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 3px 8px;
+    padding: 4px 10px;
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
@@ -714,21 +792,21 @@ const { locale } = Astro.props;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 16px;
+    padding: 14px 18px;
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid #EF4444;
     border-radius: var(--radius-md);
     color: #DC2626;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 600;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
   }
 
   /* Workspace Grid */
   .workspace-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-5);
+    gap: var(--space-6);
     align-items: start;
     width: 100%;
     min-width: 0;
@@ -737,14 +815,14 @@ const { locale } = Astro.props;
 
   @media (min-width: 960px) {
     .workspace-grid {
-      grid-template-columns: 380px 1fr;
+      grid-template-columns: 390px 1fr;
     }
   }
 
   .settings-col {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: var(--space-4);
     min-width: 0;
     width: 100%;
     box-sizing: border-box;
@@ -753,21 +831,21 @@ const { locale } = Astro.props;
   .preview-col {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: var(--space-4);
     min-width: 0;
     width: 100%;
     box-sizing: border-box;
   }
 
-  /* Control Group */
+  /* Control Group Cards */
   .control-group {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 16px 18px;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
@@ -776,51 +854,61 @@ const { locale } = Astro.props;
   .field-row {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     width: 100%;
     min-width: 0;
   }
 
   .field-label {
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
+    margin-bottom: 2px;
   }
 
   .field-label-sm {
-    font-size: 11.5px;
+    font-size: 12.5px;
     font-weight: 600;
     color: var(--color-text-secondary);
     display: block;
+    margin: 0;
   }
 
   .field-hint {
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--color-text-secondary);
     display: block;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   .form-select,
   .form-input {
     width: 100%;
     max-width: 100%;
-    height: 40px;
-    padding: 8px 12px;
+    min-height: 44px;
+    padding: 10px 14px;
     background: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     color: var(--color-text);
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 600;
     box-sizing: border-box;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .form-select:focus,
+  .form-input:focus {
+    border-color: #4F46E5;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
   }
 
   .two-cols-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     box-sizing: border-box;
   }
@@ -829,7 +917,7 @@ const { locale } = Astro.props;
   .orientation-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
   }
 
@@ -838,12 +926,12 @@ const { locale } = Astro.props;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 38px;
-    padding: 6px 12px;
+    min-height: 42px;
+    padding: 8px 14px;
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 700;
     color: var(--color-text-secondary);
     cursor: pointer;
@@ -866,28 +954,31 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    padding-top: 4px;
   }
 
   .checkbox-inline {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 600;
     color: var(--color-text);
   }
 
   .checkbox-inline input {
-    margin-top: 2px;
+    margin-top: 3px;
     accent-color: #4F46E5;
     flex-shrink: 0;
+    width: 16px;
+    height: 16px;
   }
 
   .checkbox-text-col {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
   }
 
   /* Output Card */
@@ -895,10 +986,10 @@ const { locale } = Astro.props;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 16px 18px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-5);
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -911,7 +1002,7 @@ const { locale } = Astro.props;
   }
 
   .output-title {
-    font-size: 14.5px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--color-text);
   }
@@ -921,8 +1012,8 @@ const { locale } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    padding: 20px 16px;
+    gap: 16px;
+    padding: 24px 20px;
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -930,10 +1021,11 @@ const { locale } = Astro.props;
     width: 100%;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .aspect-ratio-comparison-stage {
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
+      padding: 18px 14px;
     }
   }
 
@@ -942,7 +1034,7 @@ const { locale } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     min-width: 0;
     width: 100%;
   }
@@ -956,7 +1048,7 @@ const { locale } = Astro.props;
   }
 
   .box-badge {
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 700;
     color: var(--color-text-secondary);
   }
@@ -966,14 +1058,14 @@ const { locale } = Astro.props;
   }
 
   .box-ratio {
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-text);
   }
 
   .slide-frame-canvas-wrap {
     width: 100%;
-    height: 140px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -989,7 +1081,7 @@ const { locale } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 14px;
     box-sizing: border-box;
     transition: all 0.25s ease;
   }
@@ -1007,7 +1099,7 @@ const { locale } = Astro.props;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 7px;
   }
 
   .mock-line {
@@ -1034,7 +1126,7 @@ const { locale } = Astro.props;
   }
 
   .box-dims-text {
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-text-secondary);
   }
@@ -1046,18 +1138,32 @@ const { locale } = Astro.props;
     flex-shrink: 0;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .comparison-arrow {
       transform: rotate(90deg);
     }
   }
 
-  /* Download Action */
-  .download-action-box {
+  /* Action Buttons Box */
+  .action-buttons-box {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
+  }
+
+  .action-buttons-row {
+    display: flex;
+    gap: 14px 16px;
+    align-items: center;
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .action-buttons-row {
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 
   .progress-bar-container {
@@ -1074,12 +1180,12 @@ const { locale } = Astro.props;
     transition: width 0.2s ease;
   }
 
-  /* General Buttons */
+  /* Universal Buttons */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 8px 10px;
     font-family: inherit;
     font-weight: 700;
     border-radius: var(--radius-md);
@@ -1091,21 +1197,30 @@ const { locale } = Astro.props;
   }
 
   .btn-sm {
-    height: 36px;
-    padding: 4px 12px;
-    font-size: 12px;
-  }
-
-  .btn-lg {
-    height: 42px;
-    padding: 8px 18px;
+    min-height: 40px;
+    padding: 8px 16px;
     font-size: 13px;
   }
 
-  .btn-xl {
-    height: 46px;
-    padding: 10px 22px;
-    font-size: 14px;
+  .btn-action {
+    min-height: 50px;
+    padding: 12px 26px;
+    font-size: 15px;
+  }
+
+  .btn-action-main {
+    flex: 2;
+    min-height: 50px;
+    padding: 12px 28px;
+    font-size: 15px;
+    width: 100%;
+  }
+
+  .btn-action-secondary {
+    flex: 1;
+    min-height: 50px;
+    padding: 12px 20px;
+    font-size: 15px;
     width: 100%;
   }
 
