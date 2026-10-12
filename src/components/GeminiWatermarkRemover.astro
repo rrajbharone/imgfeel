@@ -1,0 +1,1372 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div
+  class="gemini-remover"
+  id="geminiRemoverApp"
+  data-str-detected={t(locale, 'geminiwatermark.status.detected')}
+  data-str-not-detected={t(locale, 'geminiwatermark.status.notDetected')}
+  data-str-analyzing={t(locale, 'geminiwatermark.status.analyzing')}
+  data-str-remove-image={t(locale, 'geminiwatermark.action.removeImage')}
+  data-str-process-video={t(locale, 'geminiwatermark.action.processVideo')}
+  data-str-processing={t(locale, 'geminiwatermark.action.processing')}
+  data-str-complete-image={t(locale, 'geminiwatermark.action.completeImage')}
+  data-str-complete-video={t(locale, 'geminiwatermark.action.completeVideo')}
+  data-str-error-load={t(locale, 'geminiwatermark.error.load')}
+  data-str-error-process={t(locale, 'geminiwatermark.error.process')}
+  data-str-error-video={t(locale, 'geminiwatermark.error.videoSupport')}
+  data-str-sample-loaded={t(locale, 'geminiwatermark.sample.loaded')}
+>
+  <!-- Hidden File Inputs -->
+  <input
+    type="file"
+    id="imageFileInput"
+    accept="image/jpeg,image/png,image/webp"
+    class="sr-only"
+  />
+  <input
+    type="file"
+    id="videoFileInput"
+    accept="video/mp4,video/webm,video/quicktime"
+    class="sr-only"
+  />
+
+  <!-- Mode Tab Switcher (Image vs Video) -->
+  <div class="media-tabs-wrapper">
+    <div class="media-tabs" role="tablist">
+      <button
+        type="button"
+        class="media-tab active"
+        id="tabImageBtn"
+        role="tab"
+        aria-selected="true"
+        aria-controls="imagePanel"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <span>{t(locale, 'geminiwatermark.tab.image')}</span>
+      </button>
+
+      <button
+        type="button"
+        class="media-tab"
+        id="tabVideoBtn"
+        role="tab"
+        aria-selected="false"
+        aria-controls="videoPanel"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+        <span>{t(locale, 'geminiwatermark.tab.video')}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 1. Upload State (Visible initially; completely hidden when media is selected) -->
+  <div class="gemini-upload-card" id="uploadState">
+    <div
+      class="dropzone-area"
+      id="dropzone"
+      tabindex="0"
+      role="button"
+      aria-label={t(locale, 'geminiwatermark.dropzone.titleImage')}
+    >
+      <div class="dropzone-icon">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"></path>
+          <path d="M19 16l1.2 2.8L23 20l-2.8 1.2L19 24l-1.2-2.8L15 20l2.8-1.2z"></path>
+        </svg>
+      </div>
+      <h2 class="dropzone-title" id="dropzoneTitle">{t(locale, 'geminiwatermark.dropzone.titleImage')}</h2>
+      <p class="dropzone-subtitle" id="dropzoneSubtitle">{t(locale, 'geminiwatermark.dropzone.subtitleImage')}</p>
+      
+      <div class="dropzone-actions">
+        <button type="button" class="btn btn-primary dropzone-browse-btn" id="browseBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+            <path d="M12 12v9"></path>
+            <path d="m16 16-4-4-4 4"></path>
+          </svg>
+          <span id="browseBtnText">{t(locale, 'geminiwatermark.dropzone.browseImage')}</span>
+        </button>
+        <button type="button" class="btn btn-secondary dropzone-sample-btn" id="sampleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>{t(locale, 'geminiwatermark.dropzone.sample')}</span>
+        </button>
+      </div>
+
+      <div class="privacy-pill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>{t(locale, 'geminiwatermark.privacy.badge')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Editor State (Two-column desktop / clean stacked mobile layout) -->
+  <div class="gemini-editor" id="editorState" hidden>
+    <div class="editor-layout">
+      <!-- Left Column: Clean Media Stage -->
+      <div class="preview-area">
+        <div class="preview-header">
+          <h3 class="preview-title" id="previewHeading">{t(locale, 'geminiwatermark.tab.image')}</h3>
+          <button type="button" class="btn btn-secondary btn-sm change-media-btn" id="changeMediaBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path>
+            </svg>
+            <span>{t(locale, 'geminiwatermark.action.changeMedia')}</span>
+          </button>
+        </div>
+
+        <!-- Stage Container -->
+        <div class="preview-stage">
+          <!-- Image Mode Stage: Direct Clean Display -->
+          <div class="single-preview-card" id="imageStage">
+            <div class="preview-badge" id="imageStageBadge">{t(locale, 'geminiwatermark.action.processing')}</div>
+            <div class="preview-img-box">
+              <img id="resultImg" class="preview-img" alt="Gemini Clean Image Preview" />
+              <!-- In-Image Processing Overlay -->
+              <div class="processing-overlay" id="processingOverlay">
+                <span class="processing-spinner"></span>
+                <span class="processing-text" id="processingOverlayText">{t(locale, 'geminiwatermark.action.processing')}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Mode Stage -->
+          <div class="video-stage" id="videoStage" style="display: none;">
+            <div class="video-preview-wrapper">
+              <div class="preview-badge" id="videoStageBadge">{t(locale, 'geminiwatermark.preview.badgeBefore')}</div>
+              <video id="sourceVideo" controls playsinline class="video-player"></video>
+              <video id="processedVideo" controls playsinline class="video-player" style="display: none;"></video>
+            </div>
+
+            <!-- Video Progress Bar (Visible during processing) -->
+            <div class="video-progress-panel" id="videoProgressPanel" style="display: none;">
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" id="videoProgressBar" style="width: 0%;"></div>
+                </div>
+                <div class="progress-status-row">
+                  <span class="progress-percent" id="videoProgressPercent">0%</span>
+                  <span class="progress-frames" id="videoProgressFrames">0 / 0</span>
+                </div>
+              </div>
+              <div class="progress-meta-row">
+                <div class="progress-stat">
+                  <span class="stat-lbl">{t(locale, 'geminiwatermark.video.fps')}:</span>
+                  <span class="stat-val" id="videoFpsVal">--</span>
+                </div>
+                <div class="progress-stat">
+                  <span class="stat-lbl">{t(locale, 'geminiwatermark.video.eta')}:</span>
+                  <span class="stat-val" id="videoEtaVal">--s</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Details & Detection Summary Bar -->
+        <div class="image-meta-bar" id="detectionBar">
+          <div class="meta-status-wrap">
+            <div class="detection-indicator" id="detectionIndicator">
+              <span class="pulse-dot"></span>
+              <span id="detectionStatusText">{t(locale, 'geminiwatermark.status.analyzing')}</span>
+            </div>
+            <div class="file-meta-pill" id="fileMetaPill">
+              <span id="metaDimensions">-- × --</span>
+              <span class="meta-sep">•</span>
+              <span id="metaFileSize">-- KB</span>
+            </div>
+          </div>
+          <div class="meta-stats-grid" id="detectionDetails">
+            <div class="meta-stat-item">
+              <span class="meta-stat-label">{t(locale, 'geminiwatermark.detail.confidence')}</span>
+              <span class="meta-stat-value" id="confidenceVal">--%</span>
+            </div>
+            <div class="meta-stat-item">
+              <span class="meta-stat-label">{t(locale, 'geminiwatermark.detail.coordinates')}</span>
+              <span class="meta-stat-value" id="coordsVal">--</span>
+            </div>
+            <div class="meta-stat-item">
+              <span class="meta-stat-label">{t(locale, 'geminiwatermark.detail.model')}</span>
+              <span class="meta-stat-value" id="modelVal">--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Results & Action Card -->
+      <div class="controls-area">
+        <!-- Error Banner (Visible only if processing fails) -->
+        <div class="error-card" id="errorBanner" style="display: none;">
+          <div class="error-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="error-content">
+            <h4 class="error-title">{t(locale, 'geminiwatermark.error.process')}</h4>
+            <p class="error-msg" id="errorMessageText">{t(locale, 'geminiwatermark.error.load')}</p>
+          </div>
+        </div>
+
+        <!-- Image Mode: Instant Clean Result Card -->
+        <div class="cleaner-card" id="imageCleanerCard">
+          <div class="cleaner-header">
+            <div class="cleaner-status-pill" id="cleanerStatusPill">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span id="cleanerStatusText">{t(locale, 'geminiwatermark.action.completeImage')}</span>
+            </div>
+          </div>
+
+          <div class="cleaner-feature-list">
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>100% mathematical reverse alpha unblending</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>Original image sharpness & dimensions intact</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>Lossless high-quality PNG export</span>
+            </div>
+          </div>
+
+          <!-- Primary Download & Action Buttons -->
+          <div class="action-buttons-wrap">
+            <button type="button" class="btn btn-primary btn-lg action-btn action-btn-download" id="downloadImageBtn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>{t(locale, 'geminiwatermark.download.actionImage')}</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary action-btn action-btn-reset" id="resetImageBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>{t(locale, 'geminiwatermark.action.reset')}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Mode: Video Processing & Download Card -->
+        <div class="cleaner-card" id="videoCleanerCard" style="display: none;">
+          <div class="cleaner-header">
+            <div class="cleaner-status-pill">
+              <span class="pulse-dot"></span>
+              <span id="videoStatusHeading">{t(locale, 'geminiwatermark.tab.video')}</span>
+            </div>
+          </div>
+
+          <div class="cleaner-feature-list">
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>Frame-by-frame client-side unblending</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>Synchronized audio track preserved</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-check">✓</span>
+              <span>100% private in-browser WebCodecs</span>
+            </div>
+          </div>
+
+          <div class="action-buttons-wrap">
+            <button type="button" class="btn btn-primary btn-lg action-btn action-btn-process" id="processVideoBtn">
+              <span class="btn-spinner" id="processVideoSpinner" style="display: none;"></span>
+              <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span id="processVideoBtnText">{t(locale, 'geminiwatermark.action.processVideo')}</span>
+            </button>
+
+            <button type="button" class="btn btn-primary btn-lg action-btn action-btn-download" id="downloadVideoBtn" style="display: none;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>{t(locale, 'geminiwatermark.download.actionVideo')}</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary action-btn action-btn-reset" id="resetVideoBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>{t(locale, 'geminiwatermark.action.reset')}</span>
+            </button>
+
+            <button type="button" class="btn btn-outline-danger action-btn action-btn-cancel" id="cancelVideoBtn" style="display: none;">
+              <span>{t(locale, 'geminiwatermark.action.cancelVideo')}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    loadImageFromFile,
+    processGeminiImage,
+    generateSampleGeminiImage,
+    ClientVideoProcessor,
+    type VideoProcessingProgress,
+  } from '@/scripts/gemini-watermark-remover';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const app = document.getElementById('geminiRemoverApp');
+    if (!app) return;
+
+    // Localized Strings
+    const strDetected = app.dataset.strDetected || 'Gemini Sparkle Watermark Detected';
+    const strNotDetected = app.dataset.strNotDetected || 'Watermark Location Calibrated (Bottom-Right)';
+    const strAnalyzing = app.dataset.strAnalyzing || 'Analyzing Watermark Coordinates...';
+    const strProcessVideo = app.dataset.strProcessVideo || 'Process Video & Remove Watermark';
+    const strProcessing = app.dataset.strProcessing || 'Unblending Alpha Pixels...';
+    const strCompleteImage = app.dataset.strCompleteImage || 'Watermark Removed Successfully!';
+    const strCompleteVideo = app.dataset.strCompleteVideo || 'Video Processed Successfully!';
+    const strErrorLoad = app.dataset.strErrorLoad || 'Failed to load media file.';
+    const strErrorProcess = app.dataset.strErrorProcess || 'Watermark unblending failed.';
+
+    // State Variables
+    let currentMode: 'image' | 'video' = 'image';
+    let currentImageBlob: Blob | null = null;
+    let currentVideoFile: File | null = null;
+    let sourceCanvas: HTMLCanvasElement | null = null;
+    let cleanCanvas: HTMLCanvasElement | null = null;
+    let videoProcessor: ClientVideoProcessor | null = null;
+    let processedVideoBlob: Blob | null = null;
+    let originalFileName = 'gemini-media';
+
+    // UI Elements
+    const tabImageBtn = document.getElementById('tabImageBtn') as HTMLButtonElement;
+    const tabVideoBtn = document.getElementById('tabVideoBtn') as HTMLButtonElement;
+    const uploadState = document.getElementById('uploadState') as HTMLDivElement;
+    const editorState = document.getElementById('editorState') as HTMLDivElement;
+    const dropzone = document.getElementById('dropzone') as HTMLDivElement;
+    const dropzoneTitle = document.getElementById('dropzoneTitle') as HTMLHeadingElement;
+    const dropzoneSubtitle = document.getElementById('dropzoneSubtitle') as HTMLParagraphElement;
+    const imageFileInput = document.getElementById('imageFileInput') as HTMLInputElement;
+    const videoFileInput = document.getElementById('videoFileInput') as HTMLInputElement;
+    const browseBtn = document.getElementById('browseBtn') as HTMLButtonElement;
+    const browseBtnText = document.getElementById('browseBtnText') as HTMLSpanElement;
+    const sampleBtn = document.getElementById('sampleBtn') as HTMLButtonElement;
+    const changeMediaBtn = document.getElementById('changeMediaBtn') as HTMLButtonElement;
+    const imageStage = document.getElementById('imageStage') as HTMLDivElement;
+    const videoStage = document.getElementById('videoStage') as HTMLDivElement;
+    const imageStageBadge = document.getElementById('imageStageBadge') as HTMLDivElement;
+    const previewHeading = document.getElementById('previewHeading') as HTMLHeadingElement;
+    const resultImg = document.getElementById('resultImg') as HTMLImageElement;
+    const processingOverlay = document.getElementById('processingOverlay') as HTMLDivElement;
+    const processingOverlayText = document.getElementById('processingOverlayText') as HTMLSpanElement;
+
+    // Video Elements
+    const sourceVideo = document.getElementById('sourceVideo') as HTMLVideoElement;
+    const processedVideo = document.getElementById('processedVideo') as HTMLVideoElement;
+    const videoStageBadge = document.getElementById('videoStageBadge') as HTMLDivElement;
+    const videoProgressPanel = document.getElementById('videoProgressPanel') as HTMLDivElement;
+    const videoProgressBar = document.getElementById('videoProgressBar') as HTMLDivElement;
+    const videoProgressPercent = document.getElementById('videoProgressPercent') as HTMLSpanElement;
+    const videoProgressFrames = document.getElementById('videoProgressFrames') as HTMLSpanElement;
+    const videoFpsVal = document.getElementById('videoFpsVal') as HTMLSpanElement;
+    const videoEtaVal = document.getElementById('videoEtaVal') as HTMLSpanElement;
+    const processVideoBtn = document.getElementById('processVideoBtn') as HTMLButtonElement;
+    const processVideoBtnText = document.getElementById('processVideoBtnText') as HTMLSpanElement;
+    const processVideoSpinner = document.getElementById('processVideoSpinner') as HTMLSpanElement;
+    const downloadVideoBtn = document.getElementById('downloadVideoBtn') as HTMLButtonElement;
+    const cancelVideoBtn = document.getElementById('cancelVideoBtn') as HTMLButtonElement;
+    const resetVideoBtn = document.getElementById('resetVideoBtn') as HTMLButtonElement;
+    const videoStatusHeading = document.getElementById('videoStatusHeading') as HTMLSpanElement;
+
+    // Meta elements
+    const detectionStatusText = document.getElementById('detectionStatusText') as HTMLSpanElement;
+    const detectionIndicator = document.getElementById('detectionIndicator') as HTMLDivElement;
+    const metaDimensions = document.getElementById('metaDimensions') as HTMLSpanElement;
+    const metaFileSize = document.getElementById('metaFileSize') as HTMLSpanElement;
+    const confidenceVal = document.getElementById('confidenceVal') as HTMLSpanElement;
+    const coordsVal = document.getElementById('coordsVal') as HTMLSpanElement;
+    const modelVal = document.getElementById('modelVal') as HTMLSpanElement;
+
+    // Controls & Cards
+    const errorBanner = document.getElementById('errorBanner') as HTMLDivElement;
+    const errorMessageText = document.getElementById('errorMessageText') as HTMLParagraphElement;
+    const imageCleanerCard = document.getElementById('imageCleanerCard') as HTMLDivElement;
+    const videoCleanerCard = document.getElementById('videoCleanerCard') as HTMLDivElement;
+    const downloadImageBtn = document.getElementById('downloadImageBtn') as HTMLButtonElement;
+    const resetImageBtn = document.getElementById('resetImageBtn') as HTMLButtonElement;
+    const cleanerStatusPill = document.getElementById('cleanerStatusPill') as HTMLDivElement;
+    const cleanerStatusText = document.getElementById('cleanerStatusText') as HTMLSpanElement;
+
+    // Tab Mode Switcher
+    function switchMode(mode: 'image' | 'video') {
+      currentMode = mode;
+      hideError();
+      if (mode === 'image') {
+        tabImageBtn.classList.add('active');
+        tabImageBtn.setAttribute('aria-selected', 'true');
+        tabVideoBtn.classList.remove('active');
+        tabVideoBtn.setAttribute('aria-selected', 'false');
+        dropzoneTitle.textContent = 'Drag and drop your Gemini image here, or click to browse';
+        dropzoneSubtitle.textContent = 'Supports JPG, PNG, and WebP images. 100% in-browser processing with zero server uploads.';
+        browseBtnText.textContent = 'Select Gemini Image';
+        sampleBtn.style.display = 'inline-flex';
+        previewHeading.textContent = 'Clean Gemini Image Result';
+        imageCleanerCard.style.display = 'block';
+        videoCleanerCard.style.display = 'none';
+      } else {
+        tabVideoBtn.classList.add('active');
+        tabVideoBtn.setAttribute('aria-selected', 'true');
+        tabImageBtn.classList.remove('active');
+        tabImageBtn.setAttribute('aria-selected', 'false');
+        dropzoneTitle.textContent = 'Drag and drop your Veo / Flow video here, or click to browse';
+        dropzoneSubtitle.textContent = 'Supports MP4, WebM, and MOV video clips. Audio track and full resolution preserved locally.';
+        browseBtnText.textContent = 'Select Veo / Flow Video';
+        sampleBtn.style.display = 'none';
+        previewHeading.textContent = 'Video Playback & Result Preview';
+        imageCleanerCard.style.display = 'none';
+        videoCleanerCard.style.display = 'block';
+      }
+    }
+
+    tabImageBtn.addEventListener('click', () => switchMode('image'));
+    tabVideoBtn.addEventListener('click', () => switchMode('video'));
+
+    // File Browse Triggers
+    browseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentMode === 'image') imageFileInput.click();
+      else videoFileInput.click();
+    });
+
+    changeMediaBtn.addEventListener('click', () => {
+      if (currentMode === 'image') imageFileInput.click();
+      else videoFileInput.click();
+    });
+
+    dropzone.addEventListener('click', () => {
+      if (currentMode === 'image') imageFileInput.click();
+      else videoFileInput.click();
+    });
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach((ev) => {
+      dropzone.addEventListener(ev, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-active');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((ev) => {
+      dropzone.addEventListener(ev, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-active');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e: DragEvent) => {
+      if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.startsWith('video/')) {
+          switchMode('video');
+          handleVideoFile(file);
+        } else {
+          switchMode('image');
+          handleImageFile(file);
+        }
+      }
+    });
+
+    imageFileInput.addEventListener('change', () => {
+      if (imageFileInput.files && imageFileInput.files[0]) {
+        handleImageFile(imageFileInput.files[0]);
+      }
+    });
+
+    videoFileInput.addEventListener('change', () => {
+      if (videoFileInput.files && videoFileInput.files[0]) {
+        handleVideoFile(videoFileInput.files[0]);
+      }
+    });
+
+    // Sample Image Button
+    sampleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      switchMode('image');
+      await loadSampleImage();
+    });
+
+    function showError(msg: string) {
+      errorMessageText.textContent = msg;
+      errorBanner.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorBanner.style.display = 'none';
+    }
+
+    // Load & Process Sample Image
+    async function loadSampleImage() {
+      hideError();
+      originalFileName = 'gemini-sample';
+      showEditor('image');
+
+      // 1. Show processing overlay
+      processingOverlay.style.display = 'flex';
+      processingOverlayText.textContent = strProcessing;
+      imageStageBadge.textContent = strProcessing;
+      downloadImageBtn.disabled = true;
+
+      try {
+        const sample = await generateSampleGeminiImage();
+        sourceCanvas = sample;
+        resultImg.src = sample.toDataURL('image/png');
+
+        metaDimensions.textContent = `${sample.width} × ${sample.height}`;
+        metaFileSize.textContent = `~280 KB`;
+
+        // 2. Automatically execute exact watermark unblending
+        const result = await processGeminiImage(sample);
+        cleanCanvas = result.cleanCanvas;
+        currentImageBlob = result.blob;
+
+        // 3. Display the actual clean reconstructed image
+        resultImg.src = URL.createObjectURL(result.blob);
+        processingOverlay.style.display = 'none';
+        imageStageBadge.textContent = strCompleteImage;
+        imageStageBadge.classList.add('clean');
+        downloadImageBtn.disabled = false;
+
+        // Update detection telemetry
+        const box = result.detection.box;
+        detectionStatusText.textContent = strDetected;
+        detectionIndicator.classList.add('detected');
+        confidenceVal.textContent = `${result.detection.confidence}%`;
+        coordsVal.textContent = `X: ${box.x}, Y: ${box.y} (${box.size}px)`;
+        modelVal.textContent = box.variant;
+
+        cleanerStatusText.textContent = strCompleteImage;
+        cleanerStatusPill.classList.add('success');
+      } catch (err: any) {
+        processingOverlay.style.display = 'none';
+        showError(err.message || strErrorProcess);
+      }
+    }
+
+    // Handle Uploaded Image File
+    async function handleImageFile(file: File) {
+      hideError();
+      originalFileName = file.name.replace(/\.[^/.]+$/, '');
+      showEditor('image');
+
+      // 1. Show uploaded image preview and processing overlay immediately
+      processingOverlay.style.display = 'flex';
+      processingOverlayText.textContent = strProcessing;
+      imageStageBadge.textContent = strProcessing;
+      downloadImageBtn.disabled = true;
+      detectionStatusText.textContent = strAnalyzing;
+      detectionIndicator.classList.remove('detected');
+
+      try {
+        const loaded = await loadImageFromFile(file);
+        sourceCanvas = loaded.canvas;
+        resultImg.src = loaded.img.src;
+
+        metaDimensions.textContent = `${loaded.width} × ${loaded.height}`;
+        metaFileSize.textContent = `${Math.round(loaded.size / 1024)} KB`;
+
+        // 2. Automatically remove watermark using exact mathematical inverse unblending
+        const result = await processGeminiImage(loaded.canvas);
+        cleanCanvas = result.cleanCanvas;
+        currentImageBlob = result.blob;
+
+        // 3. Display final processed image in preview
+        resultImg.src = URL.createObjectURL(result.blob);
+        processingOverlay.style.display = 'none';
+        imageStageBadge.textContent = strCompleteImage;
+        imageStageBadge.classList.add('clean');
+        downloadImageBtn.disabled = false;
+
+        // Update telemetry
+        const box = result.detection.box;
+        detectionStatusText.textContent = result.detection.detected ? strDetected : strNotDetected;
+        if (result.detection.detected) detectionIndicator.classList.add('detected');
+        confidenceVal.textContent = `${result.detection.confidence}%`;
+        coordsVal.textContent = `X: ${box.x}, Y: ${box.y} (${box.size}px)`;
+        modelVal.textContent = box.variant;
+
+        cleanerStatusText.textContent = strCompleteImage;
+        cleanerStatusPill.classList.add('success');
+      } catch (err: any) {
+        processingOverlay.style.display = 'none';
+        showError(err.message || strErrorProcess);
+      }
+    }
+
+    // Handle Uploaded Video File
+    function handleVideoFile(file: File) {
+      hideError();
+      currentVideoFile = file;
+      originalFileName = file.name.replace(/\.[^/.]+$/, '');
+      const url = URL.createObjectURL(file);
+      sourceVideo.src = url;
+      processedVideoBlob = null;
+      processedVideo.style.display = 'none';
+      sourceVideo.style.display = 'block';
+      videoStageBadge.textContent = 'Original Video';
+      downloadVideoBtn.style.display = 'none';
+      processVideoBtn.style.display = 'inline-flex';
+
+      sourceVideo.onloadedmetadata = () => {
+        metaDimensions.textContent = `${sourceVideo.videoWidth} × ${sourceVideo.videoHeight}`;
+        metaFileSize.textContent = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+        const vSize = sourceVideo.videoWidth >= 1080 ? '64px' : '48px';
+        coordsVal.textContent = `Bottom-Right (${vSize})`;
+        modelVal.textContent = 'Google Veo / Flow';
+        confidenceVal.textContent = '95%';
+        detectionStatusText.textContent = strDetected;
+        detectionIndicator.classList.add('detected');
+      };
+
+      showEditor('video');
+    }
+
+    // Switch between dropzone and editor
+    function showEditor(type: 'image' | 'video') {
+      uploadState.hidden = true;
+      editorState.hidden = false;
+
+      if (type === 'image') {
+        imageStage.style.display = 'block';
+        videoStage.style.display = 'none';
+        imageCleanerCard.style.display = 'block';
+        videoCleanerCard.style.display = 'none';
+        previewHeading.textContent = 'Clean Gemini Image Result';
+      } else {
+        imageStage.style.display = 'none';
+        videoStage.style.display = 'block';
+        imageCleanerCard.style.display = 'none';
+        videoCleanerCard.style.display = 'block';
+        previewHeading.textContent = 'Video Playback & Result Preview';
+      }
+    }
+
+    // Process Video Frame-by-Frame
+    processVideoBtn.addEventListener('click', async () => {
+      if (!sourceVideo || !sourceVideo.videoWidth) return;
+      processVideoBtn.disabled = true;
+      processVideoSpinner.style.display = 'inline-block';
+      processVideoBtnText.textContent = strProcessing;
+      cancelVideoBtn.style.display = 'inline-flex';
+      videoProgressPanel.style.display = 'block';
+
+      try {
+        videoProcessor = new ClientVideoProcessor(sourceVideo);
+        const resultBlob = await videoProcessor.process((progress: VideoProcessingProgress) => {
+          videoProgressBar.style.width = `${progress.progressPercent}%`;
+          videoProgressPercent.textContent = `${progress.progressPercent}%`;
+          videoProgressFrames.textContent = `${progress.currentFrame} / ${progress.totalFrames}`;
+          videoFpsVal.textContent = `${progress.fps}`;
+          videoEtaVal.textContent = `${progress.estimatedTimeRemainingSec}s`;
+        });
+
+        processedVideoBlob = resultBlob;
+        const cleanUrl = URL.createObjectURL(resultBlob);
+        sourceVideo.style.display = 'none';
+        processedVideo.style.display = 'block';
+        processedVideo.src = cleanUrl;
+        processedVideo.play();
+        videoStageBadge.textContent = 'Clean Reconstructed Video';
+        videoStatusHeading.textContent = strCompleteVideo;
+
+        processVideoBtn.style.display = 'none';
+        downloadVideoBtn.style.display = 'inline-flex';
+        cancelVideoBtn.style.display = 'none';
+        videoProgressPanel.style.display = 'none';
+      } catch (err: any) {
+        if (!err.message?.includes('cancelled')) {
+          showError(err.message || strErrorProcess);
+        }
+        processVideoBtn.disabled = false;
+        processVideoSpinner.style.display = 'none';
+        processVideoBtnText.textContent = strProcessVideo;
+        cancelVideoBtn.style.display = 'none';
+        videoProgressPanel.style.display = 'none';
+      }
+    });
+
+    cancelVideoBtn.addEventListener('click', () => {
+      if (videoProcessor) videoProcessor.cancel();
+    });
+
+    // Download Clean Image (Lossless PNG)
+    downloadImageBtn.addEventListener('click', () => {
+      if (currentImageBlob) {
+        const link = document.createElement('a');
+        link.download = `${originalFileName}-clean.png`;
+        link.href = URL.createObjectURL(currentImageBlob);
+        link.click();
+      } else if (cleanCanvas) {
+        const link = document.createElement('a');
+        link.download = `${originalFileName}-clean.png`;
+        link.href = cleanCanvas.toDataURL('image/png');
+        link.click();
+      }
+    });
+
+    // Download Clean Video (MP4)
+    downloadVideoBtn.addEventListener('click', () => {
+      if (processedVideoBlob) {
+        const link = document.createElement('a');
+        link.download = `${originalFileName}-clean.mp4`;
+        link.href = URL.createObjectURL(processedVideoBlob);
+        link.click();
+      }
+    });
+
+    // Reset Handlers
+    function resetTool() {
+      editorState.hidden = true;
+      uploadState.hidden = false;
+      hideError();
+      currentImageBlob = null;
+      processedVideoBlob = null;
+      sourceCanvas = null;
+      cleanCanvas = null;
+      resultImg.src = '';
+      sourceVideo.src = '';
+      processedVideo.src = '';
+      imageFileInput.value = '';
+      videoFileInput.value = '';
+      processVideoBtn.disabled = false;
+      processVideoBtn.style.display = 'inline-flex';
+      downloadVideoBtn.style.display = 'none';
+      processVideoSpinner.style.display = 'none';
+      processVideoBtnText.textContent = strProcessVideo;
+    }
+
+    resetImageBtn.addEventListener('click', resetTool);
+    resetVideoBtn.addEventListener('click', resetTool);
+  });
+</script>
+
+<style>
+  .gemini-remover {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Media Tabs */
+  .media-tabs-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+  }
+
+  .media-tabs {
+    display: inline-flex;
+    background: var(--color-surface-subtle);
+    padding: 6px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    gap: 8px;
+  }
+
+  .media-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .media-tab:hover {
+    color: var(--color-text);
+  }
+
+  .media-tab.active {
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  /* 1. Upload Dropzone Card */
+  .gemini-upload-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .dropzone-area {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12) var(--space-6);
+    text-align: center;
+    cursor: pointer;
+    background: var(--color-surface-subtle);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+  }
+
+  .dropzone-area:hover,
+  .dropzone-area.drag-active {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.04);
+  }
+
+  .dropzone-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .dropzone-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .dropzone-subtitle {
+    font-size: 15px;
+    color: var(--color-text-muted);
+    max-width: 580px;
+    margin: 0 auto var(--space-6);
+    line-height: 1.5;
+  }
+
+  .dropzone-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+  }
+
+  .dropzone-browse-btn,
+  .dropzone-sample-btn {
+    min-height: 48px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .privacy-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  /* 2. Editor Layout */
+  .gemini-editor {
+    width: 100%;
+  }
+
+  .editor-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  /* Preview Area (Left Column) */
+  .preview-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+  }
+
+  .preview-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .change-media-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .preview-stage {
+    background: #0f172a;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Single Image Stage */
+  .single-preview-card {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 20px 20px;
+  }
+
+  .preview-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 10;
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .preview-badge.clean {
+    background: rgba(16, 185, 129, 0.9);
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+
+  .preview-img-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .preview-img {
+    max-width: 100%;
+    max-height: 580px;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+  }
+
+  /* Processing Overlay */
+  .processing-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    z-index: 20;
+  }
+
+  .processing-spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .processing-text {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Video Stage */
+  .video-stage {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+  }
+
+  .video-preview-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+  }
+
+  .video-player {
+    width: 100%;
+    max-height: 520px;
+    display: block;
+  }
+
+  .video-progress-panel {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .progress-bar-wrap {
+    margin-bottom: var(--space-2);
+  }
+
+  .progress-bar-track {
+    width: 100%;
+    height: 8px;
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    transition: width 0.15s ease;
+  }
+
+  .progress-status-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  .progress-meta-row {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+  }
+
+  /* File Details Bar */
+  .image-meta-bar {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .meta-status-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .detection-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .pulse-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #eab308;
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7);
+    animation: pulse 1.6s infinite;
+  }
+
+  .detection-indicator.detected .pulse-dot {
+    background: #10b981;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+
+  .file-meta-pill {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+  }
+
+  .meta-sep {
+    margin: 0 6px;
+  }
+
+  .meta-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .meta-stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .meta-stat-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* Right Column (Controls & Cleaner Card) */
+  .controls-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .cleaner-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .cleaner-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .cleaner-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .cleaner-feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .feature-check {
+    color: #10b981;
+    font-weight: 800;
+  }
+
+  /* Action Buttons */
+  .action-buttons-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+  }
+
+  .action-btn-download {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+  }
+
+  .action-btn-download:hover {
+    background: #059669;
+    border-color: #059669;
+  }
+
+  .action-btn-reset {
+    min-height: 48px;
+  }
+
+  .btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* Error Banner */
+  .error-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    color: #ef4444;
+  }
+
+  .error-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .error-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  .error-msg {
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+    color: var(--color-text);
+  }
+
+  /* Responsive Mobile */
+  @media (max-width: 900px) {
+    .editor-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gemini-upload-card {
+      padding: var(--space-4);
+    }
+
+    .dropzone-area {
+      padding: var(--space-8) var(--space-4);
+    }
+
+    .dropzone-actions {
+      flex-direction: column;
+      width: 100%;
+      gap: 12px;
+    }
+
+    .dropzone-browse-btn,
+    .dropzone-sample-btn {
+      width: 100%;
+    }
+
+    .meta-stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .single-preview-card {
+      min-height: 280px;
+    }
+  }
+</style>

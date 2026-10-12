@@ -1,0 +1,854 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { getToolUrl } from '@/data/tools';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+// Localized tool URLs for related tools grid
+const exactUrl = getToolUrl('exact-dimension-resizer', locale);
+const webpUrl = getToolUrl('webp-compressor', locale);
+const denoiseUrl = getToolUrl('image-noise-reducer', locale);
+const productWhiteBgUrl = getToolUrl('product-image-white-background', locale);
+const pixelCounterUrl = getToolUrl('pixel-counter', locale);
+const ocrUrl = getToolUrl('image-to-text-converter', locale);
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq1Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq1A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq2Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq2A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq3Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq3A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq4Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq4A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq5Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq5A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq6Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq6A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq7Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq7A')
+      }
+    },
+    {
+      "@type": "Question",
+      "name": t(locale, 'canvawatermark.content.faq8Q'),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": t(locale, 'canvawatermark.content.faq8A')
+      }
+    }
+  ]
+};
+---
+
+<section class="section content-section">
+  <div class="container">
+    <div class="content-body">
+      <!-- Section 1: Overview & Value -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h1')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p1a')}</p>
+        <p>{t(locale, 'canvawatermark.content.p1b')}</p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h3>{t(locale, 'canvawatermark.content.feat1Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.feat1Desc')}</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </div>
+            <h3>{t(locale, 'canvawatermark.content.feat2Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.feat2Desc')}</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"></path>
+                <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"></path>
+              </svg>
+            </div>
+            <h3>{t(locale, 'canvawatermark.content.feat3Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.feat3Desc')}</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <h3>{t(locale, 'canvawatermark.content.feat4Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.feat4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Why Canva Watermarks Appear -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h2Why')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p2Why1')}</p>
+        <p>{t(locale, 'canvawatermark.content.p2Why2')}</p>
+      </div>
+
+      <!-- Section 3: Technical Inpainting Mechanics -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h3Tech')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p3Tech1')}</p>
+        <p>{t(locale, 'canvawatermark.content.p3Tech2')}</p>
+        <p>{t(locale, 'canvawatermark.content.p3Tech3')}</p>
+      </div>
+
+      <!-- Section 4: Comparison Table -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h2Table')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p2Table')}</p>
+
+        <div class="table-responsive">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>{t(locale, 'canvawatermark.content.thMethod')}</th>
+                <th>{t(locale, 'canvawatermark.content.thSpeed')}</th>
+                <th>{t(locale, 'canvawatermark.content.thPrivacy')}</th>
+                <th>{t(locale, 'canvawatermark.content.thQuality')}</th>
+                <th>{t(locale, 'canvawatermark.content.thLegality')}</th>
+                <th>{t(locale, 'canvawatermark.content.thBestFor')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>{t(locale, 'canvawatermark.content.row1Method')}</strong></td>
+                <td><span class="code-badge">&lt; 500 ms</span></td>
+                <td>100% Local (Client Sandbox)</td>
+                <td>High (Inverse Deblend + Inpainting)</td>
+                <td>Personal Proofs & Authorized Decks</td>
+                <td>{t(locale, 'canvawatermark.content.row1Use')}</td>
+              </tr>
+              <tr>
+                <td><strong>{t(locale, 'canvawatermark.content.row2Method')}</strong></td>
+                <td><span class="code-badge">10 - 45 sec</span></td>
+                <td>Transfers to Cloud Server</td>
+                <td>Generative Hallucination</td>
+                <td>Varies by Hosting Provider</td>
+                <td>{t(locale, 'canvawatermark.content.row2Use')}</td>
+              </tr>
+              <tr>
+                <td><strong>{t(locale, 'canvawatermark.content.row3Method')}</strong></td>
+                <td><span class="code-badge">Instant</span></td>
+                <td>Cloud Native in Canva</td>
+                <td>100% Flawless Original Source</td>
+                <td>Fully Licensed Commercial Rights</td>
+                <td>{t(locale, 'canvawatermark.content.row3Use')}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 5: Step-by-Step Workflow Guide -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h2Steps')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p2Steps')}</p>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>{t(locale, 'canvawatermark.content.step1Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.step1Desc')}</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>{t(locale, 'canvawatermark.content.step2Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.step2Desc')}</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>{t(locale, 'canvawatermark.content.step3Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.step3Desc')}</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>{t(locale, 'canvawatermark.content.step4Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.step4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Authorized & Lawful Use Cases -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h3UseCases')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p3UseCases')}</p>
+
+        <div class="types-grid">
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.use1Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.use1Desc')}</p>
+          </div>
+
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.use2Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.use2Desc')}</p>
+          </div>
+
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.use3Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.use3Desc')}</p>
+          </div>
+
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.use4Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.use4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Ethics, Copyright & Official Licensing -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h2Ethics')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p2Ethics1')}</p>
+        <p>{t(locale, 'canvawatermark.content.p2Ethics2')}</p>
+      </div>
+
+      <!-- Section 8: Limitations & Artifact Management -->
+      <div class="content-block">
+        <h2>{t(locale, 'canvawatermark.content.h2Limits')}</h2>
+        <p>{t(locale, 'canvawatermark.content.p2Limits')}</p>
+
+        <div class="types-grid">
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.limit1Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.limit1Desc')}</p>
+          </div>
+
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.limit2Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.limit2Desc')}</p>
+          </div>
+
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.limit3Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.limit3Desc')}</p>
+          </div>
+
+          <div class="type-card">
+            <h3>{t(locale, 'canvawatermark.content.limit4Title')}</h3>
+            <p>{t(locale, 'canvawatermark.content.limit4Desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 9: Related Tools 6-Card Grid -->
+      <div class="content-block related-tools-section">
+        <h2>{t(locale, 'canvawatermark.cross.title')}</h2>
+        <div class="cross-tools-grid">
+          <a href={exactUrl} class="cross-card">
+            <div class="cross-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </div>
+            <div class="cross-info">
+              <span class="cross-title">{t(locale, 'canvawatermark.cross.exact')}</span>
+              <p class="cross-desc">{t(locale, 'canvawatermark.cross.exactDesc')}</p>
+            </div>
+          </a>
+
+          <a href={webpUrl} class="cross-card">
+            <div class="cross-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div class="cross-info">
+              <span class="cross-title">{t(locale, 'canvawatermark.cross.webp')}</span>
+              <p class="cross-desc">{t(locale, 'canvawatermark.cross.webpDesc')}</p>
+            </div>
+          </a>
+
+          <a href={denoiseUrl} class="cross-card">
+            <div class="cross-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 4V2"></path>
+                <path d="M15 16v-2"></path>
+                <path d="M8 9h2"></path>
+                <path d="M20 9h2"></path>
+                <path d="M17.8 11.8 19 13"></path>
+                <path d="M15 9h0"></path>
+                <path d="M17.8 6.2 19 5"></path>
+                <path d="m3 21 9-9"></path>
+                <path d="M12.2 6.2 11 5"></path>
+              </svg>
+            </div>
+            <div class="cross-info">
+              <span class="cross-title">{t(locale, 'canvawatermark.cross.denoise')}</span>
+              <p class="cross-desc">{t(locale, 'canvawatermark.cross.denoiseDesc')}</p>
+            </div>
+          </a>
+
+          <a href={productWhiteBgUrl} class="cross-card">
+            <div class="cross-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z"></path>
+                <path d="M21 5v14"></path>
+              </svg>
+            </div>
+            <div class="cross-info">
+              <span class="cross-title">{t(locale, 'canvawatermark.cross.whiteBg')}</span>
+              <p class="cross-desc">{t(locale, 'canvawatermark.cross.whiteBgDesc')}</p>
+            </div>
+          </a>
+
+          <a href={pixelCounterUrl} class="cross-card">
+            <div class="cross-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
+            <div class="cross-info">
+              <span class="cross-title">{t(locale, 'canvawatermark.cross.pixelCounter')}</span>
+              <p class="cross-desc">{t(locale, 'canvawatermark.cross.pixelCounterDesc')}</p>
+            </div>
+          </a>
+
+          <a href={ocrUrl} class="cross-card">
+            <div class="cross-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 7V4h16v3"></path>
+                <path d="M9 20h6"></path>
+                <path d="M12 4v16"></path>
+              </svg>
+            </div>
+            <div class="cross-info">
+              <span class="cross-title">{t(locale, 'canvawatermark.cross.imgToText')}</span>
+              <p class="cross-desc">{t(locale, 'canvawatermark.cross.imgToTextDesc')}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section 10: FAQ Accordion -->
+      <div class="content-block faq-container">
+        <h2>{t(locale, 'canvawatermark.content.faqTitle')}</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq1Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq1A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq2Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq2A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq3Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq3A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq4Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq4A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq5Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq5A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq6Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq6A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq7Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq7A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{t(locale, 'canvawatermark.content.faq8Q')}</span>
+              <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>{t(locale, 'canvawatermark.content.faq8A')}</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JSON-LD FAQ Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  .content-section {
+    margin-top: var(--space-12);
+  }
+
+  .content-body {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  .content-block {
+    margin-bottom: var(--space-12);
+  }
+
+  .content-block h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .content-block p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Features Grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: var(--space-6);
+  }
+
+  .feature-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .feature-card h3 {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .feature-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* Responsive Specs Table */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    margin-top: var(--space-6);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 680px;
+  }
+
+  .specs-table th {
+    padding: 16px 20px;
+    background: var(--color-surface-subtle);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .specs-table td {
+    padding: 16px 20px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+    line-height: 1.5;
+  }
+
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .code-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-family: monospace;
+    color: var(--color-text);
+  }
+
+  /* Steps Grid */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: var(--space-6);
+  }
+
+  .step-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+  }
+
+  .step-card h3 {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .step-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* Types / Cards Grid */
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: var(--space-6);
+  }
+
+  .type-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .type-card h3 {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .type-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* Related Tools 6-Card Grid */
+  .related-tools-section {
+    margin-top: var(--space-14);
+  }
+
+  .cross-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: var(--space-6);
+  }
+
+  .cross-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    min-height: 160px;
+  }
+
+  .cross-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cross-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .cross-title {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+    display: block;
+  }
+
+  .cross-desc {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  /* FAQ Container & Styling */
+  .faq-container {
+    margin-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+  }
+
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: var(--space-6);
+  }
+
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    padding: 18px 22px;
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-primary);
+  }
+
+  .faq-answer {
+    padding: 0 22px 20px 22px;
+  }
+
+  .faq-answer p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  /* Mobile Media Queries */
+  @media (max-width: 900px) {
+    .cross-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .features-grid,
+    .steps-grid,
+    .types-grid,
+    .cross-tools-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-question {
+      padding: 16px 18px;
+      font-size: var(--font-size-sm);
+    }
+
+    .faq-answer {
+      padding: 0 18px 18px 18px;
+    }
+  }
+</style>

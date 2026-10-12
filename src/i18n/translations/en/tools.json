@@ -97,5 +97,9 @@
   "tools.seoFilenameGenerator.title": "SEO Image Filename Generator (Rename Image for SEO)",
   "tools.seoFilenameGenerator.description": "Automatically generate clean, descriptive, and SEO-friendly image filenames and download renamed images in one click.",
   "tools.whatsappCompressor.title": "WhatsApp Photo Compressor (Compress Images for WhatsApp)",
-  "tools.whatsappCompressor.description": "Compress photos and images to target sizes (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) for seamless WhatsApp sharing without losing visual quality."
+  "tools.whatsappCompressor.description": "Compress photos and images to target sizes (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) for seamless WhatsApp sharing without losing visual quality.",
+  "tools.canvaWatermarkRemover.title": "Canva Watermark Remover",
+  "tools.canvaWatermarkRemover.description": "Remove Canva watermarks and criss-cross grid lines from authorized image designs with 100% in-browser privacy.",
+  "tools.geminiWatermarkRemover.title": "Gemini Watermark Remover",
+  "tools.geminiWatermarkRemover.description": "Remove Google Gemini, Nano Banana, Veo, and Flow AI watermarks from images and videos using mathematical inverse alpha unblending with 100% in-browser privacy."
 }

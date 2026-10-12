@@ -97,5 +97,9 @@
   "tools.seoFilenameGenerator.title": "Gerador de Nomes de Arquivo SEO para Imagens",
   "tools.seoFilenameGenerator.description": "Gere nomes de arquivo descritivos e otimizados para SEO automaticamente e baixe a foto renomeada com um clique.",
   "tools.whatsappCompressor.title": "Compressor de Fotos do WhatsApp (Comprimir Imagens para WhatsApp)",
-  "tools.whatsappCompressor.description": "Comprima fotos e imagens para tamanhos específicos (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) para enviar no WhatsApp sem perder qualidade visual."
+  "tools.whatsappCompressor.description": "Comprima fotos e imagens para tamanhos específicos (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) para enviar no WhatsApp sem perder qualidade visual.",
+  "tools.canvaWatermarkRemover.title": "Removedor de Marca d'Água do Canva",
+  "tools.canvaWatermarkRemover.description": "Remova marcas d'água e linhas de grade do Canva de designs autorizados com 100% de privacidade no navegador.",
+  "tools.geminiWatermarkRemover.title": "Removedor de Marca d'Água do Gemini",
+  "tools.geminiWatermarkRemover.description": "Remova marcas d'água de IA do Google Gemini, Nano Banana, Veo e Flow em imagens e vídeos usando desmistura alfa inversa 100% no seu navegador."
 }

@@ -97,5 +97,9 @@
   "tools.seoFilenameGenerator.title": "SEO Bild-Dateinamen-Generator",
   "tools.seoFilenameGenerator.description": "Erstellen Sie beschreibende, SEO-optimierte Dateinamen für Bilder automatisch und laden Sie die umbenannte Datei mit einem Klick herunter.",
   "tools.whatsappCompressor.title": "WhatsApp Foto-Komprimierer (Bilder für WhatsApp komprimieren)",
-  "tools.whatsappCompressor.description": "Komprimieren Sie Fotos auf Zielgrößen (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) für schnellen WhatsApp-Versand bei bester Bildqualität."
+  "tools.whatsappCompressor.description": "Komprimieren Sie Fotos auf Zielgrößen (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) für schnellen WhatsApp-Versand bei bester Bildqualität.",
+  "tools.canvaWatermarkRemover.title": "Canva Wasserzeichen Entfernen",
+  "tools.canvaWatermarkRemover.description": "Entfernen Sie Canva-Wasserzeichen und Rasterlinien aus autorisierten Grafiken mit 100% Privatsphäre im Browser.",
+  "tools.geminiWatermarkRemover.title": "Gemini Wasserzeichen Entfernen",
+  "tools.geminiWatermarkRemover.description": "Entfernen Sie Google Gemini-, Nano Banana-, Veo- und Flow-KI-Wasserzeichen aus Bildern und Videos mit mathematischer Alpha-Entmischung 100% lokal im Browser."
 }

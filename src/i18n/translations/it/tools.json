@@ -97,5 +97,9 @@
   "tools.seoFilenameGenerator.title": "Generatore Nomi File SEO per Immagini",
   "tools.seoFilenameGenerator.description": "Genera automaticamente nomi di file descrittivi e ottimizzati per la SEO e scarica l'immagine rinominata in un clic.",
   "tools.whatsappCompressor.title": "Comprimi Foto WhatsApp (Comprimi Immagini per WhatsApp)",
-  "tools.whatsappCompressor.description": "Comprimi foto e immagini a dimensioni target (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) per una condivisione rapida su WhatsApp senza perdere qualità visiva."
+  "tools.whatsappCompressor.description": "Comprimi foto e immagini a dimensioni target (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) per una condivisione rapida su WhatsApp senza perdere qualità visiva.",
+  "tools.canvaWatermarkRemover.title": "Rimozione Filigrana Canva",
+  "tools.canvaWatermarkRemover.description": "Rimuovi filigrane e griglie di Canva da grafiche e progetti autorizzati con il 100% di privacy nel browser.",
+  "tools.geminiWatermarkRemover.title": "Rimozione Filigrana Gemini",
+  "tools.geminiWatermarkRemover.description": "Rimuovi le filigrane IA di Google Gemini, Nano Banana, Veo e Flow da immagini e video tramite unblending alfa inverso matematico al 100% nel tuo browser."
 }

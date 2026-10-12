@@ -97,5 +97,9 @@
   "tools.seoFilenameGenerator.title": "SEO Resim Dosya Adı Oluşturucu (SEO için Yeniden Adlandır)",
   "tools.seoFilenameGenerator.description": "Görseller için SEO uyumlu, açıklayıcı dosya adlarını otomatik oluşturun ve yeniden adlandırılmış görseli tek tıkla indirin.",
   "tools.whatsappCompressor.title": "WhatsApp Fotoğraf Sıkıştırma (WhatsApp için Resim Küçültme)",
-  "tools.whatsappCompressor.description": "Görsel kalitesinden ödün vermeden hızlı WhatsApp paylaşımı için fotoğrafları hedef boyutlara (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) sıkıştırın."
+  "tools.whatsappCompressor.description": "Görsel kalitesinden ödün vermeden hızlı WhatsApp paylaşımı için fotoğrafları hedef boyutlara (20KB, 50KB, 100KB, 200KB, 500KB, 1MB) sıkıştırın.",
+  "tools.canvaWatermarkRemover.title": "Canva Filigran Kaldırma",
+  "tools.canvaWatermarkRemover.description": "Yetkili görsel tasarımlarından Canva filigranlarını ve ızgara çizgilerini tarayıcıda %100 gizlilikle temizleyin.",
+  "tools.geminiWatermarkRemover.title": "Gemini Filigran Kaldırma",
+  "tools.geminiWatermarkRemover.description": "Resim ve videolardan Google Gemini, Nano Banana, Veo ve Flow yapay zeka filigranlarını matematiksel ters alfa ayrıştırma ile %100 tarayıcıda temizleyin."
 }

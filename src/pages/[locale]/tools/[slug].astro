@@ -91,6 +91,10 @@ import SeoFilenameGenerator from '@/components/SeoFilenameGenerator.astro';
 import SeoFilenameGeneratorContent from '@/components/SeoFilenameGeneratorContent.astro';
 import WhatsAppPhotoCompressor from '@/components/WhatsAppPhotoCompressor.astro';
 import WhatsAppPhotoCompressorContent from '@/components/WhatsAppPhotoCompressorContent.astro';
+import CanvaWatermarkRemover from '@/components/CanvaWatermarkRemover.astro';
+import CanvaWatermarkRemoverContent from '@/components/CanvaWatermarkRemoverContent.astro';
+import GeminiWatermarkRemover from '@/components/GeminiWatermarkRemover.astro';
+import GeminiWatermarkRemoverContent from '@/components/GeminiWatermarkRemoverContent.astro';
 import SEOHead from '@/components/SEOHead.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 import { NON_DEFAULT_LOCALES, type Locale } from '@/i18n/config';
@@ -124,6 +128,8 @@ const toolPrefixMap: Record<string, string> = {
   'whatsapp-dp-resizer': 'waresizer',
   'youtube-banner-resizer': 'ytresizer',
   'ppt-resizer': 'pptresize',
+  'canva-watermark-remover': 'canvawatermark',
+  'gemini-watermark-remover': 'geminiwatermark',
   'image-srcset-generator': 'srcset',
   'passport-photo-maker': 'passport',
   'gif-frame-extractor': 'gifext',
@@ -210,6 +216,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
       {toolId === 'whatsapp-dp-resizer' && <WhatsAppResizer locale={locale} />}
       {toolId === 'youtube-banner-resizer' && <YouTubeResizer locale={locale} />}
       {toolId === 'ppt-resizer' && <PptResizer locale={locale} />}
+      {toolId === 'canva-watermark-remover' && <CanvaWatermarkRemover locale={locale} />}
+      {toolId === 'gemini-watermark-remover' && <GeminiWatermarkRemover locale={locale} />}
       {toolId === 'image-srcset-generator' && <SrcsetGenerator locale={locale} />}
       {toolId === 'passport-photo-maker' && <PassportPhotoMaker locale={locale} />}
       {toolId === 'gif-frame-extractor' && <GifExtractor locale={locale} />}
@@ -258,6 +266,8 @@ const heroSubtitle = t(locale, `${prefix}.hero.subtitle`);
   {toolId === 'whatsapp-dp-resizer' && <WhatsAppContent locale={locale} />}
   {toolId === 'youtube-banner-resizer' && <YouTubeContent locale={locale} />}
   {toolId === 'ppt-resizer' && <PptResizerContent locale={locale} />}
+  {toolId === 'canva-watermark-remover' && <CanvaWatermarkRemoverContent locale={locale} />}
+  {toolId === 'gemini-watermark-remover' && <GeminiWatermarkRemoverContent locale={locale} />}
   {toolId === 'image-srcset-generator' && <SrcsetGeneratorContent locale={locale} />}
   {toolId === 'passport-photo-maker' && <PassportPhotoMakerContent locale={locale} />}
   {toolId === 'gif-frame-extractor' && <GifExtractorContent locale={locale} />}
