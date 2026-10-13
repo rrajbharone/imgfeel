@@ -343,7 +343,8 @@ const { locale } = Astro.props;
     loadImageFromFile,
     processGeminiImage,
     generateSampleGeminiImage,
-    ClientVideoProcessor,
+    VideoWatermarkEngine,
+    isWebCodecsSupported,
     type VideoProcessingProgress,
   } from '@/scripts/gemini-watermark-remover';
 
@@ -368,7 +369,7 @@ const { locale } = Astro.props;
     let currentVideoFile: File | null = null;
     let sourceCanvas: HTMLCanvasElement | null = null;
     let cleanCanvas: HTMLCanvasElement | null = null;
-    let videoProcessor: ClientVideoProcessor | null = null;
+    let videoProcessor: VideoWatermarkEngine | null = null;
     let processedVideoBlob: Blob | null = null;
     let originalFileName = 'gemini-media';
 
@@ -686,7 +687,13 @@ const { locale } = Astro.props;
 
     // Process Video Frame-by-Frame
     processVideoBtn.addEventListener('click', async () => {
-      if (!sourceVideo || !sourceVideo.videoWidth) return;
+      if (!currentVideoFile) return;
+
+      if (!isWebCodecsSupported()) {
+        showError('Your browser does not support WebCodecs hardware video decoding/encoding. Please use Google Chrome or Microsoft Edge desktop.');
+        return;
+      }
+
       processVideoBtn.disabled = true;
       processVideoSpinner.style.display = 'inline-block';
       processVideoBtnText.textContent = strProcessing;
@@ -694,21 +701,23 @@ const { locale } = Astro.props;
       videoProgressPanel.style.display = 'block';
 
       try {
-        videoProcessor = new ClientVideoProcessor(sourceVideo);
-        const resultBlob = await videoProcessor.process((progress: VideoProcessingProgress) => {
-          videoProgressBar.style.width = `${progress.progressPercent}%`;
-          videoProgressPercent.textContent = `${progress.progressPercent}%`;
-          videoProgressFrames.textContent = `${progress.currentFrame} / ${progress.totalFrames}`;
-          videoFpsVal.textContent = `${progress.fps}`;
-          videoEtaVal.textContent = `${progress.estimatedTimeRemainingSec}s`;
+        videoProcessor = new VideoWatermarkEngine();
+        const result = await videoProcessor.process(currentVideoFile, {
+          onProgress: (progress: VideoProcessingProgress) => {
+            videoProgressBar.style.width = `${progress.progressPercent}%`;
+            videoProgressPercent.textContent = `${progress.progressPercent}%`;
+            videoProgressFrames.textContent = `${progress.currentFrame} / ${progress.totalFrames}`;
+            videoFpsVal.textContent = `${progress.fps}`;
+            videoEtaVal.textContent = `${progress.estimatedTimeRemainingSec}s`;
+          },
         });
 
-        processedVideoBlob = resultBlob;
-        const cleanUrl = URL.createObjectURL(resultBlob);
+        processedVideoBlob = result.blob;
+        const cleanUrl = URL.createObjectURL(result.blob);
         sourceVideo.style.display = 'none';
         processedVideo.style.display = 'block';
         processedVideo.src = cleanUrl;
-        processedVideo.play();
+        processedVideo.play().catch(() => {});
         videoStageBadge.textContent = 'Clean Reconstructed Video';
         videoStatusHeading.textContent = strCompleteVideo;
 

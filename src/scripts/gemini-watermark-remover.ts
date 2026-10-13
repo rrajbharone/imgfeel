@@ -556,181 +556,351 @@ export async function generateSampleGeminiImage(): Promise<HTMLCanvasElement> {
   return canvas;
 }
 
-// ── 5. Client-Side Video Frame Processing Engine ──
-export class ClientVideoProcessor {
-  private videoEl: HTMLVideoElement;
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
-  private isCancelled = false;
-  private mediaRecorder: MediaRecorder | null = null;
-  private recordedChunks: Blob[] = [];
+// ── 5. Client-Side Video Frame Processing Engine (Mediabunny + WebCodecs) ──
 
-  constructor(videoEl: HTMLVideoElement) {
-    this.videoEl = videoEl;
-    this.canvas = document.createElement('canvas');
-    const ctx = this.canvas.getContext('2d', { willReadFrequently: true });
-    if (!ctx) throw new Error('Canvas 2D context unavailable');
-    this.ctx = ctx;
+export interface VideoProcessingOptions {
+  onProgress?: (progress: VideoProcessingProgress) => void;
+  gain?: number;
+}
+
+export interface VideoProcessingResult {
+  blob: Blob;
+  width: number;
+  height: number;
+  fps: number;
+  duration: number;
+  detection: {
+    name: string;
+    score: number;
+    size: number;
+    box: { x: number; y: number; width: number; height: number };
+  };
+}
+
+/**
+ * Checks whether the current browser supports WebCodecs (VideoEncoder & VideoDecoder).
+ */
+export function isWebCodecsSupported(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof (window as any).VideoEncoder !== 'undefined' &&
+    typeof (window as any).VideoDecoder !== 'undefined'
+  );
+}
+
+/**
+ * Calculates adaptive Google Veo and Flow watermark anchor position.
+ */
+export function getVeoWatermarkBox(width: number, height: number): { x: number; y: number; width: number; height: number; size: number } {
+  const base = Math.min(width, height);
+  const size = Math.max(24, Math.min(Math.round(base / 15), base));
+  const margin = Math.round(base / 10);
+  return {
+    size,
+    x: Math.max(0, width - margin - size),
+    y: Math.max(0, height - margin - size),
+    width: size,
+    height: size,
+  };
+}
+
+/**
+ * VideoWatermarkEngine:
+ * High-performance, client-side, frame-by-frame video unblending pipeline.
+ * - Extracts frames using Mediabunny VideoSampleSink
+ * - Mathematically reverses Gemini / Veo alpha blend on each frame ROI
+ * - Uses createImageBitmap for hardware GPU texture sync before AVC encoding
+ * - Preserves audio stream through EncodedPacketSink / EncodedAudioPacketSource
+ * - Exports valid MP4 (AVC/H.264)
+ */
+export class VideoWatermarkEngine {
+  private static mediabunnyLib: any = null;
+  private isCancelled = false;
+
+  private static async getMediabunny(): Promise<any> {
+    if (this.mediabunnyLib) return this.mediabunnyLib;
+    try {
+      this.mediabunnyLib = await import(/* @vite-ignore */ 'https://cdn.jsdelivr.net/npm/mediabunny@1.52.3/+esm');
+      return this.mediabunnyLib;
+    } catch (err) {
+      // Fallback CDN if jsdelivr fails
+      this.mediabunnyLib = await import(/* @vite-ignore */ 'https://esm.sh/mediabunny@1.52.3');
+      return this.mediabunnyLib;
+    }
   }
 
   public cancel(): void {
     this.isCancelled = true;
-    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-      try {
-        this.mediaRecorder.stop();
-      } catch {
-        // Safe noop
-      }
-    }
   }
 
   public async process(
-    onProgress: (progress: VideoProcessingProgress) => void
-  ): Promise<Blob> {
+    file: File | Blob,
+    options: VideoProcessingOptions = {}
+  ): Promise<VideoProcessingResult> {
     this.isCancelled = false;
-    this.recordedChunks = [];
 
-    const video = this.videoEl;
-    const width = video.videoWidth || 1280;
-    const height = video.videoHeight || 720;
-    this.canvas.width = width;
-    this.canvas.height = height;
+    if (!isWebCodecsSupported()) {
+      throw new Error('Your browser does not support WebCodecs (VideoEncoder / VideoDecoder). Please use Google Chrome, Microsoft Edge, or a modern Chromium browser.');
+    }
 
-    const duration = video.duration || 5;
-    const fps = 30;
-    const totalFrames = Math.max(1, Math.round(duration * fps));
+    const mb = await VideoWatermarkEngine.getMediabunny();
+    const {
+      ALL_FORMATS,
+      BlobSource,
+      BufferTarget,
+      CanvasSource,
+      EncodedAudioPacketSource,
+      EncodedPacketSink,
+      Input,
+      Mp4OutputFormat,
+      Output,
+      QUALITY_HIGH,
+      VideoSampleSink,
+      canEncodeVideo,
+    } = mb;
 
-    // Determine watermark coordinates using Veo / video sizing rules
-    const minDim = Math.min(width, height);
-    const vSize = Math.max(24, Math.min(Math.round(minDim / 15), minDim));
-    const vMargin = Math.round(minDim / 10);
-    const box = {
-      x: Math.max(0, width - vMargin - vSize),
-      y: Math.max(0, height - vMargin - vSize),
-      width: vSize,
-      height: vSize,
-    };
-    const alphaMap = await getAlphaMapForSize(vSize);
+    if (canEncodeVideo && !(await canEncodeVideo('avc'))) {
+      throw new Error('Your browser cannot encode H.264/AVC video in hardware/software. Please use desktop Chrome or Edge.');
+    }
 
-    // Audio stream preservation using AudioContext
-    let audioStreamTrack: MediaStreamTrack | null = null;
-    let audioCtx: AudioContext | null = null;
+    const input = new Input({ source: new BlobSource(file), formats: ALL_FORMATS });
+
+    const videoTrack = await input.getPrimaryVideoTrack();
+    if (!videoTrack) {
+      if (typeof input.dispose === 'function') input.dispose();
+      throw new Error('No valid, decodable video track found in the uploaded file.');
+    }
+
+    const width = videoTrack.displayWidth ?? videoTrack.codedWidth;
+    const height = videoTrack.displayHeight ?? videoTrack.codedHeight;
+    const duration = await input.computeDuration().catch(() => 0);
+
+    let frameRate = 30;
     try {
-      const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioCtxClass) {
-        audioCtx = new AudioCtxClass();
-        const sourceNode = audioCtx.createMediaElementSource(video);
-        const destNode = audioCtx.createMediaStreamDestination();
-        sourceNode.connect(destNode);
-        sourceNode.connect(audioCtx.destination);
-        const tracks = destNode.stream.getAudioTracks();
-        if (tracks.length > 0) audioStreamTrack = tracks[0];
+      const stats = await videoTrack.computePacketStats?.(120);
+      if (stats?.averagePacketRate) {
+        frameRate = Math.round(stats.averagePacketRate);
       }
     } catch {
-      audioStreamTrack = null;
+      // default 30
+    }
+    if (!frameRate || frameRate <= 0 || !Number.isFinite(frameRate)) {
+      frameRate = 30;
     }
 
-    // Capture stream from canvas
-    const canvasStream = (this.canvas as HTMLCanvasElement & { captureStream(fps?: number): MediaStream }).captureStream(fps);
-    const combinedTracks: MediaStreamTrack[] = [...canvasStream.getVideoTracks()];
-    if (audioStreamTrack) combinedTracks.push(audioStreamTrack);
-    const combinedStream = new MediaStream(combinedTracks);
+    // Compute Veo watermark geometry with adaptive offset
+    const baseDim = Math.min(width, height);
+    const veoBase = getVeoWatermarkBox(width, height);
+    const adaptiveOffset = Math.round(-24 * (baseDim / 720));
+    const targetSize = veoBase.size;
+    const wmBox = {
+      size: targetSize,
+      x: Math.max(0, Math.min(width - targetSize, veoBase.x + adaptiveOffset)),
+      y: Math.max(0, Math.min(height - targetSize, veoBase.y + adaptiveOffset)),
+      width: targetSize,
+      height: targetSize,
+    };
 
-    // Pick best supported MIME type
-    let mimeType = 'video/mp4';
-    if (!MediaRecorder.isTypeSupported('video/mp4')) {
-      if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
-        mimeType = 'video/webm;codecs=vp9';
-      } else if (MediaRecorder.isTypeSupported('video/webm')) {
-        mimeType = 'video/webm';
+    // ROI bounding box with margin
+    const pad = Math.round(targetSize * 0.6);
+    const rx = Math.max(0, Math.min(width - 1, wmBox.x - pad));
+    const ry = Math.max(0, Math.min(height - 1, wmBox.y - pad));
+    const rw = Math.max(1, Math.min(width - rx, wmBox.width + pad * 2));
+    const rh = Math.max(1, Math.min(height - ry, wmBox.height + pad * 2));
+    const roi = { x: rx, y: ry, width: rw, height: rh };
+
+    // Build alpha map scaled for this watermark
+    const alphaMap = await getAlphaMapForSize(targetSize);
+    const roiCount = roi.width * roi.height;
+    const roiAlphaMap = new Float32Array(roiCount);
+    const offX = wmBox.x - roi.x;
+    const offY = wmBox.y - roi.y;
+    const gain = options.gain ?? 1.0;
+
+    for (let r = 0; r < targetSize; r++) {
+      for (let c = 0; c < targetSize; c++) {
+        const roiIdx = (offY + r) * roi.width + (offX + c);
+        if (roiIdx < 0 || roiIdx >= roiCount) continue;
+        const a = alphaMap[r * targetSize + c] * gain;
+        roiAlphaMap[roiIdx] = a > 0 ? Math.min(a, MAX_ALPHA) : 0;
       }
     }
 
-    const recorder = new MediaRecorder(combinedStream, {
-      mimeType,
-      videoBitsPerSecond: 8000000,
+    const regionBox = { x: 0, y: 0, width: roi.width, height: roi.height };
+
+    // Offscreen rendering canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) throw new Error('Canvas 2D rendering context unavailable');
+
+    // Mediabunny MP4 muxer setup
+    const target = new BufferTarget();
+    const output = new Output({
+      format: new Mp4OutputFormat(),
+      target,
     });
-    this.mediaRecorder = recorder;
 
-    recorder.ondataavailable = (e) => {
-      if (e.data && e.data.size > 0) this.recordedChunks.push(e.data);
-    };
+    const videoSource = new CanvasSource(canvas, {
+      codec: 'avc',
+      bitrate: QUALITY_HIGH,
+      keyFrameInterval: 2,
+    });
+    output.addVideoTrack(videoSource, { frameRate });
 
-    recorder.start(100);
+    // Audio stream pass-through (lossless direct remuxing)
+    let audioSource: any = null;
+    let audioTrack: any = null;
+    let audioDecoderConfig: any = null;
+    try {
+      audioTrack = await input.getPrimaryAudioTrack();
+      if (audioTrack) {
+        const audioCodec = await audioTrack.getCodec();
+        audioDecoderConfig = await audioTrack.getDecoderConfig().catch(() => null);
+        if (audioCodec && audioDecoderConfig) {
+          audioSource = new EncodedAudioPacketSource(audioCodec);
+          output.addAudioTrack(audioSource);
+        }
+      }
+    } catch {
+      audioSource = null;
+    }
 
-    const startTime = performance.now();
+    await output.start();
+
+    const fallbackDur = frameRate > 0 ? 1 / frameRate : 1 / 30;
+    const sink = new VideoSampleSink(videoTrack);
+    let firstTimestamp: number | null = null;
+    let lastTimestamp = -1;
     let currentFrame = 0;
+    const totalEstFrames = duration > 0 ? Math.max(1, Math.round(duration * frameRate)) : 100;
+    const startTime = performance.now();
 
-    return new Promise((resolve, reject) => {
-      recorder.onstop = () => {
-        if (audioCtx) {
-          try { audioCtx.close(); } catch { /* noop */ }
-        }
+    try {
+      for await (const sample of sink.samples()) {
         if (this.isCancelled) {
-          reject(new Error('Video processing was cancelled by user'));
-          return;
-        }
-        const outputBlob = new Blob(this.recordedChunks, { type: mimeType });
-        resolve(outputBlob);
-      };
-
-      recorder.onerror = (e) => {
-        if (audioCtx) {
-          try { audioCtx.close(); } catch { /* noop */ }
-        }
-        reject(new Error(`MediaRecorder error: ${String(e)}`));
-      };
-
-      const renderStep = () => {
-        if (this.isCancelled) {
-          recorder.stop();
-          return;
+          sample.close();
+          break;
         }
 
-        if (video.ended || currentFrame >= totalFrames) {
-          recorder.stop();
-          return;
-        }
+        if (firstTimestamp === null) firstTimestamp = sample.timestamp;
+        let timestamp = sample.timestamp - firstTimestamp;
+        if (!(timestamp >= 0)) timestamp = 0;
+        if (timestamp <= lastTimestamp) timestamp = lastTimestamp + fallbackDur;
+        const dur = Number.isFinite(sample.duration) && sample.duration > 0 ? sample.duration : fallbackDur;
+        lastTimestamp = timestamp;
 
-        // Draw frame onto canvas
-        this.ctx.drawImage(video, 0, 0, width, height);
+        // Draw decoded frame
+        sample.draw(ctx, 0, 0, width, height);
+        sample.close();
 
-        // Apply mathematical reverse alpha unblending to corner
-        const frameImgData = this.ctx.getImageData(0, 0, width, height);
-        applyReverseAlphaUnblending(frameImgData, alphaMap, box, 1.0);
-        this.ctx.putImageData(frameImgData, 0, 0);
+        // Mathematical unblending on watermark ROI
+        const px = ctx.getImageData(roi.x, roi.y, roi.width, roi.height);
+        applyReverseAlphaUnblending(px, roiAlphaMap, regionBox, 1.0);
 
+        // Hardware GPU texture sync for WebCodecs
+        const bmp = await createImageBitmap(px);
+        ctx.drawImage(bmp, roi.x, roi.y);
+        bmp.close();
+
+        await videoSource.add(timestamp, dur);
         currentFrame++;
+
         const elapsedSec = (performance.now() - startTime) / 1000;
-        const currentFps = elapsedSec > 0 ? Math.round(currentFrame / elapsedSec) : fps;
-        const remainingFrames = Math.max(0, totalFrames - currentFrame);
+        const currentFps = elapsedSec > 0 ? Math.round(currentFrame / elapsedSec) : frameRate;
+        const remainingFrames = Math.max(0, totalEstFrames - currentFrame);
         const eta = currentFps > 0 ? Math.round(remainingFrames / currentFps) : 0;
-        const pct = Math.min(100, Math.round((currentFrame / totalFrames) * 100));
+        const pct = duration > 0
+          ? Math.min(99, Math.round((timestamp / duration) * 100))
+          : Math.min(99, Math.round((currentFrame / totalEstFrames) * 100));
 
-        onProgress({
+        if (options.onProgress) {
+          options.onProgress({
+            currentFrame,
+            totalFrames: totalEstFrames,
+            progressPercent: pct,
+            fps: currentFps,
+            estimatedTimeRemainingSec: eta,
+            isProcessing: true,
+          });
+        }
+      }
+
+      videoSource.close();
+
+      if (this.isCancelled) {
+        if (typeof input.dispose === 'function') input.dispose();
+        throw new Error('Video processing was cancelled by user');
+      }
+
+      // Audio packets pass-through remuxing
+      if (audioSource && audioTrack) {
+        try {
+          const offset = firstTimestamp ?? 0;
+          const aSink = new EncodedPacketSink(audioTrack);
+          let isFirstAudio = true;
+          let lastAudioTs = -1;
+          for await (const packet of aSink.packets()) {
+            if (this.isCancelled) break;
+            let newTs = packet.timestamp - offset;
+            if (newTs < 0) continue;
+            if (newTs <= lastAudioTs) newTs = lastAudioTs + 1e-6;
+            lastAudioTs = newTs;
+            let outPacket = packet;
+            if (newTs !== packet.timestamp && typeof packet.clone === 'function') {
+              outPacket = packet.clone({ timestamp: newTs });
+            }
+            await audioSource.add(
+              outPacket,
+              isFirstAudio && audioDecoderConfig ? { decoderConfig: audioDecoderConfig } : undefined
+            );
+            isFirstAudio = false;
+          }
+        } catch (e) {
+          console.warn('Audio passthrough skipped or completed:', e);
+        } finally {
+          audioSource.close();
+        }
+      }
+
+      await output.finalize();
+      if (typeof input.dispose === 'function') input.dispose();
+
+      if (!target.buffer) {
+        throw new Error('Video processing produced no buffer output.');
+      }
+
+      const outputBlob = new Blob([target.buffer], { type: 'video/mp4' });
+
+      if (options.onProgress) {
+        options.onProgress({
           currentFrame,
-          totalFrames,
-          progressPercent: pct,
-          fps: currentFps,
-          estimatedTimeRemainingSec: eta,
-          isProcessing: true,
+          totalFrames: currentFrame,
+          progressPercent: 100,
+          fps: frameRate,
+          estimatedTimeRemainingSec: 0,
+          isProcessing: false,
         });
+      }
 
-        if ('requestVideoFrameCallback' in video) {
-          (video as HTMLVideoElement & { requestVideoFrameCallback(cb: () => void): void }).requestVideoFrameCallback(renderStep);
-        } else {
-          requestAnimationFrame(renderStep);
-        }
+      return {
+        blob: outputBlob,
+        width,
+        height,
+        fps: frameRate,
+        duration: duration || lastTimestamp,
+        detection: {
+          name: 'Google Veo / Flow (Adaptive Inset)',
+          score: 95,
+          size: targetSize,
+          box: wmBox,
+        },
       };
-
-      video.currentTime = 0;
-      video.play().then(() => {
-        if ('requestVideoFrameCallback' in video) {
-          (video as HTMLVideoElement & { requestVideoFrameCallback(cb: () => void): void }).requestVideoFrameCallback(renderStep);
-        } else {
-          requestAnimationFrame(renderStep);
-        }
-      }).catch(reject);
-    });
+    } catch (err) {
+      if (typeof input.dispose === 'function') input.dispose();
+      throw err;
+    }
   }
 }
+
